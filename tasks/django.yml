@@ -1,0 +1,70 @@
+- name: create {{ app_path }}
+  file:
+    path: "{{ app_path }}"
+    state: directory
+    group: www-data
+    mode: 0775
+
+- name: create "{{ app_path }}/openwisp2"
+  file:
+    path: "{{ app_path }}/openwisp2"
+    state: directory
+    group: www-data
+    mode: 0775
+
+- name: create "{{ app_path }}/log"
+  file:
+    path: "{{ app_path }}/log"
+    state: directory
+    group: www-data
+    mode: 0775
+
+- name: manage.py
+  template:
+    src: ../templates/manage.py
+    dest: "{{ app_path }}/manage.py"
+    group: www-data
+    mode: 0754
+
+- name: __init__.py
+  template:
+    src: ../templates/openwisp2/__init__.py
+    dest: "{{ app_path }}/openwisp2/__init__.py"
+    group: www-data
+
+- name: urls.py
+  template:
+    src: ../templates/openwisp2/urls.py
+    dest: "{{ app_path }}/openwisp2/urls.py"
+    group: www-data
+
+- name: wsgi.py
+  template:
+    src: ../templates/openwisp2/wsgi.py
+    dest: "{{ app_path }}/openwisp2/wsgi.py"
+    group: www-data
+
+- name: settings.py
+  template:
+    src: ../templates/openwisp2/settings.py
+    dest: "{{ app_path }}/openwisp2/settings.py"
+    group: www-data
+
+- name: migrate
+  django_manage:
+    app_path: "{{ app_path }}"
+    command: migrate
+    virtualenv: "{{ virtualenv_path }}"
+
+- name: set permissions to sqlite db
+  file:
+    path: "{{ app_path }}/db.sqlite3"
+    state: file
+    group: www-data
+    mode: 0775
+
+- name: collectstatic
+  django_manage:
+    app_path: "{{ app_path }}"
+    command: "collectstatic --noinput"
+    virtualenv: "{{ virtualenv_path }}"

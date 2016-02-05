@@ -1,0 +1,14 @@
+- name: uwsgi.ini
+  template:
+    src: ../templates/uwsgi.ini.j2
+    dest: "{{ app_path }}/uwsgi.ini"
+  tags:
+    - openwisp2
+    - supervisor
+
+- name: supervisor uwsgi
+  action: template src=../templates/supervisor.j2 dest=/etc/supervisor/conf.d/openwisp2.conf
+  notify: reload supervisor
+  tags:
+    - openwisp2
+    - supervisor

@@ -1,0 +1,11 @@
+[program:openwisp2]
+user=www-data
+directory={{app_path}}
+command={{app_path}}/env/bin/uwsgi --ini uwsgi.ini
+autostart=true
+autorestart=true
+stopsignal=INT
+redirect_stderr=true
+stdout_logfile={{ app_path }}/log/uwsgi.log
+stdout_logfile_maxbytes=30MB
+stdout_logfile_backups=5

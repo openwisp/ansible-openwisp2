@@ -1,0 +1,8 @@
+ssl_cert: "{{ app_path }}/ssl/server.crt"
+ssl_key: "{{ app_path }}/ssl/server.key"
+ssl_country: "US"
+ssl_state: "California"
+ssl_locality: "San Francisco"
+ssl_organization: "IT dep."
+ssl_common_name: "{{ inventory_hostname }}"
+stable: true

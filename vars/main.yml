@@ -1,0 +1,2 @@
+app_path: /opt/openwisp2
+virtualenv_path: "{{ app_path }}/env"

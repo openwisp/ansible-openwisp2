@@ -1,0 +1,21 @@
+- name: Install stable version of django-netjsonconfig
+  when: stable
+  pip:
+    name: "{{ item }}"
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: python3.4
+    virtualenv_site_packages: yes
+  with_items:
+    - django-netjsonconfig
+
+- name: Install development version of django-netjsonconfig
+  when: not stable
+  pip:
+    name: "{{ item }}"
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: python3.4
+    virtualenv_site_packages: yes
+  with_items:
+    - https://github.com/openwisp/django-netjsonconfig/tarball/master

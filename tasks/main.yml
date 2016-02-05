@@ -1,0 +1,16 @@
+### openwisp2
+## tasks
+- include: apt.yml
+  tags: [openwisp2, apt]
+
+- include: pip.yml
+  tags: [openwisp2, pip]
+
+- include: django.yml
+  tags: [openwisp2, django]
+
+- include: supervisor.yml
+  tags: [openwisp2, supervisor]
+
+- include: nginx.yml
+  tags: [openwisp2, nginx]

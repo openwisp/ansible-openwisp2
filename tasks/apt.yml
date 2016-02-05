@@ -1,0 +1,18 @@
+- name: Update APT package cache
+  apt: update_cache=yes
+
+- name: Install system packages
+  apt: >
+    name={{ item }} state=latest
+  with_items:
+    - python-software-properties
+    - python-pip
+    - python-wheel
+    - python-dev
+    - python3-pip
+    - python3-wheel
+    - python3-dev
+    - python-virtualenv
+    - sqlite3
+    - supervisor
+    - nginx

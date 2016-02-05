@@ -1,0 +1,13 @@
+[uwsgi]
+chdir={{ app_path }}
+module=openwisp2.wsgi:application
+master=True
+pidfile={{ app_path }}/uwsgi.pid
+socket=127.0.0.1:3031
+processes=2
+harakiri=20
+max-requests=5000
+vacuum=True
+enable-threads=True
+env=HTTPS=on
+buffer-size=8192
