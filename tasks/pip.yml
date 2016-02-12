@@ -1,5 +1,5 @@
 - name: Install stable version of django-netjsonconfig
-  when: stable
+  when: openwisp2_stable
   pip:
     name: "{{ item }}"
     state: latest
@@ -10,7 +10,7 @@
     - django-netjsonconfig
 
 - name: Install development version of django-netjsonconfig
-  when: not stable
+  when: not openwisp2_stable
   pip:
     name: "{{ item }}"
     state: latest

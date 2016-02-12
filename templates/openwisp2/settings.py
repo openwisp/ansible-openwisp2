@@ -4,7 +4,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '{{ secret_key }}'
+SECRET_KEY = '{{ openwisp2_secret_key }}'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -102,7 +102,7 @@ MEDIA_ROOT = '%s/media' % BASE_DIR
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
-NETJSONCONFIG_SHARED_SECRET = '{{ shared_secret }}'
+NETJSONCONFIG_SHARED_SECRET = '{{ openwisp2_shared_secret }}'
 
 # See http://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.

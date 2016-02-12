@@ -17,8 +17,8 @@ server {
     client_max_body_size 5M;
 
     ssl on;
-    ssl_certificate {{ ssl_cert }};
-    ssl_certificate_key {{ ssl_key }};
+    ssl_certificate {{ openwisp2_ssl_cert }};
+    ssl_certificate_key {{ openwisp2_ssl_key }};
     # optimizations
     ssl_session_cache shared:SSL:20m;
     ssl_session_timeout 10m;

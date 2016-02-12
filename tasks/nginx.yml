@@ -10,7 +10,7 @@
 
 - name: create SSL cert if not exists yet
   command: >
-    openssl req -new -nodes -x509 -subj "/C={{ ssl_country }}/ST={{ ssl_state }}/L={{ ssl_locality }}/O={{ ssl_organization }}/CN={{ ssl_common_name }}" -days 3650 -keyout {{ ssl_key }} -out {{ ssl_cert }} -extensions v3_ca creates={{ ssl_cert }}
+    openssl req -new -nodes -x509 -subj "/C={{ openwisp2_ssl_country }}/ST={{ openwisp2_ssl_state }}/L={{ openwisp2_ssl_locality }}/O={{ openwisp2_ssl_organization }}/CN={{ openwisp2_ssl_common_name }}" -days 3650 -keyout {{ openwisp2_ssl_key }} -out {{ openwisp2_ssl_cert }} -extensions v3_ca creates={{ openwisp2_ssl_cert }}
   notify: restart nginx
 
 - name: nginx site available

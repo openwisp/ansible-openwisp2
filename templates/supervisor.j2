@@ -1,7 +1,7 @@
 [program:openwisp2]
 user=www-data
-directory={{app_path}}
-command={{app_path}}/env/bin/uwsgi --ini uwsgi.ini
+directory={{ app_path }}
+command={{ app_path }}/env/bin/uwsgi --ini uwsgi.ini
 autostart=true
 autorestart=true
 stopsignal=INT
