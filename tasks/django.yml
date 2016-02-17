@@ -55,6 +55,7 @@
     app_path: "{{ app_path }}"
     command: migrate
     virtualenv: "{{ virtualenv_path }}"
+  notify: restart openwisp2
 
 - name: set permissions to sqlite db
   file:
@@ -68,3 +69,4 @@
     app_path: "{{ app_path }}"
     command: "collectstatic --noinput"
     virtualenv: "{{ virtualenv_path }}"
+  notify: restart openwisp2

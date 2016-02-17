@@ -7,3 +7,6 @@
 
 - name: restart nginx
   service: name=nginx state=restarted
+
+- name: restart openwisp2
+  shell: supervisorctl restart openwisp2

@@ -8,6 +8,7 @@
     virtualenv_site_packages: yes
   with_items:
     - django-netjsonconfig
+  notify: restart openwisp2
 
 - name: Install development version of django-netjsonconfig
   when: not openwisp2_stable
@@ -19,3 +20,4 @@
     virtualenv_site_packages: yes
   with_items:
     - https://github.com/openwisp/django-netjsonconfig/tarball/master
+  notify: restart openwisp2
