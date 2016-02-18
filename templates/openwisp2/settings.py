@@ -23,7 +23,7 @@ INSTALLED_APPS = [
     'django_netjsonconfig',
     'sortedm2m',
     'reversion',
-    'django_extensions'
+    {% for app in openwisp2_extra_django_apps %}'{{ app }}'{% endfor %}
 ]
 
 MIDDLEWARE_CLASSES = [

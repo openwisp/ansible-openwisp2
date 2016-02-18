@@ -22,6 +22,15 @@
     - https://github.com/openwisp/django-netjsonconfig/tarball/master
   notify: restart openwisp2
 
+- name: Install extra django apps
+  pip:
+    name: "{{ item }}"
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+    virtualenv_site_packages: yes
+  with_items: openwisp2_extra_django_apps
+  notify: restart openwisp2
 - name: Install psycopg2
   when: openwisp2_database.engine in ["django.db.backends.postgresql", "django.contrib.gis.db.backends.postgis"]
   pip:

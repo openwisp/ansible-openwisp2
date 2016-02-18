@@ -56,6 +56,9 @@ Add an entry to your ``site.yml`` like the following one:
         # is allowed to access the controller via unencrypted HTTP
         # (this feature is disabled by default)
         #openwisp2_http_allowed_ip: "10.8.0.0/16"
+        # additional apps to install with pip and put in settings.INSTALLED_APPS
+        #openwisp2_extra_django_apps:
+        #    - django_extensions
 
 Run the playbook::
 
