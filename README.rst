@@ -25,6 +25,7 @@ Add an entry to your ``site.yml`` like the following one:
         #openwisp2_path: /opt/openwisp2
         # customize django settings:
         #openwisp2_language_code: en-gb
+        #openwisp2_time_zone: UTC
         # customize the self-signed SSL certificate info if needed
         #openwisp2_ssl_country: "US"
         #openwisp2_ssl_state: "California"
