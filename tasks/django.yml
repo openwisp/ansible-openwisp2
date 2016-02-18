@@ -20,6 +20,7 @@
     mode: 0775
 
 - name: manage.py
+  notify: restart openwisp2
   template:
     src: ../templates/manage.py
     dest: "{{ openwisp2_path }}/manage.py"
@@ -27,46 +28,51 @@
     mode: 0754
 
 - name: __init__.py
+  notify: restart openwisp2
   template:
     src: ../templates/openwisp2/__init__.py
     dest: "{{ openwisp2_path }}/openwisp2/__init__.py"
     group: www-data
 
 - name: urls.py
+  notify: restart openwisp2
   template:
     src: ../templates/openwisp2/urls.py
     dest: "{{ openwisp2_path }}/openwisp2/urls.py"
     group: www-data
 
 - name: wsgi.py
+  notify: restart openwisp2
   template:
     src: ../templates/openwisp2/wsgi.py
     dest: "{{ openwisp2_path }}/openwisp2/wsgi.py"
     group: www-data
 
 - name: settings.py
+  notify: restart openwisp2
   template:
     src: ../templates/openwisp2/settings.py
     dest: "{{ openwisp2_path }}/openwisp2/settings.py"
     group: www-data
 
 - name: migrate
+  notify: restart openwisp2
   django_manage:
     app_path: "{{ openwisp2_path }}"
     command: migrate
     virtualenv: "{{ virtualenv_path }}"
-  notify: restart openwisp2
 
 - name: set permissions to sqlite db
+  when: openwisp2_database.engine == "django.db.backends.sqlite3"
   file:
-    path: "{{ openwisp2_path }}/db.sqlite3"
+    path: "{{ openwisp2_database.name }}"
     state: file
     group: www-data
     mode: 0775
 
 - name: collectstatic
+  notify: restart openwisp2
   django_manage:
     app_path: "{{ openwisp2_path }}"
     command: "collectstatic --noinput"
     virtualenv: "{{ virtualenv_path }}"
-  notify: restart openwisp2

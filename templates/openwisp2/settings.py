@@ -62,8 +62,24 @@ WSGI_APPLICATION = 'openwisp2.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': '{{ openwisp2_database.engine }}',
+        'NAME': '{{ openwisp2_database.name }}',
+        {% if openwisp2_database.user %}
+            'USER': '{{ openwisp2_database.user }}',
+        {% endif %}
+        {% if openwisp2_database.password %}
+            'PASSWORD': '{{ openwisp2_database.password }}',
+        {% endif %}
+        {% if openwisp2_database.host %}
+            'HOST': '{{ openwisp2_database.host }}',
+        {% endif %}
+        {% if openwisp2_database.port %}
+            'PORT': '{{ openwisp2_database.port }}',
+        {% endif %}
+        {% if openwisp2_database.options %}
+            'OPTIONS': {{ openwisp2_database.options|to_nice_json }}
+        {% endif %}
+
     }
 }
 

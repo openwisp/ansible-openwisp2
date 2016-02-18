@@ -21,3 +21,23 @@
   with_items:
     - https://github.com/openwisp/django-netjsonconfig/tarball/master
   notify: restart openwisp2
+
+- name: Install psycopg2
+  when: openwisp2_database.engine in ["django.db.backends.postgresql", "django.contrib.gis.db.backends.postgis"]
+  pip:
+    name: psycopg2
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: python3.4
+    virtualenv_site_packages: yes
+  notify: restart openwisp2
+
+- name: Install MySQL-python
+  when: openwisp2_database.engine in ["django.db.backends.mysql", "django.contrib.gis.db.backends.mysql"]
+  pip:
+    name: MySQL-python
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: python3.4
+    virtualenv_site_packages: yes
+  notify: restart openwisp2

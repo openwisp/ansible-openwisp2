@@ -28,7 +28,16 @@ Add an entry to your ``site.yml`` like the following one:
         openwisp2_stable: true
         # customize the app_path
         #openwisp2_path: /opt/openwisp2
-        # customize django settings:
+        # edit database settings only if you are not using sqlite
+        #openwisp2_database:
+        #    engine: django.db.backends.postgresql
+        #    name: openwisp2
+        #    user: postgres
+        #    password: ""
+        #    host: ""
+        #    port: ""
+        #    options: {}
+        # customize other django settings:
         #openwisp2_language_code: en-gb
         #openwisp2_time_zone: UTC
         # customize the self-signed SSL certificate info if needed
