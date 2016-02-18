@@ -21,6 +21,8 @@ Add an entry to your ``site.yml`` like the following one:
         openwisp2_secret_key: fdPt*+$-ueeyic6-#txyy$5yf2er@c0d2n#h)qb)y5@lc$t*@w
         openwisp2_shared_secret: changemeplease
         openwisp2_stable: true
+        # customize the app_path
+        #openwisp2_path: /opt/openwisp2
         # customize the self-signed SSL certificate info if needed
         #openwisp2_ssl_country: "US"
         #openwisp2_ssl_state: "California"

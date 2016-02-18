@@ -1,8 +1,8 @@
 [uwsgi]
-chdir={{ app_path }}
+chdir={{ openwisp2_path }}
 module=openwisp2.wsgi:application
 master=True
-pidfile={{ app_path }}/uwsgi.pid
+pidfile={{ openwisp2_path }}/uwsgi.pid
 socket=127.0.0.1:3031
 processes=2
 harakiri=20

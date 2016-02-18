@@ -2,12 +2,12 @@ server {
     listen 443 ssl spdy;  # ipv4
     #listen [::]:443 ssl;  # ipv6
 
-    root {{ app_path }}/public_html;
+    root {{ openwisp2_path }}/public_html;
     index index.html index.htm;
 
     # error log
-    access_log {{ app_path }}/log/nginx.access.log;
-    error_log {{ app_path }}/log/nginx.error.log error;
+    access_log {{ openwisp2_path }}/log/nginx.access.log;
+    error_log {{ openwisp2_path }}/log/nginx.error.log error;
 
     # Make site accessible from hostanme
     # change this according to your domain/hostanme
@@ -35,15 +35,15 @@ server {
     }
 
     location / {
-        try_files {{ app_path }}/public_html/maintenance.html $uri @uwsgi;
+        try_files {{ openwisp2_path }}/public_html/maintenance.html $uri @uwsgi;
     }
 
     location /static {
-        alias {{ app_path }}/static/;
+        alias {{ openwisp2_path }}/static/;
     }
 
     location /media {
-        alias {{ app_path }}/media/;
+        alias {{ openwisp2_path }}/media/;
     }
 }
 

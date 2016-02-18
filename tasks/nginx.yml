@@ -1,11 +1,11 @@
-- name: create "{{ app_path }}/public_html"
+- name: create "{{ openwisp2_path }}/public_html"
   file:
-    path: "{{ app_path }}/public_html"
+    path: "{{ openwisp2_path }}/public_html"
     state: directory
 
-- name: create "{{ app_path }}/ssl"
+- name: create "{{ openwisp2_path }}/ssl"
   file:
-    path: "{{ app_path }}/ssl"
+    path: "{{ openwisp2_path }}/ssl"
     state: directory
 
 - name: create SSL cert if not exists yet

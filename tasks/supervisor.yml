@@ -1,7 +1,7 @@
 - name: uwsgi.ini
   template:
     src: ../templates/uwsgi.ini.j2
-    dest: "{{ app_path }}/uwsgi.ini"
+    dest: "{{ openwisp2_path }}/uwsgi.ini"
   tags:
     - openwisp2
     - supervisor
