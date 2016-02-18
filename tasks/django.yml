@@ -57,6 +57,8 @@
 
 - name: migrate
   notify: restart openwisp2
+  become: yes
+  become_user: www-data
   django_manage:
     app_path: "{{ openwisp2_path }}"
     command: migrate
@@ -72,6 +74,8 @@
 
 - name: collectstatic
   notify: restart openwisp2
+  become: yes
+  become_user: www-data
   django_manage:
     app_path: "{{ openwisp2_path }}"
     command: "collectstatic --noinput"
