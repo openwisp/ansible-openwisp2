@@ -59,6 +59,8 @@ Add an entry to your ``site.yml`` like the following one:
         # additional apps to install with pip and put in settings.INSTALLED_APPS
         #openwisp2_extra_django_apps:
         #    - django_extensions
+        # spdy protocol in nginx is enabled by default
+        #openwisp2_nginx_spdy: true
 
 Run the playbook::
 
