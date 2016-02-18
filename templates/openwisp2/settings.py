@@ -88,7 +88,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
-LANGUAGE_CODE = 'it-it'
+LANGUAGE_CODE = '{{ openwisp2_language_code }}'
 TIME_ZONE = 'Europe/Rome'
 USE_I18N = True
 USE_L10N = True
