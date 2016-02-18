@@ -4,7 +4,7 @@
     name: "{{ item }}"
     state: latest
     virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: python3.4
+    virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
   with_items:
     - django-netjsonconfig
@@ -16,7 +16,7 @@
     name: "{{ item }}"
     state: latest
     virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: python3.4
+    virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
   with_items:
     - https://github.com/openwisp/django-netjsonconfig/tarball/master
@@ -28,7 +28,7 @@
     name: psycopg2
     state: latest
     virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: python3.4
+    virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
   notify: restart openwisp2
 
@@ -38,6 +38,6 @@
     name: MySQL-python
     state: latest
     virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: python3.4
+    virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
   notify: restart openwisp2

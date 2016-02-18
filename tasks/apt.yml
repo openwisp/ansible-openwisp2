@@ -6,13 +6,32 @@
     name={{ item }} state=latest
   with_items:
     - python-software-properties
-    - python-pip
-    - python-wheel
-    - python-dev
-    - python3-pip
-    - python3-wheel
-    - python3-dev
-    - python-virtualenv
     - sqlite3
     - supervisor
     - nginx
+
+- name: Install python2 packages
+  when: openwisp2_python in ["python2.7", "python2"]
+  apt: >
+    name={{ item }} state=latest
+  with_items:
+    - python-pip
+    - python-dev
+    - python-virtualenv
+
+- name: Install python3 packages
+  when: openwisp2_python == "python3.4"
+  apt: >
+    name={{ item }} state=latest
+  with_items:
+    - python3
+    - python3-pip
+    - python3-dev
+
+- name: Install python wheel (allowed to fail)
+  ignore_errors: yes
+  apt: >
+    name={{ item }} state=latest
+  with_items:
+    - python-wheel
+    - python3-wheel

@@ -27,6 +27,8 @@ Add an entry to your ``site.yml`` like the following one:
         openwisp2_shared_secret: changemeplease
         # whether to use the stable release (true) or the development verison (false)
         openwisp2_stable: true
+        # by default python3.4 is used, if may need to set this to python2.7 for older systems
+        #openwisp2_python: python2.7
         # customize the app_path
         #openwisp2_path: /opt/openwisp2
         # edit database settings only if you are not using sqlite
