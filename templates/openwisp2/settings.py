@@ -23,7 +23,11 @@ INSTALLED_APPS = [
     'django_netjsonconfig',
     'sortedm2m',
     'reversion',
-    {% for app in openwisp2_extra_django_apps %}'{{ app }}'{% endfor %}
+    {% for app in openwisp2_extra_django_apps %}'{{ app }}',
+    {% endfor %}
+
+    {% if openwisp2_sentry.get('dsn') %}'raven.contrib.django.raven_compat',{% endif %}
+
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -168,3 +172,7 @@ LOGGING = {
         'handlers': ['main_log', 'console', 'mail_admins'],
     }
 }
+
+{% if openwisp2_sentry.get('dsn') %}
+RAVEN_CONFIG = {{ openwisp2_sentry|to_nice_json }}
+{% endif %}

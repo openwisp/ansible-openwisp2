@@ -22,3 +22,5 @@ openwisp2_http_allowed_ip: false
 openwisp2_extra_django_apps:
     - django_extensions
 openwisp2_nginx_spdy: true
+openwisp2_sentry:
+    dsn: false

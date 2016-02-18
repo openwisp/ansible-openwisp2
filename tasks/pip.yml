@@ -62,3 +62,13 @@
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
   notify: restart openwisp2
+
+- name: Install raven (sentry client)
+  when: openwisp2_sentry.get('dsn') != False
+  pip:
+    name: raven
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+    virtualenv_site_packages: yes
+  notify: restart openwisp2

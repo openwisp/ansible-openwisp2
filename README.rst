@@ -61,6 +61,9 @@ Add an entry to your ``site.yml`` like the following one:
         #    - django_extensions
         # spdy protocol in nginx is enabled by default
         #openwisp2_nginx_spdy: true
+        # enable sentry
+        #openwisp2_sentry:
+        #    dsn: "https://7d2e3cd61acc32eca1fb2a390f7b55e1:bf82aab5ddn4422688e34a486c7426e3@getsentry.com:443/12345"
 
 Run the playbook::
 
