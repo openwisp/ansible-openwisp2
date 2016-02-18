@@ -8,6 +8,10 @@ Usable but not stable, will probably change a lot over time.
 Usage
 =====
 
+Generate a ``SECRET_KEY`` for django (copy the output of the following command)::
+
+    ./generate-django-secret-key
+
 Add an entry to your ``site.yml`` like the following one:
 
 .. code-block:: yaml
@@ -17,8 +21,9 @@ Add an entry to your ``site.yml`` like the following one:
       # you can add other roles here
         - openwisp2
       vars:
-        # change scret_key and shared_secret for security reasons
-        openwisp2_secret_key: fdPt*+$-ueeyic6-#txyy$5yf2er@c0d2n#h)qb)y5@lc$t*@w
+        # generate a secret key with ./generate-django-secret-key
+        openwisp2_secret_key: changemeplease
+        # change the openwisp2 shared secret to a value of your liking
         openwisp2_shared_secret: changemeplease
         openwisp2_stable: true
         # customize the app_path
