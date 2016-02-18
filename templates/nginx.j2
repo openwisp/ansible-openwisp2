@@ -55,6 +55,35 @@ server {
     # change this according to your domain/hostanme
     server_name {{ inventory_hostname }};
 
+    {% if openwisp2_http_allowed_ip %}
+    location @uwsgi {
+        uwsgi_pass 127.0.0.1:3031;
+        include uwsgi_params;
+        uwsgi_param HTTP_X_FORWARDED_PROTO http;
+    }
+
+    location / {
+        error_page 403 = @deny;
+        allow {{ openwisp2_http_allowed_ip }};
+        deny all;
+        try_files $uri @uwsgi;
+    }
+
+    location @deny {
+        return 301 https://$host$request_uri;
+    }
+
+    location /static {
+        alias {{ openwisp2_path }}/static/;
+    }
+
+    location /media {
+        alias {{ openwisp2_path }}/media/;
+    }
+    {% else %}
+
     # redirect all requests to https
     return 301 https://$host$request_uri;
+    {% endif %}
+
 }

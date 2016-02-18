@@ -45,6 +45,10 @@ Add an entry to your ``site.yml`` like the following one:
         #openwisp2_ssl_state: "California"
         #openwisp2_ssl_locality: "San Francisco"
         #openwisp2_ssl_organization: "IT dep."
+        # the following setting controls which ip address range
+        # is allowed to access the controller via unencrypted HTTP
+        # (this feature is disabled by default)
+        #openwisp2_http_allowed_ip: "10.8.0.0/16"
 
 Run the playbook::
 
