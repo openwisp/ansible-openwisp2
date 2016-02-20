@@ -1,0 +1,16 @@
+---
+
+dependencies: []
+
+galaxy_info:
+  author: nemesisdesign
+  description: Deploy and upgrade django-netjsonconfig/openwisp2
+  license: BSD
+  platforms:
+  - name: Debian
+    versions:
+    - 7
+    - 8
+  categories:
+  - system
+  - networking
