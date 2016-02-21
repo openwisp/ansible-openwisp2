@@ -28,46 +28,47 @@ Add an entry to your ``site.yml`` like the following one:
         # whether to use the stable release (true) or the development verison (false)
         openwisp2_stable: true
         # by default python3.4 is used, if may need to set this to python2.7 for older systems
-        #openwisp2_python: python2.7
+        openwisp2_python: python2.7
         # customize the app_path
-        #openwisp2_path: /opt/openwisp2
+        openwisp2_path: /opt/openwisp2
         # edit database settings only if you are not using sqlite
-        #openwisp2_database:
-        #    engine: django.db.backends.postgresql
-        #    name: openwisp2
-        #    user: postgres
-        #    password: ""
-        #    host: ""
-        #    port: ""
-        #    options: {}
+        openwisp2_database:
+            engine: django.db.backends.postgresql
+            name: openwisp2
+            user: postgres
+            password: ""
+            host: ""
+            port: ""
+            options: {}
         # customize other django settings:
-        #openwisp2_language_code: en-gb
-        #openwisp2_time_zone: UTC
-        #openwisp2_context: {}
+        openwisp2_language_code: en-gb
+        openwisp2_time_zone: UTC
+        # django-netjsonconfig context
+        openwisp2_context: {}
         # additional allowed hosts
-        #openwisp2_allowed_hosts:
-        #    - myadditionalhost.openwisp.org
+        openwisp2_allowed_hosts:
+            - myadditionalhost.openwisp.org
         # specify path to a valid SSL certificate and key
         # (a self-signed SSL cert will be generated if omitted)
-        #openwisp2_ssl_cert: "/etc/nginx/ssl/server.crt"
-        #openwisp2_ssl_key: "/etc/nginx/ssl/server.key"
+        openwisp2_ssl_cert: "/etc/nginx/ssl/server.crt"
+        openwisp2_ssl_key: "/etc/nginx/ssl/server.key"
         # customize the self-signed SSL certificate info if needed
-        #openwisp2_ssl_country: "US"
-        #openwisp2_ssl_state: "California"
-        #openwisp2_ssl_locality: "San Francisco"
-        #openwisp2_ssl_organization: "IT dep."
+        openwisp2_ssl_country: "US"
+        openwisp2_ssl_state: "California"
+        openwisp2_ssl_locality: "San Francisco"
+        openwisp2_ssl_organization: "IT dep."
         # the following setting controls which ip address range
         # is allowed to access the controller via unencrypted HTTP
         # (this feature is disabled by default)
-        #openwisp2_http_allowed_ip: "10.8.0.0/16"
+        openwisp2_http_allowed_ip: "10.8.0.0/16"
         # additional apps to install with pip and put in settings.INSTALLED_APPS
-        #openwisp2_extra_django_apps:
-        #    - django_extensions
+        openwisp2_extra_django_apps:
+            - django_extensions
         # spdy protocol in nginx is enabled by default
-        #openwisp2_nginx_spdy: true
+        openwisp2_nginx_spdy: true
         # enable sentry
-        #openwisp2_sentry:
-        #    dsn: "https://7d2e3cd61acc32eca1fb2a390f7b55e1:bf82aab5ddn4422688e34a486c7426e3@getsentry.com:443/12345"
+        openwisp2_sentry:
+            dsn: "https://7d2e3cd61acc32eca1fb2a390f7b55e1:bf82aab5ddn4422688e34a486c7426e3@getsentry.com:443/12345"
 
 Run the playbook::
 
