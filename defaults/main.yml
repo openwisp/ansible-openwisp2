@@ -11,6 +11,7 @@ openwisp2_database:
     options: {}
 openwisp2_language_code: "en-gb"
 openwisp2_time_zone: "UTC"
+openwisp2_context: {}
 openwisp2_ssl_cert: "{{ openwisp2_path }}/ssl/server.crt"
 openwisp2_ssl_key: "{{ openwisp2_path }}/ssl/server.key"
 openwisp2_ssl_country: "US"

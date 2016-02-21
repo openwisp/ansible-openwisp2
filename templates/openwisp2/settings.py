@@ -123,6 +123,9 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
 NETJSONCONFIG_SHARED_SECRET = '{{ openwisp2_shared_secret }}'
+{% if openwisp2_context %}
+NETJSONCONFIG_CONTEXT = {{ openwisp2_context|to_nice_json }}
+{% endif %}
 
 # See http://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.

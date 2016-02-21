@@ -43,6 +43,7 @@ Add an entry to your ``site.yml`` like the following one:
         # customize other django settings:
         #openwisp2_language_code: en-gb
         #openwisp2_time_zone: UTC
+        #openwisp2_context: {}
         # specify path to a valid SSL certificate and key
         # (a self-signed SSL cert will be generated if omitted)
         #openwisp2_ssl_cert: "/etc/nginx/ssl/server.crt"
