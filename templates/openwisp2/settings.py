@@ -9,7 +9,12 @@ SECRET_KEY = '{{ openwisp2_secret_key }}'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['{{ inventory_hostname }}']
+ALLOWED_HOSTS = [
+    '{{ inventory_hostname }}',
+{% for host in openwisp2_allowed_hosts %}
+    '{{ host }}',
+{% endfor %}
+]
 
 # Application definition
 

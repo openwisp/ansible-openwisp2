@@ -44,6 +44,9 @@ Add an entry to your ``site.yml`` like the following one:
         #openwisp2_language_code: en-gb
         #openwisp2_time_zone: UTC
         #openwisp2_context: {}
+        # additional allowed hosts
+        #openwisp2_allowed_hosts:
+        #    - myadditionalhost.openwisp.org
         # specify path to a valid SSL certificate and key
         # (a self-signed SSL cert will be generated if omitted)
         #openwisp2_ssl_cert: "/etc/nginx/ssl/server.crt"
