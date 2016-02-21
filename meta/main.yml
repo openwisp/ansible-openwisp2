@@ -9,8 +9,8 @@ galaxy_info:
   platforms:
   - name: Debian
     versions:
-    - 7
-    - 8
+    - wheezy
+    - jessie
   categories:
   - system
   - networking
