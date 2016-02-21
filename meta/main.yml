@@ -12,5 +12,5 @@ galaxy_info:
     - wheezy
     - jessie
   categories:
-  - system
-  - networking
+    - system
+    - networking
