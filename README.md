@@ -1,6 +1,8 @@
 ansible-openwisp2
 =================
 
+[![Galaxy](http://img.shields.io/badge/galaxy-nemesisdesign.openwisp2-blue.svg?style=flat-square)](https://galaxy.ansible.com/nemesisdesign/openwisp2/)
+
 Ansible role for the nascent openwisp2 controller.
 
 Usable but not stable, will probably change a lot over time.
