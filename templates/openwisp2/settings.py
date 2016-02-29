@@ -173,11 +173,25 @@ LOGGING = {
             'maxBytes': 5242880.0,
             'backupCount': 3,
             'formatter': 'verbose'
-        }
+        },
+{% if openwisp2_sentry.get('dsn') %}
+        'sentry': {
+            'level': 'WARNING',
+            'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
+            'filters': ['require_debug_false']
+        },
+{% endif %}
     },
     'root': {
         'level': 'INFO',
-        'handlers': ['main_log', 'console', 'mail_admins'],
+        'handlers': [
+            'main_log',
+            'console',
+            'mail_admins',
+{% if openwisp2_sentry.get('dsn') %}
+            'sentry'
+{% endif %}
+        ]
     }
 }
 
