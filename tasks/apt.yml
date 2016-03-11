@@ -5,6 +5,7 @@
   apt: >
     name={{ item }} state=latest
   with_items:
+    - sudo
     - python-software-properties
     - sqlite3
     - supervisor
