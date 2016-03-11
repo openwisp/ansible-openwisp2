@@ -8,7 +8,14 @@ admin.site.site_url = None
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+    # controller URLs
+    # used by devices to download/update their configuration
+    # keep the namespace argument unchanged
     url(r'^', include('django_netjsonconfig.controller.urls', namespace='controller')),
+    # common URLs
+    # shared among django-netjsonconfig components
+    # keep the namespace argument unchanged
+    url(r'^', include('django_netjsonconfig.urls', namespace='netjsonconfig')),
 ]
 
 urlpatterns += staticfiles_urlpatterns()
