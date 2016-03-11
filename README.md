@@ -76,3 +76,14 @@ Add an entry to your `site.yml` like the following one:
 Run the playbook:
 
     ansible-playbook -i hosts site.yml -l yourhost
+
+When the playbook is done running, if you got no errors you can login at::
+
+    https://<host>/admin
+    username: admin
+    passowrd: admin
+
+Change the password (and the username if you like) of the superuser as soon
+as possible.
+
+The superuser will be created only the first time the playbook is run.

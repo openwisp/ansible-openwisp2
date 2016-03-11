@@ -80,3 +80,15 @@
     app_path: "{{ openwisp2_path }}"
     command: "collectstatic --noinput"
     virtualenv: "{{ virtualenv_path }}"
+
+- name: create_superuser.py
+  template:
+    src: ../templates/create_superuser.py
+    dest: "{{ openwisp2_path }}/create_superuser.py"
+    mode: 0744
+
+- name: create superuser (only if no superuser is present)
+  shell: "env/bin/python create_superuser.py > .superuser-result"
+  args:
+    chdir: "{{ openwisp2_path }}"
+    creates: "{{ openwisp2_path }}/.superuser-result"
