@@ -27,7 +27,7 @@ Add an entry to your `site.yml` like the following one:
     openwisp2_secret_key: changemeplease
     # change the openwisp2 shared secret to a value of your liking
     openwisp2_shared_secret: changemeplease
-    # whether to use the stable release (true) or the development verison (false)
+    # whether to use the stable release (true) or the development version (false)
     openwisp2_stable: true
     # by default python3.4 is used, if may need to set this to python2.7 for older systems
     openwisp2_python: python2.7
