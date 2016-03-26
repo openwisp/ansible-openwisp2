@@ -31,7 +31,7 @@
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
   with_items:
-    - https://github.com/openwisp/django-netjsonconfig/tarball/master
+    - "git+git://github.com/openwisp/django-netjsonconfig#egg=django-netjsonconfig"
   notify: restart openwisp2
 
 - name: Install development version of netjsonconfig
