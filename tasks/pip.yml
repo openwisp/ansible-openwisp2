@@ -43,7 +43,7 @@
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
   with_items:
-    - https://github.com/openwisp/netjsonconfig/tarball/master
+    - "git+git://github.com/openwisp/netjsonconfig#egg=netjsonconfig"
   notify: restart openwisp2
 
 - name: Install extra django apps
