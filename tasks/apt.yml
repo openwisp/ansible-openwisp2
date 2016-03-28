@@ -38,3 +38,7 @@
   with_items:
     - python-wheel
     - python3-wheel
+
+- name: Install git-core if using development version of any openwisp module
+  apt: name=git state=latest
+  when: not openwisp2_stable or not openwisp2_netjsonconfig_stable
