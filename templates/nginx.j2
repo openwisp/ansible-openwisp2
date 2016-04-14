@@ -2,16 +2,15 @@ server {
     listen 443 ssl{% if openwisp2_nginx_spdy %} spdy{% endif %};  # ipv4
     #listen [::]:443 ssl;  # ipv6
 
+    # accepted hostnames on port 443
+    server_name {{ inventory_hostname }}{% for host in openwisp2_allowed_hosts %} {{ host }}{% endfor %};
+
     root {{ openwisp2_path }}/public_html;
     index index.html index.htm;
 
     # error log
     access_log {{ openwisp2_path }}/log/nginx.access.log;
     error_log {{ openwisp2_path }}/log/nginx.error.log error;
-
-    # Make site accessible from hostanme
-    # change this according to your domain/hostanme
-    server_name {{ inventory_hostname }};
 
     # set client body size #
     client_max_body_size 5M;
@@ -51,9 +50,8 @@ server {
     listen 80;  # ipv4
     #listen [::]:80;  # ipv6
 
-    # Make site accessible from hostanme on port 80
-    # change this according to your domain/hostanme
-    server_name {{ inventory_hostname }};
+    # accepted hostnames on port 80
+    server_name {{ inventory_hostname }}{% for host in openwisp2_allowed_hosts %} {{ host }}{% endfor %};
 
     {% if openwisp2_http_allowed_ip %}
     location @uwsgi {
