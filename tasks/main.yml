@@ -6,6 +6,7 @@
 - include: pip.yml
   tags: [openwisp2, pip]
 
+# comprises django_secret_key.yml
 - include: django.yml
   tags: [openwisp2, django]
 

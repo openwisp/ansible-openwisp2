@@ -48,6 +48,10 @@
     dest: "{{ openwisp2_path }}/openwisp2/wsgi.py"
     group: www-data
 
+# set openwisp2_secret_key if not defined explicitly
+- include: django_secret_key.yml
+  when: openwisp2_secret_key is not defined
+
 - name: settings.py
   notify: restart openwisp2
   template:
