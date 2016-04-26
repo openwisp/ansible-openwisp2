@@ -25,7 +25,7 @@ Install ansible **on your local machine** if you haven't done already, there are
 which you can do this, but we prefer to use the official python
 package manager, eg::
 
-    pip install ansible
+    sudo pip install ansible
 
 If you don't have pip installed see [Installing pip](https://pip.pypa.io/en/stable/installing/)
 on the pip documentation website.
@@ -40,7 +40,7 @@ Install this role
 For the sake of simplicity, the easiest thing is to install this role
 via `ansible-galaxy` (which was installed when installing ansible), therefore run::
 
-    ansible-galaxy install nemesisdesign.openwisp2
+    sudo ansible-galaxy install nemesisdesign.openwisp2
 
 Choose a working directory
 --------------------------
