@@ -89,7 +89,7 @@
   template:
     src: ../templates/create_superuser.py
     dest: "{{ openwisp2_path }}/create_superuser.py"
-    mode: 0744
+    mode: 0754
 
 - name: create superuser (only if no superuser is present)
   shell: "env/bin/python create_superuser.py > .superuser-result"
