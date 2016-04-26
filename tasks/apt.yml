@@ -27,13 +27,18 @@
     - python3-dev
     - python-virtualenv
 
-- name: Install optional python packages (allowed to fail)
+- name: Install python wheel (optional, allowed to fail)
   ignore_errors: yes
   apt: name={{ item }} state=latest
   with_items:
-    - python3-virtualenv
     - python-wheel
     - python3-wheel
+
+- name: Install python3-virtualenv
+  when: ansible_distribution != 'Ubuntu'
+  apt: name={{ item }} state=latest
+  with_items:
+    - python3-virtualenv
 
 - name: Install git if using development version of any openwisp module
   apt: name=git state=latest
