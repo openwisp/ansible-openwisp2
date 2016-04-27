@@ -23,7 +23,7 @@ Install ansible
 
 Install ansible **on your local machine** if you haven't done already, there are various way in
 which you can do this, but we prefer to use the official python
-package manager, eg::
+package manager, eg:
 
     sudo pip install ansible
 
@@ -38,7 +38,7 @@ Install this role
 -----------------
 
 For the sake of simplicity, the easiest thing is to install this role
-via `ansible-galaxy` (which was installed when installing ansible), therefore run::
+via `ansible-galaxy` (which was installed when installing ansible), therefore run:
 
     sudo ansible-galaxy install nemesisdesign.openwisp2
 
@@ -49,7 +49,7 @@ Choose a working directory where to put the configuration of openwisp2.
 
 This will be useful when you will need to upgrade openwisp2.
 
-Eg::
+Eg:
 
     mkdir ~/openwisp2-ansible-playbook
     cd ~/openwisp2-ansible-playbook
@@ -93,7 +93,7 @@ program to run each command. You may remove this line if you don't need it.
 Run the playbook
 ----------------
 
-Run the playbook with::
+Run the playbook with:
 
     ansible-playbook -i hosts playbook.yml -u <user> -k --ask-sudo-pass
 
@@ -103,7 +103,7 @@ The `--ask-sudo-pass` argument will need the `sshpass` program.
 
 You can remove `-k` and `--ask-sudo-pass` if your public SSH key is installed on the server.
 
-When the playbook is done running, if you got no errors you can login at::
+When the playbook is done running, if you got no errors you can login at:
 
     https://openwisp2.mydomain.com/admin
     username: admin
