@@ -4,13 +4,17 @@ dependencies: []
 
 galaxy_info:
   author: nemesisdesign
-  description: Deploy and upgrade django-netjsonconfig/openwisp2
+  description: Deploy and upgrade django-netjsonconfig/openwisp2 on debian/ubuntu
   license: BSD
   platforms:
   - name: Debian
     versions:
     - wheezy
     - jessie
+  - name: Ubuntu
+    versions:
+    - trusty
+    - xenial
   categories:
     - system
     - networking
