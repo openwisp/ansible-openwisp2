@@ -116,6 +116,13 @@ as possible.
 
 The superuser will be created only the first time the playbook is run.
 
+Upgrading openwisp2
+===================
+
+Upgrading is as simple as running the playbook again.
+
+It's even possible to set up the playbook to run periodically.
+
 Role variables
 ==============
 
