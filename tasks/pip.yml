@@ -20,7 +20,7 @@
     virtualenv_site_packages: yes
   with_items:
     - django-netjsonconfig
-  notify: restart openwisp2
+  notify: reload supervisor
 
 - name: Install development version of django-netjsonconfig
   when: not openwisp2_stable
@@ -32,7 +32,7 @@
     virtualenv_site_packages: yes
   with_items:
     - "git+git://github.com/openwisp/django-netjsonconfig#egg=django-netjsonconfig"
-  notify: restart openwisp2
+  notify: reload supervisor
 
 - name: Install development version of netjsonconfig
   when: not openwisp2_netjsonconfig_stable
@@ -44,7 +44,7 @@
     virtualenv_site_packages: yes
   with_items:
     - "git+git://github.com/openwisp/netjsonconfig#egg=netjsonconfig"
-  notify: restart openwisp2
+  notify: reload supervisor
 
 - name: Install extra django apps
   pip:
@@ -54,7 +54,7 @@
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
   with_items: openwisp2_extra_django_apps
-  notify: restart openwisp2
+  notify: reload supervisor
 
 - name: Install uwsgi
   pip:
@@ -65,7 +65,7 @@
     virtualenv_site_packages: yes
   with_items:
     - uwsgi
-  notify: restart openwisp2
+  notify: reload supervisor
 
 - name: Install psycopg2
   when: openwisp2_database.engine in ["django.db.backends.postgresql", "django.contrib.gis.db.backends.postgis"]
@@ -75,7 +75,7 @@
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
-  notify: restart openwisp2
+  notify: reload supervisor
 
 - name: Install MySQL-python
   when: openwisp2_database.engine in ["django.db.backends.mysql", "django.contrib.gis.db.backends.mysql"]
@@ -85,7 +85,7 @@
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
-  notify: restart openwisp2
+  notify: reload supervisor
 
 - name: Install raven (sentry client)
   when: openwisp2_sentry.get('dsn') != False
@@ -95,4 +95,4 @@
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
-  notify: restart openwisp2
+  notify: reload supervisor
