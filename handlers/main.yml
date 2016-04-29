@@ -2,6 +2,10 @@
 ## handlers
 ---
 
+- name: reload systemd
+  shell: systemctl daemon-reload
+  when: ansible_distribution_release in ['jessie', 'xenial']
+
 - name: reload supervisor
   shell: supervisorctl reload
 

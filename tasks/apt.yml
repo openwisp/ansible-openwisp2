@@ -3,6 +3,7 @@
 
 - name: Install system packages
   apt: name={{ item }} state=latest
+  notify: reload systemd
   with_items:
     - sudo
     - python-software-properties
