@@ -145,7 +145,7 @@ Below are listed all the variables you can customize.
     openwisp2_stable: true
     # set to false to use development version of netjsonconfig
     openwisp2_netjsonconfig_stable: true
-    # by default python3.4 is used, if may need to set this to python2.7 for older systems
+    # by default python3 is used, if may need to set this to python2.7 for older systems
     openwisp2_python: python2.7
     # customize the app_path
     openwisp2_path: /opt/openwisp2

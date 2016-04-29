@@ -1,4 +1,4 @@
-openwisp2_python: python3.4
+openwisp2_python: python3
 openwisp2_stable: true
 openwisp2_netjsonconfig_stable: true
 openwisp2_path: "/opt/openwisp2"
