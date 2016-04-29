@@ -11,6 +11,9 @@
     - supervisor
     - nginx
 
+- name: ensure supervisor is started
+  service: name=supervisor state=started
+
 - name: Install python2 packages
   when: openwisp2_python in ["python2.7", "python2"]
   apt: name={{ item }} state=latest
