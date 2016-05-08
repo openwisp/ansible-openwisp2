@@ -136,8 +136,6 @@ Below are listed all the variables you can customize.
   # you can add other roles here
     - openwisp2
   vars:
-    # generate a secret key with ./generate-django-secret-key
-    # openwisp2_secret_key: changemeplease
     # change the openwisp2 shared secret to a value of your liking
     openwisp2_shared_secret: changemeplease
     # whether to use the stable release (true) or the development version (false)
