@@ -21,9 +21,8 @@ Ansible is a configuration management tool that works by entering servers via SS
 Install ansible
 ---------------
 
-Install ansible **on your local machine** if you haven't done already, there are various way in
-which you can do this, but we prefer to use the official python
-package manager, eg:
+Install ansible **on your local machine** if you haven't done already, there are various ways in
+which you can do this, but we prefer to use the official python package manager, eg:
 
     sudo pip install ansible
 
@@ -45,7 +44,7 @@ via `ansible-galaxy` (which was installed when installing ansible), therefore ru
 Choose a working directory
 --------------------------
 
-Choose a working directory where to put the configuration of openwisp2.
+Choose a working directory **on your local machine** where to put the configuration of openwisp2.
 
 This will be useful when you will need to upgrade openwisp2.
 
