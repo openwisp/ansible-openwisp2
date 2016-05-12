@@ -53,7 +53,7 @@
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
-  with_items: openwisp2_extra_django_apps
+  with_items: "{{ openwisp2_extra_django_apps }}"
   notify: reload supervisor
 
 - name: Install uwsgi
