@@ -15,13 +15,19 @@ guide you towards a fully working basic openwisp2 installation.
 
 If you already know how to use ansible, you can skip this tutorial.
 
-Ansible is a configuration management tool that works by entering servers via SSH,
-**so you need to install it and configure it on your local machine**.
+First of all you need to understand two key concepts:
+
+* for **"production server"** we mean a server (**not a laptop or a desktop computer!**) with public ipv4 / ipv6 which is used to host openwisp2
+* for **"local machine"** we mean the host from which you launch ansible, eg: your own laptop
+
+Ansible is a configuration management tool that works by entering production servers via SSH,
+**so you need to install it and configure it on the machine where you launch the deployment** and
+this machine must be able to SSH into the production server.
 
 Install ansible
 ---------------
 
-Install ansible **on your local machine** if you haven't done already, there are various ways in
+Install ansible **on your local machine** (not the production server!) if you haven't done already, there are various ways in
 which you can do this, but we prefer to use the official python package manager, eg:
 
     sudo pip install ansible
@@ -36,7 +42,7 @@ which we have tested this playbook).
 Install this role
 -----------------
 
-For the sake of simplicity, the easiest thing is to install this role
+For the sake of simplicity, the easiest thing is to install this role **on your local machine**
 via `ansible-galaxy` (which was installed when installing ansible), therefore run:
 
     sudo ansible-galaxy install nemesisdesign.openwisp2
@@ -61,7 +67,7 @@ Create inventory file
 The inventory file is where group of servers are defined. In our simple case we can
 get away with defining just one group in which we will put just one server.
 
-Create a new file `hosts` with the following contents:
+Create a new file `hosts` **on your local machine** with the following contents:
 
     [openwisp2]
     openwisp2.mydomain.com
@@ -71,7 +77,7 @@ Substitute `openwisp2.mydomain.com` with your hostname (ip addresses are allowed
 Create playbook file
 --------------------
 
-Create a new playbook file `playbook.yml` with the following contents:
+Create a new playbook file `playbook.yml` **on your local machine** with the following contents:
 
 ```yaml
 - hosts: openwisp2
@@ -92,7 +98,9 @@ program to run each command. You may remove this line if you don't need it.
 Run the playbook
 ----------------
 
-Run the playbook with:
+Now is time to **deploy openwisp2 to the production server**.
+
+Run the playbook **on your local machine** with:
 
     ansible-playbook -i hosts playbook.yml -u <user> -k --ask-sudo-pass
 
@@ -118,7 +126,7 @@ The superuser will be created only the first time the playbook is run.
 Upgrading openwisp2
 ===================
 
-Upgrading is as simple as running the playbook again.
+Upgrading is as simple as running the playbook again **on your local machine**.
 
 It's even possible to set up the playbook to run periodically.
 
