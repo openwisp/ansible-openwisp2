@@ -123,6 +123,18 @@ as possible.
 
 The superuser will be created only the first time the playbook is run.
 
+SSL certificate gotchas
+=======================
+
+When you access the admin website you will get an SSL certificate warning because the
+playbook creates a self-signed (untrusted) SSL certificate. You can get rid of the warning by
+installing your own trusted certificate and set the openwisp2_ssl_cert` and `openwisp2_ssl_key`
+variables accordingly.
+
+If you keep the untrusted certificate, you will also need to disable SSL verification on devices
+using [openwisp-config](https://github.com/openwisp/openwisp-config) by setting verify_ssl` to
+0`, although I advice against using this kind of setup in a production environment.
+
 Upgrading openwisp2
 ===================
 
