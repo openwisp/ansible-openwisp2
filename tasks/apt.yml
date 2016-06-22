@@ -39,6 +39,7 @@
     - python3-wheel
 
 - name: Install python3-virtualenv
+  ignore_errors: yes
   when: ansible_distribution != 'Ubuntu'
   apt: name={{ item }} state=latest
   with_items:
