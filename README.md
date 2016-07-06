@@ -201,6 +201,8 @@ Below are listed all the variables you can customize.
         - django_extensions
     # spdy protocol in nginx is enabled by default
     openwisp2_nginx_spdy: true
+    # ipv6 must be enabled explicitly to avoid errors
+    openwisp2_nginx_ipv6: false
     # enable sentry
     openwisp2_sentry:
         dsn: "https://7d2e3cd61acc32eca1fb2a390f7b55e1:bf82aab5ddn4422688e34a486c7426e3@getsentry.com:443/12345"

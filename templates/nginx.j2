@@ -1,6 +1,6 @@
 server {
     listen 443 ssl{% if openwisp2_nginx_spdy %} spdy{% endif %};  # ipv4
-    #listen [::]:443 ssl;  # ipv6
+    {% if openwisp2_nginx_ipv6 %}listen [::]:443 ssl{% if openwisp2_nginx_spdy %} spdy{% endif %};  # ipv6{% endif %}
 
     # accepted hostnames on port 443
     server_name {{ inventory_hostname }}{% for host in openwisp2_allowed_hosts %} {{ host }}{% endfor %};
@@ -48,7 +48,7 @@ server {
 
 server {
     listen 80{% if openwisp2_nginx_spdy %} spdy{% endif %};  # ipv4
-    #listen [::]:80;  # ipv6
+    {% if openwisp2_nginx_ipv6 %}listen [::]:80{% if openwisp2_nginx_spdy %} spdy{% endif %};  # ipv6{% endif %}
 
     # accepted hostnames on port 80
     server_name {{ inventory_hostname }}{% for host in openwisp2_allowed_hosts %} {{ host }}{% endfor %};
