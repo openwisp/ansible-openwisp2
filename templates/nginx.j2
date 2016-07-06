@@ -47,7 +47,7 @@ server {
 }
 
 server {
-    listen 80;  # ipv4
+    listen 80{% if openwisp2_nginx_spdy %} spdy{% endif %};  # ipv4
     #listen [::]:80;  # ipv6
 
     # accepted hostnames on port 80
