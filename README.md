@@ -132,8 +132,7 @@ installing your own trusted certificate and set the `openwisp2_ssl_cert` and `op
 variables accordingly.
 
 If you keep the untrusted certificate, you will also need to disable SSL verification on devices
-using [openwisp-config](https://github.com/openwisp/openwisp-config) by setting verify_ssl` to
-0`, although I advice against using this kind of setup in a production environment.
+using [openwisp-config](https://github.com/openwisp/openwisp-config) by setting `verify_ssl` to `0`, although I advice against using this kind of setup in a production environment.
 
 Upgrading openwisp2
 ===================
