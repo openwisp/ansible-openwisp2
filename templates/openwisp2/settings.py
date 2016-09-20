@@ -19,13 +19,13 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_netjsonconfig',
+    'django.contrib.admin',
     'sortedm2m',
     'reversion',
 {% for app in openwisp2_extra_django_apps %}
