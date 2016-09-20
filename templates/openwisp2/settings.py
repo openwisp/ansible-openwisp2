@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'sortedm2m',
     'reversion',
+    'django_x509',
 {% for app in openwisp2_extra_django_apps %}
     '{{ app }}',
 {% endfor %}
@@ -131,6 +132,10 @@ NETJSONCONFIG_SHARED_SECRET = '{{ openwisp2_shared_secret }}'
 {% if openwisp2_context %}
 NETJSONCONFIG_CONTEXT = {{ openwisp2_context|to_nice_json }}
 {% endif %}
+
+# django x509 settings
+DJANGO_X509_DEFAULT_CERT_VALIDITY = {{ openwisp2_default_cert_validity }}
+DJANGO_X509_DEFAULT_CA_VALIDITY = {{ openwisp2_default_ca_validity }}
 
 # See http://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.

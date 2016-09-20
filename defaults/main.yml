@@ -28,3 +28,5 @@ openwisp2_nginx_spdy: true
 openwisp2_nginx_ipv6: false
 openwisp2_sentry:
     dsn: false
+openwisp2_default_cert_validity: 1825
+openwisp2_default_ca_validity: 3650
