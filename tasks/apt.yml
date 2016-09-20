@@ -10,6 +10,7 @@
     - sqlite3
     - supervisor
     - nginx
+    - libssl-dev
     - openssl
 
 - name: ensure supervisor is started
