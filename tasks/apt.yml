@@ -10,6 +10,7 @@
     - sqlite3
     - supervisor
     - nginx
+    - openssl
 
 - name: ensure supervisor is started
   service: name=supervisor state=started
