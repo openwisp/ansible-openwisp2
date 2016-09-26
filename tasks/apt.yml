@@ -7,11 +7,14 @@
   with_items:
     - sudo
     - python-software-properties
+    - build-essential
     - sqlite3
     - supervisor
     - nginx
-    - libssl-dev
     - openssl
+    - libssl-dev
+    - libffi-dev
+    - python-dev
 
 - name: ensure supervisor is started
   service: name=supervisor state=started
