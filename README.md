@@ -137,9 +137,11 @@ using [openwisp-config](https://github.com/openwisp/openwisp-config) by setting 
 Upgrading openwisp2
 ===================
 
-Upgrading is as simple as running the playbook again **on your local machine**.
+Upgrading is as simple as running `ansible-playbook` again **on your local machine**:
 
-It's even possible to set up the playbook to run periodically.
+    ansible-playbook -i hosts playbook.yml
+
+You may also run the playbook automatically periodically or when a new release of OpenWISP2, for example, by using setting up a continuos integration system.
 
 Role variables
 ==============
