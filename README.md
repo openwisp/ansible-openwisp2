@@ -137,7 +137,11 @@ using [openwisp-config](https://github.com/openwisp/openwisp-config) by setting 
 Upgrading openwisp2
 ===================
 
-Upgrading is as simple as running `ansible-playbook` again **on your local machine**:
+Update this ansible-role via `ansible-galaxy`:
+
+    ansible-galaxy install --force openwisp.openwisp2
+
+Run `ansible-playbook` again **on your local machine**:
 
     ansible-playbook -i hosts playbook.yml
 
