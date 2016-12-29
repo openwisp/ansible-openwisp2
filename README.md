@@ -1,7 +1,7 @@
 ansible-openwisp2
 =================
 
-[![Galaxy](http://img.shields.io/badge/galaxy-nemesisdesign.openwisp2-blue.svg?style=flat-square)](https://galaxy.ansible.com/nemesisdesign/openwisp2/)
+[![Galaxy](http://img.shields.io/badge/galaxy-openwisp.openwisp2-blue.svg?style=flat-square)](https://galaxy.ansible.com/openwisp/openwisp2/)
 
 Ansible role for the nascent openwisp2 controller.
 
@@ -45,7 +45,7 @@ Install this role
 For the sake of simplicity, the easiest thing is to install this role **on your local machine**
 via `ansible-galaxy` (which was installed when installing ansible), therefore run:
 
-    sudo ansible-galaxy install nemesisdesign.openwisp2
+    sudo ansible-galaxy install openwisp.openwisp2
 
 Choose a working directory
 --------------------------
@@ -83,7 +83,7 @@ Create a new playbook file `playbook.yml` **on your local machine** with the fol
 - hosts: openwisp2
   sudo: "{{ sudo | default('yes') }}"
   roles:
-    - nemesisdesign.openwisp2
+    - openwisp.openwisp2
   vars:
     openwisp2_shared_secret: <PLEASE_CHANGE_ME>
 ```
