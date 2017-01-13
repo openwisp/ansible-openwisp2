@@ -214,3 +214,8 @@ Below are listed all the variables you can customize.
     openwisp2_default_cert_validity: 1825
     openwisp2_default_ca_validity: 3650
 ```
+
+Support
+=======
+
+Send questions to the [OpenWISP Mailing List](https://groups.google.com/d/forum/openwisp).
