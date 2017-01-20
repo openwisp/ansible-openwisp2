@@ -3,7 +3,7 @@ ansible-openwisp2
 
 [![Galaxy](http://img.shields.io/badge/galaxy-openwisp.openwisp2-blue.svg?style=flat-square)](https://galaxy.ansible.com/openwisp/openwisp2/)
 
-Ansible role for the nascent openwisp2 controller.
+Ansible role that installs the openwisp2 controller.
 
 Tested on **debian** and **ubuntu**.
 
