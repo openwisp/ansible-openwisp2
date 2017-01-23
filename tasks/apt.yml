@@ -16,6 +16,11 @@
     - libffi-dev
     - python-dev
 
+# fixes issue described in https://docs.ansible.com/ansible/become.html#becoming-an-unprivileged-user
+- name: Install acl if acting as non-root user
+  apt: name=acl state=latest
+  when: ansible_user != 'root'
+
 - name: ensure supervisor is started
   service: name=supervisor state=started
 
