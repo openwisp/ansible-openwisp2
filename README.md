@@ -83,7 +83,7 @@ Create a new playbook file `playbook.yml` **on your local machine** with the fol
 
 ```yaml
 - hosts: openwisp2
-  sudo: "{{ sudo | default('yes') }}"
+  become: "{{ become | default('yes') }}"
   roles:
     - openwisp.openwisp2
   vars:
@@ -94,7 +94,7 @@ Substitute `<PLEASE_CHANGE_ME>` with a value of your liking, this value will be 
 `NETJSONCONFIG_SHARED_SECRET` setting, see the [relevant section in the README of django-netjsonconfig](https://github.com/openwisp/django-netjsonconfig#netjsonconfig-shared-secret)
 for more information.
 
-The line `sudo: "{{ sudo | default('yes') }}"` means ansible  will use the `sudo`
+The line `become: "{{ become | default('yes') }}"` means ansible  will use the `sudo`
 program to run each command. You may remove this line if you don't need it.
 
 Run the playbook
