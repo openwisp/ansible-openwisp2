@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_netjsonconfig',
+    'django_netjsonconfig.admin_theme',
     'django.contrib.admin',
     'sortedm2m',
     'reversion',

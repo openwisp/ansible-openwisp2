@@ -1,10 +1,8 @@
 from django.conf.urls import include, url
-from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django_netjsonconfig.admin_theme.admin import admin, openwisp_admin
 
-admin.autodiscover()
-admin.site.site_url = None
-
+openwisp_admin()
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
