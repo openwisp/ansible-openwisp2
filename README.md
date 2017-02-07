@@ -9,6 +9,8 @@ Tested on **debian** and **ubuntu**.
 
 **NOTE**: it is highly suggested to use this procedure on clean virtual machines or linux containers.
 
+**Minimum ansible version supported**: 2.2.
+
 Usage (tutorial)
 ================
 
@@ -29,10 +31,10 @@ this machine must be able to SSH into the production server.
 Install ansible
 ---------------
 
-Install ansible **on your local machine** (not the production server!) if you haven't done already, there are various ways in
+Install ansible (version 2.2 or higher) **on your local machine** (not the production server!) if you haven't done already, there are various ways in
 which you can do this, but we prefer to use the official python package manager, eg:
 
-    sudo pip install ansible
+    sudo pip install ansible>=2.2
 
 If you don't have pip installed see [Installing pip](https://pip.pypa.io/en/stable/installing/)
 on the pip documentation website.
