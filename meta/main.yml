@@ -3,9 +3,11 @@
 dependencies: []
 
 galaxy_info:
-  author: nemesisdesign
-  description: Deploy and upgrade django-netjsonconfig/openwisp2 on debian/ubuntu
+  author: Federico Capoano
+  company: Cineca
+  description: Official role to install and upgrade openwisp2 controller
   license: BSD
+  min_ansible_version: 2.2
   platforms:
   - name: Debian
     versions:
