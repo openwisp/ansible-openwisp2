@@ -1,6 +1,8 @@
 ansible-openwisp2
 =================
 
+[![Installing OpenWISP2](https://raw.githubusercontent.com/openwisp/ansible-openwisp2/4fa71c8425e2e262abc250c8a195ad8a81cf0f0f/docs/install-openwisp2.png)](https://www.youtube.com/watch?v=v_DUeFUGG8Q&index=1&list=PLPueLZei9c8_DEYgC5StOcR5bCAcQVfR8)
+
 [![Galaxy](http://img.shields.io/badge/galaxy-openwisp.openwisp2-blue.svg?style=flat-square)](https://galaxy.ansible.com/openwisp/openwisp2/)
 
 Ansible role that installs the openwisp2 controller.
