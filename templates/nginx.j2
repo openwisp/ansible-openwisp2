@@ -53,6 +53,13 @@ server {
     # accepted hostnames on port 80
     server_name {{ inventory_hostname }}{% for host in openwisp2_allowed_hosts %} {{ host }}{% endfor %};
 
+    root {{ openwisp2_path }}/public_html;
+
+    # Necessary for Let's Encrypt Domain Name ownership validation
+    location /.well-known/ {
+        try_files   $uri /dev/null =404;
+    }
+
     {% if openwisp2_http_allowed_ip %}
     location @uwsgi {
         uwsgi_pass 127.0.0.1:3031;
@@ -81,7 +88,9 @@ server {
     {% else %}
 
     # redirect all requests to https
-    return 301 https://$host$request_uri;
+    location / {
+        return 301 https://$host$request_uri;
+    }
     {% endif %}
 
 }
