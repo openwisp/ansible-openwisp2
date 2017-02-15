@@ -8,6 +8,7 @@ galaxy_info:
   description: Official role to install and upgrade openwisp2 controller
   license: BSD
   min_ansible_version: 2.2
+  issue_tracker_url: https://github.com/openwisp/ansible-openwisp2/issues
   platforms:
   - name: Debian
     versions:
@@ -18,5 +19,8 @@ galaxy_info:
     - trusty
     - xenial
   categories:
+    - system
+    - networking
+  galaxy_tags:
     - system
     - networking
