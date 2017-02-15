@@ -194,7 +194,7 @@ Upgrading openwisp2
 
 Update this ansible-role via `ansible-galaxy`:
 
-    ansible-galaxy install --force openwisp.openwisp2
+    sudo ansible-galaxy install --force openwisp.openwisp2
 
 Run `ansible-playbook` again **on your local machine**:
 
