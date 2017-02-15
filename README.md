@@ -135,10 +135,59 @@ SSL certificate gotchas
 When you access the admin website you will get an SSL certificate warning because the
 playbook creates a self-signed (untrusted) SSL certificate. You can get rid of the warning by
 installing your own trusted certificate and set the `openwisp2_ssl_cert` and `openwisp2_ssl_key`
-variables accordingly.
+variables accordingly or by following the instructions explained in the section
+["Automatic SSL certificate"](#automatic-ssl-certificate).
 
 If you keep the untrusted certificate, you will also need to disable SSL verification on devices
 using [openwisp-config](https://github.com/openwisp/openwisp-config) by setting `verify_ssl` to `0`, although I advice against using this kind of setup in a production environment.
+
+Automatic SSL certificate
+=========================
+
+This section explains how to **automatically install and renew a valid SSL certificate** signed by
+[letsencrypt](https://letsencrypt.org/).
+
+The first thing you have to do is to setup a valid domain for your openwisp2 instance, this means
+your inventory file (hosts) should look like the following:
+
+    [openwisp2]
+    openwisp2.yourdomain.com
+
+You must be able to add a DNS record for `openwisp2.yourdomain.com`, you cannot use an ip address
+in place of `openwisp2.yourdomain.com`.
+
+Once your domain is set up and the DNS record is propagated, proceed by installing the ansible role
+[thefinn93.letsencrypt](https://github.com/thefinn93/ansible-letsencrypt):
+
+    sudo ansible-galaxy install thefinn93.letsencrypt
+
+Then proceed to edit your `playbook.yml` so that it will look similar to the following example:
+
+```yaml
+- hosts: openwisp2
+  become: "{{ become | default('yes') }}"
+  roles:
+    - thefinn93.letsencrypt
+    - openwisp.openwisp2
+  vars:
+    openwisp2_shared_secret: <PLEASE_CHANGE_ME>
+    # SSL certificates
+    openwisp2_ssl_cert: "/etc/letsencrypt/live/{{ ansible_fqdn }}/fullchain.pem"
+    openwisp2_ssl_key: "/etc/letsencrypt/live/{{ ansible_fqdn }}/privkey.pem"
+    # letsencrypt configuration
+    letsencrypt_webroot_path: "{{ openwisp2_path }}/public_html"
+    letsencrypt_email: <YOUR_EMAIL_HERE>
+    letsencrypt_renewal_command_args: '--renew-hook "service nginx restart"'
+    letsencrypt_renewal_frequency:
+      day: "*"
+      hour: "7,19"  # renewal cronjob runs at 7 AM and at 7 PM
+      minute: 0
+```
+
+Fill a real email address in place of `<YOUR_EMAIL_HERE>`, it may be used by [letsencrypt](https://letsencrypt.org/)
+to send you important communications regarding your SSL certificate.
+
+Once you have set up all the variables correctly, run the playbook again.
 
 Upgrading openwisp2
 ===================
