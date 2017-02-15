@@ -23,7 +23,8 @@ If you already know how to use ansible, you can skip this tutorial.
 
 First of all you need to understand two key concepts:
 
-* for **"production server"** we mean a server (**not a laptop or a desktop computer!**) with public ipv4 / ipv6 which is used to host openwisp2
+* for **"production server"** we mean a server (**not a laptop or a desktop computer!**) with public
+  ipv4 / ipv6 which is used to host openwisp2
 * for **"local machine"** we mean the host from which you launch ansible, eg: your own laptop
 
 Ansible is a configuration management tool that works by entering production servers via SSH,
@@ -33,8 +34,9 @@ this machine must be able to SSH into the production server.
 Install ansible
 ---------------
 
-Install ansible (version 2.2 or higher) **on your local machine** (not the production server!) if you haven't done already, there are various ways in
-which you can do this, but we prefer to use the official python package manager, eg:
+Install ansible (version 2.2 or higher) **on your local machine** (not the production server!) if
+you haven't done already, there are various ways in which you can do this, but we prefer
+to use the official python package manager, eg:
 
     sudo pip install ansible>=2.2
 
@@ -139,7 +141,8 @@ variables accordingly or by following the instructions explained in the section
 ["Automatic SSL certificate"](#automatic-ssl-certificate).
 
 If you keep the untrusted certificate, you will also need to disable SSL verification on devices
-using [openwisp-config](https://github.com/openwisp/openwisp-config) by setting `verify_ssl` to `0`, although I advice against using this kind of setup in a production environment.
+using [openwisp-config](https://github.com/openwisp/openwisp-config) by setting `verify_ssl` to `0`,
+although I advice against using this kind of setup in a production environment.
 
 Automatic SSL certificate
 =========================
@@ -200,7 +203,8 @@ Run `ansible-playbook` again **on your local machine**:
 
     ansible-playbook -i hosts playbook.yml
 
-You may also run the playbook automatically periodically or when a new release of OpenWISP2, for example, by using setting up a continuos integration system.
+You may also run the playbook automatically periodically or when a new release of OpenWISP2, for
+example, by using setting up a continuos integration system.
 
 Role variables
 ==============
