@@ -31,6 +31,9 @@ Ansible is a configuration management tool that works by entering production ser
 **so you need to install it and configure it on the machine where you launch the deployment** and
 this machine must be able to SSH into the production server.
 
+**If you are trying to install OpenWISP2 on your laptop or desktop pc just for testing purposes**,
+please read [Install OpenWISP2 locally (laptop, desktop pc)](#install-openwisp2-locally-laptop-desktop-pc).
+
 Install ansible
 ---------------
 
@@ -93,7 +96,7 @@ Create a new playbook file `playbook.yml` **on your local machine** with the fol
   roles:
     - openwisp.openwisp2
   vars:
-    openwisp2_shared_secret: <PLEASE_CHANGE_ME>
+    openwisp2_shared_secret: <PLEASE_CHANGE_ME>  # put any value of your liking
 ```
 
 Substitute `<PLEASE_CHANGE_ME>` with a value of your liking, this value will be used for
@@ -130,6 +133,38 @@ Change the password (and the username if you like) of the superuser as soon
 as possible.
 
 The superuser will be created only the first time the playbook is run.
+
+Install OpenWISP2 locally (laptop, desktop pc)
+----------------------------------------------
+
+If you are trying to install *OpenWISP 2* on your laptop or desktop pc for testing purposes,
+you can run ``ansible-playbook`` with the ``--connection=local`` flag.
+
+**Step 1**: [Install ansible](#install-ansible)
+
+**Step 2**: [Install this role](#install-this-role)
+
+**Step 3**, create ``playbook.yml``:
+
+```yaml
+- hosts: localhost
+  roles: [openwisp.openwisp2]
+  vars:
+    openwisp2_shared_secret: <PLEASE_CHANGE_ME>  # put any value of your liking
+```
+
+**Step 4**, become root and launch ``ansible-playbook`` locally:
+
+    sudo -s  # become root, needs sudo password
+    ansible-playbook -i "localhost," --connection local playbook.yml
+
+When the playbook is done running, if you got no errors you can login at:
+
+    https://localhost/admin
+    username: admin
+    passowrd: admin
+
+**Note**: do not use this method in a production system.
 
 SSL certificate gotchas
 =======================
