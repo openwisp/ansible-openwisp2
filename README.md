@@ -108,7 +108,7 @@ Run the playbook
 
 Now is time to **deploy openwisp2 to the production server**.
 
-Run the playbook **on your local machine** with:
+Run the playbook **from your local machine** with:
 
     ansible-playbook -i hosts playbook.yml -u <user> -k --ask-sudo-pass
 
@@ -199,7 +199,7 @@ Update this ansible-role via `ansible-galaxy`:
 
     sudo ansible-galaxy install --force openwisp.openwisp2
 
-Run `ansible-playbook` again **on your local machine**:
+Run `ansible-playbook` again **from your local machine**:
 
     ansible-playbook -i hosts playbook.yml
 
