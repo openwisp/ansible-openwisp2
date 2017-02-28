@@ -312,4 +312,4 @@ Below are listed all the variables you can customize.
 Support
 =======
 
-Send questions to the [OpenWISP Mailing List](https://groups.google.com/d/forum/openwisp).
+See [OpenWISP Support Channels](http://openwisp.org/support.html).
