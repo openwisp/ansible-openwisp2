@@ -47,7 +47,7 @@ If you don't have pip installed see [Installing pip](https://pip.pypa.io/en/stab
 on the pip documentation website.
 
 [Installing ansible in other ways](http://docs.ansible.com/ansible/intro_installation.html#latest-release-via-yum)
-is fine too, just make sure to install a version of the `2.0.x` series (which is the version with
+is fine too, just make sure to install a version of the `2.x` series (which is the version with
 which we have tested this playbook).
 
 Install this role
