@@ -250,10 +250,13 @@ Below are listed all the variables you can customize.
   # you can add other roles here
     - openwisp.openwisp2
   vars:
-    # whether to use the stable release (true) or the development version (false)
-    openwisp2_stable: true
-    # set to false to use development version of netjsonconfig
-    openwisp2_netjsonconfig_stable: true
+    # you may set one of these variables to true if you need to
+    # use the development version of a specific openwisp2 module
+    openwisp2_controller_dev: false
+    openwisp2_users_dev: false
+    openwisp2_django_netjsonconfig_dev: false
+    openwisp2_django_x509_dev: false
+    openwisp2_netjsonconfig_dev: false
     # by default python3 is used, if may need to set this to python2.7 for older systems
     openwisp2_python: python2.7
     # customize the app_path

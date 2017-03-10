@@ -1,6 +1,9 @@
 openwisp2_python: python3
-openwisp2_stable: true
-openwisp2_netjsonconfig_stable: true
+openwisp2_controller_dev: false
+openwisp2_users_dev: false
+openwisp2_django_netjsonconfig_dev: false
+openwisp2_django_x509_dev: false
+openwisp2_netjsonconfig_dev: false
 openwisp2_path: "/opt/openwisp2"
 openwisp2_database:
     engine: "django.db.backends.sqlite3"

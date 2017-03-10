@@ -54,7 +54,3 @@
   apt: name={{ item }} state=latest
   with_items:
     - python3-virtualenv
-
-- name: Install git if using development version of any openwisp module
-  apt: name=git state=latest
-  when: not openwisp2_stable or not openwisp2_netjsonconfig_stable

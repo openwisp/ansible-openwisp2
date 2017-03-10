@@ -10,7 +10,7 @@
     - setuptools
     - wheel
 
-- name: Install openwisp2 modules
+- name: Install openwisp2 controller and its dependencies
   pip:
     name: "{{ item }}"
     state: latest
@@ -18,44 +18,57 @@
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
   with_items:
-    - openwisp-users
     - openwisp-controller
   notify: reload supervisor
 
-- name: Install stable version of django-netjsonconfig
-  when: openwisp2_stable
+- name: Install development version of openwisp-controller
+  when: openwisp2_controller_dev
   pip:
-    name: "{{ item }}"
+    name: https://github.com/openwisp/openwisp-controller/tarball/master
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
-  with_items:
-    - django-netjsonconfig
+  notify: reload supervisor
+
+- name: Install development version of openwisp-users
+  when: openwisp2_users_dev
+  pip:
+    name: https://github.com/openwisp/openwisp-users/tarball/master
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+    virtualenv_site_packages: yes
   notify: reload supervisor
 
 - name: Install development version of django-netjsonconfig
-  when: not openwisp2_stable
+  when: openwisp2_django_netjsonconfig_dev
   pip:
-    name: "{{ item }}"
+    name: https://github.com/openwisp/django-netjsonconfig/tarball/master
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
-  with_items:
-    - "git+git://github.com/openwisp/django-netjsonconfig#egg=django-netjsonconfig"
+  notify: reload supervisor
+
+- name: Install development version of django-x509
+  when: openwisp2_django_x509_dev
+  pip:
+    name: https://github.com/openwisp/django-x509/tarball/master
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+    virtualenv_site_packages: yes
   notify: reload supervisor
 
 - name: Install development version of netjsonconfig
-  when: not openwisp2_netjsonconfig_stable
+  when: openwisp2_netjsonconfig_dev
   pip:
-    name: "{{ item }}"
+    name: https://github.com/openwisp/netjsonconfig/tarball/master
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
-  with_items:
-    - "git+git://github.com/openwisp/netjsonconfig#egg=netjsonconfig"
   notify: reload supervisor
 
 - name: Install extra django apps
