@@ -10,9 +10,8 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 if User.objects.filter(is_superuser=True).count() < 1:
-    email = 'admin@{{ inventory_hostname }}'
     admin = User.objects.create_superuser(username='admin',
                                           password='admin',
-                                          email=email)
-# print always the same string for idempotency
-print('superuser created')
+                                          email='')
+    print('superuser created')
+print('superuser present')
