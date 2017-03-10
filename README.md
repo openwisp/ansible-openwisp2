@@ -253,7 +253,7 @@ Below are listed all the variables you can customize.
 - hosts: yourhost
   roles:
   # you can add other roles here
-    - openwisp2
+    - openwisp.openwisp2
   vars:
     # change the openwisp2 shared secret to a value of your liking
     openwisp2_shared_secret: changemeplease
