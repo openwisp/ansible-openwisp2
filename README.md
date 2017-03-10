@@ -95,8 +95,6 @@ Create a new playbook file `playbook.yml` **on your local machine** with the fol
   become: "{{ become | default('yes') }}"
   roles:
     - openwisp.openwisp2
-  vars:
-    openwisp2_shared_secret: <PLEASE_CHANGE_ME>  # put any value of your liking
 ```
 
 Substitute `<PLEASE_CHANGE_ME>` with a value of your liking, this value will be used for
@@ -149,8 +147,6 @@ you can run ``ansible-playbook`` with the ``--connection=local`` flag.
 ```yaml
 - hosts: localhost
   roles: [openwisp.openwisp2]
-  vars:
-    openwisp2_shared_secret: <PLEASE_CHANGE_ME>  # put any value of your liking
 ```
 
 **Step 4**, become root and launch ``ansible-playbook`` locally:
@@ -208,7 +204,6 @@ Then proceed to edit your `playbook.yml` so that it will look similar to the fol
     - thefinn93.letsencrypt
     - openwisp.openwisp2
   vars:
-    openwisp2_shared_secret: <PLEASE_CHANGE_ME>
     # SSL certificates
     openwisp2_ssl_cert: "/etc/letsencrypt/live/{{ ansible_fqdn }}/fullchain.pem"
     openwisp2_ssl_key: "/etc/letsencrypt/live/{{ ansible_fqdn }}/privkey.pem"
@@ -255,8 +250,6 @@ Below are listed all the variables you can customize.
   # you can add other roles here
     - openwisp.openwisp2
   vars:
-    # change the openwisp2 shared secret to a value of your liking
-    openwisp2_shared_secret: changemeplease
     # whether to use the stable release (true) or the development version (false)
     openwisp2_stable: true
     # set to false to use development version of netjsonconfig
@@ -297,7 +290,7 @@ Below are listed all the variables you can customize.
     openwisp2_http_allowed_ip: "10.8.0.0/16"
     # additional apps to install with pip and put in settings.INSTALLED_APPS
     openwisp2_extra_django_apps:
-        - django_extensions
+        - owm_legacy
     # spdy protocol in nginx is enabled by default
     openwisp2_nginx_spdy: true
     # ipv6 must be enabled explicitly to avoid errors

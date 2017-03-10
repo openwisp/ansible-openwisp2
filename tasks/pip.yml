@@ -10,6 +10,18 @@
     - setuptools
     - wheel
 
+- name: Install openwisp2 modules
+  pip:
+    name: "{{ item }}"
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+    virtualenv_site_packages: yes
+  with_items:
+    - openwisp-users
+    - openwisp-controller
+  notify: reload supervisor
+
 - name: Install stable version of django-netjsonconfig
   when: openwisp2_stable
   pip:

@@ -24,18 +24,37 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_netjsonconfig',
+    # all-auth
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'django_extensions',
+    # openwisp2 modules
+    'openwisp_users',
+    'openwisp_controller.pki',
+    'openwisp_controller.config',
+    # admin
     'django_netjsonconfig.admin_theme',
     'django.contrib.admin',
+    # other dependencies
     'sortedm2m',
     'reversion',
-    'django_x509',
 {% for app in openwisp2_extra_django_apps %}
     '{{ app }}',
 {% endfor %}
 {% if openwisp2_sentry.get('dsn') %}
     'raven.contrib.django.raven_compat',
 {% endif %}
+]
+
+AUTH_USER_MODEL = 'openwisp_users.User'
+SITE_ID = '1'
+
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'openwisp_controller.staticfiles.DependencyFinder',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -55,8 +74,12 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
-        'APP_DIRS': True,
         'OPTIONS': {
+            'loaders': [
+                'django.template.loaders.filesystem.Loader',
+                'django.template.loaders.app_directories.Loader',
+                'openwisp_controller.loaders.DependencyLoader'
+            ],
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
@@ -98,18 +121,10 @@ DATABASES = {
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
 # Internationalization
@@ -129,7 +144,6 @@ MEDIA_ROOT = '%s/media' % BASE_DIR
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
-NETJSONCONFIG_SHARED_SECRET = '{{ openwisp2_shared_secret }}'
 {% if openwisp2_context %}
 NETJSONCONFIG_CONTEXT = {{ openwisp2_context|to_nice_json }}
 {% endif %}
