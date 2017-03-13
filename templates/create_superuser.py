@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-# Creates the admin user when openwisp2 is installed
+"""
+Creates the default admin user when openwisp2 is installed
+"""
 import os
 import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'openwisp2.settings')
