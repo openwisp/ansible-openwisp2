@@ -48,6 +48,20 @@ for row in data:
         continue
     new_data.append(row)
 
+# create default organization configuration settings
+# contains the shared_secret attribute which is
+# required for auto registration
+organization_settings = {
+    "model": "config.organizationconfigsettings",
+    "pk": default_org_id,
+    "fields": {
+        "organization": default_org_id,
+        "registration_enabled": True,
+        "shared_secret": "{{ openwisp2_shared_secret|default('<CHANGE-ME>') }}"
+    }
+}
+new_data.append(organization_settings)
+
 contents = json.dumps(new_data, indent=4, sort_keys=True)
 
 result = open('post_multitenancy_migration.json', 'w')
