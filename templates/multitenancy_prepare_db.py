@@ -10,12 +10,15 @@ django.setup()
 from django.contrib.auth.models import ContentType
 from django.contrib.auth.models import Permission
 from openwisp_users.models import Organization
+from openwisp_controller.config.models import OrganizationConfigSettings
 
 # flush automatically created content types and permissions
 ContentType.objects.all().delete()
 Permission.objects.all().delete()
 
 # create the default organization
-Organization.objects.create(id='{{ openwisp2_default_organization_id }}',
-                            name='default',
-                            slug='default')
+org = Organization.objects.create(id='{{ openwisp2_default_organization_id }}',
+                                  name='default',
+                                  slug='default')
+OrganizationConfigSettings.objects.create(organization=org,
+                                          registration_enabled=True)
