@@ -97,10 +97,6 @@ Create a new playbook file `playbook.yml` **on your local machine** with the fol
     - openwisp.openwisp2
 ```
 
-Substitute `<PLEASE_CHANGE_ME>` with a value of your liking, this value will be used for
-`NETJSONCONFIG_SHARED_SECRET` setting, see the [relevant section in the README of django-netjsonconfig](https://github.com/openwisp/django-netjsonconfig#netjsonconfig-shared-secret)
-for more information.
-
 The line `become: "{{ become | default('yes') }}"` means ansible  will use the `sudo`
 program to run each command. You may remove this line if you don't need it.
 
@@ -127,10 +123,15 @@ When the playbook is done running, if you got no errors you can login at:
 
 Substitute `openwisp2.mydomain.com` with your hostname.
 
-Change the password (and the username if you like) of the superuser as soon
-as possible.
+Now proceed with the following steps:
 
-The superuser will be created only the first time the playbook is run.
+1. change the password (and the username if you like) of the superuser as soon as possible
+2. edit the information of the default organization
+3. in the default organization you just updated, note down the automatically generated *shared secret*
+   option, you will need it to use the [auto-registration feature of openwisp-config](https://github.com/openwisp/openwisp-config#automatic-registration)
+
+Now you are ready to start configuring your network! **If you need help** you can ask questions
+on one of the official [OpenWISP Support Channels](http://openwisp.org/support.html).
 
 Install OpenWISP2 locally (laptop, desktop pc)
 ----------------------------------------------
@@ -147,6 +148,8 @@ you can run ``ansible-playbook`` with the ``--connection=local`` flag.
 ```yaml
 - hosts: localhost
   roles: [openwisp.openwisp2]
+  vars:
+    postfix_myhostname: "localhost"
 ```
 
 **Step 4**, become root and launch ``ansible-playbook`` locally:
