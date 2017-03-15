@@ -242,7 +242,8 @@ Role variables
 This role has many variables values that can be changed to best suit
 your needs.
 
-Below are listed all the variables you can customize.
+Below are listed all the variables you can customize (you ma also want to take a look at
+[the default values of these variables](https://github.com/openwisp/ansible-openwisp2/blob/master/defaults/main.yml)).
 
 ```yaml
 - hosts: yourhost
