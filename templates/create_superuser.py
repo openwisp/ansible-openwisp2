@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 """
-Creates the admin user when openwisp2 is installed
-Additionally creates the default organization if no organization is present
+- Creates the admin user when openwisp2 is installed
+- Additionally creates the default organization if no organization is present
+- Modifies default Site object
 """
 import os
 import django
@@ -35,3 +36,12 @@ if 'openwisp_users' in settings.INSTALLED_APPS:
             OrganizationConfigSettings.objects.create(organization=org,
                                                       registration_enabled=True)
         print('default organization created')
+
+if 'django.contrib.sites' in settings.INSTALLED_APPS:
+    from django.contrib.sites.models import Site
+    site = Site.objects.first()
+    if site and 'example.com' in [site.name, site.domain]:
+        site.name = '{{ ansible_fqdn }}'
+        site.domain = '{{ inventory_hostname }}'
+        site.save()
+        print('default site updated')
