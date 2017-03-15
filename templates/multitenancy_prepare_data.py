@@ -9,10 +9,8 @@ substitutions = [
     ('"django_netjsonconfig"', '"config"'),
     ('"django_netjsonconfig.config"', '"config.config"'),
     ('"django_netjsonconfig.vpn"', '"config.vpn"'),
+    ('"django_netjsonconfig.vpnclient"', '"config.vpnclient"'),
     ('"django_netjsonconfig.template"', '"config.template"'),
-    ('\"django_netjsonconfig.config\"', '"config.config"'),
-    ('\"django_netjsonconfig.vpn\"', '"config.vpn"'),
-    ('\"django_netjsonconfig.template\"', '"config.template"'),
     ('"django_x509"', '"pki"'),
     ('"django_x509.ca"', '"pki.ca"'),
     ('"django_x509.cert"', '"pki.cert"'),
@@ -31,7 +29,7 @@ new_data = []
 
 for row in data:
     # add organization relation to openwisp2 models
-    if 'config.' in row['model'] or 'pki.' in row['model']:
+    if ('config.' in row['model'] or 'pki.' in row['model']) and row['model'] != 'config.vpnclient':
         row['fields']['organization'] = default_org_id
     # generate new uuid for users
     elif row['model'] == 'openwisp_users.user':
