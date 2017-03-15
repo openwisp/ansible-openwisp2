@@ -97,15 +97,15 @@
     command: "collectstatic --noinput"
     virtualenv: "{{ virtualenv_path }}"
 
-- name: load create_superuser.py script
+- name: create load_initial_data.py script
   template:
-    src: ../templates/create_superuser.py
-    dest: "{{ openwisp2_path }}/create_superuser.py"
+    src: ../templates/load_initial_data.py
+    dest: "{{ openwisp2_path }}/load_initial_data.py"
     mode: 0754
 
-- name: create superuser and default org
-  shell: "env/bin/python create_superuser.py"
-  register: superuser_result
-  changed_when: '"created" in superuser_result.stdout'
+- name: load initial data
+  shell: "env/bin/python load_initial_data.py"
+  register: load_initial_data_result
+  changed_when: '"created" in load_initial_data_result.stdout'
   args:
     chdir: "{{ openwisp2_path }}"

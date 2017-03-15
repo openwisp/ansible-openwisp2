@@ -41,7 +41,7 @@ if 'django.contrib.sites' in settings.INSTALLED_APPS:
     from django.contrib.sites.models import Site
     site = Site.objects.first()
     if site and 'example.com' in [site.name, site.domain]:
-        site.name = '{{ ansible_fqdn }}'
+        site.name = '{{ inventory_hostname }}'
         site.domain = '{{ inventory_hostname }}'
         site.save()
         print('default site updated')
