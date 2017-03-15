@@ -71,14 +71,14 @@
     virtualenv_site_packages: yes
   notify: reload supervisor
 
-- name: Install extra django apps
+- name: Install extra python packages
   pip:
     name: "{{ item }}"
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
-  with_items: "{{ openwisp2_extra_django_apps }}"
+  with_items: "{{ openwisp2_extra_python_packages }}"
   notify: reload supervisor
 
 - name: Install uwsgi

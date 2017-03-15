@@ -292,7 +292,13 @@ Below are listed all the variables you can customize (you ma also want to take a
     # is allowed to access the controller via unencrypted HTTP
     # (this feature is disabled by default)
     openwisp2_http_allowed_ip: "10.8.0.0/16"
-    # additional apps to install with pip and put in settings.INSTALLED_APPS
+    # additional python packages that will be installed with pip
+    openwisp2_extra_python_packages:
+        - bpython
+        - django-owm-legacy
+    # additional django apps that will be added to settings.INSTALLED_APPS
+    # (if the app needs to be installed, the name its python package
+    # must be also added to the openwisp2_extra_python_packages var)
     openwisp2_extra_django_apps:
         - owm_legacy
     # spdy protocol in nginx is enabled by default
