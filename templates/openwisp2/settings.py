@@ -52,6 +52,8 @@ INSTALLED_APPS = [
 
 AUTH_USER_MODEL = 'openwisp_users.User'
 SITE_ID = '1'
+LOGIN_REDIRECT_URL = 'admin:index'
+ACCOUNT_LOGOUT_REDIRECT_URL = LOGIN_REDIRECT_URL
 
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
