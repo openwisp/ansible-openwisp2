@@ -21,4 +21,5 @@ org = Organization.objects.create(id='{{ openwisp2_default_organization_id }}',
                                   name='default',
                                   slug='default')
 OrganizationConfigSettings.objects.create(organization=org,
-                                          registration_enabled=True)
+                                          registration_enabled=True,
+                                          shared_secret='{{ openwisp2_shared_secret|default("<CHANGE-ME>") }}')
