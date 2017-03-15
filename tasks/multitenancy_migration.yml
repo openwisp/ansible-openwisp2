@@ -38,6 +38,12 @@
     name: "{{ openwisp2_database.name }}"
     state: present
 
+- name: install python-mysqldb in system python packages
+  when: openwisp2_database.engine in ["django.db.backends.mysql", "django.contrib.gis.db.backends.mysql"]
+  pip:
+    name: MySQL-python
+    state: latest
+
 - name: DROP mysql database
   when: openwisp2_database.engine in ["django.db.backends.mysql", "django.contrib.gis.db.backends.mysql"]
   mysql_db:
@@ -45,8 +51,8 @@
     state: absent
     login_user: "{{ openwisp2_database.user }}"
     login_password: "{{ openwisp2_database.password }}"
-    login_host: "{{ openwisp2_database.host }}"
-    login_port: "{{ openwisp2_database.port }}"
+    login_host: "{{ openwisp2_database.host|default('127.0.0.1') }}"
+    login_port: "{{ openwisp2_database.port|default('3306') }}"
 
 - name: CREATE mysql database
   when: openwisp2_database.engine in ["django.db.backends.mysql", "django.contrib.gis.db.backends.mysql"]
@@ -55,8 +61,8 @@
     state: present
     login_user: "{{ openwisp2_database.user }}"
     login_password: "{{ openwisp2_database.password }}"
-    login_host: "{{ openwisp2_database.host }}"
-    login_port: "{{ openwisp2_database.port }}"
+    login_host: "{{ openwisp2_database.host|default('127.0.0.1') }}"
+    login_port: "{{ openwisp2_database.port|default('3306') }}"
 
 # this task purposely duplicates this operation in order to isolate
 # all the multitenancy-migration operations in this single YAML file

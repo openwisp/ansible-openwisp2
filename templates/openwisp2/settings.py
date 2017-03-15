@@ -99,19 +99,19 @@ DATABASES = {
     'default': {
         'ENGINE': '{{ openwisp2_database.engine }}',
         'NAME': '{{ openwisp2_database.name }}',
-{% if openwisp2_database.user %}
+{% if openwisp2_database.user is defined and openwisp2_database.user%}
         'USER': '{{ openwisp2_database.user }}',
 {% endif %}
-{% if openwisp2_database.password %}
+{% if openwisp2_database.password is defined and openwisp2_database.password %}
         'PASSWORD': '{{ openwisp2_database.password }}',
 {% endif %}
-{% if openwisp2_database.host %}
+{% if openwisp2_database.host is defined and openwisp2_database.host %}
         'HOST': '{{ openwisp2_database.host }}',
 {% endif %}
-{% if openwisp2_database.port %}
+{% if openwisp2_database.port is defined and openwisp2_database.port %}
         'PORT': '{{ openwisp2_database.port }}',
 {% endif %}
-{% if openwisp2_database.options %}
+{% if openwisp2_database.options is defined and openwisp2_database.options %}
         'OPTIONS': {{ openwisp2_database.options|to_nice_json }}
 {% endif %}
     }
