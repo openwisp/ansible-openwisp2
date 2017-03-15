@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 """
-Creates the default admin user when openwisp2 is installed
+Creates the admin user when openwisp2 is installed
+Additionally creates the default organization if no organization is present
 """
 import os
 import django
@@ -9,11 +10,28 @@ django.setup()
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
+
 User = get_user_model()
+changed = False
 
 if User.objects.filter(is_superuser=True).count() < 1:
     admin = User.objects.create_superuser(username='admin',
                                           password='admin',
                                           email='')
     print('superuser created')
-print('superuser present')
+
+if 'openwisp_users' in settings.INSTALLED_APPS:
+    from openwisp_users.models import Organization
+
+    if Organization.objects.count() < 1:
+        options = dict(id='{{ openwisp2_default_organization_id }}',
+                       name='default',
+                       slug='default')
+        org = Organization.objects.create(**options)
+
+        if 'openwisp_controller.config' in settings.INSTALLED_APPS:
+            from openwisp_controller.config.models import OrganizationConfigSettings
+
+            OrganizationConfigSettings.objects.create(organization=org,
+                                                      registration_enabled=True)
+        print('default organization created')

@@ -103,9 +103,9 @@
     dest: "{{ openwisp2_path }}/create_superuser.py"
     mode: 0754
 
-- name: create superuser (only if no superuser is present)
+- name: create superuser and default org
   shell: "env/bin/python create_superuser.py"
   register: superuser_result
-  changed_when: '"superuser created" in superuser_result.stdout'
+  changed_when: '"created" in superuser_result.stdout'
   args:
     chdir: "{{ openwisp2_path }}"
