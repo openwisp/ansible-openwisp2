@@ -18,6 +18,7 @@
     src: ../templates/nginx.j2
     dest: "/etc/nginx/sites-available/{{ inventory_hostname }}"
   notify: restart nginx
+  when: ansible_distribution != 'CentOS' and ansible_distribution != 'Red Hat Enterprise Linux'
 
 - name: nginx site enabled
   file:
@@ -25,3 +26,11 @@
     dest: "/etc/nginx/sites-enabled/{{ inventory_hostname }}"
     state: link
   notify: restart nginx
+  when: ansible_distribution != 'CentOS' and ansible_distribution != 'Red Hat Enterprise Linux'
+
+- name: nginx site
+  template:
+    src: ../templates/nginx.j2
+    dest: "/etc/nginx/conf.d/{{ inventory_hostname }}.conf"
+  notify: restart nginx
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'

@@ -2,6 +2,11 @@
 ## tasks
 - include: apt.yml
   tags: [openwisp2, apt]
+  when: ansible_distribution != 'CentOS' and ansible_distribution != 'Red Hat Enterprise Linux'
+
+- include: yum.yml
+  tags: [openwisp2, yum]
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
 
 - include: pip.yml
   tags: [openwisp2, pip]
@@ -9,6 +14,11 @@
 # comprises django_secret_key.yml
 - include: django.yml
   tags: [openwisp2, django]
+  when: ansible_distribution != 'CentOS' and ansible_distribution != 'Red Hat Enterprise Linux'
+
+- include: django_centos.yml
+  tags: [openwisp2, django]
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
 
 - include: supervisor.yml
   tags: [openwisp2, supervisor]

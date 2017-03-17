@@ -12,3 +12,21 @@
   tags:
     - openwisp2
     - supervisor
+  when: ansible_distribution != 'CentOS' and ansible_distribution != 'Red Hat Enterprise Linux'
+
+- name: supervisor uwsgi for Redhat/CentOS
+  action: template src=../templates/supervisor.j2 dest=/etc/supervisord.d/openwisp2.ini
+  notify: reload supervisor
+  tags:
+    - openwisp2
+    - supervisor
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+- name: supervisor uwsgi modification for Redhat/CentOS
+  shell: >
+    grep -v "user=" /etc/supervisord.d/openwisp2.ini > /tmp/tempconf.tmp && echo "user=nginx" >> /tmp/tempconf.tmp && rm -f /etc/supervisord.d/openwisp2.ini && mv /tmp/tempconf.tmp /etc/supervisord.d/openwisp2.ini
+  notify: reload supervisor
+  tags:
+    - openwisp2
+    - supervisor
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'

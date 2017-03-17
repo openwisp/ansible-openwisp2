@@ -1,0 +1,121 @@
+- name: openwisp_users present in settings.py?
+  shell: >
+    file {{ openwisp2_path }}/openwisp2/settings.py > /dev/null 2>&1 &&
+    grep openwisp_users {{ openwisp2_path }}/openwisp2/settings.py | wc -l
+  failed_when: false
+  changed_when: false
+  register: openwisp_users_check
+  when: ansible_distribution != 'CentOS' and ansible_distribution != 'Red Hat Enterprise Linux'
+
+- name: openwisp_users present in settings.py?
+  shell: >
+    [ -f {{ openwisp2_path }}/openwisp2/settings.py > /dev/null 2>&1 ] &&
+    grep openwisp_users {{ openwisp2_path }}/openwisp2/settings.py | wc -l
+  failed_when: false
+  changed_when: false
+  register: openwisp_users_check
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+# perform migration to multitenant version of OpenWISP 2
+- include: multitenancy_migration.yml
+  when: openwisp_users_check.rc == 0 and openwisp_users_check.stdout == "0"
+
+- name: create {{ openwisp2_path }}
+  file:
+    path: "{{ openwisp2_path }}"
+    state: directory
+    group: nginx
+    mode: 0775
+
+- name: create "{{ openwisp2_path }}/openwisp2"
+  file:
+    path: "{{ openwisp2_path }}/openwisp2"
+    state: directory
+    group: nginx
+    mode: 0775
+
+- name: create "{{ openwisp2_path }}/log"
+  file:
+    path: "{{ openwisp2_path }}/log"
+    state: directory
+    group: nginx
+    mode: 0775
+
+- name: manage.py
+  notify: reload supervisor
+  template:
+    src: ../templates/manage.py
+    dest: "{{ openwisp2_path }}/manage.py"
+    group: nginx
+    mode: 0754
+
+- name: __init__.py
+  notify: reload supervisor
+  template:
+    src: ../templates/openwisp2/__init__.py
+    dest: "{{ openwisp2_path }}/openwisp2/__init__.py"
+    group: nginx
+
+- name: urls.py
+  notify: reload supervisor
+  template:
+    src: ../templates/openwisp2/urls.py
+    dest: "{{ openwisp2_path }}/openwisp2/urls.py"
+    group: nginx
+
+- name: wsgi.py
+  notify: reload supervisor
+  template:
+    src: ../templates/openwisp2/wsgi.py
+    dest: "{{ openwisp2_path }}/openwisp2/wsgi.py"
+    group: nginx
+
+# set openwisp2_secret_key if not defined explicitly
+- include: django_secret_key.yml
+  when: openwisp2_secret_key is not defined
+
+- name: settings.py
+  notify: reload supervisor
+  template:
+    src: ../templates/openwisp2/settings.py
+    dest: "{{ openwisp2_path }}/openwisp2/settings.py"
+    group: nginx
+
+- name: migrate
+  notify: reload supervisor
+  become: yes
+  become_user: nginx
+  django_manage:
+    app_path: "{{ openwisp2_path }}"
+    command: migrate
+    virtualenv: "{{ virtualenv_path }}"
+
+- name: set permissions to sqlite db
+  when: openwisp2_database.engine == "django.db.backends.sqlite3"
+  file:
+    path: "{{ openwisp2_database.name }}"
+    state: file
+    group: nginx
+    mode: 0775
+
+- name: collectstatic
+  notify: reload supervisor
+  become: yes
+  become_user: nginx
+  django_manage:
+    app_path: "{{ openwisp2_path }}"
+    command: "collectstatic --noinput"
+    virtualenv: "{{ virtualenv_path }}"
+
+- name: create load_initial_data.py script
+  template:
+    src: ../templates/load_initial_data.py
+    dest: "{{ openwisp2_path }}/load_initial_data.py"
+    mode: 0754
+
+- name: load initial data
+  shell: "env/bin/python load_initial_data.py"
+  register: load_initial_data_result
+  changed_when: '"created" in load_initial_data_result.stdout'
+  args:
+    chdir: "{{ openwisp2_path }}"
