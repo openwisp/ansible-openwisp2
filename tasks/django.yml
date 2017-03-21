@@ -1,6 +1,6 @@
 - name: openwisp_users present in settings.py?
   shell: >
-    file {{ openwisp2_path }}/openwisp2/settings.py > /dev/null 2>&1 &&
+    test -f {{ openwisp2_path }}/openwisp2/settings.py &&
     grep openwisp_users {{ openwisp2_path }}/openwisp2/settings.py | wc -l
   failed_when: false
   changed_when: false
