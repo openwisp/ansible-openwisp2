@@ -237,7 +237,7 @@ Run `ansible-playbook` again **from your local machine**:
     ansible-playbook -i hosts playbook.yml
 
 You may also run the playbook automatically periodically or when a new release of OpenWISP2, for
-example, by using setting up a continuos integration system.
+example, by setting up a continuous integration system.
 
 Role variables
 ==============
