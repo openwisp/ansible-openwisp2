@@ -1,0 +1,10 @@
+- name: Configure firewall
+  firewalld:
+    permanent: true
+    immediate: true
+    service: "{{ item }}"
+    state: enabled
+  with_items:
+    - http
+    - https
+

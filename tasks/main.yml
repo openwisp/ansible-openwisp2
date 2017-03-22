@@ -4,7 +4,7 @@
   tags: [openwisp2, apt]
   when: ansible_distribution != 'CentOS' and ansible_distribution != 'Red Hat Enterprise Linux'
 
-- include: yum.yml
+- include: yum_centos.yml
   tags: [openwisp2, yum]
   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
 
@@ -18,6 +18,14 @@
 
 - include: django_centos.yml
   tags: [openwisp2, django]
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+- include: firewalld_centos.yml
+  tags: [openwisp2, firewalld]
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+- include: selinux_centos.yml
+  tags: [openwisp2, selinux]
   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
 
 - include: supervisor.yml

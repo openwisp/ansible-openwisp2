@@ -1,0 +1,10 @@
+- name: Set http_can_network_connect
+  seboolean:
+    name: httpd_can_network_connect
+    state: yes
+    persistent: yes
+
+# Disable SELinux
+- name: Disable SELinux (shouldn't be done!)
+  selinux:
+    state: disabled
