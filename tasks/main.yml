@@ -11,14 +11,21 @@
 - include: pip.yml
   tags: [openwisp2, pip]
 
+- name: Set www user (Debian)
+  set_fact:
+    www_group: 'www-data'
+    www_user:  'www-data'
+  when: ansible_distribution != 'CentOS' and ansible_distribution != 'Red Hat Enterprise Linux'
+
+- name: Set www user (RedHat)
+  set_fact:
+    www_group: 'nginx'
+    www_user:  'nginx'
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
 # comprises django_secret_key.yml
 - include: django.yml
   tags: [openwisp2, django]
-  when: ansible_distribution != 'CentOS' and ansible_distribution != 'Red Hat Enterprise Linux'
-
-- include: django_centos.yml
-  tags: [openwisp2, django]
-  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
 
 - include: firewalld_centos.yml
   tags: [openwisp2, firewalld]
