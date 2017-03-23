@@ -1,4 +1,4 @@
-- name: Update YUM package cache
+- name: Update packages
   yum:
     update_cache=yes state=latest
     name="*"
