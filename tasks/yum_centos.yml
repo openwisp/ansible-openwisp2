@@ -34,11 +34,6 @@
     - python2-pip
     - python-devel
 
-- name: Install python2 pip
-  yum: name={{ item }} state=latest
-  with_items:
-    - python2-pip
-
 - name: Install python3 packages
   when: openwisp2_python == "python3"
   yum: name={{ item }} state=latest
@@ -46,6 +41,13 @@
     - python34
     - python34-pip
     - python34-devel
+
+- name: Link pip from python3 to /usr/bin/pip
+  when: openwisp2_python == "python3"
+  file:
+    src: /usr/bin/pip3
+    dest: /usr/bin/pip
+    state: link
 
 - name: Install python wheel (optional, allowed to fail)
   ignore_errors: yes
