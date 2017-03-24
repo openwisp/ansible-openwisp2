@@ -1,5 +1,5 @@
 [program:openwisp2]
-user=www-data
+user={{ www_user }}
 directory={{ openwisp2_path }}
 command={{ openwisp2_path }}/env/bin/uwsgi --ini uwsgi.ini
 autostart=true

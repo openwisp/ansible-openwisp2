@@ -7,26 +7,8 @@
     - supervisor
 
 - name: supervisor uwsgi
-  action: template src=../templates/supervisor.j2 dest=/etc/supervisor/conf.d/openwisp2.conf
+  action: template src=../templates/supervisor.j2 dest={{ uwsgi_path }}
   notify: reload supervisor
   tags:
     - openwisp2
     - supervisor
-  when: ansible_os_family == 'Debian'
-
-- name: supervisor uwsgi for Redhat/CentOS
-  action: template src=../templates/supervisor.j2 dest=/etc/supervisord.d/openwisp2.ini
-  notify: reload supervisor
-  tags:
-    - openwisp2
-    - supervisor
-  when: ansible_os_family == 'RedHat'
-
-- name: supervisor uwsgi modification for Redhat/CentOS
-  shell: >
-    grep -v "user=" /etc/supervisord.d/openwisp2.ini > /tmp/tempconf.tmp && echo "user=nginx" >> /tmp/tempconf.tmp && rm -f /etc/supervisord.d/openwisp2.ini && mv /tmp/tempconf.tmp /etc/supervisord.d/openwisp2.ini
-  notify: reload supervisor
-  tags:
-    - openwisp2
-    - supervisor
-  when: ansible_os_family == 'RedHat'
