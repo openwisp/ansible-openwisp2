@@ -2,11 +2,11 @@
 ## tasks
 - include: apt.yml
   tags: [openwisp2, apt]
-  when: ansible_distribution != 'CentOS' and ansible_distribution != 'Red Hat Enterprise Linux'
+  when: ansible_os_family == 'Debian'
 
 - include: yum_centos.yml
   tags: [openwisp2, yum]
-  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  when: ansible_os_family == 'RedHat'
 
 - include: pip.yml
   tags: [openwisp2, pip]
@@ -15,13 +15,13 @@
   set_fact:
     www_group: 'www-data'
     www_user:  'www-data'
-  when: ansible_distribution != 'CentOS' and ansible_distribution != 'Red Hat Enterprise Linux'
+  when: ansible_os_family == 'Debian'
 
 - name: Set www user (RedHat)
   set_fact:
     www_group: 'nginx'
     www_user:  'nginx'
-  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  when: ansible_os_family == 'RedHat'
 
 # comprises django_secret_key.yml
 - include: django.yml
@@ -29,11 +29,11 @@
 
 - include: firewalld_centos.yml
   tags: [openwisp2, firewalld]
-  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  when: ansible_os_family == 'RedHat'
 
 - include: selinux_centos.yml
   tags: [openwisp2, selinux]
-  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  when: ansible_os_family == 'RedHat'
 
 - include: supervisor.yml
   tags: [openwisp2, supervisor]
