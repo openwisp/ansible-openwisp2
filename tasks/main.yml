@@ -4,7 +4,7 @@
   tags: [openwisp2, apt]
   when: ansible_os_family == 'Debian'
 
-- include: yum_centos.yml
+- include: yum.yml
   tags: [openwisp2, yum]
   when: ansible_os_family == 'RedHat'
 
@@ -27,11 +27,11 @@
 - include: django.yml
   tags: [openwisp2, django]
 
-- include: firewalld_centos.yml
+- include: firewalld.yml
   tags: [openwisp2, firewalld]
   when: ansible_os_family == 'RedHat'
 
-- include: selinux_centos.yml
+- include: selinux.yml
   tags: [openwisp2, selinux]
   when: ansible_os_family == 'RedHat'
 
