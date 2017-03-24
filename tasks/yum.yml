@@ -1,8 +1,3 @@
-- name: Update packages
-  yum:
-    update_cache=yes state=latest
-    name="*"
-
 - name: Install additional repositories
   yum: name={{ item }} state=latest
   notify: reload systemd
