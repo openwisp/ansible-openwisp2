@@ -1,5 +1,8 @@
 ### openwisp2
 ## tasks
+- include: variables.yml
+  tags: [openwisp2, variables]
+  
 - include: apt.yml
   tags: [openwisp2, apt]
   when: ansible_os_family == 'Debian'
@@ -10,18 +13,6 @@
 
 - include: pip.yml
   tags: [openwisp2, pip]
-
-- name: Set www user (Debian)
-  set_fact:
-    www_group: 'www-data'
-    www_user:  'www-data'
-  when: ansible_os_family == 'Debian'
-
-- name: Set www user (RedHat)
-  set_fact:
-    www_group: 'nginx'
-    www_user:  'nginx'
-  when: ansible_os_family == 'RedHat'
 
 # comprises django_secret_key.yml
 - include: django.yml
