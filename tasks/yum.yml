@@ -18,6 +18,7 @@
     - libffi-devel
     - python-devel
     - libsemanage-python
+    - policycoreutils-python
 
 - name: ensure supervisor is started
   service: name=supervisord state=started
