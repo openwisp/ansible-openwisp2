@@ -12,13 +12,13 @@
 - name: Set correct labels for nginx logs
   sefcontext:
     target: '{{ openwisp2_path }}/log/(.*)?'
-    setype: var_log_t
+    setype: httpd_log_t
     state: present
 
 - name: Set label on log directory
   sefcontext:
     target: '{{ openwisp2_path }}/log'
-    setype: var_log_t
+    setype: httpd_log_t
     state: present
 
 - name: Relabel files
