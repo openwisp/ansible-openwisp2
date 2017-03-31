@@ -21,7 +21,10 @@
     - policycoreutils-python
 
 - name: ensure supervisor is started
-  service: name=supervisord state=started
+  service: name=supervisord state=started enabled=yes
+
+- name: ensure nginx is enabled
+  service: name=nginx enabled=yes
 
 - name: Install python2 packages
   when: openwisp2_python in ["python2.7", "python2"]
