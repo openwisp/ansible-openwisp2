@@ -6,7 +6,7 @@
   notify: reload systemd
   with_items:
     - sudo
-    - python-software-properties
+    - software-properties-common
     - build-essential
     - sqlite3
     - supervisor
@@ -40,6 +40,12 @@
     - python3-pip
     - python3-dev
     - python-virtualenv
+
+- name: Install python3-pyparsing
+  when: ansible_distribution == "Debian" and ansible_distribution_version == "9.0"
+  apt: name={{ item }} state=latest
+  with_items:
+    - python3-pyparsing
 
 - name: Install python wheel (optional, allowed to fail)
   ignore_errors: yes
