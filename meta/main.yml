@@ -22,9 +22,6 @@ galaxy_info:
     versions:
     - trusty
     - xenial
-  categories:
-    - system
-    - networking
   galaxy_tags:
     - system
     - networking
