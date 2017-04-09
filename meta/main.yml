@@ -17,6 +17,7 @@ galaxy_info:
     versions:
     - wheezy
     - jessie
+    - stretch
   - name: Ubuntu
     versions:
     - trusty
