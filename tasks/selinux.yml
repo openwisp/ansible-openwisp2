@@ -22,5 +22,5 @@
     state: present
 
 - name: Relabel files
-  command: >
-    /usr/sbin/restorecon -R {{ openwisp2_path }}
+  command: /usr/sbin/restorecon -R {{ openwisp2_path }}
+  changed_when: false
