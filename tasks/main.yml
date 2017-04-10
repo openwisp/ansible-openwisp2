@@ -2,7 +2,7 @@
 ## tasks
 - include: variables.yml
   tags: [openwisp2, variables]
-  
+
 - include: apt.yml
   tags: [openwisp2, apt]
   when: ansible_os_family == 'Debian'
