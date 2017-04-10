@@ -1,5 +1,6 @@
 - name: Update APT package cache
   apt: update_cache=yes
+  changed_when: false
 
 - name: Install system packages
   apt: name={{ item }} state=latest
