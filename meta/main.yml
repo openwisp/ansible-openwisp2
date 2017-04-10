@@ -22,6 +22,9 @@ galaxy_info:
     versions:
     - trusty
     - xenial
+  - name: Fedora
+    versions:
+    - 25
   galaxy_tags:
     - system
     - networking
