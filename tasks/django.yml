@@ -14,21 +14,21 @@
   file:
     path: "{{ openwisp2_path }}"
     state: directory
-    group: www-data
+    group: "{{ www_group }}"
     mode: 0775
 
 - name: create "{{ openwisp2_path }}/openwisp2"
   file:
     path: "{{ openwisp2_path }}/openwisp2"
     state: directory
-    group: www-data
+    group: "{{ www_group }}"
     mode: 0775
 
 - name: create "{{ openwisp2_path }}/log"
   file:
     path: "{{ openwisp2_path }}/log"
     state: directory
-    group: www-data
+    group: "{{ www_group }}"
     mode: 0775
 
 - name: manage.py
@@ -36,7 +36,7 @@
   template:
     src: ../templates/manage.py
     dest: "{{ openwisp2_path }}/manage.py"
-    group: www-data
+    group: "{{ www_group }}"
     mode: 0754
 
 - name: __init__.py
@@ -44,21 +44,21 @@
   template:
     src: ../templates/openwisp2/__init__.py
     dest: "{{ openwisp2_path }}/openwisp2/__init__.py"
-    group: www-data
+    group: "{{ www_group }}"
 
 - name: urls.py
   notify: reload supervisor
   template:
     src: ../templates/openwisp2/urls.py
     dest: "{{ openwisp2_path }}/openwisp2/urls.py"
-    group: www-data
+    group: "{{ www_group }}"
 
 - name: wsgi.py
   notify: reload supervisor
   template:
     src: ../templates/openwisp2/wsgi.py
     dest: "{{ openwisp2_path }}/openwisp2/wsgi.py"
-    group: www-data
+    group: "{{ www_group }}"
 
 # set openwisp2_secret_key if not defined explicitly
 - include: django_secret_key.yml
@@ -69,12 +69,12 @@
   template:
     src: ../templates/openwisp2/settings.py
     dest: "{{ openwisp2_path }}/openwisp2/settings.py"
-    group: www-data
+    group: "{{ www_group }}"
 
 - name: migrate
   notify: reload supervisor
   become: yes
-  become_user: www-data
+  become_user: "{{ www_user }}"
   django_manage:
     app_path: "{{ openwisp2_path }}"
     command: migrate
@@ -85,13 +85,13 @@
   file:
     path: "{{ openwisp2_database.name }}"
     state: file
-    group: www-data
+    group: "{{ www_group }}"
     mode: 0775
 
 - name: collectstatic
   notify: reload supervisor
   become: yes
-  become_user: www-data
+  become_user: "{{ www_user }}"
   django_manage:
     app_path: "{{ openwisp2_path }}"
     command: "collectstatic --noinput"

@@ -1,0 +1,26 @@
+- name: Set http_can_network_connect
+  seboolean:
+    name: httpd_can_network_connect
+    state: yes
+    persistent: yes
+
+- name: Set SELinux permissive mode (for testing puropses)
+  selinux:
+    state: permissive
+    policy: targeted
+
+- name: Set correct labels for nginx logs
+  sefcontext:
+    target: '{{ openwisp2_path }}/log/(.*)?'
+    setype: httpd_log_t
+    state: present
+
+- name: Set label on log directory
+  sefcontext:
+    target: '{{ openwisp2_path }}/log'
+    setype: httpd_log_t
+    state: present
+
+- name: Relabel files
+  command: >
+    /usr/sbin/restorecon -R {{ openwisp2_path }}

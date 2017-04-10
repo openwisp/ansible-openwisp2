@@ -1,3 +1,11 @@
+- name: Install virtualenv with pip
+  pip:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - virtualenv
+  when: ansible_os_family == 'RedHat'
+
 - name: Update pip & related tools
   pip:
     name: "{{ item }}"

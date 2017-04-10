@@ -7,7 +7,7 @@
     - supervisor
 
 - name: supervisor uwsgi
-  action: template src=../templates/supervisor.j2 dest=/etc/supervisor/conf.d/openwisp2.conf
+  action: template src=../templates/supervisor.j2 dest={{ uwsgi_path }}
   notify: reload supervisor
   tags:
     - openwisp2
