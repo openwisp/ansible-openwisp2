@@ -25,6 +25,9 @@ galaxy_info:
   - name: Fedora
     versions:
     - 25
+  - name: EL
+    versions:
+    - 7
   galaxy_tags:
     - system
     - networking
