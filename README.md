@@ -1,7 +1,7 @@
 ansible-openwisp2
 =================
 
-[![Installing OpenWISP2](https://raw.githubusercontent.com/openwisp/ansible-openwisp2/4fa71c8425e2e262abc250c8a195ad8a81cf0f0f/docs/install-openwisp2.png)](https://www.youtube.com/watch?v=v_DUeFUGG8Q&index=1&list=PLPueLZei9c8_DEYgC5StOcR5bCAcQVfR8)
+[![Installing OpenWISP2](https://raw.githubusercontent.com/openwisp/ansible-openwisp2/master/docs/install-openwisp2.png)](https://www.youtube.com/watch?v=v_DUeFUGG8Q&index=1&list=PLPueLZei9c8_DEYgC5StOcR5bCAcQVfR8)
 
 [![Galaxy](http://img.shields.io/badge/galaxy-openwisp.openwisp2-blue.svg?style=flat-square)](https://galaxy.ansible.com/openwisp/openwisp2/)
 
@@ -12,6 +12,15 @@ Tested on **debian** and **ubuntu**.
 **NOTE**: it is highly suggested to use this procedure on clean virtual machines or linux containers.
 
 **Minimum ansible version supported**: 2.2.
+
+Architecture
+============
+
+If you are fond of **Python**, **Django** and **Unix**/**Linux** systems, you may find interesting to know more about what happens under the hood in **OpenWISP 2**.
+
+![openwisp2 modules diagram](https://raw.githubusercontent.com/openwisp/ansible-openwisp2/master/docs/openwisp2-modules-diagram.png)
+
+For more information see also [Applying the Unix Philosophy to Django projects: a report from the real world](https://www.slideshare.net/FedericoCapoano/applying-the-unix-philosophy-to-django-projects-a-report-from-the-real-world).
 
 Usage (tutorial)
 ================
