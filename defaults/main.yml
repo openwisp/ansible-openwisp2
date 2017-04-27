@@ -28,6 +28,7 @@ openwisp2_ssl_organization: "IT dep."
 openwisp2_ssl_common_name: "{{ inventory_hostname }}"
 openwisp2_http_allowed_ip: false
 openwisp2_nginx_spdy: true
+openwisp2_nginx_http2: false
 openwisp2_nginx_ipv6: false
 openwisp2_sentry:
     dsn: false
