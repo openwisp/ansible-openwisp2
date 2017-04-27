@@ -315,6 +315,8 @@ Below are listed all the variables you can customize (you ma also want to take a
         - owm_legacy
     # spdy protocol support (disabled by default)
     openwisp2_nginx_spdy: false
+    # HTTP2 protocol support (disabled by default)
+    openwisp2_nginx_http2: false
     # ipv6 must be enabled explicitly to avoid errors
     openwisp2_nginx_ipv6: false
     # enable sentry
