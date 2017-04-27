@@ -313,8 +313,8 @@ Below are listed all the variables you can customize (you ma also want to take a
     # must be also added to the openwisp2_extra_python_packages var)
     openwisp2_extra_django_apps:
         - owm_legacy
-    # spdy protocol in nginx is enabled by default
-    openwisp2_nginx_spdy: true
+    # spdy protocol support (disabled by default)
+    openwisp2_nginx_spdy: false
     # ipv6 must be enabled explicitly to avoid errors
     openwisp2_nginx_ipv6: false
     # enable sentry
