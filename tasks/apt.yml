@@ -61,3 +61,9 @@
   apt: name={{ item }} state=latest
   with_items:
     - python3-virtualenv
+
+- name: Install ntp
+  when: openwisp2_install_ntp
+  apt:
+    name: ntp
+    state: latest

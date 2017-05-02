@@ -65,3 +65,9 @@
   pip:
     name: virtualenv
     state: latest
+
+- name: Install ntp
+  when: openwisp2_install_ntp
+  package:
+    name: ntp
+    state: latest
