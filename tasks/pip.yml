@@ -51,20 +51,20 @@
     virtualenv_site_packages: yes
   notify: reload supervisor
 
-- name: Install development version of django-x509
-  when: openwisp2_django_x509_dev
+- name: Install development version of netjsonconfig
+  when: openwisp2_netjsonconfig_dev
   pip:
-    name: https://github.com/openwisp/django-x509/tarball/master
+    name: https://github.com/openwisp/netjsonconfig/tarball/master
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
   notify: reload supervisor
 
-- name: Install development version of netjsonconfig
-  when: openwisp2_netjsonconfig_dev
+- name: Install development version of django-x509
+  when: openwisp2_django_x509_dev
   pip:
-    name: https://github.com/openwisp/netjsonconfig/tarball/master
+    name: https://github.com/openwisp/django-x509/tarball/master
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
