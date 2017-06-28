@@ -26,7 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # openwisp2 admin theme
     # (must be loaded here)
-    'django_netjsonconfig.admin_theme',
+    'openwisp_utils.admin_theme',
     # all-auth
     'django.contrib.sites',
     'allauth',
@@ -50,6 +50,8 @@ INSTALLED_APPS = [
 {% endif %}
 ]
 
+EXTENDED_APPS = ['django_netjsonconfig', 'django_x509']
+
 AUTH_USER_MODEL = 'openwisp_users.User'
 SITE_ID = '1'
 LOGIN_REDIRECT_URL = 'admin:index'
@@ -58,7 +60,7 @@ ACCOUNT_LOGOUT_REDIRECT_URL = LOGIN_REDIRECT_URL
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'openwisp_controller.staticfiles.DependencyFinder',
+    'openwisp_utils.staticfiles.DependencyFinder',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -82,7 +84,7 @@ TEMPLATES = [
             'loaders': [
                 'django.template.loaders.filesystem.Loader',
                 'django.template.loaders.app_directories.Loader',
-                'openwisp_controller.loaders.DependencyLoader'
+                'openwisp_utils.loaders.DependencyLoader'
             ],
             'context_processors': [
                 'django.template.context_processors.debug',
