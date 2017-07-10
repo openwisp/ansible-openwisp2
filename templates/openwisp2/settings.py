@@ -79,7 +79,7 @@ ROOT_URLCONF = 'openwisp2.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'OPTIONS': {
             'loaders': [
                 'django.template.loaders.filesystem.Loader',
