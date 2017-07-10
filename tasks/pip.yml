@@ -21,6 +21,18 @@
     - openwisp-controller
   notify: reload supervisor
 
+- name: Install openwisp2 network topology and dependencies
+  when: openwisp2_network_topology
+  pip:
+    name: "{{ item }}"
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+    virtualenv_site_packages: yes
+  with_items:
+    - openwisp-network-topology
+  notify: reload supervisor
+
 - name: Install development version of openwisp-controller
   when: openwisp2_controller_dev
   pip:
@@ -65,6 +77,26 @@
   when: openwisp2_django_x509_dev
   pip:
     name: https://github.com/openwisp/django-x509/tarball/master
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+    virtualenv_site_packages: yes
+  notify: reload supervisor
+
+- name: Install development version of openwisp-network-topology
+  when: openwisp2_network_topology and openwisp2_network_topology_dev
+  pip:
+    name: https://github.com/openwisp/openwisp-network-topology/tarball/master
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+    virtualenv_site_packages: yes
+  notify: reload supervisor
+
+- name: Install development version of django-netjsongraph
+  when: openwisp2_network_topology and openwisp2_django_netjsongraph_dev
+  pip:
+    name: https://github.com/netjson/django-netjsongraph/tarball/master
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"

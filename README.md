@@ -130,7 +130,7 @@ When the playbook is done running, if you got no errors you can login at:
 
     https://openwisp2.mydomain.com/admin
     username: admin
-    passowrd: admin
+    password: admin
 
 Substitute `openwisp2.mydomain.com` with your hostname.
 
@@ -154,7 +154,7 @@ you can run ``ansible-playbook`` with the ``--connection=local`` flag.
 
 **Step 2**: [Install this role](#install-this-role)
 
-**Step 3**, create ``playbook.yml``:
+**Step 3**: create ``playbook.yml``:
 
 ```yaml
 - hosts: localhost
@@ -166,15 +166,45 @@ you can run ``ansible-playbook`` with the ``--connection=local`` flag.
 **Step 4**, become root and launch ``ansible-playbook`` locally:
 
     sudo -s  # become root, needs sudo password
-    ansible-playbook -i "localhost," --connection local playbook.yml
+    ansible-playbook -i "localhost," --connection=local playbook.yml
 
 When the playbook is done running, if you got no errors you can login at:
 
     https://localhost/admin
     username: admin
-    passowrd: admin
+    password: admin
 
 **Note**: do not use this method in a production system.
+
+Enabling the network topology module
+------------------------------------
+
+To enable the network topology module you need to set `openwisp2_network_topology` to `true`.
+
+**Step 1**: [Install ansible](#install-ansible)
+
+**Step 2**: [Install this role](#install-this-role)
+
+**Step 3**: [Create inventory file](#create-inventory-file)
+
+**Step 4**: Create a playbook file with following contents:
+
+```yaml
+- hosts: openwisp2
+  become: "{{ become | default('yes') }}"
+  roles:
+    - openwisp.openwisp2
+  vars:
+    openwisp2_network_topology: true
+```
+
+**Step 4**: [Run the playbook](#run-the-playbook)
+
+When the playbook is done running, if you got no errors you can login at:
+
+    https://openwisp2.mydomain.com/admin
+    username: admin
+    password: admin
 
 SSL certificate gotchas
 =======================
@@ -267,11 +297,14 @@ Below are listed all the variables you can customize (you ma also want to take a
   vars:
     # you may set one of these variables to true if you need to
     # use the development version of a specific openwisp2 module
+    openwisp2_network_topology: false
     openwisp2_controller_dev: false
     openwisp2_users_dev: false
     openwisp2_django_netjsonconfig_dev: false
     openwisp2_django_x509_dev: false
     openwisp2_netjsonconfig_dev: false
+    openwisp2_network_topology_dev: false
+    openwisp2_django_netjsongraph_dev: false
     # by default python3 is used, if may need to set this to python2.7 for older systems
     openwisp2_python: python2.7
     # customize the app_path
