@@ -1,9 +1,12 @@
 openwisp2_python: python3
+openwisp2_network_topology: false
 openwisp2_controller_dev: false
 openwisp2_users_dev: false
 openwisp2_django_netjsonconfig_dev: false
 openwisp2_django_x509_dev: false
 openwisp2_netjsonconfig_dev: false
+openwisp2_network_topology_dev: false
+openwisp2_django_netjsongraph_dev: false
 openwisp2_extra_python_packages: [bpython]
 openwisp2_extra_django_apps: []
 openwisp2_path: "/opt/openwisp2"

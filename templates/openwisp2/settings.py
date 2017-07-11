@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'openwisp_users',
     'openwisp_controller.pki',
     'openwisp_controller.config',
+{% if openwisp2_network_topology %}
+    'openwisp_network_topology',
+{% endif %}
     # admin
     'django.contrib.admin',
     # other dependencies
@@ -50,7 +53,13 @@ INSTALLED_APPS = [
 {% endif %}
 ]
 
-EXTENDED_APPS = ['django_netjsonconfig', 'django_x509']
+EXTENDED_APPS = [
+    'django_netjsonconfig',
+    'django_x509',
+{% if openwisp2_network_topology %}
+    'django_netjsongraph',
+{% endif %}
+]
 
 AUTH_USER_MODEL = 'openwisp_users.User'
 SITE_ID = '1'
