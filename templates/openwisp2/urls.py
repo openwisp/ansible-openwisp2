@@ -12,7 +12,7 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'', include('openwisp_controller.urls')),
     {% if openwisp2_network_topology %}
-    url(r'^network_topology/', include('openwisp_network_topology.urls')),
+    url(r'^', include('openwisp_network_topology.urls')),
     {% endif %}
     url(r'^$', redirect_view, name='index')
 ]

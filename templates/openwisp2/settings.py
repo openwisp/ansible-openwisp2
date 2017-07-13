@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'openwisp_controller.config',
 {% if openwisp2_network_topology %}
     'openwisp_network_topology',
+    'rest_framework',
 {% endif %}
     # admin
     'django.contrib.admin',
