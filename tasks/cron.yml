@@ -1,0 +1,9 @@
+- name: Install topology update cron
+  when: openwisp2_network_topology
+  become: true
+  cron:
+    name: "Update toplogies"
+    day: "{{ openwisp2_topology_update_frequency.day }}"
+    hour: "{{ openwisp2_topology_update_frequency.hour }}"
+    minute: "{{ openwisp2_topology_update_frequency.minute }}"
+    job: "{{ virtualenv_path }}/bin/python {{ openwisp2_path }}/manage.py update_topology"
