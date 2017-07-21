@@ -31,3 +31,7 @@
 
 - include: nginx.yml
   tags: [openwisp2, nginx]
+
+- include: cron.yml
+  tags: [openwisp2, cron]
+  when: openwisp2_network_topology
