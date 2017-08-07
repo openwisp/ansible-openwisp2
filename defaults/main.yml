@@ -33,6 +33,7 @@ openwisp2_http_allowed_ip: false
 openwisp2_nginx_spdy: false
 openwisp2_nginx_http2: false
 openwisp2_nginx_ipv6: false
+openwisp2_admin_allowed_network: null
 openwisp2_install_ntp: true
 openwisp2_sentry:
     dsn: false

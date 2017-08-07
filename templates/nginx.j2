@@ -37,6 +37,14 @@ server {
         try_files {{ openwisp2_path }}/public_html/maintenance.html $uri @uwsgi;
     }
 
+    {% if openwisp2_admin_allowed_network %}
+    location /admin {
+        try_files {{ openwisp2_path }}/public_html/maintenance.html $uri @uwsgi;
+        allow {{ openwisp2_admin_allowed_network }};
+        deny all;
+    }
+    {% endif %}
+
     location /static {
         alias {{ openwisp2_path }}/static/;
     }

@@ -352,6 +352,10 @@ Below are listed all the variables you can customize (you ma also want to take a
     openwisp2_nginx_http2: false
     # ipv6 must be enabled explicitly to avoid errors
     openwisp2_nginx_ipv6: false
+    # the following setting controls which ip address range
+    # is allowed to access the openwisp2 admin web interface
+    # (by default any IP is allowed)
+    openwisp2_admin_allowed_network: null
     # install ntp client (enabled by default)
     openwisp2_install_ntp: true
     # enable sentry
