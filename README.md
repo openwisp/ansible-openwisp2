@@ -178,7 +178,8 @@ When the playbook is done running, if you got no errors you can login at:
 Enabling the network topology module
 ------------------------------------
 
-To enable the network topology module you need to set `openwisp2_network_topology` to `true`.
+To enable the network topology module you need to set `openwisp2_network_topology` to `true` in
+your `playbook.yml` file. Here's a short summary of how to do this:
 
 **Step 1**: [Install ansible](#install-ansible)
 
