@@ -107,7 +107,8 @@ Create a new playbook file `playbook.yml` **on your local machine** with the fol
 ```
 
 The line `become: "{{ become | default('yes') }}"` means ansible  will use the `sudo`
-program to run each command. You may remove this line if you don't need it.
+program to run each command. You may remove this line if you don't need it (eg: if you are
+using the `root` user).
 
 Run the playbook
 ----------------
