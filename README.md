@@ -93,7 +93,9 @@ Create a new file `hosts` **on your local machine** with the following contents:
     [openwisp2]
     openwisp2.mydomain.com
 
-Substitute `openwisp2.mydomain.com` with your hostname (ip addresses are allowed as well).
+Substitute `openwisp2.mydomain.com` with your hostname - **DO NOT REPLACE `openwisp2.mydomain.com`
+WITH AN IP ADDRESS**, otherwise email sending through postfix will break, causing 500 internal
+server errors on some operations.
 
 Create playbook file
 --------------------
