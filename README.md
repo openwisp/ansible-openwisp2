@@ -48,17 +48,14 @@ Install ansible
 ---------------
 
 Install ansible (version 2.2 or higher) **on your local machine** (not the production server!) if
-you haven't done already, there are various ways in which you can do this, but we prefer
-to use the official python package manager, eg:
+you haven't done already.
 
-    sudo pip install ansible>=2.2
+To **install ansible** we suggest to follow the official
+[ansible installation guide](http://docs.ansible.com/ansible/latest/intro_installation.html).
 
-If you don't have pip installed see [Installing pip](https://pip.pypa.io/en/stable/installing/)
-on the pip documentation website.
+After having installed ansible, **you need to install git** (example for linux debian/ubuntu systems):
 
-[Installing ansible in other ways](http://docs.ansible.com/ansible/intro_installation.html#latest-release-via-yum)
-is fine too, just make sure to install a version of the `2.x` series (which is the version with
-which we have tested this playbook).
+    sudo apt-get install git
 
 Install this role
 -----------------
