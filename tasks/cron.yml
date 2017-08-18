@@ -7,3 +7,13 @@
     hour: "{{ openwisp2_topology_update_frequency.hour }}"
     minute: "{{ openwisp2_topology_update_frequency.minute }}"
     job: "{{ virtualenv_path }}/bin/python {{ openwisp2_path }}/manage.py update_topology"
+
+- name: Install topology snapshot save cron
+  when: openwisp2_network_topology
+  become: true
+  cron:
+    name: "Save snapshots of topologies"
+    day: "{{ openwisp2_topology_save_snapshot_frequency.day }}"
+    hour: "{{ openwisp2_topology_save_snapshot_frequency.hour }}"
+    minute: "{{ openwisp2_topology_save_snapshot_frequency.minute }}"
+    job: "{{ virtualenv_path }}/bin/python {{ openwisp2_path }}/manage.py save_snapshot"

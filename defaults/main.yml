@@ -44,3 +44,7 @@ openwisp2_topology_update_frequency:
     day: "*"
     hour: "*"
     minute: "*/5"
+openwisp2_topology_save_snapshot_frequency:
+    day: "*"
+    hour: "23"
+    minute: "30"
