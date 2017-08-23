@@ -295,9 +295,10 @@ Below are listed all the variables you can customize (you ma also want to take a
   # you can add other roles here
     - openwisp.openwisp2
   vars:
+    # optional openwisp2 modules
+    openwisp2_network_topology: false
     # you may set one of these variables to true if you need to
     # use the development version of a specific openwisp2 module
-    openwisp2_network_topology: false
     openwisp2_controller_dev: false
     openwisp2_users_dev: false
     openwisp2_django_netjsonconfig_dev: false
