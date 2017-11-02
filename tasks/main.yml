@@ -35,3 +35,6 @@
 - include: cron.yml
   tags: [openwisp2, cron]
   when: openwisp2_network_topology
+
+- include: complete.yml
+  tags: [openwisp2]
