@@ -1,2 +1,3 @@
 - name: Change superuser password hint
-  msg: "Change your admin password at https://{{ inventory_hostname }}/admin/password_change/"
+  debug:
+    msg: "Change your admin password at https://{{ inventory_hostname }}/admin/password_change/"
