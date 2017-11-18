@@ -1,5 +1,6 @@
 [uwsgi]
 chdir={{ openwisp2_path }}
+uid=www-data
 module=openwisp2.wsgi:application
 master=True
 pidfile={{ openwisp2_path }}/uwsgi.pid
