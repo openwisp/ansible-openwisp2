@@ -17,3 +17,12 @@
     hour: "{{ openwisp2_topology_save_snapshot_frequency.hour }}"
     minute: "{{ openwisp2_topology_save_snapshot_frequency.minute }}"
     job: "{{ virtualenv_path }}/bin/python {{ openwisp2_path }}/manage.py save_snapshot"
+
+- name: Install clearsessions cronjob
+  become: true
+  cron:
+    name: "clearsessions cronjob"
+    day: "*"
+    hour: "04"
+    minute: "30"
+    job: "{{ virtualenv_path }}/bin/python {{ openwisp2_path }}/manage.py clearsessions"
