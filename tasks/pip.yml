@@ -1,12 +1,17 @@
 - set_fact:
-    openwisp2_python_packages: ["{{ openwisp2_controller_pip }}" , "{{ openwisp2_users_pip }}" , "{{ openwisp2_django_netjsonconfig_pip }}", "{{ openwisp2_django_x509_pip }}", "{{ openwisp2_netjsonconfig_pip }}","{{ openwisp2_django_netjsongraph_pip }}"]
+    openwisp2_python_packages: [
+        "{{ openwisp2_controller_pip }}" ,
+        "{{ openwisp2_users_pip }}" ,
+        "{{ openwisp2_django_netjsonconfig_pip }}",
+        "{{ openwisp2_django_x509_pip }}",
+        "{{ openwisp2_netjsonconfig_pip }}",
+        "{{ openwisp2_django_netjsongraph_pip }}"
+    ]
 
 - name: Add network_topology to package list if enabled
   when: openwisp2_network_topology
   set_fact:
     openwisp2_python_packages: "{{ openwisp2_python_packages }} + [ '{{ openwisp2_network_topology_pip }}' ]"
-
-
 
 - name: Update pip & related tools
   pip:
