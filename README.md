@@ -298,15 +298,14 @@ Below are listed all the variables you can customize (you ma also want to take a
   vars:
     # optional openwisp2 modules
     openwisp2_network_topology: false
-    # you may set one of these variables to true if you need to
-    # use the development version of a specific openwisp2 module
-    openwisp2_controller_dev: false
-    openwisp2_users_dev: false
-    openwisp2_django_netjsonconfig_dev: false
-    openwisp2_django_x509_dev: false
-    openwisp2_netjsonconfig_dev: false
-    openwisp2_network_topology_dev: false
-    openwisp2_django_netjsongraph_dev: false
+    #you may replace the values of these variables with a PIP supported URL to install a custom #version of an openwisp2 module. 
+    openwisp2_controller_pip: openwisp-controller
+    openwisp2_users_pip: openwisp-users
+    openwisp2_django_netjsonconfig_pip: django-netjsonconfig
+    openwisp2_django_x509_pip: django-x509
+    openwisp2_netjsonconfig_pip: netjsonconfig
+    openwisp2_network_topology_pip: openwisp-network-topology
+    openwisp2_django_netjsongraph_pip: django-netjsongraph
     # by default python3 is used, if may need to set this to python2.7 for older systems
     openwisp2_python: python2.7
     # customize the app_path
