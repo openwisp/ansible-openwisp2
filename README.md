@@ -298,7 +298,11 @@ Below are listed all the variables you can customize (you may also want to take 
   vars:
     # optional openwisp2 modules
     openwisp2_network_topology: false
-    #you may replace the values of these variables with a PIP supported URL to install a custom #version of an openwisp2 module. 
+    # you may replace the values of these variables with any URL
+    # supported by pip (the python package installer)
+    # use these to install forks, branches or development versions
+    # WARNING: only do this if you know what you are doing; disruption
+    # of service is very likely to occur during development
     openwisp2_controller_pip: openwisp-controller
     openwisp2_users_pip: openwisp-users
     openwisp2_django_netjsonconfig_pip: django-netjsonconfig
