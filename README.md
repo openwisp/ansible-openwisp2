@@ -287,7 +287,7 @@ Role variables
 This role has many variables values that can be changed to best suit
 your needs.
 
-Below are listed all the variables you can customize (you ma also want to take a look at
+Below are listed all the variables you can customize (you may also want to take a look at
 [the default values of these variables](https://github.com/openwisp/ansible-openwisp2/blob/master/defaults/main.yml)).
 
 ```yaml
@@ -298,19 +298,25 @@ Below are listed all the variables you can customize (you ma also want to take a
   vars:
     # optional openwisp2 modules
     openwisp2_network_topology: false
-    # you may set one of these variables to true if you need to
-    # use the development version of a specific openwisp2 module
-    openwisp2_controller_dev: false
-    openwisp2_users_dev: false
-    openwisp2_django_netjsonconfig_dev: false
-    openwisp2_django_x509_dev: false
-    openwisp2_netjsonconfig_dev: false
-    openwisp2_network_topology_dev: false
-    openwisp2_django_netjsongraph_dev: false
+    # you may replace the values of these variables with any URL
+    # supported by pip (the python package installer)
+    # use these to install forks, branches or development versions
+    # WARNING: only do this if you know what you are doing; disruption
+    # of service is very likely to occur during development
+    openwisp2_controller_pip: openwisp-controller
+    openwisp2_users_pip: openwisp-users
+    openwisp2_django_netjsonconfig_pip: django-netjsonconfig
+    openwisp2_django_x509_pip: django-x509
+    openwisp2_netjsonconfig_pip: netjsonconfig
+    openwisp2_network_topology_pip: openwisp-network-topology
+    openwisp2_django_netjsongraph_pip: django-netjsongraph
     # by default python3 is used, if may need to set this to python2.7 for older systems
     openwisp2_python: python2.7
     # customize the app_path
     openwisp2_path: /opt/openwisp2
+    #It is recommended that you change the value of this variable if you intend to use 
+    #OpenWISP2 in production, as a misconfiguration may result in emails not being sent
+    openwisp2_default_from_email: "openwisp2@yourhostname"
     # edit database settings only if you are not using sqlite
     openwisp2_database:
         engine: django.db.backends.postgresql
