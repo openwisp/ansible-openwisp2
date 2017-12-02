@@ -111,7 +111,10 @@ Create a new playbook file `playbook.yml` **on your local machine** with the fol
 
 The line `become: "{{ become | default('yes') }}"` means ansible  will use the `sudo`
 program to run each command. You may remove this line if you don't need it (eg: if you are
-using the `root` user).Substitute openwisp2.mydomain.com with your hostname.
+using the `root` user).
+
+Substitute `openwisp2@openwisp2.mydomain.com` with what you deem most appropiate
+as default sender for emails sent by OpenWISP 2.
 
 Run the playbook
 ----------------
@@ -318,7 +321,7 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_path: /opt/openwisp2
     # It is recommended that you change the value of this variable if you intend to use
     # OpenWISP2 in production, as a misconfiguration may result in emails not being sent
-    openwisp2_default_from_email: "openwisp2@yourhostname"
+    openwisp2_default_from_email: "openwisp2@yourhostname.com"
     # edit database settings only if you are not using sqlite
     openwisp2_database:
         engine: django.db.backends.postgresql
