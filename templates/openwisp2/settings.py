@@ -168,6 +168,8 @@ NETJSONCONFIG_CONTEXT = {{ openwisp2_context|to_nice_json }}
 DJANGO_X509_DEFAULT_CERT_VALIDITY = {{ openwisp2_default_cert_validity }}
 DJANGO_X509_DEFAULT_CA_VALIDITY = {{ openwisp2_default_ca_validity }}
 
+# Set default email
+DEFAULT_FROM_EMAIL = "{{ openwisp2_default_from_email }}"
 # See http://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.
 LOGGING = {
