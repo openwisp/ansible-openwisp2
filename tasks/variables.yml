@@ -1,11 +1,11 @@
-- name: Set uwsgi path (Debian)
+- name: Set supervisor path (Debian)
   set_fact:
-    uwsgi_path: '/etc/supervisor/conf.d/openwisp2.conf'
+    supervisor_path: '/etc/supervisor/conf.d/%s.conf'
   when: ansible_os_family == 'Debian'
 
-- name: Set uwsgi path (RedHat)
+- name: Set supervisor path (RedHat)
   set_fact:
-    uwsgi_path: '/etc/supervisord.d/openwisp2.ini'
+    supervisor_path: '/etc/supervisord.d/%s.ini'
   when: ansible_os_family == 'RedHat'
 
 - name: Set www user (Debian)

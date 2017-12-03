@@ -2,13 +2,10 @@
   template:
     src: ../templates/uwsgi.ini.j2
     dest: "{{ openwisp2_path }}/uwsgi.ini"
-  tags:
-    - openwisp2
-    - supervisor
+  notify: reload supervisor
 
 - name: supervisor uwsgi
-  action: template src=../templates/supervisor.j2 dest={{ uwsgi_path }}
+  template:
+    src: ../templates/supervisor/openwisp2.j2
+    dest: "{{ supervisor_path | format('openwisp2') }}"
   notify: reload supervisor
-  tags:
-    - openwisp2
-    - supervisor
