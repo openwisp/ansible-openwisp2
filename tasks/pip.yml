@@ -28,7 +28,7 @@
     - setuptools
     - wheel
 
-- name: Install OpenWISP2 Python packages
+- name: Install OpenWISP 2 Python packages
   pip:
     name: "{{ item }}"
     state: latest
