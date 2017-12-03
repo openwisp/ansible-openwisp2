@@ -1,7 +1,5 @@
 openwisp2_python: python3
-
 openwisp2_network_topology: false
-
 openwisp2_controller_pip: "openwisp-controller"
 openwisp2_users_pip: "openwisp-users"
 openwisp2_django_netjsonconfig_pip : "django-netjsonconfig"
@@ -9,8 +7,6 @@ openwisp2_django_x509_pip: "django-x509"
 openwisp2_netjsonconfig_pip: "netjsonconfig"
 openwisp2_network_topology_pip: "openwisp-network-topology"
 openwisp2_django_netjsongraph_pip: "django-netjsongraph"
-
-
 openwisp2_extra_python_packages: [bpython]
 openwisp2_extra_django_apps: []
 openwisp2_path: "/opt/openwisp2"
