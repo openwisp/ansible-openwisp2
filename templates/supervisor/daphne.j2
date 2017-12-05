@@ -1,0 +1,11 @@
+[program:daphne]
+user={{ www_user }}
+directory={{ openwisp2_path }}
+command={{ openwisp2_path }}/env/bin/daphne openwisp2.asgi:channel_layer
+autostart=true
+autorestart=true
+stopsignal=INT
+redirect_stderr=true
+stdout_logfile={{ openwisp2_path }}/log/daphne.log
+stdout_logfile_maxbytes=30MB
+stdout_logfile_backups=5

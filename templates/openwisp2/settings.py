@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.gis',
     # openwisp2 admin theme
     # (must be loaded here)
     'openwisp_utils.admin_theme',
@@ -37,15 +38,20 @@ INSTALLED_APPS = [
     'openwisp_users',
     'openwisp_controller.pki',
     'openwisp_controller.config',
+    'openwisp_controller.geo',
 {% if openwisp2_network_topology %}
     'openwisp_network_topology',
-    'rest_framework',
 {% endif %}
     # admin
     'django.contrib.admin',
+    'django.forms',
     # other dependencies
     'sortedm2m',
     'reversion',
+    'leaflet',
+    'rest_framework',
+    'rest_framework_gis',
+    'channels',
 {% for app in openwisp2_extra_django_apps %}
     '{{ app }}',
 {% endfor %}
@@ -57,6 +63,7 @@ INSTALLED_APPS = [
 EXTENDED_APPS = [
     'django_netjsonconfig',
     'django_x509',
+    'django_loci',
 {% if openwisp2_network_topology %}
     'django_netjsongraph',
 {% endif %}
@@ -86,6 +93,14 @@ MIDDLEWARE_CLASSES = [
 
 ROOT_URLCONF = 'openwisp2.urls'
 
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'asgi_redis.RedisChannelLayer',
+        'CONFIG': {'hosts': [('localhost', 6379)]},
+        'ROUTING': 'openwisp_controller.geo.channels.routing.channel_routing',
+    },
+}
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -105,6 +120,8 @@ TEMPLATES = [
         },
     },
 ]
+
+FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
 
 WSGI_APPLICATION = 'openwisp2.wsgi.application'
 
@@ -168,8 +185,12 @@ NETJSONCONFIG_CONTEXT = {{ openwisp2_context|to_nice_json }}
 DJANGO_X509_DEFAULT_CERT_VALIDITY = {{ openwisp2_default_cert_validity }}
 DJANGO_X509_DEFAULT_CA_VALIDITY = {{ openwisp2_default_ca_validity }}
 
+{% if openwisp2_leaflet_config %}
+LEAFLET_CONFIG = {{ openwisp2_leaflet_config|to_nice_json }}
+{% endif %}
+
 # Set default email
-DEFAULT_FROM_EMAIL = "{{ openwisp2_default_from_email }}"
+DEFAULT_FROM_EMAIL = '{{ openwisp2_default_from_email }}'
 # See http://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.
 LOGGING = {

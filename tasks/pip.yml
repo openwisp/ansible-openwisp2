@@ -9,6 +9,7 @@
     - "{{ openwisp2_users_pip }}"
     - "{{ openwisp2_django_netjsonconfig_pip }}"
     - "{{ openwisp2_django_x509_pip }}"
+    - "{{ openwisp2_django_loci_pip }}"
     - "{{ openwisp2_netjsonconfig_pip }}"
   when: item != false
 
@@ -41,6 +42,9 @@
     virtualenv_site_packages: yes
   with_items:
     - openwisp-controller
+    # add asgi_redis for websockets
+    - asgi_redis
+    - service_identity
   notify: reload supervisor
 
 - name: Install openwisp2 network topology and it's dependencies

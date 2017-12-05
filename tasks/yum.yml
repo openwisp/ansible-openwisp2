@@ -9,17 +9,28 @@
   with_items:
     - sudo
     - gcc
-    - sqlite
     - supervisor
     - nginx
     - openssl
     - openssl-devel
     - libffi-devel
     - python-devel
+    - redis
     - python-firewall
     - libsemanage-python
     - policycoreutils-python
     - redhat-rpm-config
+
+- name: Install spatialite
+  when: openwisp2_database.engine == "django.contrib.gis.db.backends.spatialite"
+  package: name={{ item }} state=latest
+  notify: reload systemd
+  with_items:
+    - sqlite
+    - gdal
+    - proj-devel
+    - geos-devel
+    - libspatialite-devel
 
 - name: ensure supervisor is started
   service: name=supervisord state=started enabled=yes

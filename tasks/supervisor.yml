@@ -9,3 +9,15 @@
     src: ../templates/supervisor/openwisp2.j2
     dest: "{{ supervisor_path | format('openwisp2') }}"
   notify: reload supervisor
+
+- name: supervisor runworker
+  template:
+    src: ../templates/supervisor/runworker.j2
+    dest: "{{ supervisor_path | format('runworker') }}"
+  notify: reload supervisor
+
+- name: supervisor daphne
+  template:
+    src: ../templates/supervisor/daphne.j2
+    dest: "{{ supervisor_path | format('daphne') }}"
+  notify: reload supervisor

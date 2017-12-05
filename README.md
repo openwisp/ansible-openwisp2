@@ -339,6 +339,10 @@ Below are listed all the variables you can customize (you may also want to take 
     # additional allowed hosts
     openwisp2_allowed_hosts:
         - myadditionalhost.openwisp.org
+    # geographic map settings
+    openwisp2_leaflet_config:
+        DEFAULT_CENTER: [42.06775, 12.62011]
+        DEFAULT_ZOOM: 6
     # specify path to a valid SSL certificate and key
     # (a self-signed SSL cert will be generated if omitted)
     openwisp2_ssl_cert: "/etc/nginx/ssl/server.crt"

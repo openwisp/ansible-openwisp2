@@ -2,8 +2,9 @@ openwisp2_python: python3
 openwisp2_network_topology: false
 openwisp2_controller_pip: false
 openwisp2_users_pip: false
-openwisp2_django_netjsonconfig_pip : false
+openwisp2_django_netjsonconfig_pip: false
 openwisp2_django_x509_pip: false
+openwisp2_django_loci_pip: false
 openwisp2_netjsonconfig_pip: false
 openwisp2_network_topology_pip: false
 openwisp2_django_netjsongraph_pip: false
@@ -12,7 +13,7 @@ openwisp2_extra_django_apps: []
 openwisp2_path: "/opt/openwisp2"
 openwisp2_default_from_email: "openwisp2@{{ inventory_hostname }}"
 openwisp2_database:
-    engine: "django.db.backends.sqlite3"
+    engine: "django.contrib.gis.db.backends.spatialite"
     name: "{{ openwisp2_path }}/db.sqlite3"
     user: ""
     password: ""
@@ -23,6 +24,7 @@ openwisp2_language_code: "en-gb"
 openwisp2_time_zone: "UTC"
 openwisp2_context: {}
 openwisp2_allowed_hosts: []
+openwisp2_leaflet_config: {}
 openwisp2_ssl_cert: "{{ openwisp2_path }}/ssl/server.crt"
 openwisp2_ssl_key: "{{ openwisp2_path }}/ssl/server.key"
 openwisp2_ssl_country: "US"
