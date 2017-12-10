@@ -1,20 +1,24 @@
 - set_fact:
-    openwisp2_python_packages: [
-        "{{ openwisp2_controller_pip }}" ,
-        "{{ openwisp2_users_pip }}" ,
-        "{{ openwisp2_django_netjsonconfig_pip }}",
-        "{{ openwisp2_django_x509_pip }}",
-        "{{ openwisp2_netjsonconfig_pip }}",
-    ]
+    openwisp2_python_packages: []
 
-- name: Add network_topology to package list if enabled
-  when: openwisp2_network_topology
+- name: Set custom package list
   set_fact:
-    openwisp2_python_packages: >
-        {{ openwisp2_python_packages }} + [
-            '{{ openwisp2_django_netjsongraph_pip }}',
-            '{{ openwisp2_network_topology_pip }}'
-        ]
+    openwisp2_python_packages: "{{ openwisp2_python_packages  + [ item ] }}"
+  with_items:
+    - "{{ openwisp2_controller_pip }}"
+    - "{{ openwisp2_users_pip }}"
+    - "{{ openwisp2_django_netjsonconfig_pip }}"
+    - "{{ openwisp2_django_x509_pip }}"
+    - "{{ openwisp2_netjsonconfig_pip }}"
+  when: item != false
+
+- name: Add network_topology to custom package list if set and enabled
+  set_fact:
+    openwisp2_python_packages:"{{ openwisp2_python_packages + [ item ] }}"
+  with_items:
+    - "{{ openwisp2_django_netjsongraph_pip }}"
+    - "{{ openwisp2_network_topology_pip }}"
+  when: item != false and openwisp2_network_topology
 
 - name: Update pip & related tools
   pip:
@@ -28,7 +32,31 @@
     - setuptools
     - wheel
 
-- name: Install OpenWISP 2 Python packages
+- name: Install openwisp2 controller and it's dependencies
+  pip:
+    name: "{{ item }}"
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+    virtualenv_site_packages: yes
+  with_items:
+    - openwisp-controller
+  notify: reload supervisor
+
+- name: Install openwisp2 network topology and it's dependencies
+  when: openwisp2_network_topology
+  pip:
+    name: "{{ item }}"
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+    virtualenv_site_packages: yes
+  with_items:
+    - openwisp-network-topology
+  notify: reload supervisor
+
+
+- name: Install custom OpenWISP 2 Python packages
   pip:
     name: "{{ item }}"
     state: latest
