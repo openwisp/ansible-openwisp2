@@ -3,7 +3,7 @@
 
 - name: Set custom package list
   set_fact:
-    openwisp2_python_packages: "{{ openwisp2_python_packages  + [ item ] }}"
+    openwisp2_python_packages: "{{ openwisp2_python_packages  + [item] }}"
   with_items:
     - "{{ openwisp2_controller_pip }}"
     - "{{ openwisp2_users_pip }}"
@@ -14,7 +14,7 @@
 
 - name: Add network_topology to custom package list if set and enabled
   set_fact:
-    openwisp2_python_packages:"{{ openwisp2_python_packages + [ item ] }}"
+    openwisp2_python_packages:"{{ openwisp2_python_packages + [item] }}"
   with_items:
     - "{{ openwisp2_django_netjsongraph_pip }}"
     - "{{ openwisp2_network_topology_pip }}"
@@ -54,7 +54,6 @@
   with_items:
     - openwisp-network-topology
   notify: reload supervisor
-
 
 - name: Install custom OpenWISP 2 Python packages
   pip:
