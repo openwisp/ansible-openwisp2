@@ -7,7 +7,7 @@
   register: openwisp_users_check
 
 # perform migration to multitenant version of OpenWISP 2
-- include: multitenancy_migration.yml
+- import_tasks: multitenancy_migration.yml
   when: openwisp_users_check.rc == 0 and openwisp_users_check.stdout == "0"
 
 - name: create {{ openwisp2_path }}
@@ -61,7 +61,7 @@
     group: "{{ www_group }}"
 
 # set openwisp2_secret_key if not defined explicitly
-- include: django_secret_key.yml
+- import_tasks: django_secret_key.yml
   when: openwisp2_secret_key is not defined
 
 - name: settings.py
