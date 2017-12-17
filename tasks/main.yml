@@ -1,39 +1,39 @@
 ### openwisp2
 ## tasks
-- include: variables.yml
+- import_tasks: variables.yml
   tags: [openwisp2, variables]
 
-- include: apt.yml
+- import_tasks: apt.yml
   tags: [openwisp2, apt]
   when: ansible_os_family == 'Debian'
 
-- include: yum.yml
+- import_tasks: yum.yml
   tags: [openwisp2, yum]
   when: ansible_os_family == 'RedHat'
 
-- include: pip.yml
+- import_tasks: pip.yml
   tags: [openwisp2, pip]
 
 # comprises django_secret_key.yml
-- include: django.yml
+- import_tasks: django.yml
   tags: [openwisp2, django]
 
-- include: firewalld.yml
+- import_tasks: firewalld.yml
   tags: [openwisp2, firewalld]
   when: ansible_os_family == 'RedHat'
 
-- include: selinux.yml
+- import_tasks: selinux.yml
   tags: [openwisp2, selinux]
   when: ansible_os_family == 'RedHat'
 
-- include: supervisor.yml
+- import_tasks: supervisor.yml
   tags: [openwisp2, supervisor]
 
-- include: nginx.yml
+- import_tasks: nginx.yml
   tags: [openwisp2, nginx]
 
-- include: cron.yml
+- import_tasks: cron.yml
   tags: [openwisp2, cron]
 
-- include: complete.yml
+- import_tasks: complete.yml
   tags: [openwisp2]
