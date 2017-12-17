@@ -76,7 +76,7 @@
 # this task purposely duplicates this operation in order to isolate
 # all the multitenancy-migration operations in this single YAML file
 # set openwisp2_secret_key if not defined explicitly
-- include: django_secret_key.yml
+- import_tasks: django_secret_key.yml
   when: openwisp2_secret_key is not defined
 
 # this task purposely duplicates this operation in order to isolate
