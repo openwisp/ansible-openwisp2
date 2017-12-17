@@ -123,13 +123,15 @@ Now is time to **deploy openwisp2 to the production server**.
 
 Run the playbook **from your local machine** with:
 
-    ansible-playbook -i hosts playbook.yml -u <user> -k --ask-sudo-pass
+    ansible-playbook -i hosts playbook.yml -u <user> -k --become -K
 
 Substitute `<user>` with your user.
 
-The `--ask-sudo-pass` argument will need the `sshpass` program.
+The `-k` argument will need the `sshpass` program.
 
-You can remove `-k` and `--ask-sudo-pass` if your public SSH key is installed on the server.
+You can remove `-k`, `--become` and `-K` if your public SSH key is installed on the server.
+
+**Tip**: if you have an error like `Authentication or permission failure` then try to use *root* user `ansible-playbook -i hosts playbook.yml -u root -k`
 
 When the playbook is done running, if you got no errors you can login at:
 
