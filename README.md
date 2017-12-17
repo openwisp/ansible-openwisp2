@@ -131,7 +131,7 @@ The `-k` argument will need the `sshpass` program.
 
 You can remove `-k`, `--become` and `-K` if your public SSH key is installed on the server.
 
-**Tip**: if you have a error like `Authentication or permission failure` then try to use *root* user `ansible-playbook -i hosts playbook.yml -u root -k`
+**Tip**: if you have an error like `Authentication or permission failure` then try to use *root* user `ansible-playbook -i hosts playbook.yml -u root -k`
 
 When the playbook is done running, if you got no errors you can login at:
 
