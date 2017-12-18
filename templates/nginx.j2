@@ -34,7 +34,7 @@ server {
     }
 
     location / {
-        try_files {{ openwisp2_path }}/public_html/maintenance.html $uri @uwsgi;
+        try_files {{ openwisp2_path }}/public_html/maintenance.html $uri $uri/index.html @uwsgi;
     }
 
     # websockets
@@ -93,7 +93,7 @@ server {
         error_page 403 = @deny;
         allow {{ openwisp2_http_allowed_ip }};
         deny all;
-        try_files $uri @uwsgi;
+        try_files $uri $uri/index.html @uwsgi;
     }
 
     location @deny {
@@ -109,8 +109,12 @@ server {
     }
     {% else %}
 
-    # redirect all requests to https
     location / {
+        try_files {{ openwisp2_path }}/public_html/maintenance.html $uri $uri/index.html @redirect;
+    }
+
+    # redirect all requests to https
+    location @redirect {
         return 301 https://$host$request_uri;
     }
     {% endif %}
