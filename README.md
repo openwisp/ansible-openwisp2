@@ -42,6 +42,9 @@ Ansible is a configuration management tool that works by entering production ser
 **so you need to install it and configure it on the machine where you launch the deployment** and
 this machine must be able to SSH into the production server.
 
+Ansible will be run on your local machine and from there it will connect to the production server
+to install openwisp2.
+
 **If you are trying to install OpenWISP2 on your laptop or desktop pc just for testing purposes**,
 please read [Install OpenWISP2 locally (laptop, desktop pc)](#install-openwisp2-locally-laptop-desktop-pc).
 
@@ -64,7 +67,7 @@ Install this role
 For the sake of simplicity, the easiest thing is to install this role **on your local machine**
 via `ansible-galaxy` (which was installed when installing ansible), therefore run:
 
-    sudo ansible-galaxy install openwisp.openwisp2
+    ansible-galaxy install openwisp.openwisp2
 
 Choose a working directory
 --------------------------
@@ -86,14 +89,15 @@ Create inventory file
 The inventory file is where group of servers are defined. In our simple case we can
 get away with defining just one group in which we will put just one server.
 
-Create a new file `hosts` **on your local machine** with the following contents:
+Create a new file called `hosts` **in your local machine**'s working directory
+(the directory just created in the previous step), with the following contents:
 
     [openwisp2]
     openwisp2.mydomain.com
 
-Substitute `openwisp2.mydomain.com` with your hostname - **DO NOT REPLACE `openwisp2.mydomain.com`
-WITH AN IP ADDRESS**, otherwise email sending through postfix will break, causing 500 internal
-server errors on some operations.
+Substitute `openwisp2.mydomain.com` with your **production server**'s hostname - **DO NOT REPLACE
+`openwisp2.mydomain.com` WITH AN IP ADDRESS**, otherwise email sending through postfix will break,
+causing 500 internal server errors on some operations.
 
 Create playbook file
 --------------------
@@ -111,9 +115,11 @@ Create a new playbook file `playbook.yml` **on your local machine** with the fol
 
 The line `become: "{{ become | default('yes') }}"` means ansible  will use the `sudo`
 program to run each command. You may remove this line if you don't need it (eg: if you are
-using the `root` user).
+using the `root` user on the production server).
 
-Substitute `openwisp2@openwisp2.mydomain.com` with what you deem most appropiate
+You may replace `openwisp2` on the `hosts` field with your production server's hostname if you desire.
+
+Substitute `openwisp2@openwisp2.mydomain.com` with what you deem most appropriate
 as default sender for emails sent by OpenWISP 2.
 
 Run the playbook
@@ -125,13 +131,16 @@ Run the playbook **from your local machine** with:
 
     ansible-playbook -i hosts playbook.yml -u <user> -k --become -K
 
-Substitute `<user>` with your user.
+Substitute `<user>` with your **production server**'s username.
 
 The `-k` argument will need the `sshpass` program.
 
 You can remove `-k`, `--become` and `-K` if your public SSH key is installed on the server.
 
-**Tip**: if you have an error like `Authentication or permission failure` then try to use *root* user `ansible-playbook -i hosts playbook.yml -u root -k`
+**Tips**:
+
+- If you have an error like `Authentication or permission failure` then try to use *root* user `ansible-playbook -i hosts playbook.yml -u root -k`
+- If you have an error about adding the host's fingerprint to the `known_hosts` file, you can simply connect to the host via SSH and then answering yes when prompted, and then try running `ansible-playbook` again.
 
 When the playbook is done running, if you got no errors you can login at:
 
@@ -139,7 +148,7 @@ When the playbook is done running, if you got no errors you can login at:
     username: admin
     password: admin
 
-Substitute `openwisp2.mydomain.com` with your hostname.
+Substitute `openwisp2.mydomain.com` with your production server's hostname.
 
 Now proceed with the following steps:
 
