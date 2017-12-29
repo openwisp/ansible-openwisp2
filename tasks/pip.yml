@@ -33,7 +33,7 @@
     - setuptools
     - wheel
 
-- name: Install openwisp2 controller and it's dependencies
+- name: Install openwisp2 controller and its dependencies
   pip:
     name: "{{ item }}"
     state: latest
@@ -47,7 +47,7 @@
     - service_identity
   notify: reload supervisor
 
-- name: Install openwisp2 network topology and it's dependencies
+- name: Install openwisp2 network topology and its dependencies
   when: openwisp2_network_topology
   pip:
     name: "{{ item }}"
