@@ -128,6 +128,8 @@ WSGI_APPLICATION = 'openwisp2.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
+SPATIALITE_LIBRARY_PATH = '{{ openwisp2_spatialite_path }}'
+
 DATABASES = {
     'default': {
         'ENGINE': '{{ openwisp2_database.engine }}',

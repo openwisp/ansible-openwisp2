@@ -27,6 +27,7 @@
     - libproj-dev
     - libgeos-dev
     - libspatialite-dev
+    - libsqlite3-mod-spatialite
 
 # fixes issue described in https://docs.ansible.com/ansible/become.html#becoming-an-unprivileged-user
 - name: Install acl if acting as non-root user
