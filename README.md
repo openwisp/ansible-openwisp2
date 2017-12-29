@@ -160,31 +160,42 @@ Now proceed with the following steps:
 Now you are ready to start configuring your network! **If you need help** you can ask questions
 on one of the official [OpenWISP Support Channels](http://openwisp.org/support.html).
 
-Install OpenWISP2 locally (laptop, desktop pc)
+Install OpenWISP2 locally (laptop, desktop PC)
 ----------------------------------------------
 
-If you are trying to install *OpenWISP 2* on your laptop or desktop pc for testing purposes,
+If you are trying to install *OpenWISP 2* on your laptop or desktop PC for testing purposes,
 you can run ``ansible-playbook`` with the ``--connection=local`` flag.
 
 **Step 1**: [Install ansible](#install-ansible)
 
 **Step 2**: [Install this role](#install-this-role)
 
-**Step 3**: create ``playbook.yml``:
+**Step 3**: Create `hosts` file:
+
+```
+[openwisp2]
+<IP ADDRESS>
+```
+
+Replace `<IP ADDRESS>` with your computer's IP address.
+
+**Step 4**: Create ``playbook.yml``:
 
 ```yaml
-- hosts: localhost
+- hosts: <IP ADDRESS>
   roles: [openwisp.openwisp2]
   vars:
     postfix_myhostname: "localhost"
 ```
 
-**Step 4**, become root and launch ``ansible-playbook`` locally:
+Replace `<IP ADDRESS>` with the IP address specified in Step 3.
+
+**Step 5**: become root and launch ``ansible-playbook`` locally:
 
     sudo -s  # become root, needs sudo password
-    ansible-playbook -i "localhost," --connection=local playbook.yml
+    ansible-playbook -i hosts --connection=local playbook.yml
 
-When the playbook is done running, if you got no errors you can login at:
+When the playbook is done running and you got no errors, you can login at:
 
     https://localhost/admin
     username: admin
