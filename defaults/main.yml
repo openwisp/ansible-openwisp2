@@ -20,6 +20,7 @@ openwisp2_database:
     host: ""
     port: ""
     options: {}
+openwisp2_spatialite_path: "mod_spatialite"
 openwisp2_language_code: "en-gb"
 openwisp2_time_zone: "UTC"
 openwisp2_context: {}
