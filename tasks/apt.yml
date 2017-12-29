@@ -27,7 +27,17 @@
     - libproj-dev
     - libgeos-dev
     - libspatialite-dev
-    - libsqlite3-mod-spatialite
+
+- name: Install mod-spatialite (may fail on older linux distros)
+  ignore_errors: yes
+  apt: name=libsqlite3-mod-spatialite state=latest
+  register: mod_spatialie_result
+
+- set_fact:
+    openwisp2_spatialite_path: false
+  when: >
+    openwisp2_spatialite_path == 'mod_spatialite'
+    and mod_spatialie_result|failed
 
 # fixes issue described in https://docs.ansible.com/ansible/become.html#becoming-an-unprivileged-user
 - name: Install acl if acting as non-root user

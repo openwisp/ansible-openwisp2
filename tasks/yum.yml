@@ -32,6 +32,11 @@
     - geos-devel
     - libspatialite-devel
 
+# mod-spatialite doesn't seem available on RedHat yet
+- set_fact:
+    openwisp2_spatialite_path: false
+  when: openwisp2_spatialite_path == 'mod_spatialite'
+
 - name: ensure supervisor is started
   service: name=supervisord state=started enabled=yes
 

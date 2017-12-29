@@ -128,8 +128,6 @@ WSGI_APPLICATION = 'openwisp2.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
-SPATIALITE_LIBRARY_PATH = '{{ openwisp2_spatialite_path }}'
-
 DATABASES = {
     'default': {
         'ENGINE': '{{ openwisp2_database.engine }}',
@@ -151,6 +149,10 @@ DATABASES = {
 {% endif %}
     }
 }
+
+{% if openwisp2_spatialite_path %}
+SPATIALITE_LIBRARY_PATH = '{{ openwisp2_spatialite_path }}'
+{% endif %}
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
