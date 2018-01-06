@@ -207,6 +207,7 @@ Create an empty file named `playbook.yml` and paste the contents below within it
 Ansible requires `openssh-server` and likewise, OpenWISP2 requires `python` to be installed on the **production server** so that it can pass commands to it remotely. Install `openssh-server` by running this command **on the production server**(or simply the booted up VM):
 
 `sudo apt-get install openssh-server`
+
 `sudo apt-get install python`
 
 Now we're going to set up port forwarding for `3022`, the port we used earlier in the `hosts` file. To do this, do the following:
