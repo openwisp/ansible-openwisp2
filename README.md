@@ -171,7 +171,7 @@ on one of the official [OpenWISP Support Channels](http://openwisp.org/support.h
 Install OpenWISP2 in a VirtualBox VM
 ----------------------------------------------
 
-If you want to check out **OpenWISP 2** on your own laptop, PC, you can simply do so. This section covers the steps involved to achieve the above stated task. This article assumes you already have an Ubuntu-Server VM set up.
+If you want to check out **OpenWISP 2** on your own laptop, PC, you can simply do so. This section covers the steps involved to achieve the above stated task. The following steps have been written assuming you've already set-up your VM. The OS recommended for doing this is Ubuntu Server.
 
 **Step 1**: [Install ansible](#install-ansible)
 
