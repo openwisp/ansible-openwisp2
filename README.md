@@ -171,12 +171,14 @@ on one of the official [OpenWISP Support Channels](http://openwisp.org/support.h
 Install OpenWISP2 in a VirtualBox VM
 ----------------------------------------------
 
-If you want to check out **OpenWISP 2** on your own laptop, PC, you can simply do so. This section covers the steps involved to achieve the above stated task. This article assumes you already have an Ubuntu-Server VM set up.
+If you want to check out **OpenWISP 2** on your own laptop, PC, you can simply do so. This section covers the steps involved to achieve the above stated task. The following steps have been written assuming you've already set-up your VM. The OS recommended for doing this is Ubuntu Server.
 
 **Step 1**: [Install ansible](#install-ansible)
+
 Install the latest ansible release as by referring to the ansible documentation.
 
 **Step 2**: [Install the OpenWISP2 role for Ansible](#install-this-role)
+
 Install the latest version of **OpenWISP2**
 
 `ansible-galaxy install git+https://github.com/openwisp/ansible-openwisp2.git openwisp.openwisp2`
@@ -184,6 +186,7 @@ Install the latest version of **OpenWISP2**
 **Step 3**: [Set up a working directory](#choose-a-working-directory)
 
 **Step 4: Creating the `hosts` file**
+
 We are going to store the details of our production server in a separate file named `hosts`. Therefore create an empty file named `hosts` **in the working directory** and paste the below contents within it using a text editor.
 ```
 [openwisp2]
@@ -192,6 +195,7 @@ localhost:3022
 ```
 
 **Step 5: Setting up the Ansible Playbook**
+
 Create an empty file named `playbook.yml` and paste the contents below within it.
 ```yaml
 - hosts: openwisp2
@@ -199,9 +203,11 @@ Create an empty file named `playbook.yml` and paste the contents below within it
     - ansible-openwisp2
 ```
 **Step 6: Modifying the Ubuntu Server VM**
+
 Ansible requires `openssh-server` and likewise, OpenWISP2 requires `python` to be installed on the **production server** so that it can pass commands to it remotely. Install `openssh-server` by running this command **on the production server**(or simply the booted up VM):
 
 `sudo apt-get install openssh-server`
+
 `sudo apt-get install python`
 
 Now we're going to set up port forwarding for `3022`, the port we used earlier in the `hosts` file. To do this, do the following:
@@ -209,17 +215,23 @@ Now we're going to set up port forwarding for `3022`, the port we used earlier i
 - Locate the `Network` section.
 - Set `Adapter 1` as `NAT`, click on the `Advanced` option and then open `Port Forwarding` settings.
 - We're going to add **two port-forwarding rules**, one for SSH communication, and the other one for forwarding the website requests from the local machine to the our virtual machine. They are as follows:
+
 --**Name**:SSH, **Protocol**:TCP, **Host Port**:3022, **Guest Port**:22
+
 --**Name**:HTTPS, **Protocol**:TCP, **Host Port:**:8000, **Guest Port**:443
+
 --(Leave the others blank)
 
 That's all for the VM modification.
 
 **Step 7**: [Running the Playbook](#run-the-playbook)
+
 Everything is set up now for ansible to go ahead and do its job, that is **install OpenWISP2**. When asked for **SSH Password**, enter the password of your VM user.
 
 **Step 8: Using OpenWISP2**
+
 If your playbook finished running without any sort of error, you may now begin using OpenWISP2. To access the site being hosted by your VM, visit and log-in at:
+
 ```yml
 https://localhost:8000/admin      ##8000 port being forwarded to VM's port 443
 username:admin
