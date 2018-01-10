@@ -418,6 +418,26 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_nginx_http2: false
     # ipv6 must be enabled explicitly to avoid errors
     openwisp2_nginx_ipv6: false
+    # dictionary containing more nginx settings for
+    # the 443 section of the openwisp2 nginx configuration
+    # IMPORTANT: 1. you can add more nginx settings in this dictionary
+    #            2. here we list the default values used
+    openwisp2_nginx_ssl_config:
+        gzip: "on"
+        gzip_comp_level: "6"
+        gzip_proxied: "any"
+        gzip_min_length: "1000"
+        gzip_types:
+            - "text/plain"
+            - "text/html"
+            - "image/svg+xml"
+            - "application/json"
+            - "application/javascript"
+            - "text/xml"
+            - "text/css"
+            - "application/xml"
+            - "application/x-font-ttf"
+            - "font/opentype"
     # the following setting controls which ip address range
     # is allowed to access the openwisp2 admin web interface
     # (by default any IP is allowed)

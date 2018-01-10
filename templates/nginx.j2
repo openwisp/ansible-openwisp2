@@ -27,11 +27,11 @@ server {
     add_header Strict-Transport-Security "max-age=31536000";
     add_header X-Content-Type-Options nosniff;
 
-    {% for gzip_variable in openwisp2_nginx_ssl_config %}
-        {% if openwisp2_nginx_ssl_config[gzip_variable] is sequence and openwisp2_nginx_ssl_config[gzip_variable] is not string -%}
-            {{ gzip_variable }} {{ ' '.join(openwisp2_nginx_ssl_config[gzip_variable]) }};
+    {% for key, value in openwisp2_nginx_ssl_config.items() %}
+        {% if value is sequence and value is not string -%}
+            {{ key }} {{ ' '.join(value) }};
         {% else -%}
-            {{ gzip_variable }} {{ openwisp2_nginx_ssl_config[gzip_variable] }};
+            {{ key }} {{ value }};
         {%- endif %}
     {% endfor %}
 
