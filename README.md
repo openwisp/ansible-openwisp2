@@ -46,7 +46,7 @@ Ansible will be run on your local machine and from there it will connect to the 
 to install openwisp2.
 
 **If you are trying to install OpenWISP2 on your laptop or desktop pc just for testing purposes**,
-please read [Install OpenWISP2 locally (laptop, desktop pc)](#install-openwisp2-locally-laptop-desktop-pc).
+please read [Install OpenWISP2 for testing in a VirtualBox VM](#install-openwisp2-for-testing-in-a-virtualbox-vm).
 
 Install ansible
 ---------------
@@ -67,9 +67,6 @@ For the sake of simplicity, the easiest thing is to install this role **on your 
 via `ansible-galaxy` (which was installed when installing ansible), therefore run:
 
     ansible-galaxy install openwisp.openwisp2
-    
-If you want to install the latest version of **OpenWISP 2** instead, run:
-`ansible-galaxy install git+https://github.com/openwisp/ansible-openwsip2.git openwisp.openwisp2`
 
 Choose a working directory
 --------------------------
@@ -142,13 +139,7 @@ You can remove `-k`, `--become` and `-K` if your public SSH key is installed on 
 **Tips**:
 
 - If you have an error like `Authentication or permission failure` then try to use *root* user `ansible-playbook -i hosts playbook.yml -u root -k`
-- If you have an error about adding the host's fingerprint to the `known_hosts` file, you can simply connect to the host via SSH and then answering yes when prompted, and then try running `ansible-playbook` again. 
- 
-Alternatively, you can also disable `host_key_checking`. Just create a new file in the working directory named `ansible.cfg` and place the following contents within it:
-```yml
-[defaults]
-host_key_checking=False
-```
+- If you have an error about adding the host's fingerprint to the `known_hosts` file, you can simply connect to the host via SSH and answer yes when prompted; then you can run `ansible-playbook` again.
 
 When the playbook is done running, if you got no errors you can login at:
 
@@ -168,75 +159,72 @@ Now proceed with the following steps:
 Now you are ready to start configuring your network! **If you need help** you can ask questions
 on one of the official [OpenWISP Support Channels](http://openwisp.org/support.html).
 
-Install OpenWISP2 in a VirtualBox VM
-----------------------------------------------
+Install OpenWISP2 for testing in a VirtualBox VM
+-------------------------------------------------
 
-If you want to check out **OpenWISP 2** on your own laptop, PC, you can simply do so. This section covers the steps involved to achieve the above stated task. The following steps have been written assuming you've already set-up your VM. The OS recommended for doing this is Ubuntu Server.
+If you want to try out **OpenWISP 2** in your own development environment, the safest
+way is to use a VirtualBox Virtual Machine (from here on VM).
+
+Install VirtualBox and create a new Virtual Machine using Ubuntu Server 16.04.
 
 **Step 1**: [Install ansible](#install-ansible)
 
-Install the latest ansible release as by referring to the ansible documentation.
-
 **Step 2**: [Install the OpenWISP2 role for Ansible](#install-this-role)
-
-Install the latest version of **OpenWISP2**
-
-`ansible-galaxy install git+https://github.com/openwisp/ansible-openwisp2.git openwisp.openwisp2`
 
 **Step 3**: [Set up a working directory](#choose-a-working-directory)
 
-**Step 4: Creating the `hosts` file**
+**Step 4: Create the `hosts` file**
 
-We are going to store the details of our production server in a separate file named `hosts`. Therefore create an empty file named `hosts` **in the working directory** and paste the below contents within it using a text editor.
+Create an ansible inventory file named `hosts` **in your working directory**
+(eg: not the VM) with the following contents:
+
 ```
 [openwisp2]
 localhost:3022
-##3022 is just a random port. Only using it for port-forwarding.
 ```
 
-**Step 5: Setting up the Ansible Playbook**
+**Note**: `3022` is just a random port. Only using it for port-forwarding.
 
-Create an empty file named `playbook.yml` and paste the contents below within it.
+**Step 5**: Create the ansible playbook
+
+In the same directory where you created the `host` file,
+create an empty file named `playbook.yml` which contains the following:
+
 ```yaml
 - hosts: openwisp2
   roles:
     - ansible-openwisp2
 ```
-**Step 6: Modifying the Ubuntu Server VM**
 
-Ansible requires `openssh-server` and likewise, OpenWISP2 requires `python` to be installed on the **production server** so that it can pass commands to it remotely. Install `openssh-server` by running this command **on the production server**(or simply the booted up VM):
+**Step 6**: Configure the Ubuntu Server VM
 
-`sudo apt-get install openssh-server`
+Ansible requires `openssh-server` and likewise, OpenWISP2 requires `python`
+to be installed on the **production server** so that it can pass commands to it remotely.
+Install `openssh-server` by running this command **on the production server**
+(or simply the booted up VM):
 
-`sudo apt-get install python`
+```
+sudo apt-get install openssh-server
+sudo apt-get install python
+```
 
 Now we're going to set up port forwarding for `3022`, the port we used earlier in the `hosts` file. To do this, do the following:
+
 - Open your VM `Settings`.
 - Locate the `Network` section.
 - Set `Adapter 1` as `NAT`, click on the `Advanced` option and then open `Port Forwarding` settings.
 - We're going to add **two port-forwarding rules**, one for SSH communication, and the other one for forwarding the website requests from the local machine to the our virtual machine. They are as follows:
+  - **Name**:SSH, **Protocol**:TCP, **Host Port**:3022, **Guest Port**:22
+  - **Name**:HTTPS, **Protocol**:TCP, **Host Port:**:8000, **Guest Port**:443
+  - (Leave the others blank)
 
---**Name**:SSH, **Protocol**:TCP, **Host Port**:3022, **Guest Port**:22
+**Step 7**: [Run the playbook](#run-the-playbook)
 
---**Name**:HTTPS, **Protocol**:TCP, **Host Port:**:8000, **Guest Port**:443
+When the playbook is done running, if you got no errors you can login at:
 
---(Leave the others blank)
-
-That's all for the VM modification.
-
-**Step 7**: [Running the Playbook](#run-the-playbook)
-
-Everything is set up now for ansible to go ahead and do its job, that is **install OpenWISP2**. When asked for **SSH Password**, enter the password of your VM user.
-
-**Step 8: Using OpenWISP2**
-
-If your playbook finished running without any sort of error, you may now begin using OpenWISP2. To access the site being hosted by your VM, visit and log-in at:
-
-```yml
-https://localhost:8000/admin      ##8000 port being forwarded to VM's port 443
-username:admin
-password:admin
-```
+    https://openwisp2.mydomain.com/admin
+    username: admin
+    password: admin
 
 Enabling the network topology module
 ------------------------------------
@@ -261,7 +249,7 @@ your `playbook.yml` file. Here's a short summary of how to do this:
     openwisp2_network_topology: true
 ```
 
-**Step 4**: [Run the playbook](#run-the-playbook)
+**Step 5**: [Run the playbook](#run-the-playbook)
 
 When the playbook is done running, if you got no errors you can login at:
 
