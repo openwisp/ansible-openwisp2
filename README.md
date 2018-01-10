@@ -193,7 +193,7 @@ create an empty file named `playbook.yml` which contains the following:
 ```yaml
 - hosts: openwisp2
   roles:
-    - ansible-openwisp2
+    - openwisp.openwisp2
 ```
 
 **Step 6**: Configure the Ubuntu Server VM
@@ -444,7 +444,7 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_admin_allowed_network: null
     # install ntp client (enabled by default)
     openwisp2_install_ntp: true
-    # enable sentry
+    # enable sentry example
     openwisp2_sentry:
         dsn: "https://7d2e3cd61acc32eca1fb2a390f7b55e1:bf82aab5ddn4422688e34a486c7426e3@getsentry.com:443/12345"
     openwisp2_default_cert_validity: 1825
