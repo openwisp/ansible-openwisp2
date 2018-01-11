@@ -165,7 +165,57 @@ Install OpenWISP2 for testing in a VirtualBox VM
 If you want to try out **OpenWISP 2** in your own development environment, the safest
 way is to use a VirtualBox Virtual Machine (from here on VM).
 
-Install VirtualBox and create a new Virtual Machine using Ubuntu Server 16.04.
+### Installing Debian 9 on VirtualBox
+
+Install [VirtualBox](https://virtualbox.org) and create a new Virtual Machine running
+Debian 9. A step-by-step guide is available
+[here](http://www.brianlinkletter.com/installing-debian-linux-in-a-virtualbox-virtual-machine/),
+however we need to change a few things to get ansible working.
+
+#### VM configuration
+
+Proceed with the installation as shown in the guide linked above, and come back
+here when you see this screen:
+
+![Screenshot of the Software Selection screen](https://raw.githubusercontent.com/openwisp/ansible-openwisp2/master/docs/debian-software-selection.png)
+
+We're only running this as a server, so you can uncheck `Debian desktop environment`.
+Make sure `SSH server` and `standard system utilities` are checked.
+
+Next, add a [Host-only Network Adapter](https://www.virtualbox.org/manual/ch06.html#network_hostonly)
+and assign an IP address to the VM.
+
+- Go to `File > Preferences > Network > Host-only Networks`
+- Click the <kbd>+</kbd> icon to create a new adapter
+- Set the IPv4 address to `192.168.56.1` and the IPv4 Network Mask to `255.255.255.0`. The IPv6 settings can be ignored
+  ![Screenshot of the Host-only network configuration screen](https://raw.githubusercontent.com/openwisp/ansible-openwisp2/master/docs/host-only-network.png)
+- Shut off your VM
+- In your VM settings, in the Network section, click Adapter 2
+- Select Host-only adapter and the name of the adapter you created
+- Boot up your VM, run `su`, and type in your superuser password
+- Run `ls /sys/class/net` and take note of the output
+- Run `nano /etc/network/interfaces` and add the following at the end of the file:
+
+        auto enp0s8
+        iface enp0s8 inet static
+            address 192.168.56.2
+            netmask 255.255.255.0
+            network 192.168.56.0
+            broadcast 192.168.56.255
+
+  Replace `enp0s8` with the network interface not present in the file but is shown when running `ls /sys/class/net`
+- Save the file with <kbd>Ctrl</kbd><kbd>O</kbd> then <kbd>Enter</kbd>, and exit with <kbd>Ctrl</kbd><kbd>X</kbd>
+- Restart the machine by running `reboot`
+
+Make sure you can access your VM via ssh:
+
+```bash
+ssh 192.168.56.2
+```
+
+#### Back to your local machine
+
+Proceed with these steps in your **local machine**, not the VM.
 
 **Step 1**: [Install ansible](#install-ansible)
 
@@ -173,17 +223,15 @@ Install VirtualBox and create a new Virtual Machine using Ubuntu Server 16.04.
 
 **Step 3**: [Set up a working directory](#choose-a-working-directory)
 
-**Step 4: Create the `hosts` file**
+**Step 4**: Create the `hosts` file
 
 Create an ansible inventory file named `hosts` **in your working directory**
-(eg: not the VM) with the following contents:
+(i.e. not in the VM) with the following contents:
 
 ```
 [openwisp2]
-localhost:3022
+192.168.56.2
 ```
-
-**Note**: `3022` is just a random port. Only using it for port-forwarding.
 
 **Step 5**: Create the ansible playbook
 
@@ -194,37 +242,24 @@ create an empty file named `playbook.yml` which contains the following:
 - hosts: openwisp2
   roles:
     - openwisp.openwisp2
+  # the following line is needed only when an IP address is used as the inventory hostname
+  vars:
+      postfix_myhostname: localhost
 ```
 
-**Step 6**: Configure the Ubuntu Server VM
+**Step 6**: Run the playbook
 
-Ansible requires `openssh-server` and likewise, OpenWISP2 requires `python`
-to be installed on the **production server** so that it can pass commands to it remotely.
-Install `openssh-server` by running this command **on the production server**
-(or simply the booted up VM):
-
-```
-sudo apt-get install openssh-server
-sudo apt-get install python
+```bash
+ansible-playbook -i hosts playbook.yml -b -k -K --become-method=su
 ```
 
-Now we're going to set up port forwarding for `3022`, the port we used earlier in the `hosts` file. To do this, do the following:
+When the playbook ran successfully, you can log in at:
 
-- Open your VM `Settings`.
-- Locate the `Network` section.
-- Set `Adapter 1` as `NAT`, click on the `Advanced` option and then open `Port Forwarding` settings.
-- We're going to add **two port-forwarding rules**, one for SSH communication, and the other one for forwarding the website requests from the local machine to the our virtual machine. They are as follows:
-  - **Name**:SSH, **Protocol**:TCP, **Host Port**:3022, **Guest Port**:22
-  - **Name**:HTTPS, **Protocol**:TCP, **Host Port:**:8000, **Guest Port**:443
-  - (Leave the others blank)
-
-**Step 7**: [Run the playbook](#run-the-playbook)
-
-When the playbook is done running, if you got no errors you can login at:
-
-    https://openwisp2.mydomain.com/admin
-    username: admin
-    password: admin
+```
+https://192.168.56.2/admin
+username: admin
+password: admin
+```
 
 Enabling the network topology module
 ------------------------------------
