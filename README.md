@@ -447,6 +447,9 @@ Below are listed all the variables you can customize (you may also want to take 
     # must be also added to the openwisp2_extra_python_packages var)
     openwisp2_extra_django_apps:
         - owm_legacy
+    # additional django settings example
+    openwisp2_extra_django_settings:
+        - CSRF_COOKIE_AGE: 2620800.0
     # spdy protocol support (disabled by default)
     openwisp2_nginx_spdy: false
     # HTTP2 protocol support (disabled by default)

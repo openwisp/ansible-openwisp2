@@ -261,3 +261,8 @@ LOGGING = {
 {% if openwisp2_sentry.get('dsn') %}
 RAVEN_CONFIG = {{ openwisp2_sentry|to_nice_json }}
 {% endif %}
+
+{% for setting, value in openwisp2_extra_django_settings.items() %}
+{{ setting }} = {% if value is string %}'{{ value }}'{% else %}value{% endif %}
+
+{% endfor %}
