@@ -18,6 +18,9 @@ urlpatterns = [
     {% if openwisp2_network_topology %}
     url(r'^', include('openwisp_network_topology.urls')),
     {% endif %}
+    {% if openwisp2_extra_urls %}
+    {{ openwisp2_extra_urls }},
+    {% endif %}
     url(r'^$', redirect_view, name='index')
 ]
 

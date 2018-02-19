@@ -450,6 +450,8 @@ Below are listed all the variables you can customize (you may also want to take 
     # additional django settings example
     openwisp2_extra_django_settings:
         - CSRF_COOKIE_AGE: 2620800.0
+    # extra URL settings for django
+    openwisp2_extra_urls: "url(r'', include('my_custom_app.urls'))"
     # spdy protocol support (disabled by default)
     openwisp2_nginx_spdy: false
     # HTTP2 protocol support (disabled by default)
