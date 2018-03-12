@@ -1,0 +1,9 @@
+- name: Install python3.6 if python update is true
+  get_url: 
+    url: "{{ python3.6_package_url }}"
+    dest: "/home/{{ ansible_env.USER }}/Downloads/{{ python_package_name }}.deb"
+
+- name: Installing the deb package
+  apt: deb="/home/{{ ansible_env.USER }}/Downloads/{{ python_package_name }}.deb"
+  sudo: true
+  when: openwisp2_python_update = true

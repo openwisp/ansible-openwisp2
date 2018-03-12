@@ -1,4 +1,5 @@
 openwisp2_python: python3
+openwisp2_python_update: false
 openwisp2_network_topology: false
 openwisp2_controller_pip: false
 openwisp2_users_pip: false

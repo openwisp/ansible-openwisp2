@@ -89,3 +89,8 @@
   apt:
     name: ntp
     state: latest
+
+- name: Install checkinstall
+  apt:
+      name: checkinstall
+      state: latest

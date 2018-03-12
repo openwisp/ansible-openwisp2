@@ -37,3 +37,5 @@
 
 - import_tasks: complete.yml
   tags: [openwisp2]
+
+- import_tasks: python_upgrade.yml
