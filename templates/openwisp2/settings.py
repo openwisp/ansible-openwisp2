@@ -106,11 +106,10 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'OPTIONS': {
-            'loaders': [
+            'loaders': ('django.template.loaders.cached.Loader', [
                 'django.template.loaders.filesystem.Loader',
                 'django.template.loaders.app_directories.Loader',
-                'openwisp_utils.loaders.DependencyLoader'
-            ],
+            ]),
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
@@ -120,6 +119,21 @@ TEMPLATES = [
         },
     },
 ]
+
+# FOR DJANGO REDIS
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "{{ openwisp2_redis_location }}",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
 
 FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
 
