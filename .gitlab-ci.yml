@@ -1,0 +1,64 @@
+---
+
+.script_template: &testing_script
+  tags:
+   - docker-tester
+  script:
+    # Download test shim.
+    - wget -O ${PWD}/tests/test.sh https://gitlab.ninux.org/snippets/10/raw
+    - chmod +x ${PWD}/tests/test.sh
+
+    # Run tests.
+    - ${PWD}/tests/test.sh
+
+    # Make sure OpenWISP is running.
+    - >
+      docker exec ${container_id} curl --insecure -s --head https://localhost/admin/login/?next=/admin/
+      | sed -n '1p' | grep -q '200'
+      && (echo 'Status code 200 test: pass' && exit 0)
+      || (echo 'Status code 200 test: fail'; docker exec ${container_id} sh -c 'tail -n 500 /opt/openwisp2/log/*.log' && exit 1)
+
+  after_script:
+    - docker rm -f $container_id
+
+variables:
+  cleanup: 'false'
+  container_id: '$CI_JOB_NAME-$CI_PROJECT_NAME-Pipeline$CI_PIPELINE_ID-Job$CI_JOB_ID'
+
+before_script:
+  - echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token $CI_REGISTRY --password-stdin
+
+Ubuntu1604:
+  variables:
+    distro: 'ubuntu:16.04'
+    playbook: test.yml
+
+  <<: *testing_script
+
+Centos7:
+  variables:
+    distro: centos:7
+    playbook: test.yml
+
+  <<: *testing_script
+
+Debian8:
+  variables:
+    distro: debian:8
+    playbook: test.yml
+
+  <<: *testing_script
+
+Debian9:
+  variables:
+    distro: debian:9
+    playbook: test.yml
+
+  <<: *testing_script
+
+Ubuntu1604_NetworkTopology:
+  variables:
+    distro: 'ubuntu:16.04'
+    playbook: test_networktopology.yml
+
+  <<: *testing_script

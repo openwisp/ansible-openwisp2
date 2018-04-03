@@ -1,3 +1,5 @@
+---
+
 - name: Install epel-release (if RedHat/Centos)
   when: ansible_distribution in ['RedHat', 'CentOS']
   yum: name=epel-release state=latest
@@ -16,10 +18,17 @@
     - libffi-devel
     - python-devel
     - redis
-    - python-firewall
     - libsemanage-python
     - policycoreutils-python
     - redhat-rpm-config
+
+- name: Install firewall packages
+  package: name={{ item }} state=present
+  notify: reload systemd
+  with_items:
+    - python-firewall
+    - firewalld
+  when: ansible_distribution_major_version|int >= 7
 
 - name: Install spatialite
   when: openwisp2_database.engine == "django.contrib.gis.db.backends.spatialite"
@@ -33,7 +42,8 @@
     - libspatialite-devel
 
 # mod-spatialite doesn't seem available on RedHat yet
-- set_fact:
+- name: Set openwisp2_spatialite_path
+  set_fact:
     openwisp2_spatialite_path: false
   when: openwisp2_spatialite_path == 'mod_spatialite'
 

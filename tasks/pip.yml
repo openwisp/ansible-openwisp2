@@ -1,4 +1,5 @@
-- set_fact:
+- name: Set openwisp2_python_packages
+  set_fact:
     openwisp2_python_packages: []
 
 - name: Set custom package list

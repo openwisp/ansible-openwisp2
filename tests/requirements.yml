@@ -1,0 +1,5 @@
+---
+
+- src: https://github.com/openwisp/ansible-openwisp2
+  version: master
+  name: openwisp.openwisp2

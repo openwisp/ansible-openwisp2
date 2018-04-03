@@ -33,11 +33,12 @@
   apt: name=libsqlite3-mod-spatialite state=latest
   register: mod_spatialie_result
 
-- set_fact:
+- name: Set openwisp2_spatialite_path
+  set_fact:
     openwisp2_spatialite_path: false
   when: >
     openwisp2_spatialite_path == 'mod_spatialite'
-    and mod_spatialie_result|failed
+    and mod_spatialie_result is failed
 
 # fixes issue described in https://docs.ansible.com/ansible/become.html#becoming-an-unprivileged-user
 - name: Install acl if acting as non-root user
