@@ -46,6 +46,8 @@
     # add asgi_redis for websockets
     - asgi_redis
     - service_identity
+    # django-redis for caching
+    - django-redis
   notify: reload supervisor
 
 - name: Install openwisp2 network topology and its dependencies
