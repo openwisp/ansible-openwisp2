@@ -1,3 +1,11 @@
+---
+
+- name: Enable firewalld
+  service:
+    name: firewalld
+    state: started
+    enabled: yes
+
 - name: Configure firewall
   firewalld:
     permanent: true

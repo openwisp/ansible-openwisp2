@@ -1,0 +1,38 @@
+---
+
+services: docker
+
+env:
+  - distro: centos:7
+    playbook: test.yml
+  - distro: 'ubuntu:16.04'
+    playbook: test.yml
+  - distro: debian:8
+    playbook: test.yml
+  - distro: debian:9
+    playbook: test.yml
+
+  - distro: 'ubuntu:16.04'
+    playbook: test_networktopology.yml
+
+script:
+  # Configure test script so we can run extra tests after playbook is run.
+  - export container_id=$(date +%s)
+  - export cleanup=false
+
+  # Download test shim.
+  - wget -O ${PWD}/tests/test.sh https://gitlab.ninux.org/snippets/10/raw
+  - chmod +x ${PWD}/tests/test.sh
+
+  # Run tests.
+  - ${PWD}/tests/test.sh
+
+  # Make sure OpenWISP is running.
+  - >
+    docker exec ${container_id} curl --insecure -s --head https://localhost/admin/login/?next=/admin/
+    | sed -n '1p' | grep -q '200'
+    && (echo 'Status code 200 test: pass' && exit 0)
+    || (echo 'Status code 200 test: fail'; docker exec ${container_id} sh -c 'tail -n 500 /opt/openwisp2/log/*.log' && exit 1)
+
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/

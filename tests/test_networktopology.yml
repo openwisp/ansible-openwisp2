@@ -1,0 +1,24 @@
+---
+
+- hosts: all
+
+  become: true
+
+  vars:
+    openwisp2_network_topology: true
+
+  pre_tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 600
+      when: ansible_os_family == 'Debian'
+      changed_when: false
+
+    - name: Remove the .dockerenv file
+      file:
+        path: /.dockerenv
+        state: absent
+
+  roles:
+    - role_under_test

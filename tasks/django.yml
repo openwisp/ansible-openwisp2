@@ -111,7 +111,7 @@
     mode: 0754
 
 - name: load initial data
-  shell: "env/bin/python load_initial_data.py"
+  command: "env/bin/python load_initial_data.py"
   register: load_initial_data_result
   changed_when: '"created" in load_initial_data_result.stdout'
   args:

@@ -3,11 +3,11 @@
 ---
 
 - name: reload systemd
-  shell: systemctl daemon-reload
+  systemd: daemon_reload=yes
   when: ansible_distribution_release in ['jessie', 'xenial']
 
 - name: reload supervisor
-  shell: supervisorctl reload
+  command: supervisorctl reload
 
 - name: restart nginx
   service: name=nginx state=restarted

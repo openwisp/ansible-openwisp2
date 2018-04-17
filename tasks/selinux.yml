@@ -1,3 +1,5 @@
+---
+
 - name: Set http_can_network_connect
   seboolean:
     name: httpd_can_network_connect

@@ -59,7 +59,7 @@ openwisp2_nginx_ssl_config:
     gzip_comp_level: "6"
     gzip_proxied: "any"
     gzip_min_length: "1000"
-    gzip_types: 
+    gzip_types:
         - "text/plain"
         - "text/html"
         - "image/svg+xml"
