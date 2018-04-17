@@ -489,6 +489,8 @@ Below are listed all the variables you can customize (you may also want to take 
         dsn: "https://7d2e3cd61acc32eca1fb2a390f7b55e1:bf82aab5ddn4422688e34a486c7426e3@getsentry.com:443/12345"
     openwisp2_default_cert_validity: 1825
     openwisp2_default_ca_validity: 3650
+    # redis cache url
+    openwisp2_redis_cache_url: redis://127.0.0.1:6379/1
 ```
 
 Support

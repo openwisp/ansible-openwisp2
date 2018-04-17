@@ -125,7 +125,7 @@ TEMPLATES = [
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "{{ openwisp2_redis_location }}",
+        "LOCATION": "{{ openwisp2_redis_cache_url }}",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
