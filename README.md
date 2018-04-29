@@ -16,6 +16,14 @@ Tested on **debian**, **ubuntu**, **fedora**, **redhat** and **centos**.
 
 **Minimum ansible version supported**: 2.4.
 
+Help OpenWISP
+=============
+
+Like OpenWISP? Find out how to help us!
+
+- [Help us to grow our community](http://openwisp.io/docs/general/help-us.html)
+- [How to contribute to OpenWISP](http://openwisp.io/docs/developer/contributing.html)
+
 Architecture
 ============
 
