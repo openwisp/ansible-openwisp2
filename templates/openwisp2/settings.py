@@ -283,3 +283,8 @@ RAVEN_CONFIG = {{ openwisp2_sentry|to_nice_json }}
 {{ setting }} = {% if value is string %}'{{ value }}'{% else %}{{ value }}{% endif %}
 
 {% endfor %}
+
+{% for instruction in openwisp2_extra_django_settings_instructions %}
+{{ instruction }}
+
+{% endfor %}
