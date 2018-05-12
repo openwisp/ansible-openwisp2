@@ -501,6 +501,8 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_default_ca_validity: 3650
     # redis cache url
     openwisp2_redis_cache_url: redis://127.0.0.1:6379/1
+    # allow overriding default `postfix_smtp_sasl_auth_enable` variable
+    postfix_smtp_sasl_auth_enable_override: yes
 ```
 
 Support
