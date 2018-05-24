@@ -1,1 +1,21 @@
 virtualenv_path: "{{ openwisp2_path }}/env"
+# Dictionary for Cross-Origin Resource Sharing (CORS) Settings
+# The usage of django-cors-headers is documented here: "https://pypi.python.org/pypi/django-cors-headers/2.1.0"
+- cors:                                    
+    enabled: False                       # Variable to enable/disable django-cors-headers.
+    whitelist_all: False           #Set to True to accept all origins    
+    regex: False                         #Set to True to enable regex whitlist
+    regex_whitelist: []           #Set cors_regex to True to pass this
+    whitelist: []                          # Contains the origin hostnames allow for CORS.
+    csrf_trusted_origins: []   
+    urls: r'^.*$'
+    methods_defaults: True              #Set to true if default methods aren't included in your passed method list.
+    methods: [] 
+    headers_defaults: True              #Set to true if defualt headers aren't included in your passed header list.
+    headers: [] 
+    expose_headers: []
+    preflight: 86400
+    credentials: False                         #Set to True to enable cookies in cross-site HTTPS requests
+    model: None
+    replace_referer: False                  
+

@@ -1,4 +1,5 @@
 import os
+from corsheaders.defaults import default_methods, default_headers
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -189,6 +190,47 @@ TIME_ZONE = '{{ openwisp2_time_zone }}'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
+
+#Initialize django-cors-headers
+{% if cors.enabled %}
+INSTALLED_APPS.insert(0,'corsheaders',)
+MIDDLEWARE_CLASSES.insert(0,'corsheaders.middleware.CorsMiddleware',)
+{% endif %}
+
+#CORS Whitelist
+{% if cors.whitelist_all %}          # If all hosts are allowed
+CORS_ORIGIN_ALLOW_ALL = True    
+{% elif cors.regex %}                # If regex is enabled
+CORS_ORIGIN_REGEX_WHITELIST = tuple({{ cors.regex_whitelist }})  
+{% else %}
+CORS_ORIGIN_WHITELIST = tuple({{ cors.whitelist }})    
+{% endif %}
+
+#CORS Allow Methods
+{% if cors.methods_defaults %}       # If default methods of corsheaders are to be added as well.
+CORS_ALLOW_METHODS = default_methods + tuple({{ cors.methods }}) 
+{% else %}                           # If default methods of corsheaders aren't to be added.
+CORS_ALLOW_METHODS = {{ cors.methods }}
+{% endif %}
+
+#CORS Allow Headers
+{% if cors.headers_defaults %}       # If default headers of corsheaders are to be added as well.
+CORS_ALLOW_HEADERS = default_headers + tuple({{ cors.headers }})
+{% else %}                           # If default headers of corsheaders aren't to be added. 
+CORS_ALLOW_HEADERS = {{ cors.headers }}
+{% endif %}
+
+CORS_EXPOSE_HEADERS = {{ cors.expose_headers }}
+CORS_PREFLIGHT_MAX_AGE = {{ cors.preflight }}
+CORS_ALLOW_CREDENTIALS = {{ cors.credentials }}
+CORS_MODEL = {{ cors.model }}    
+CORS_URLS_REGEX = {{ cors.urls }}
+
+CORS_REPLACE_HTTPS_REFERER = {{ cors.replace_referer }}
+{% if "CORS_REPLACE_HTTPS_REFERER" %}
+MIDDLEWARE_CLASSES.insert(6,'corsheaders.middleware.CorsPostCsrfMiddleware',)
+{% endif %}      
+CSRF_TRUSTED_ORIGINS =  tuple({{ cors.csrf_trusted_origins }})
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
