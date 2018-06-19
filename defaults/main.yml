@@ -12,7 +12,7 @@ openwisp2_extra_python_packages: [bpython]
 openwisp2_extra_django_apps: []
 openwisp2_extra_django_settings: {}
 openwisp2_extra_django_settings_instructions: []
-openwisp2_extra_urls: false
+openwisp2_extra_urls: []
 openwisp2_path: "/opt/openwisp2"
 openwisp2_default_from_email: "openwisp2@{{ inventory_hostname }}"
 openwisp2_database:

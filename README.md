@@ -464,7 +464,8 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_extra_django_settings_instructions:
         - TEMPLATES[0]['OPTIONS']['loaders'].insert(0, 'apptemplates.Loader')
     # extra URL settings for django
-    openwisp2_extra_urls: "url(r'', include('my_custom_app.urls'))"
+    openwisp2_extra_urls:
+      - "url(r'', include('my_custom_app.urls'))"
     # spdy protocol support (disabled by default)
     openwisp2_nginx_spdy: false
     # HTTP2 protocol support (disabled by default)
