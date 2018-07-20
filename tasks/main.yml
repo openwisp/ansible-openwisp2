@@ -3,7 +3,7 @@
 ### openwisp2
 ## tasks
 - import_tasks: variables.yml
-  tags: [openwisp2, variables]
+  tags: [openwisp2, apt, yum, pip, django, supervisor, nginx, variables]
 
 - import_tasks: apt.yml
   tags: [openwisp2, apt]
