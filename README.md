@@ -175,6 +175,20 @@ Install OpenWISP2 for testing in a VirtualBox VM
 If you want to try out **OpenWISP 2** in your own development environment, the safest
 way is to use a VirtualBox Virtual Machine (from here on VM).
 
+### Using Vagrant
+
+**Since August 2018 there's a new fast and easy way to install OpenWISP 2 for testing
+purposes** leveraging [Vagrant](https://www.vagrantup.com), a popular open source
+tool for building and maintaining portable virtual software development environments.
+
+To use this new way, clone the repository [vagrant-openwisp2](https://github.com/openwisp/vagrant-openwisp2),
+it contains the instructions (in the `README.md`) and the vagrant configuration
+to perform the automatic installation.
+
+Alternatively, you can read on to learn how to install *VirtualBox* and run
+*ansible-openwisp2* manually, this is useful if you need to test advanced
+customisations of *OpenWISP*.
+
 ### Installing Debian 9 on VirtualBox
 
 Install [VirtualBox](https://virtualbox.org) and create a new Virtual Machine running
