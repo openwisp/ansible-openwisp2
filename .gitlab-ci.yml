@@ -35,6 +35,13 @@ Ubuntu1604:
 
   <<: *testing_script
 
+Ubuntu1804:
+  variables:
+    distro: 'ubuntu:18.04'
+    playbook: test.yml
+
+  <<: *testing_script
+
 Centos7:
   variables:
     distro: centos:7
@@ -56,9 +63,23 @@ Debian9:
 
   <<: *testing_script
 
-Ubuntu1604_NetworkTopology:
+Debian10:
   variables:
-    distro: 'ubuntu:16.04'
+    distro: debian:10
+    playbook: test.yml
+
+  <<: *testing_script
+
+Fedora27:
+  variables:
+    distro: fedora:27
+    playbook: test.yml
+
+  <<: *testing_script
+
+Ubuntu1804_NetworkTopology:
+  variables:
+    distro: 'ubuntu:18.04'
     playbook: test_networktopology.yml
 
   <<: *testing_script

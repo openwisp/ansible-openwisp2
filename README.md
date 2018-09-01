@@ -436,7 +436,9 @@ Below are listed all the variables you can customize (you may also want to take 
         port: ""
         options: {}
     # SPATIALITE_LIBRARY_PATH django setting
-    openwisp2_spatialite_path: "mod_spatialite"
+    # The role will attempt determining the right mod-spatialite path automatically
+    # But you can use this variable to customize the path or fix future arising issues
+    openwisp2_spatialite_path: null
     # customize other django settings:
     openwisp2_language_code: en-gb
     openwisp2_time_zone: UTC
