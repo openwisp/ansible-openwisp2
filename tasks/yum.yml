@@ -45,7 +45,6 @@
 - name: Set openwisp2_spatialite_path
   set_fact:
     openwisp2_spatialite_path: false
-  when: openwisp2_spatialite_path == 'mod_spatialite'
 
 - name: ensure supervisor is started
   service: name=supervisord state=started enabled=yes
