@@ -5,6 +5,12 @@
 - import_tasks: variables.yml
   tags: [openwisp2, apt, yum, pip, django, supervisor, nginx, variables]
 
+- import_tasks: variables-spatialite.yml
+  tags: [openwisp2, apt, yum, pip, django, supervisor, nginx, variables]
+  when: >
+    openwisp2_database.engine == "django.contrib.gis.db.backends.spatialite"
+    and openwisp2_spatialite_path is none
+
 - import_tasks: apt.yml
   tags: [openwisp2, apt]
   when: ansible_os_family == 'Debian'
