@@ -3,6 +3,7 @@
 services: docker
 
 env:
+  matrix:
   - distro: centos:7
     playbook: test.yml
   - distro: 'ubuntu:16.04'
@@ -17,9 +18,15 @@ env:
     playbook: test.yml
   - distro: fedora:27
     playbook: test.yml
-
+  - distro: fedora:28
+    playbook: test.yml
   - distro: 'ubuntu:18.04'
     playbook: test_networktopology.yml
+
+matrix:
+  allow_failures:
+    - env: distro=debian:10 playbook=test.yml
+    - env: distro=fedora:28 playbook=test.yml
 
 script:
   # Configure test script so we can run extra tests after playbook is run.
@@ -27,7 +34,7 @@ script:
   - export cleanup=false
 
   # Download test shim.
-  - wget -O ${PWD}/tests/test.sh https://gitlab.ninux.org/snippets/10/raw
+  - wget -O ${PWD}/tests/test.sh https://gitlab.com/snippets/1751673/raw
   - chmod +x ${PWD}/tests/test.sh
 
   # Run tests.
