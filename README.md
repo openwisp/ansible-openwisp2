@@ -4,6 +4,7 @@ ansible-openwisp2
 [![Installing OpenWISP2](https://raw.githubusercontent.com/openwisp/ansible-openwisp2/master/docs/install-openwisp2.png)](https://www.youtube.com/watch?v=v_DUeFUGG8Q&index=1&list=PLPueLZei9c8_DEYgC5StOcR5bCAcQVfR8)
 
 [![Build Status](https://travis-ci.org/openwisp/ansible-openwisp2.svg?branch=master)](https://travis-ci.org/openwisp/ansible-openwisp2)
+[![pipeline status](https://gitlab.com/openwisp/ansible-openwisp2/badges/master/pipeline.svg)](https://gitlab.com/openwisp/ansible-openwisp2/commits/master)
 [![Galaxy](http://img.shields.io/badge/galaxy-openwisp.openwisp2-blue.svg?style=flat-square)](https://galaxy.ansible.com/openwisp/openwisp2/)
 [![Galaxy](https://img.shields.io/ansible/role/d/14542.svg?style=flat-square)](https://galaxy.ansible.com/openwisp/openwisp2/)
 [![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg?style=flat-square)](https://gitter.im/openwisp/general)
