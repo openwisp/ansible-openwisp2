@@ -317,6 +317,12 @@ When the playbook is done running, if you got no errors you can login at:
     username: admin
     password: admin
 
+Troubleshooting
+===============
+
+If encounter any issue, you can check the logs of OpenWISP 2 at `/opt/openwisp2/log`
+(unless you changed the ``openwisp2_path`` variable in the ansible playbook configuration).
+
 SSL certificate gotchas
 =======================
 
