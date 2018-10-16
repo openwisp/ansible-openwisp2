@@ -4,7 +4,9 @@
 
 - name: Install system packages
   apt: name={{ item }} state=latest
-  notify: reload systemd
+  notify: 
+    - reload systemd
+    - start redis-server
   with_items:
     - sudo
     - software-properties-common
@@ -16,6 +18,18 @@
     - libffi-dev
     - python-dev
     - redis-server
+
+# On the newer versions of redis, by default redis
+# binds to localhost on ipv6 address which wouldn't
+# let the service start if the server doesn't have
+# ipv6 enabled. Hence, we set redis to listen on ipv4
+- name: set redis to listen on ipv4
+  notify: start redis-server
+  lineinfile:
+    path: /etc/redis/redis.conf
+    regexp: '^bind 127\.0\.0\.1 ::1'
+    line: 'bind 127.0.0.1'
+    backrefs: yes
 
 - name: Install spatialite
   when: openwisp2_database.engine == "django.contrib.gis.db.backends.spatialite"

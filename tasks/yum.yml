@@ -7,7 +7,9 @@
 
 - name: Install system packages
   package: name={{ item }} state=latest
-  notify: reload systemd
+  notify: 
+    - reload systemd
+    - start redis
   with_items:
     - sudo
     - gcc
@@ -21,6 +23,18 @@
     - libsemanage-python
     - policycoreutils-python
     - redhat-rpm-config
+
+# On the newer versions of redis, by default redis
+# binds to localhost on ipv6 address which wouldn't
+# let the service start if the server doesn't have
+# ipv6 enabled. Hence, we set redis to listen on ipv4
+- name: set redis to listen on ipv4 (RedHat & CentOS)
+  notify: start redis
+  lineinfile:
+    path: /etc/redis.conf
+    regexp: '^bind 127\.0\.0\.1 ::1'
+    line: 'bind 127.0.0.1'
+    backrefs: yes
 
 - name: Install firewall packages
   package: name={{ item }} state=present

@@ -7,15 +7,9 @@
   before_script:
    - echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token $CI_REGISTRY --password-stdin
   script:
-    # Download test shim.
-    - wget -O ${PWD}/tests/test.sh https://gitlab.com/snippets/1751673/raw
-    - chmod +x ${PWD}/tests/test.sh
+    # run ci tests
+    - ${PWD}/tests/runtests.sh
 
-    # Run tests.
-    - ${PWD}/tests/test.sh
-
-    # Make sure OpenWISP is running.
-    - ./tests/runtests.sh
   dependencies: []
   after_script:
     - docker rm -f $container_id
