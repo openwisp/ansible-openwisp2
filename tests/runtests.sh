@@ -2,7 +2,7 @@
 set -e -x
 
 # Download snippet
-printf "Downloading common tests shim...\n"
+echo "Downloading common tests shim..."
 wget -q -O ${PWD}/tests/test.sh https://gitlab.com/snippets/1751673/raw
 chmod +x ${PWD}/tests/test.sh
 
@@ -17,7 +17,7 @@ docker exec "${container_id}" curl --insecure -s --head https://localhost/admin/
  docker exec "${container_id}" sh -c "tail -n 500/opt/openwisp2/log/*.log" \
  && exit 1)
 
-# Check redis is running 
+# Check redis is running
 sudo docker exec "${container_id}" systemctl status redis-server \
  | grep "Active: active (running)" \
  || sudo docker exec "${container_id}" systemctl status redis \
