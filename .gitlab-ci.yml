@@ -56,6 +56,7 @@ ansible-syntax:
       - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
   script:
     - ansible-galaxy install -r tests/requirements.yml
+    - ln -s $CI_PROJECT_DIR ~/.ansible/roles/role_under_test
     - ansible-playbook tests/test.yml --syntax-check
     - ansible-playbook tests/test_networktopology.yml --syntax-check
 
@@ -70,6 +71,7 @@ ansible-lint:
       - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
   script:
     - ansible-galaxy install -r tests/requirements.yml
+    - ln -s $CI_PROJECT_DIR ~/.ansible/roles/role_under_test
     - ansible-lint tests/test.yml
     - ansible-lint tests/test_networktopology.yml
   allow_failure: true

@@ -1,5 +1,5 @@
 ---
 
-- src: https://github.com/openwisp/ansible-openwisp2
-  version: master
-  name: openwisp.openwisp2
+- src: https://github.com/nemesisdesign/Stouts.postfix
+  version: origin/develop
+  name: Stouts.postfix
