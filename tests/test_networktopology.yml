@@ -21,4 +21,4 @@
         state: absent
 
   roles:
-    - openwisp.openwisp2
+    - role_under_test
