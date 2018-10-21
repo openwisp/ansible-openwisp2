@@ -2,6 +2,10 @@
 
 services: docker
 
+branches:
+  only:
+    - master
+
 env:
   matrix:
   - distro: centos:7
@@ -32,7 +36,6 @@ script:
   # Configure test script so we can run extra tests after playbook is run.
   - export container_id=$(date +%s)
   - export cleanup=false
-
   # run ci tests
   - ${PWD}/tests/runtests.sh
 
