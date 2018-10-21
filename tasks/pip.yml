@@ -46,8 +46,15 @@
     # add asgi_redis for websockets
     - asgi_redis
     - service_identity
-    # django-redis for caching
-    - django-redis
+  notify: reload supervisor
+
+- name: Install django-redis
+  pip:
+    name: "django-redis>=4.9.0"
+    state: present
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+    virtualenv_site_packages: yes
   notify: reload supervisor
 
 - name: Install openwisp2 network topology and its dependencies
