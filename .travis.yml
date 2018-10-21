@@ -33,15 +33,8 @@ script:
   - export container_id=$(date +%s)
   - export cleanup=false
 
-  # Download test shim.
-  - wget -O ${PWD}/tests/test.sh https://gitlab.com/snippets/1751673/raw
-  - chmod +x ${PWD}/tests/test.sh
-
-  # Run tests.
-  - ${PWD}/tests/test.sh
-
-  # Make sure OpenWISP is running.
-  - ./tests/runtests.sh
+  # run ci tests
+  - ${PWD}/tests/runtests.sh
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/

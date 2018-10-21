@@ -11,3 +11,12 @@
 
 - name: restart nginx
   service: name=nginx state=restarted
+
+- name: start redis
+  service: name=redis state=started
+
+# TODO: When debian 8 support is removed, this can
+# be removed as well and notify: redis-server can be
+# replaced with notify: redis
+- name: start redis-server
+  service: name=redis-server state=started
