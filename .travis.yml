@@ -2,7 +2,7 @@
 
 services: docker
 
-if: (type = pull_request) OR branch = master
+if: (type = pull_request) OR (branch = master)
 
 env:
   matrix:
