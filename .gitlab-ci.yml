@@ -19,7 +19,7 @@
     name: hashicorp/terraform:light
     entrypoint:
       - '/usr/bin/env'
-      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'  
+      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
   before_script:
     - wget -O $CI_PROJECT_DIR/terraform.tf https://gitlab.com/snippets/1757951/raw
     - rm -rf .terraform
