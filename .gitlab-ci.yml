@@ -19,7 +19,7 @@
     name: hashicorp/terraform:light
     entrypoint:
       - '/usr/bin/env'
-      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'  
+      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
   before_script:
     - wget -O $CI_PROJECT_DIR/terraform.tf https://gitlab.com/snippets/1757951/raw
     - rm -rf .terraform
@@ -90,6 +90,7 @@ terraform-plan:
   artifacts:
     paths:
       - planfile
+    expire_in: 1 week
 
 terraform-apply:
   stage: apply
@@ -100,6 +101,10 @@ terraform-apply:
     - terraform apply -input=false "planfile"
   dependencies:
     - terraform-plan
+  artifacts:
+    paths:
+      - terraform.tfstate
+    expire_in: 1 week
 
 Ubuntu1604:
   variables:
@@ -164,7 +169,8 @@ terraform-destroy_on_failure:
   <<: *terraform_setup
   script:
     - terraform destroy -auto-approve
-  dependencies: []
+  dependencies:
+    - terraform-apply
   when: on_failure
 
 terraform-destroy:
@@ -174,4 +180,5 @@ terraform-destroy:
   <<: *terraform_setup
   script:
     - terraform destroy -auto-approve
-  dependencies: []
+  dependencies:
+    - terraform-apply
