@@ -18,9 +18,9 @@ docker exec "${container_id}" curl --insecure -s --head https://localhost/admin/
  && exit 1)
 
 # Check redis is running
-sudo docker exec "${container_id}" systemctl status redis-server \
+docker exec "${container_id}" systemctl status redis-server \
  | grep "Active: active (running)" \
- || sudo docker exec "${container_id}" systemctl status redis \
+ || docker exec "${container_id}" systemctl status redis \
  | grep "Active: active (running)" \
  && (printf "redis test: pass\n" && exit 0) \
  || (printf "redis test: failed\n"; exit 1)
