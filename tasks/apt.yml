@@ -3,21 +3,22 @@
   changed_when: false
 
 - name: Install system packages
-  apt: name={{ item }} state=latest
-  notify: 
+  apt:
+    name:
+      - sudo
+      - software-properties-common
+      - build-essential
+      - supervisor
+      - nginx
+      - openssl
+      - libssl-dev
+      - libffi-dev
+      - python-dev
+      - redis-server
+    state: latest
+  notify:
     - reload systemd
     - start redis-server
-  with_items:
-    - sudo
-    - software-properties-common
-    - build-essential
-    - supervisor
-    - nginx
-    - openssl
-    - libssl-dev
-    - libffi-dev
-    - python-dev
-    - redis-server
 
 # On the newer versions of redis, by default redis
 # binds to localhost on ipv6 address which wouldn't
@@ -33,14 +34,15 @@
 
 - name: Install spatialite
   when: openwisp2_database.engine == "django.contrib.gis.db.backends.spatialite"
-  apt: name={{ item }} state=latest
+  apt:
+    name:
+      - sqlite3
+      - gdal-bin
+      - libproj-dev
+      - libgeos-dev
+      - libspatialite-dev
+    state: latest
   notify: reload systemd
-  with_items:
-    - sqlite3
-    - gdal-bin
-    - libproj-dev
-    - libgeos-dev
-    - libspatialite-dev
 
 - name: Install mod-spatialite (may fail on older linux distros)
   when: openwisp2_database.engine == "django.contrib.gis.db.backends.spatialite"
@@ -57,40 +59,45 @@
 
 - name: Install python2 packages
   when: openwisp2_python in ["python2.7", "python2"]
-  apt: name={{ item }} state=latest
-  with_items:
-    - python-pip
-    - python-dev
-    - python-virtualenv
+  apt:
+    name:
+      - python-pip
+      - python-dev
+      - python-virtualenv
+    state: latest
 
 - name: Install python3 packages
   when: openwisp2_python == "python3"
-  apt: name={{ item }} state=latest
-  with_items:
-    - python3
-    - python3-pip
-    - python3-dev
-    - python-virtualenv
+  apt:
+    name:
+      - python3
+      - python3-pip
+      - python3-dev
+      - python-virtualenv
+    state: latest
 
 - name: Install python3-pyparsing
   when: ansible_distribution == "Debian" and ansible_distribution_version == "9.0"
-  apt: name={{ item }} state=latest
-  with_items:
-    - python3-pyparsing
+  apt:
+    name:
+      - python3-pyparsing
+    state: latest
 
 - name: Install python wheel (optional, allowed to fail)
   ignore_errors: yes
-  apt: name={{ item }} state=latest
-  with_items:
-    - python-wheel
-    - python3-wheel
+  apt:
+    name:
+      - python-wheel
+      - python3-wheel
+    state: latest
 
 - name: Install python3-virtualenv
   ignore_errors: yes
   when: ansible_distribution != 'Ubuntu'
-  apt: name={{ item }} state=latest
-  with_items:
-    - python3-virtualenv
+  apt:
+    name:
+      - python3-virtualenv
+    state: latest
 
 - name: Install ntp
   when: openwisp2_install_ntp
