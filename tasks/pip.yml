@@ -15,8 +15,7 @@
   when: item != false
 
 - name: Add network_topology to custom package list if set and enabled
-  set_fact:
-    openwisp2_python_packages:"{{ openwisp2_python_packages + [item] }}"
+  set_fact: openwisp2_python_packages:"{{ openwisp2_python_packages + [item] }}"
   with_items:
     - "{{ openwisp2_django_netjsongraph_pip }}"
     - "{{ openwisp2_network_topology_pip }}"
@@ -24,28 +23,25 @@
 
 - name: Update pip & related tools
   pip:
-    name: "{{ item }}"
+    name:
+      - pip
+      - setuptools
+      - wheel
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
-  with_items:
-    - pip
-    - setuptools
-    - wheel
 
 - name: Install openwisp2 controller and its dependencies
   pip:
-    name: "{{ item }}"
+    name:
+      - openwisp-controller
+      - asgi_redis
+      - service_identity
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
-  with_items:
-    - openwisp-controller
-    # add asgi_redis for websockets
-    - asgi_redis
-    - service_identity
   notify: reload supervisor
 
 - name: Install django-redis
@@ -60,13 +56,12 @@
 - name: Install openwisp2 network topology and its dependencies
   when: openwisp2_network_topology
   pip:
-    name: "{{ item }}"
+    name:
+      - openwisp-network-topology
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
-  with_items:
-    - openwisp-network-topology
   notify: reload supervisor
 
 - name: Install custom OpenWISP 2 Python packages
@@ -76,9 +71,8 @@
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
+  with_items: "{{ openwisp2_python_packages }}"
   notify: reload supervisor
-  with_items:
-    - "{{ openwisp2_python_packages }}"
 
 - name: Install extra python packages
   pip:
@@ -92,13 +86,13 @@
 
 - name: Install uwsgi
   pip:
-    name: "{{ item }}"
+    name:
+      - uwsgi
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
-  with_items:
-    - uwsgi
+
   notify: reload supervisor
 
 - name: Install psycopg2

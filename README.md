@@ -15,7 +15,7 @@ Tested on **debian**, **ubuntu**, **fedora**, **redhat** and **centos**.
 
 **NOTE**: it is highly suggested to use this procedure on clean virtual machines or linux containers.
 
-**Minimum ansible version supported**: 2.4.
+**Minimum ansible version supported**: 2.5.
 
 Help OpenWISP
 =============
@@ -62,7 +62,7 @@ please read [Install OpenWISP2 for testing in a VirtualBox VM](#install-openwisp
 Install ansible
 ---------------
 
-Install ansible (version 2.4 or higher) **on your local machine** (not the production server!) if
+Install ansible (version 2.5 or higher) **on your local machine** (not the production server!) if
 you haven't done already.
 
 To **install ansible** we suggest you follow the official [ansible installation guide](http://docs.ansible.com/ansible/latest/intro_installation.html).
