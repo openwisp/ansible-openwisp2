@@ -170,6 +170,43 @@ Now proceed with the following steps:
 Now you are ready to start configuring your network! **If you need help** you can ask questions
 on one of the official [OpenWISP Support Channels](http://openwisp.org/support.html).
 
+Install ansible-openwisp2 for development
+-----------------------------------------
+If you need to modify the logic of this ansible role and you need to test your changes here we explain how to do it.
+
+First of all, create the directory where you want to place the repositories of the ansible roles and create directory roles.
+
+```bash
+    mkdir -p ~/openwisp-dev/roles
+    cd ~/openwisp-dev/roles
+```
+
+Clone `ansible-openwisp2` and `Stouts.postfix` as follows:
+
+```bash
+    git clone https://github.com/openwisp/ansible-openwisp2.git openwisp.openwisp2
+    git clone https://github.com/nemesisdesign/Stouts.postfix
+```
+
+Now, go to the parent directory & create hosts file and playbook.yml:
+
+```bash
+    cd ../
+    touch hosts
+    touch playbook.yml
+```
+
+From here on you can follow the instructions available at the following sections:
+
+- [Create inventory file](#create-inventory-file)
+- [Create playbook file](#create-playbook-file)
+- [Run the playbook](#run-the-playbook)
+
+
+**Note:** Please remember to [install ansible](#install-ansible).
+
+All done!
+
 Install OpenWISP2 for testing in a VirtualBox VM
 -------------------------------------------------
 
