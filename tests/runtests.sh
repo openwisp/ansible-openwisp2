@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e -x
+set -e 
 
 # Download snippet
 echo "Downloading common tests shim..."
@@ -7,9 +7,11 @@ wget -q -O ${PWD}/tests/test.sh https://gitlab.com/snippets/1751673/raw
 chmod +x ${PWD}/tests/test.sh
 
 # Run tests
+echo "Running test script"
 ${PWD}/tests/test.sh
 
 # Check OpenWISP is running
+echo "Launching OpenWISP tests"
 docker exec "${container_id}" curl --insecure -s --head https://localhost/admin/login/?next=/admin/ \
  | sed -n "1p" | grep -q "200" \
  && (printf "Status code 200 test: pass\n" && exit 0) \
@@ -18,6 +20,7 @@ docker exec "${container_id}" curl --insecure -s --head https://localhost/admin/
  && exit 1)
 
 # Check redis is running
+echo "Checking if redis is running"
 docker exec "${container_id}" systemctl status redis-server \
  | grep "Active: active (running)" \
  || docker exec "${container_id}" systemctl status redis \
