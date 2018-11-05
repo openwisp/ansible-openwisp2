@@ -172,7 +172,6 @@ on one of the official [OpenWISP Support Channels](http://openwisp.org/support.h
 
 Install ansible-openwisp2 for development
 -----------------------------------------
-
 If you need to modify the logic of this ansible role and you need to test your changes here we explain how to do it.
 
 First of all, create the directory where you want to place the repositories of the ansible roles and create directory roles.
