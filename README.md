@@ -519,7 +519,7 @@ Below are listed all the variables you can customize (you may also want to take 
         - owm_legacy
     # additional django settings example
     openwisp2_extra_django_settings:
-        - CSRF_COOKIE_AGE: 2620800.0
+        CSRF_COOKIE_AGE: 2620800.0
     # in case you need to add python instructions to the django settings file
     openwisp2_extra_django_settings_instructions:
         - TEMPLATES[0]['OPTIONS']['loaders'].insert(0, 'apptemplates.Loader')
