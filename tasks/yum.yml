@@ -7,7 +7,7 @@
 
 - name: Install system packages
   package: name={{ item }} state=latest
-  notify: 
+  notify:
     - reload systemd
     - start redis
   with_items:
@@ -20,9 +20,26 @@
     - libffi-devel
     - python-devel
     - redis
+    - redhat-rpm-config
+    - cronie
+
+- name: Install python2 system packages
+  when: ansible_python_interpreter == "/usr/bin/python"
+  package: name={{ item }} state=latest
+  notify:
+    - reload systemd
+  with_items:
     - libsemanage-python
     - policycoreutils-python
-    - redhat-rpm-config
+
+- name: Install python3 system packages
+  when: ansible_python_interpreter == "/usr/bin/python3"
+  package: name={{ item }} state=latest
+  notify:
+    - reload systemd
+  with_items:
+    - libsemanage-python3
+    - policycoreutils-python3
 
 # On the newer versions of redis, by default redis
 # binds to localhost on ipv6 address which wouldn't
@@ -36,13 +53,24 @@
     line: 'bind 127.0.0.1'
     backrefs: yes
 
-- name: Install firewall packages
+# Fedora 28 and above drops the package python-firewall
+# and it gets replaced by python3-firewall
+
+- name: Install python2 firewall packages
+  when: ansible_python_interpreter == "/usr/bin/python"
   package: name={{ item }} state=present
   notify: reload systemd
   with_items:
     - python-firewall
     - firewalld
-  when: ansible_distribution_major_version|int >= 7
+
+- name: Install python3 firewall packages
+  when: ansible_python_interpreter == "/usr/bin/python3"
+  package: name={{ item }} state=present
+  notify: reload systemd
+  with_items:
+    - python3-firewall
+    - firewalld
 
 - name: Install spatialite
   when: openwisp2_database.engine == "django.contrib.gis.db.backends.spatialite"

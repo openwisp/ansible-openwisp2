@@ -15,6 +15,7 @@
       - libffi-dev
       - python-dev
       - redis-server
+      - cron
     state: latest
   notify:
     - reload systemd

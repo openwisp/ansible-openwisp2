@@ -32,6 +32,14 @@
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
 
+- name: Install cryptography from pip
+  pip:
+    name: cryptography
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+    virtualenv_site_packages: yes
+
 - name: Install openwisp2 controller and its dependencies
   pip:
     name:
