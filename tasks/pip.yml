@@ -36,6 +36,7 @@
   pip:
     name:
       - openwisp-controller
+      - openwisp2_controller_version
       - asgi_redis
       - service_identity
     state: latest
@@ -58,6 +59,7 @@
   pip:
     name:
       - openwisp-network-topology
+      - openwisp2_network_topology_version
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"

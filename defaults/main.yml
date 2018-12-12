@@ -1,4 +1,6 @@
 openwisp2_python: python3
+openwisp2_controller_version: ">=0.3.0,<0.4.0"
+openwisp2_network_topology_version: ">=0.2.0,<0.3.0"
 openwisp2_network_topology: false
 openwisp2_controller_pip: false
 openwisp2_users_pip: false
@@ -72,3 +74,4 @@ openwisp2_nginx_ssl_config:
         - "application/x-font-ttf"
         - "font/opentype"
 openwisp2_redis_cache_url: redis://127.0.0.1:6379/1
+
