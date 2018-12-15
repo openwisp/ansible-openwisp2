@@ -9,9 +9,9 @@
   set_fact:
     openwisp2_spatialite_path: "mod_spatialite.so"
   when: >
-    (ansible_distribution == 'Ubuntu' 
-    and ansible_distribution_version is version_compare('18.04', 'ge')) 
-    or (ansible_distribution == 'Debian' and 
+    (ansible_distribution == 'Ubuntu'
+    and ansible_distribution_version is version_compare('18.04', 'ge'))
+    or (ansible_distribution == 'Debian' and
     ansible_distribution_version is version_compare('10', 'ge'))
     or (ansible_distribution == 'Fedora' and
     ansible_distribution_version is version_compare('28', 'ge'))

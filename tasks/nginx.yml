@@ -10,12 +10,19 @@
 
 - name: create SSL cert if not exists yet
   command: >
-    openssl req -new -nodes -x509 -subj "/C={{ openwisp2_ssl_country }}/ST={{ openwisp2_ssl_state }}/L={{ openwisp2_ssl_locality }}/O={{ openwisp2_ssl_organization }}/CN={{ openwisp2_ssl_common_name }}" -days 3650 -keyout {{ openwisp2_ssl_key }} -out {{ openwisp2_ssl_cert }} -extensions v3_ca creates={{ openwisp2_ssl_cert }}
+    openssl req -new -nodes -x509 \
+    -subj "/C={{ openwisp2_ssl_country }}/ST={{ openwisp2_ssl_state }}/L={{ openwisp2_ssl_locality }}/O={{ openwisp2_ssl_organization }}/CN={{ openwisp2_ssl_common_name }}" \
+    -days 3650 \
+    -keyout {{ openwisp2_ssl_key }} \
+    -out {{ openwisp2_ssl_cert }} \
+    -extensions v3_ca creates={{ openwisp2_ssl_cert }}
+  args:
+    warn: False
   notify: restart nginx
 
 - name: nginx site available
   template:
-    src: ../templates/nginx.j2
+    src: nginx.j2
     dest: "/etc/nginx/sites-available/{{ inventory_hostname }}"
   notify: restart nginx
   when: ansible_os_family == 'Debian'
@@ -30,7 +37,7 @@
 
 - name: nginx site
   template:
-    src: ../templates/nginx.j2
+    src: nginx.j2
     dest: "/etc/nginx/conf.d/{{ inventory_hostname }}.conf"
   notify: restart nginx
   when: ansible_os_family == 'RedHat'

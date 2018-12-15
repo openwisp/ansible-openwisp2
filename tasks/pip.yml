@@ -12,14 +12,14 @@
     - "{{ openwisp2_django_x509_pip }}"
     - "{{ openwisp2_django_loci_pip }}"
     - "{{ openwisp2_netjsonconfig_pip }}"
-  when: item != false
+  when: item
 
 - name: Add network_topology to custom package list if set and enabled
   set_fact: openwisp2_python_packages:"{{ openwisp2_python_packages + [item] }}"
   with_items:
     - "{{ openwisp2_django_netjsongraph_pip }}"
     - "{{ openwisp2_network_topology_pip }}"
-  when: item != false and openwisp2_network_topology
+  when: item and openwisp2_network_topology
 
 - name: Update pip & related tools
   pip:
@@ -100,7 +100,6 @@
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
-
   notify: reload supervisor
 
 - name: Install psycopg2
@@ -124,7 +123,7 @@
   notify: reload supervisor
 
 - name: Install raven (sentry client)
-  when: openwisp2_sentry.get('dsn') != False
+  when: openwisp2_sentry.get('dsn')
   pip:
     name: raven
     state: latest

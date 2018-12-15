@@ -1,0 +1,7 @@
+rulesdir:
+  - /home/travis/galaxy/rules
+skip_list:
+  - '303'
+  - '403'
+exclude_paths:
+  - /home/travis/.ansible/roles/Stouts.postfix/
