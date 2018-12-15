@@ -25,11 +25,6 @@ env:
   - distro: 'ubuntu:18.04'
     playbook: test_networktopology.yml
 
-matrix:
-  allow_failures:
-    - env: distro=debian:10 playbook=test.yml
-    - env: distro=fedora:28 playbook=test.yml
-
 script:
   # Configure test script so we can run extra tests after playbook is run.
   - export container_id=$(date +%s)

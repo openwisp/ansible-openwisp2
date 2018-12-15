@@ -109,6 +109,12 @@ Substitute `openwisp2.mydomain.com` with your **production server**'s hostname -
 `openwisp2.mydomain.com` WITH AN IP ADDRESS**, otherwise email sending through postfix will break,
 causing 500 internal server errors on some operations.
 
+If you are trying to deploy to a server running **Fedora 28** or newer, it is necessary to add
+`ansible_python_interpreter=/usr/bin/python3` to the end of the hostname.
+
+    [openwisp2]
+    openwisp2.mydomain.com ansible_python_interpreter=/usr/bin/python3
+
 Create playbook file
 --------------------
 
