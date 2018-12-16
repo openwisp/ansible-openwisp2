@@ -397,7 +397,7 @@ in place of `openwisp2.yourdomain.com`.
 Once your domain is set up and the DNS record is propagated, proceed by installing the ansible role
 [thefinn93.letsencrypt](https://github.com/thefinn93/ansible-letsencrypt):
 
-    sudo ansible-galaxy install thefinn93.letsencrypt
+    ansible-galaxy install thefinn93.letsencrypt
 
 Then proceed to edit your `playbook.yml` so that it will look similar to the following example:
 
@@ -431,7 +431,7 @@ Upgrading openwisp2
 
 Update this ansible-role via `ansible-galaxy`:
 
-    sudo ansible-galaxy install --force openwisp.openwisp2
+    ansible-galaxy install --force openwisp.openwisp2
 
 Run `ansible-playbook` again **from your local machine**:
 
