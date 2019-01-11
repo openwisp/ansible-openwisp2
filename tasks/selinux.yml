@@ -6,7 +6,7 @@
     state: yes
     persistent: yes
 
-- name: Set SELinux permissive mode (for testing puropses)
+- name: Set SELinux permissive mode (for testing purposes)
   selinux:
     state: permissive
     policy: targeted
