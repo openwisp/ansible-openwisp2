@@ -136,6 +136,8 @@ CACHES = {
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
 
