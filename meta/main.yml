@@ -16,17 +16,15 @@ galaxy_info:
   platforms:
   - name: Debian
     versions:
-    - wheezy
     - jessie
     - stretch
+    - buster
   - name: Ubuntu
     versions:
-    - trusty
     - xenial
     - bionic
   - name: Fedora
     versions:
-    - 25
     - 27
     - 28
   - name: EL
