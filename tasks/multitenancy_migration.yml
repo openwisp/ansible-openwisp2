@@ -6,7 +6,7 @@
 
 - name: upload multitenancy_prepare_data.py script
   template:
-    src: ../templates/multitenancy_prepare_data.py
+    src: multitenancy_prepare_data.py
     dest: "{{ openwisp2_path }}/multitenancy_prepare_data.py"
     mode: 0754
 
@@ -42,7 +42,6 @@
   when: openwisp2_database.engine in ["django.db.backends.mysql", "django.contrib.gis.db.backends.mysql"]
   pip:
     name: MySQL-python
-    state: latest
 
 - name: DROP mysql database
   when: openwisp2_database.engine in ["django.db.backends.mysql", "django.contrib.gis.db.backends.mysql"]
@@ -69,7 +68,7 @@
 - name: urls.py
   notify: reload supervisor
   template:
-    src: ../templates/openwisp2/urls.py
+    src: openwisp2/urls.py
     dest: "{{ openwisp2_path }}/openwisp2/urls.py"
     group: www-data
 
@@ -84,7 +83,7 @@
 - name: settings.py
   notify: reload supervisor
   template:
-    src: ../templates/openwisp2/settings.py
+    src: openwisp2/settings.py
     dest: "{{ openwisp2_path }}/openwisp2/settings.py"
     group: www-data
 
@@ -111,14 +110,12 @@
 
 - name: upload multitenancy_prepare_db.py script
   template:
-    src: ../templates/multitenancy_prepare_db.py
+    src: multitenancy_prepare_db.py
     dest: "{{ openwisp2_path }}/multitenancy_prepare_db.py"
     mode: 0754
 
 - name: prepare DB for multitenancy migration
   command: "{{ virtualenv_path }}/bin/python multitenancy_prepare_db.py"
-  args:
-    chdir: "{{ openwisp2_path }}"
 
 - name: multitenancy migration loaddata
   become: yes
