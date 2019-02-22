@@ -31,6 +31,10 @@
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
 
 - name: Install cryptography from pip
   pip:
@@ -39,6 +43,10 @@
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
 
 - name: Install openwisp2 controller and its dependencies
   pip:
@@ -51,6 +59,10 @@
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
   notify: reload supervisor
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
 
 - name: Install django-redis
   pip:
@@ -60,6 +72,10 @@
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
   notify: reload supervisor
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
 
 - name: Install openwisp2 network topology and its dependencies
   when: openwisp2_network_topology
@@ -71,6 +87,10 @@
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
   notify: reload supervisor
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
 
 - name: Install custom OpenWISP 2 Python packages
   pip:
@@ -81,6 +101,10 @@
     virtualenv_site_packages: yes
   with_items: "{{ openwisp2_python_packages }}"
   notify: reload supervisor
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
 
 - name: Install extra python packages
   pip:
@@ -90,6 +114,10 @@
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
   with_items: "{{ openwisp2_extra_python_packages }}"
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
   notify: reload supervisor
 
 - name: Install uwsgi
@@ -100,6 +128,10 @@
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
   notify: reload supervisor
 
 - name: Install psycopg2
@@ -110,6 +142,10 @@
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
   notify: reload supervisor
 
 - name: Install MySQL-python
@@ -120,6 +156,10 @@
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
   notify: reload supervisor
 
 - name: Install raven (sentry client)
@@ -130,4 +170,8 @@
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
   notify: reload supervisor

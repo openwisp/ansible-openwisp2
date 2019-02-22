@@ -1,6 +1,10 @@
 - name: Update APT package cache
   apt: update_cache=yes
   changed_when: false
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
 
 - name: Install system packages
   apt:
@@ -19,6 +23,11 @@
   notify:
     - reload systemd
     - start redis-server
+  ignore_errors: yes
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
 
 # On the newer versions of redis, by default redis
 # binds to localhost on ipv6 address which wouldn't
@@ -41,17 +50,30 @@
       - libproj-dev
       - libgeos-dev
       - libspatialite-dev
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
   notify: reload systemd
 
 - name: Install mod-spatialite (may fail on older linux distros)
   when: openwisp2_database.engine == "django.contrib.gis.db.backends.spatialite"
-  ignore_errors: yes
   apt: name=libsqlite3-mod-spatialite
+  ignore_errors: yes
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
 
 # fixes issue described in https://docs.ansible.com/ansible/become.html#becoming-an-unprivileged-user
 - name: Install acl if acting as non-root user
   apt: name=acl
   when: ansible_user is not defined or ansible_user != 'root'
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
+  ignore_errors: yes
 
 - name: ensure supervisor is started
   service: name=supervisor state=started
@@ -63,6 +85,10 @@
       - python-pip
       - python-dev
       - python-virtualenv
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
 
 - name: Install python3 packages
   when: openwisp2_python == "python3"
@@ -72,12 +98,18 @@
       - python3-pip
       - python3-dev
       - python-virtualenv
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
 
 - name: Install python3-pyparsing
   when: ansible_distribution == "Debian" and ansible_distribution_version == "9.0"
-  apt:
-    name:
-      - python3-pyparsing
+  apt: name=python3-pyparsing
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
 
 - name: Install python wheel (optional, allowed to fail)
   ignore_errors: yes
@@ -85,15 +117,24 @@
     name:
       - python-wheel
       - python3-wheel
+  retries: 1
+  delay: 10
+  register: result
+  until: result is success
 
 - name: Install python3-virtualenv
   ignore_errors: yes
   when: ansible_distribution != 'Ubuntu'
-  apt:
-    name:
-      - python3-virtualenv
+  apt: name=python3-virtualenv
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
 
 - name: Install ntp
   when: openwisp2_install_ntp
-  apt:
-    name: ntp
+  apt: name=ntp
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success

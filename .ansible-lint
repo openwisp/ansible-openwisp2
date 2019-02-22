@@ -1,6 +1,8 @@
 rulesdir:
   - /home/travis/galaxy/rules
 skip_list:
+  - '204'
+  - '301'
   - '303'
   - '403'
 exclude_paths:
