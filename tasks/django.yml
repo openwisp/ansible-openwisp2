@@ -34,7 +34,7 @@
 - name: manage.py
   notify: reload supervisor
   template:
-    src: ../templates/manage.py
+    src: manage.py
     dest: "{{ openwisp2_path }}/manage.py"
     group: "{{ www_group }}"
     mode: 0754
@@ -42,28 +42,28 @@
 - name: __init__.py
   notify: reload supervisor
   template:
-    src: ../templates/openwisp2/__init__.py
+    src: openwisp2/__init__.py
     dest: "{{ openwisp2_path }}/openwisp2/__init__.py"
     group: "{{ www_group }}"
 
 - name: urls.py
   notify: reload supervisor
   template:
-    src: ../templates/openwisp2/urls.py
+    src: openwisp2/urls.py
     dest: "{{ openwisp2_path }}/openwisp2/urls.py"
     group: "{{ www_group }}"
 
 - name: wsgi.py
   notify: reload supervisor
   template:
-    src: ../templates/openwisp2/wsgi.py
+    src: openwisp2/wsgi.py
     dest: "{{ openwisp2_path }}/openwisp2/wsgi.py"
     group: "{{ www_group }}"
 
 - name: asgi.py
   notify: reload supervisor
   template:
-    src: ../templates/openwisp2/asgi.py
+    src: openwisp2/asgi.py
     dest: "{{ openwisp2_path }}/openwisp2/asgi.py"
     group: "{{ www_group }}"
 
@@ -74,7 +74,7 @@
 - name: settings.py
   notify: reload supervisor
   template:
-    src: ../templates/openwisp2/settings.py
+    src: openwisp2/settings.py
     dest: "{{ openwisp2_path }}/openwisp2/settings.py"
     group: "{{ www_group }}"
 
@@ -106,7 +106,7 @@
 
 - name: create load_initial_data.py script
   template:
-    src: ../templates/load_initial_data.py
+    src: load_initial_data.py
     dest: "{{ openwisp2_path }}/load_initial_data.py"
     mode: 0754
 
