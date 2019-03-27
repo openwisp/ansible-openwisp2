@@ -42,6 +42,10 @@
   when: openwisp2_database.engine in ["django.db.backends.mysql", "django.contrib.gis.db.backends.mysql"]
   pip:
     name: MySQL-python
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
 
 - name: DROP mysql database
   when: openwisp2_database.engine in ["django.db.backends.mysql", "django.contrib.gis.db.backends.mysql"]

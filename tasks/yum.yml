@@ -4,6 +4,10 @@
   when: ansible_distribution in ['RedHat', 'CentOS']
   yum: name=epel-release
   notify: reload systemd
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
 
 - name: Install system packages
   package: name={{ item }}
@@ -22,6 +26,10 @@
     - redis
     - redhat-rpm-config
     - cronie
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
 
 - name: Install python2 system packages
   when: ansible_python_interpreter == "/usr/bin/python"
@@ -31,6 +39,10 @@
   with_items:
     - libsemanage-python
     - policycoreutils-python
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
 
 - name: Install python3 system packages
   when: ansible_python_interpreter == "/usr/bin/python3"
@@ -40,6 +52,10 @@
   with_items:
     - libsemanage-python3
     - policycoreutils-python3
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
 
 # On the newer versions of redis, by default redis
 # binds to localhost on ipv6 address which wouldn't
@@ -63,6 +79,11 @@
   with_items:
     - python-firewall
     - firewalld
+  ignore_errors: yes
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
 
 - name: Install python3 firewall packages
   when: ansible_python_interpreter == "/usr/bin/python3"
@@ -71,6 +92,11 @@
   with_items:
     - python3-firewall
     - firewalld
+  ignore_errors: yes
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
 
 - name: Install spatialite
   when: openwisp2_database.engine == "django.contrib.gis.db.backends.spatialite"
@@ -82,6 +108,11 @@
     - proj-devel
     - geos-devel
     - libspatialite-devel
+  ignore_errors: yes
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
 
 - name: ensure supervisor is started
   service: name=supervisord state=started enabled=yes
@@ -95,6 +126,11 @@
   with_items:
     - python-pip
     - python-virtualenv
+  ignore_errors: yes
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
 
 - name: Install python3 packages
   when: openwisp2_python == "python3"
@@ -103,6 +139,11 @@
     - "{{ python3_package_prefix }}"
     - "{{ python3_package_prefix }}-pip"
     - "{{ python3_package_prefix }}-devel"
+  ignore_errors: yes
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
 
 - name: Install python wheel (optional, allowed to fail)
   ignore_errors: yes
@@ -110,23 +151,38 @@
   with_items:
     - python-wheel
     - "{{ python3_package_prefix }}-wheel"
+  retries: 1
+  delay: 10
+  register: result
+  until: result is success
 
 - name: Install python3 virtualenv
   when: openwisp2_python == "python3" and ansible_distribution == 'Fedora'
-  package:
-    name: "{{ python3_package_prefix }}-virtualenv"
+  package: name={{ python3_package_prefix }}-virtualenv
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
 
 - name: (CentOS/RedHat) Always install pip
   when: ansible_distribution in ['RedHat', 'CentOS']
-  package:
-    name: python-pip
+  package: name=python-pip
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
 
 - name: (CentOS/RedHat/Fedora) Install/upgrade virtualenv via pip
-  pip:
-    name: virtualenv
-    state: latest
+  pip: name=virtualenv state=latest
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
 
 - name: Install ntp
   when: openwisp2_install_ntp
-  package:
-    name: ntp
+  package: name=ntp
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
