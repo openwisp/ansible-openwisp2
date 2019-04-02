@@ -538,6 +538,8 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_nginx_http2: false
     # ipv6 must be enabled explicitly to avoid errors
     openwisp2_nginx_ipv6: false
+    # nginx client_max_body_size setting
+    openwisp2_nginx_client_max_body_size: 10M
     # dictionary containing more nginx settings for
     # the 443 section of the openwisp2 nginx configuration
     # IMPORTANT: 1. you can add more nginx settings in this dictionary

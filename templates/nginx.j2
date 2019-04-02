@@ -13,7 +13,7 @@ server {
     error_log {{ openwisp2_path }}/log/nginx.error.log error;
 
     # set client body size #
-    client_max_body_size 5M;
+    client_max_body_size {{ openwisp2_nginx_client_max_body_size }};
 
     ssl on;
     ssl_certificate {{ openwisp2_ssl_cert }};
