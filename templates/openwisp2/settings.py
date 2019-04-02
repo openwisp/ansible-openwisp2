@@ -257,7 +257,7 @@ LOGGING = {
         },
 {% if openwisp2_sentry.get('dsn') %}
         'sentry': {
-            'level': 'WARNING',
+            'level': 'ERROR',
             'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
             'filters': ['require_debug_false']
         },
