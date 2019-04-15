@@ -12,7 +12,7 @@
     - "{{ openwisp2_django_x509_pip }}"
     - "{{ openwisp2_django_loci_pip }}"
     - "{{ openwisp2_netjsonconfig_pip }}"
-  when: item
+  when: item != False
 
 - name: Add network_topology to custom package list if set and enabled
   set_fact: openwisp2_python_packages:"{{ openwisp2_python_packages + [item] }}"
