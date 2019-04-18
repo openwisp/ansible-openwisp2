@@ -6,8 +6,6 @@ if: (type = pull_request) OR (branch = master)
 
 env:
   matrix:
-  - distro: centos:7
-    playbook: test.yml
   - distro: 'ubuntu:16.04'
     playbook: test.yml
   - distro: 'ubuntu:18.04'
@@ -18,12 +16,15 @@ env:
     playbook: test.yml
   - distro: debian:10
     playbook: test.yml
-  - distro: fedora:27
-    playbook: test.yml
-  - distro: fedora:28
-    playbook: test.yml
   - distro: 'ubuntu:18.04'
     playbook: test_networktopology.yml
+  # we don't have the resources now to maintain these distros
+  # - distro: fedora:27
+  #   playbook: test.yml
+  # - distro: fedora:28
+  #   playbook: test.yml
+  # - distro: centos:7
+  #   playbook: test.yml
 
 script:
   # Configure test script so we can run extra tests after playbook is run.
