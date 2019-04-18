@@ -463,6 +463,7 @@ Below are listed all the variables you can customize (you may also want to take 
     # of service is very likely to occur during development
     openwisp2_controller_pip: false
     openwisp2_users_pip: false
+    openwisp2_utils_pip: false
     openwisp2_django_netjsonconfig_pip: false
     openwisp2_django_x509_pip: false
     openwisp2_netjsonconfig_pip: false
