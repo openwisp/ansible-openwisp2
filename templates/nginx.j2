@@ -128,3 +128,24 @@ server {
     {% endif %}
 
 }
+
+server {
+    listen 80 default_server;
+    {% if openwisp2_nginx_ipv6 %}listen [::]:80 default_server; # ipv6{% endif %}
+
+    server_name _;
+
+    return 404;
+}
+
+server {
+    listen 443 ssl default_server;
+    {% if openwisp2_nginx_ipv6 %}listen [::]:443 ssl default_server; # ipv6{% endif %}
+    server_name _;
+
+    ssl on;
+    ssl_certificate {{ openwisp2_ssl_cert }};
+    ssl_certificate_key {{ openwisp2_ssl_key }};
+
+    return 404;
+}
