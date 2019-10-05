@@ -92,7 +92,7 @@ if [ "$test_idempotence" = true ]; then
 fi
 
 # Check OpenWISP is running
-echo "Lauching OpenWISP tests"
+echo "Launching OpenWISP tests"
 docker exec "${container_id}" curl --insecure -s --head https://localhost/admin/login/?next=/admin/ \
  | sed -n "1p" | grep -q "200" \
  && (printf "Status code 200 test: pass\n" && exit 0) \
