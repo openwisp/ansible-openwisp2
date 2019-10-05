@@ -109,12 +109,11 @@
 
 - name: Install extra python packages
   pip:
-    name: "{{ item }}"
+    name: "{{ openwisp2_extra_python_packages }}"
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
-  with_items: "{{ openwisp2_extra_python_packages }}"
   retries: 5
   delay: 10
   register: result
