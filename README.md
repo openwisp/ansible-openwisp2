@@ -12,7 +12,7 @@ Ansible role that installs the openwisp2 controller.
 
 Tested on **debian**, **ubuntu**, **fedora**, **redhat** and **centos**.
 
-**NOTE**: it is highly suggested to use this procedure on clean virtual machines or linux containers.
+**NOTE**: It is highly suggested to use this procedure on clean virtual machines or linux containers.
 
 **Minimum ansible version supported**: 2.5.
 
@@ -27,7 +27,7 @@ Like OpenWISP? Find out how to help us!
 Architecture
 ============
 
-If you are fond of **Python**, **Django** and **Unix**/**Linux** systems, you may find interesting
+If you are fond of **Python**, **Django** and **Unix**/**Linux** systems, you may find it interesting
 to know more about what happens under the hood in **OpenWISP 2**.
 
 ![openwisp2 modules diagram](https://raw.githubusercontent.com/openwisp/ansible-openwisp2/master/docs/openwisp2-modules-diagram.png)
@@ -42,11 +42,11 @@ guide you towards a fully working basic openwisp2 installation.
 
 If you already know how to use ansible, you can skip this tutorial.
 
-First of all you need to understand two key concepts:
+First of all, you need to understand two key concepts:
 
-* for **"production server"** we mean a server (**not a laptop or a desktop computer!**) with public
-  ipv4 / ipv6 which is used to host openwisp2
-* for **"local machine"** we mean the host from which you launch ansible, eg: your own laptop
+* For **"production server"** we mean a server (**not a laptop or a desktop computer!**) with public
+  ipv4 / ipv6 which is used to host openwisp2.
+* For **"local machine"** we mean the host from which you launch ansible, eg: your own laptop.
 
 Ansible is a configuration management tool that works by entering production servers via SSH,
 **so you need to install it and configure it on the machine where you launch the deployment** and
@@ -140,7 +140,7 @@ as default sender for emails sent by OpenWISP 2.
 Run the playbook
 ----------------
 
-Now is time to **deploy openwisp2 to the production server**.
+Now it is time to **deploy openwisp2 to the production server**.
 
 Run the playbook **from your local machine** with:
 
@@ -167,10 +167,10 @@ Substitute `openwisp2.mydomain.com` with your production server's hostname.
 
 Now proceed with the following steps:
 
-1. change the password (and the username if you like) of the superuser as soon as possible
-2. edit the information of the default organization
-3. in the default organization you just updated, note down the automatically generated *shared secret*
-   option, you will need it to use the [auto-registration feature of openwisp-config](https://github.com/openwisp/openwisp-config#automatic-registration)
+1. Change the password (and the username if you like) of the superuser as soon as possible.
+2. Edit the information of the default organization.
+3. In the default organization you just updated, note down the automatically generated *shared secret*
+   option, you will need it to use the [auto-registration feature of openwisp-config](https://github.com/openwisp/openwisp-config#automatic-registration).
 
 Now you are ready to start configuring your network! **If you need help** you can ask questions
 on one of the official [OpenWISP Support Channels](http://openwisp.org/support.html).
@@ -210,7 +210,7 @@ From here on you can follow the instructions available at the following sections
 
 **Note:** Please remember to [install ansible](#install-ansible).
 
-All done!
+All done😁!
 
 Install OpenWISP2 for testing in a VirtualBox VM
 -------------------------------------------------
