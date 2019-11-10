@@ -34,7 +34,7 @@ to know more about what happens under the hood in **OpenWISP 2**.
 
 For more information see also [Applying the Unix Philosophy to Django projects: a report from the real world](https://www.slideshare.net/FedericoCapoano/applying-the-unix-philosophy-to-django-projects-a-report-from-the-real-world).
 
-Usage (tutorial)
+Usage (Tutorial)
 ================
 
 If you don't know how to use ansible, don't panic, this procedure will
@@ -229,7 +229,7 @@ it contains the instructions (in the `README.md`) and the vagrant configuration
 to perform the automatic installation.
 
 Alternatively, you can read on to learn how to install *VirtualBox* and run
-*ansible-openwisp2* manually, this is useful if you need to test advanced
+*ansible-openwisp2* manually, this is useful if you wish to test advanced
 customisations of *OpenWISP*.
 
 ### Installing Debian 9 on VirtualBox
