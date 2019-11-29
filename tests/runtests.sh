@@ -4,9 +4,9 @@
 set -e
 
 # Pretty colors.
-red='\033[0;31m'
-green='\033[0;32m'
-neutral='\033[0m'
+red="\033[0;31m"
+green="\033[0;32m"
+neutral="\033[0m"
 
 timestamp=$(date +%s)
 
@@ -21,35 +21,35 @@ test_idempotence=${test_idempotence:-"true"}
 
 ## Set up vars for Docker setup.
 # CentOS 7
-if [ $distro = 'centos:7' ]; then
+if [ $distro = "centos:7" ]; then
   init="/usr/lib/systemd/systemd"
   opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
 # Ubuntu 18.04
-elif [ $distro = 'ubuntu:18.04' ]; then
+elif [ $distro = "ubuntu:18.04" ]; then
   init="/lib/systemd/systemd"
   opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
 # Ubuntu 16.04
-elif [ $distro = 'ubuntu:16.04' ]; then
+elif [ $distro = "ubuntu:16.04" ]; then
   init="/lib/systemd/systemd"
   opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
 # Debian 10
-elif [ $distro = 'debian:10' ]; then
+elif [ $distro = "debian:10" ]; then
   init="/lib/systemd/systemd"
   opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
 # Debian 9
-elif [ $distro = 'debian:9' ]; then
+elif [ $distro = "debian:9" ]; then
   init="/lib/systemd/systemd"
   opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
 # Debian 8
-elif [ $distro = 'debian:8' ]; then
+elif [ $distro = "debian:8" ]; then
   init="/lib/systemd/systemd"
   opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
 # Fedora 27
-elif [ $distro = 'fedora:27' ]; then
+elif [ $distro = "fedora:27" ]; then
   init="/usr/lib/systemd/systemd"
   opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
 # Fedora 28
-elif [ $distro = 'fedora:28' ]; then
+elif [ $distro = "fedora:28" ]; then
   init="/usr/lib/systemd/systemd"
   opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
   ansible_opts="ansible_python_interpreter=/usr/bin/python3"
@@ -86,19 +86,13 @@ if [ "$test_idempotence" = true ]; then
   idempotence=$(mktemp)
   docker exec $container_id  env TERM=xterm env ANSIBLE_FORCE_COLOR=1 ansible-playbook /etc/ansible/roles/role_under_test/tests/$playbook -e $ansible_opts --diff | tee -a $idempotence
   tail $idempotence \
-    | grep -q 'changed=0.*failed=0' \
-    && (printf ${green}'Idempotence test: pass'${neutral}"\n") \
-    || (printf ${red}'Idempotence test: fail'${neutral}"\n" && exit 1)
-fi
-
-# Remove the Docker container (if configured).
-if [ "$cleanup" = true ]; then
-  printf "Removing Docker container...\n"
-  docker rm -f $container_id
+    | grep -q "changed=0.*failed=0" \
+    && (printf ${green}"Idempotence test: pass"${neutral}"\n") \
+    || (printf ${red}"Idempotence test: fail"${neutral}"\n" && exit 1)
 fi
 
 # Check OpenWISP is running
-echo "Lauching OpenWISP tests"
+echo "Launching OpenWISP tests"
 docker exec "${container_id}" curl --insecure -s --head https://localhost/admin/login/?next=/admin/ \
  | sed -n "1p" | grep -q "200" \
  && (printf "Status code 200 test: pass\n" && exit 0) \
@@ -150,3 +144,9 @@ docker exec "${container_id}" \
         openwisp_controller.config.tests.test_admin.TestAdmin.test_vpn_not_contains_default_templates_js \
         openwisp_controller.geo.tests.test_channels \
         openwisp_controller.geo.tests.test_api
+
+# Remove the Docker container (if configured).
+if [ "$cleanup" = true ]; then
+  printf "Removing Docker container...\n"
+  docker rm -f $container_id
+fi
