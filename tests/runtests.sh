@@ -40,10 +40,6 @@ elif [ $distro = "debian:10" ]; then
 elif [ $distro = "debian:9" ]; then
   init="/lib/systemd/systemd"
   opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-# Debian 8
-elif [ $distro = "debian:8" ]; then
-  init="/lib/systemd/systemd"
-  opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
 # Fedora 27
 elif [ $distro = "fedora:27" ]; then
   init="/usr/lib/systemd/systemd"

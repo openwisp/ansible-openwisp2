@@ -4,7 +4,7 @@
 
 - name: reload systemd
   systemd: daemon_reload=yes
-  when: ansible_distribution_release in ['jessie', 'xenial']
+  when: ansible_distribution_release in ['xenial', 'bionic']
 
 - name: reload supervisor
   command: supervisorctl reload
@@ -14,9 +14,3 @@
 
 - name: start redis
   service: name=redis state=started
-
-# TODO: When debian 8 support is removed, this can
-# be removed as well and notify: redis-server can be
-# replaced with notify: redis
-- name: start redis-server
-  service: name=redis-server state=started

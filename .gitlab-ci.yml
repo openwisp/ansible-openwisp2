@@ -113,12 +113,6 @@ Ubuntu1804:
     playbook: test.yml
   <<: *testing_script
 
-Debian8:
-  variables:
-    distro: debian:8
-    playbook: test.yml
-  <<: *testing_script
-
 Debian9:
   variables:
     distro: debian:9

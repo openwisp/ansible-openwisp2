@@ -10,8 +10,6 @@ env:
     playbook: test.yml
   - distro: 'ubuntu:18.04'
     playbook: test.yml
-  - distro: debian:8
-    playbook: test.yml
   - distro: debian:9
     playbook: test.yml
   - distro: debian:10

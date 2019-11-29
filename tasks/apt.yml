@@ -22,7 +22,7 @@
       - cron
   notify:
     - reload systemd
-    - start redis-server
+    - start redis
   ignore_errors: yes
   retries: 5
   delay: 10
@@ -34,7 +34,7 @@
 # let the service start if the server doesn't have
 # ipv6 enabled. Hence, we set redis to listen on ipv4
 - name: set redis to listen on ipv4
-  notify: start redis-server
+  notify: start redis
   lineinfile:
     path: /etc/redis/redis.conf
     regexp: '^bind 127\.0\.0\.1 ::1'
