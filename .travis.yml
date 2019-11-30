@@ -1,5 +1,7 @@
 ---
 
+dist: bionic
+
 services: docker
 
 if: (type = pull_request) OR (branch = master)
