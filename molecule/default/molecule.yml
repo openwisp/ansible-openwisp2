@@ -9,7 +9,7 @@ lint:
     config-file: molecule/default/yaml-lint.yml
   enabled: False
 platforms:
-  - name: instance
+  - name: "${ROLE_NAME}-${MOLECULE_DISTRO:-centos7}"
     image: "geerlingguy/docker-${MOLECULE_DISTRO:-centos7}-ansible:latest"
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
