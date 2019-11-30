@@ -7,14 +7,9 @@ env:
     - ROLE_NAME: openwisp2
   matrix:
     #- MOLECULE_DISTRO: centos7
-    - MOLECULE_DISTRO: ubuntu1604
-      dist: trusty
     - MOLECULE_DISTRO: ubuntu1804
     - MOLECULE_DISTRO: debian9
     - MOLECULE_DISTRO: debian10
-    - MOLECULE_DISTRO: ubuntu1604
-      dist: trusty
-      MOLECULE_PLAYBOOK: playbook-networktopology.yml
     - MOLECULE_DISTRO: ubuntu1804
       MOLECULE_PLAYBOOK: playbook-networktopology.yml
     - MOLECULE_DISTRO: debian9
@@ -23,8 +18,9 @@ env:
       MOLECULE_PLAYBOOK: playbook-networktopology.yml
   
 matrix:
-  allow_failures:
-    - env: MOLECULE_DISTRO="ubuntu1604"
+  include:
+    - dist: trusty
+      env: MOLECULE_DISTRO="ubuntu1604"
 
 install:
   # Install test dependencies.
