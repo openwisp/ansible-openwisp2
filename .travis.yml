@@ -6,8 +6,6 @@ if: (type = pull_request) OR (branch = master)
 
 env:
   matrix:
-  - distro: 'ubuntu:16.04'
-    playbook: test.yml
   - distro: 'ubuntu:18.04'
     playbook: test.yml
   - distro: debian:9
@@ -23,6 +21,13 @@ env:
   #   playbook: test.yml
   # - distro: centos:7
   #   playbook: test.yml
+
+matrix:
+  include:
+    - dist: trusty
+      env:
+        - distro: 'ubuntu:16.04'
+          playbook: test.yml
 
 script:
   # Configure test script so we can run extra tests after playbook is run.
