@@ -7,6 +7,7 @@ lint:
   name: yamllint
   options:
     config-file: molecule/default/yaml-lint.yml
+  enabled: False
 platforms:
   - name: instance
     image: "geerlingguy/docker-${MOLECULE_DISTRO:-centos7}-ansible:latest"
