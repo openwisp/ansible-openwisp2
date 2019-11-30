@@ -1,0 +1,34 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+
+  pre_tasks:
+    - name: Update apt cache.
+      apt: update_cache=true cache_valid_time=600
+      when: ansible_os_family == 'Debian'
+
+    - name: Remove the .dockerenv file
+      file:
+        path: /.dockerenv
+        state: absent
+
+  roles:
+    - role: openwisp.openwisp2
+
+  post_tasks:
+    - name: Get cluster info.
+      command: kubectl cluster-info
+      changed_when: false
+      register: kubernetes_info
+
+    - name: Print cluster info.
+      debug: var=kubernetes_info.stdout
+
+    - name: Get all running pods.
+      command: kubectl get pods --all-namespaces
+      changed_when: false
+      register: kubernetes_pods
+
+    - name: Print list of running pods.
+      debug: var=kubernetes_pods.stdout

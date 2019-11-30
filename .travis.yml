@@ -1,55 +1,30 @@
 ---
-
-dist: bionic
-
+language: python
 services: docker
 
-if: (type = pull_request) OR (branch = master)
-
 env:
+  global:
+    - ROLE_NAME: openwisp2
   matrix:
-  - distro: 'ubuntu:16.04'
-    playbook: test.yml
-  - distro: 'ubuntu:18.04'
-    playbook: test.yml
-  - distro: debian:9
-    playbook: test.yml
-  - distro: debian:10
-    playbook: test.yml
-  - distro: 'ubuntu:18.04'
-    playbook: test_networktopology.yml
-  # we don't have the resources now to maintain these distros
-  # - distro: fedora:27
-  #   playbook: test.yml
-  # - distro: fedora:28
-  #   playbook: test.yml
-  # - distro: centos:7
-  #   playbook: test.yml
+    - MOLECULE_DISTRO: centos7
+    - MOLECULE_DISTRO: ubuntu1604
+    - MOLECULE_DISTRO: ubuntu1804
+    - MOLECULE_DISTRO: debian9
+    - MOLECULE_DISTRO: debian10
+
+install:
+  # Install test dependencies.
+  - pip install molecule docker
+
+before_script:
+  # Use actual Ansible Galaxy role name for the project directory.
+  - cd ../
+  - mv ansible-$ROLE_NAME openwisp.$ROLE_NAME
+  - cd openwisp.$ROLE_NAME
 
 script:
-  # Configure test script so we can run extra tests after playbook is run.
-  - export container_id=$(date +%s)
-  - export cleanup=false
-  # run ansible-lint
-  - pip install --user ansible
-  - ansible-galaxy install -r tests/requirements.yml
-  - pip install --user ansible-lint
-  - ln -s $TRAVIS_BUILD_DIR ~/.ansible/roles/role_under_test
-  - git clone https://github.com/ansible/galaxy-lint-rules.git
-  - mv galaxy-lint-rules ~/galaxy
-  - ansible-lint tests/test.yml
-  - ansible-lint tests/test_networktopology.yml
-  # run ci tests
-  - ${PWD}/tests/runtests.sh
-  - pip install --user https://github.com/openwisp/openwisp-utils/tarball/master
-  - |
-    if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
-      # gets commit message of last commit before pull request merge
-      COMMIT_MESSAGE=$(git log $TRAVIS_PULL_REQUEST_SHA --format=%B -n 1)
-      printf "Checking commit message:\n\n"
-      printf "$COMMIT_MESSAGE\n\n"
-      checkcommit --message "$COMMIT_MESSAGE"
-    fi
+  # Run tests.
+  - molecule test
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
