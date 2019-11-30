@@ -8,7 +8,6 @@ env:
   matrix:
     #- MOLECULE_DISTRO: centos7
     - MOLECULE_DISTRO: ubuntu1604
-      MOLECULE_DOCKER_COMMAND: /sbin/init
     - MOLECULE_DISTRO: ubuntu1804
     - MOLECULE_DISTRO: debian9
     - MOLECULE_DISTRO: debian10
@@ -20,6 +19,10 @@ env:
       MOLECULE_PLAYBOOK: playbook-networktopology.yml
     - MOLECULE_DISTRO: debian10
       MOLECULE_PLAYBOOK: playbook-networktopology.yml
+  
+matrix:
+  allow_failures:
+    - env: MOLECULE_DISTRO="ubuntu1604"
 
 install:
   # Install test dependencies.
