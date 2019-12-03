@@ -252,12 +252,12 @@ Make sure `SSH server` and `standard system utilities` are checked.
 Next, add a [Host-only Network Adapter](https://www.virtualbox.org/manual/ch06.html#network_hostonly)
 and assign an IP address to the VM.
 
-- Go to `File > Preferences > Network > Host-only Networks`
+- On the Main VirtualBox page, Go to `File > Host Network Manager`
 - Click the <kbd>+</kbd> icon to create a new adapter
-- Set the IPv4 address to `192.168.56.1` and the IPv4 Network Mask to `255.255.255.0`. The IPv6 settings can be ignored
+- Set the IPv4 address to `192.168.56.1` and the IPv4 Network Mask to `255.255.255.0`. You may need to select `Configure Adapter Manually` to do this. The IPv6 settings can be ignored
   ![Screenshot of the Host-only network configuration screen](https://raw.githubusercontent.com/openwisp/ansible-openwisp2/master/docs/host-only-network.png)
 - Shut off your VM
-- In your VM settings, in the Network section, click Adapter 2
+- In your VM settings, in the Network section, click Adapter 2 and Enable this Adapter
 - Select Host-only adapter and the name of the adapter you created
 - Boot up your VM, run `su`, and type in your superuser password
 - Run `ls /sys/class/net` and take note of the output
