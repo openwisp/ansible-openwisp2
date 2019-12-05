@@ -1,0 +1,12 @@
+- name: Check that virtualenv exists
+  stat:
+    path: '{{ virtualenv_path }}'
+  register: virtualenv_result
+
+- name: Create virtualenv
+  when: not virtualenv_result.stat.exists
+  command: virtualenv --python=/usr/bin/python3.6 {{ virtualenv_path }}
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success

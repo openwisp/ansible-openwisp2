@@ -22,8 +22,11 @@
 
 - name: disable default nginx configuration
   file:
-   path: "/etc/nginx/sites-enabled/default"
+   path: "{{ item }}"
    state: absent
+  with_items:
+    - /etc/nginx/sites-enabled/default
+    - /etc/nginx/nginx.conf.default
 
 - name: nginx site available
   template:

@@ -19,8 +19,8 @@ env:
   #   playbook: test.yml
   # - distro: fedora:28
   #   playbook: test.yml
-  # - distro: centos:7
-  #   playbook: test.yml
+  - distro: centos:7
+    playbook: test.yml
 
 matrix:
   include:

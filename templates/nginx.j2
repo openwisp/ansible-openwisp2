@@ -130,7 +130,7 @@ server {
 }
 
 server {
-    listen 80 default_server;
+    {% if not ansible_os_family == 'RedHat' %} listen 80 default_server; {% endif %}
     {% if openwisp2_nginx_ipv6 %}listen [::]:80 default_server; # ipv6{% endif %}
 
     server_name _;

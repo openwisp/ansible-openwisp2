@@ -9,6 +9,17 @@
   register: result
   until: result is success
 
+- name: Install python3.6 on CentOS 7
+  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7'
+  package: name= {{ item }}
+  with_items:
+    - https://centos7.iuscommunity.org/ius-release.rpm
+    - python36
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
+
 - name: Install system packages
   package: name={{ item }}
   notify:
@@ -22,7 +33,7 @@
     - openssl
     - openssl-devel
     - libffi-devel
-    - python-devel
+    - python36-devel
     - redis
     - redhat-rpm-config
     - cronie
@@ -71,7 +82,6 @@
 
 # Fedora 28 and above drops the package python-firewall
 # and it gets replaced by python3-firewall
-
 - name: Install python2 firewall packages
   when: ansible_python_interpreter == "/usr/bin/python"
   package: name={{ item }} state=present
