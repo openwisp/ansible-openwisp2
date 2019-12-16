@@ -1,12 +1,13 @@
 ---
+os: linux
 language: python
 services: docker
 
 env:
   global:
     - ROLE_NAME: openwisp2
-  matrix:
-    #- MOLECULE_DISTRO: centos7
+  jobs:
+    - MOLECULE_DISTRO: centos7
     - MOLECULE_DISTRO: ubuntu1804
     - MOLECULE_DISTRO: debian9
     - MOLECULE_DISTRO: debian10
@@ -17,7 +18,7 @@ env:
     - MOLECULE_DISTRO: debian10
       MOLECULE_PLAYBOOK: playbook-networktopology.yml
   
-matrix:
+jobs:
   include:
     - dist: trusty
       env: MOLECULE_DISTRO="ubuntu1604"
@@ -35,6 +36,15 @@ before_script:
 script:
   # Run tests.
   - molecule test
+  - pip install --user https://github.com/openwisp/openwisp-utils/tarball/master
+  - |
+    if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+      # gets commit message of last commit before pull request merge
+      COMMIT_MESSAGE=$(git log $TRAVIS_PULL_REQUEST_SHA --format=%B -n 1)
+      printf "Checking commit message:\n\n"
+      printf "$COMMIT_MESSAGE\n\n"
+      checkcommit --message "$COMMIT_MESSAGE"
+    fi
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
