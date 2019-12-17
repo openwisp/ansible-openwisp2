@@ -7,7 +7,7 @@ env:
   global:
     - ROLE_NAME: openwisp2
   jobs:
-    - MOLECULE_DISTRO: centos7
+    #- MOLECULE_DISTRO: centos7
     - MOLECULE_DISTRO: ubuntu1804
     - MOLECULE_DISTRO: debian9
     - MOLECULE_DISTRO: debian10
@@ -36,7 +36,7 @@ before_script:
 script:
   # Run tests.
   - molecule test
-  - pip install --user https://github.com/openwisp/openwisp-utils/tarball/master
+  - pip install https://github.com/openwisp/openwisp-utils/tarball/master
   - |
     if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
       # gets commit message of last commit before pull request merge
