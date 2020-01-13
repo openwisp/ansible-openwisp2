@@ -4,7 +4,6 @@ ansible-openwisp2
 [![Installing OpenWISP2](https://raw.githubusercontent.com/openwisp/ansible-openwisp2/master/docs/install-openwisp2.png)](https://www.youtube.com/watch?v=v_DUeFUGG8Q&index=1&list=PLPueLZei9c8_DEYgC5StOcR5bCAcQVfR8)
 
 [![Build Status](https://travis-ci.org/openwisp/ansible-openwisp2.svg?branch=master)](https://travis-ci.org/openwisp/ansible-openwisp2)
-[![pipeline status](https://gitlab.com/openwisp/ansible-openwisp2/badges/master/pipeline.svg)](https://gitlab.com/openwisp/ansible-openwisp2/commits/master)
 [![Galaxy](http://img.shields.io/badge/galaxy-openwisp.openwisp2-blue.svg?style=flat-square)](https://galaxy.ansible.com/openwisp/openwisp2/)
 [![Galaxy](https://img.shields.io/ansible/role/d/14542.svg?style=flat-square)](https://galaxy.ansible.com/openwisp/openwisp2/)
 [![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg?style=flat-square)](https://gitter.im/openwisp/general)
@@ -213,6 +212,61 @@ From here on you can follow the instructions available at the following sections
 
 All done!
 
+How to run tests
+----------------
+
+If you want to contribute to `ansible-openwisp2` you should run tests
+in your development environment to ensure your changes are not breaking anything.
+
+To do that, proceed with the following steps:
+
+**Step 1**: Clone `ansible-openwisp2`
+
+Clone repository by:
+
+    git clone https://github.com/<your_fork>/ansible-openwisp2.git
+
+**Step 2**: Install docker
+
+If you haven't installed docker yet, you need to install it (example for linux debian/ubuntu systems):
+
+    sudo apt-get install docker.io
+
+**Step 3**: Pull docker image
+
+Pull docker image with this command:
+
+    docker pull registry.gitlab.com/ninuxorg/docker/ansible-<distro>
+
+Substitute `<distro>` with one of these variants:
+
+* `ubuntu:18.04`
+* `ubuntu:16.04`
+* `debian:10`
+* `debian:9`
+
+**Step 4**: Run docker container
+
+To create and start docker container run this command:
+
+    docker run -d --volume=${PWD}/ansible-openwisp2:/etc/ansible/roles/role_under_test:rw --name <name> --privileged registry.gitlab.com/ninuxorg/docker/ansible-<distro> /lib/systemd/systemd
+
+Substitute `<name>` with the desired container name and `<distro>` with the option you have chosen in **Step 3**.
+
+**Step 5** Install requirements in docker container
+
+Now install the requirements with:
+
+    docker exec -t <name> ansible-galaxy install -r /etc/ansible/roles/role_under_test/tests/requirements.yml
+
+**Step 6** Run tests
+
+Run tests with:
+
+    docker exec -t <name> ansible-playbook /etc/ansible/roles/role_under_test/tests/test.yml
+
+If you don't get any error message it means that the tests ran successfully without errors.
+
 Install OpenWISP2 for testing in a VirtualBox VM
 -------------------------------------------------
 
@@ -253,12 +307,12 @@ Make sure `SSH server` and `standard system utilities` are checked.
 Next, add a [Host-only Network Adapter](https://www.virtualbox.org/manual/ch06.html#network_hostonly)
 and assign an IP address to the VM.
 
-- Go to `File > Preferences > Network > Host-only Networks`
+- On the Main VirtualBox page, Go to `File > Host Network Manager`
 - Click the <kbd>+</kbd> icon to create a new adapter
-- Set the IPv4 address to `192.168.56.1` and the IPv4 Network Mask to `255.255.255.0`. The IPv6 settings can be ignored
+- Set the IPv4 address to `192.168.56.1` and the IPv4 Network Mask to `255.255.255.0`. You may need to select `Configure Adapter Manually` to do this. The IPv6 settings can be ignored
   ![Screenshot of the Host-only network configuration screen](https://raw.githubusercontent.com/openwisp/ansible-openwisp2/master/docs/host-only-network.png)
 - Shut off your VM
-- In your VM settings, in the Network section, click Adapter 2
+- In your VM settings, in the Network section, click Adapter 2 and Enable this Adapter
 - Select Host-only adapter and the name of the adapter you created
 - Boot up your VM, run `su`, and type in your superuser password
 - Run `ls /sys/class/net` and take note of the output
@@ -464,6 +518,7 @@ Below are listed all the variables you can customize (you may also want to take 
     # of service is very likely to occur during development
     openwisp2_controller_pip: false
     openwisp2_users_pip: false
+    openwisp2_utils_pip: false
     openwisp2_django_netjsonconfig_pip: false
     openwisp2_django_x509_pip: false
     openwisp2_netjsonconfig_pip: false
@@ -538,6 +593,8 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_nginx_http2: false
     # ipv6 must be enabled explicitly to avoid errors
     openwisp2_nginx_ipv6: false
+    # nginx client_max_body_size setting
+    openwisp2_nginx_client_max_body_size: 10M
     # dictionary containing more nginx settings for
     # the 443 section of the openwisp2 nginx configuration
     # IMPORTANT: 1. you can add more nginx settings in this dictionary

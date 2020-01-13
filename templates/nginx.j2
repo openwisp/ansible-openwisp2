@@ -13,7 +13,7 @@ server {
     error_log {{ openwisp2_path }}/log/nginx.error.log error;
 
     # set client body size #
-    client_max_body_size 5M;
+    client_max_body_size {{ openwisp2_nginx_client_max_body_size }};
 
     ssl on;
     ssl_certificate {{ openwisp2_ssl_cert }};
@@ -127,4 +127,25 @@ server {
     }
     {% endif %}
 
+}
+
+server {
+    listen 80 default_server;
+    {% if openwisp2_nginx_ipv6 %}listen [::]:80 default_server; # ipv6{% endif %}
+
+    server_name _;
+
+    return 404;
+}
+
+server {
+    listen 443 ssl default_server;
+    {% if openwisp2_nginx_ipv6 %}listen [::]:443 ssl default_server; # ipv6{% endif %}
+    server_name _;
+
+    ssl on;
+    ssl_certificate {{ openwisp2_ssl_cert }};
+    ssl_certificate_key {{ openwisp2_ssl_key }};
+
+    return 404;
 }

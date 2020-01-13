@@ -16,20 +16,20 @@ galaxy_info:
   platforms:
   - name: Debian
     versions:
-    - jessie
     - stretch
     - buster
   - name: Ubuntu
     versions:
     - xenial
     - bionic
-  - name: Fedora
-    versions:
-    - 27
-    - 28
-  - name: EL
-    versions:
-    - 7
+  # we don't have the resources now to maintain these distros
+  # - name: Fedora
+  #   versions:
+  #   - 27
+  #   - 28
+  # - name: EL
+  #   versions:
+  #   - 7
   galaxy_tags:
     - system
     - networking

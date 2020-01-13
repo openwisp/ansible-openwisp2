@@ -2,6 +2,7 @@ openwisp2_python: python3
 openwisp2_network_topology: false
 openwisp2_controller_pip: false
 openwisp2_users_pip: false
+openwisp2_utils_pip: false
 openwisp2_django_netjsonconfig_pip: false
 openwisp2_django_x509_pip: false
 openwisp2_django_loci_pip: false
@@ -40,6 +41,7 @@ openwisp2_http_allowed_ip: false
 openwisp2_nginx_spdy: false
 openwisp2_nginx_http2: false
 openwisp2_nginx_ipv6: false
+openwisp2_nginx_client_max_body_size: 10M
 openwisp2_admin_allowed_network: null
 openwisp2_install_ntp: true
 openwisp2_sentry:

@@ -20,6 +20,11 @@
     warn: False
   notify: restart nginx
 
+- name: disable default nginx configuration
+  file:
+   path: "/etc/nginx/sites-enabled/default"
+   state: absent
+
 - name: nginx site available
   template:
     src: nginx.j2

@@ -8,14 +8,16 @@
   with_items:
     - "{{ openwisp2_controller_pip }}"
     - "{{ openwisp2_users_pip }}"
+    - "{{ openwisp2_utils_pip }}"
     - "{{ openwisp2_django_netjsonconfig_pip }}"
     - "{{ openwisp2_django_x509_pip }}"
     - "{{ openwisp2_django_loci_pip }}"
     - "{{ openwisp2_netjsonconfig_pip }}"
-  when: item
+  when: item | bool
 
 - name: Add network_topology to custom package list if set and enabled
-  set_fact: openwisp2_python_packages:"{{ openwisp2_python_packages + [item] }}"
+  set_fact:
+    openwisp2_python_packages: "{{ openwisp2_python_packages + [item] }}"
   with_items:
     - "{{ openwisp2_django_netjsongraph_pip }}"
     - "{{ openwisp2_network_topology_pip }}"
@@ -80,8 +82,7 @@
 - name: Install openwisp2 network topology and its dependencies
   when: openwisp2_network_topology
   pip:
-    name:
-      - openwisp-network-topology
+    name: openwisp-network-topology
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
@@ -93,13 +94,13 @@
   until: result is success
 
 - name: Install custom OpenWISP 2 Python packages
+  when: openwisp2_python_packages
   pip:
-    name: "{{ item }}"
+    name: "{{ openwisp2_python_packages }}"
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
-  with_items: "{{ openwisp2_python_packages }}"
   notify: reload supervisor
   retries: 5
   delay: 10
@@ -108,12 +109,11 @@
 
 - name: Install extra python packages
   pip:
-    name: "{{ item }}"
+    name: "{{ openwisp2_extra_python_packages }}"
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
-  with_items: "{{ openwisp2_extra_python_packages }}"
   retries: 5
   delay: 10
   register: result
@@ -122,8 +122,7 @@
 
 - name: Install uwsgi
   pip:
-    name:
-      - uwsgi
+    name: uwsgi
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"

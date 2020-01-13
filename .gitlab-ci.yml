@@ -113,18 +113,6 @@ Ubuntu1804:
     playbook: test.yml
   <<: *testing_script
 
-Centos7:
-  variables:
-    distro: centos:7
-    playbook: test.yml
-  <<: *testing_script
-
-Debian8:
-  variables:
-    distro: debian:8
-    playbook: test.yml
-  <<: *testing_script
-
 Debian9:
   variables:
     distro: debian:9
@@ -138,24 +126,32 @@ Debian10:
   <<: *testing_script
   allow_failure: true
 
-Fedora27:
-  variables:
-    distro: fedora:27
-    playbook: test.yml
-  <<: *testing_script
-
-Fedora28:
-  variables:
-    distro: fedora:28
-    playbook: test.yml
-  <<: *testing_script
-  allow_failure: true
-
 Ubuntu1804_NetworkTopology:
   variables:
     distro: 'ubuntu:18.04'
     playbook: test_networktopology.yml
   <<: *testing_script
+
+# we don't have the resources now to maintain these distros
+
+# Centos7:
+#   variables:
+#     distro: centos:7
+#     playbook: test.yml
+#   <<: *testing_script
+#
+# Fedora27:
+#   variables:
+#     distro: fedora:27
+#     playbook: test.yml
+#   <<: *testing_script
+#
+# Fedora28:
+#   variables:
+#     distro: fedora:28
+#     playbook: test.yml
+#   <<: *testing_script
+#   allow_failure: true
 
 terraform-destroy_on_failure:
   stage: destroy
