@@ -39,6 +39,13 @@
     group: "{{ www_group }}"
     mode: 0754
 
+- name: celery.py
+  notify: reload supervisor
+  template:
+    src: openwisp2/celery.py
+    dest: "{{ openwisp2_path }}/openwisp2/celery.py"
+    group: "{{ www_group }}"
+
 - name: __init__.py
   notify: reload supervisor
   template:
