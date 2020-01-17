@@ -76,24 +76,6 @@ printf "\n"
 printf ${green}"Running command: docker exec $container_id env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/$playbook"${neutral}
 docker exec $container_id env TERM=xterm env ANSIBLE_FORCE_COLOR=1 ansible-playbook /etc/ansible/roles/role_under_test/tests/$playbook -e $ansible_opts
 
-# Check OpenWISP is running
-echo "Launching OpenWISP tests"
-docker exec "${container_id}" curl --insecure -s --head https://localhost/admin/login/?next=/admin/ \
- | sed -n "1p" | grep -q "200" \
- && (printf "Status code 200 test: pass\n" && exit 0) \
- || (printf "Status code 200 test: fail\n"; \
- docker exec "${container_id}" sh -c "tail -n 500 /opt/openwisp2/log/*.log" \
- && exit 1)
-
-# Check redis is running
-echo "Checking if redis is running"
-docker exec "${container_id}" systemctl status redis-server \
- | grep "Active: active (running)" \
- || docker exec "${container_id}" systemctl status redis \
- | grep "Active: active (running)" \
- && (printf "redis test: pass\n" && exit 0) \
- || (printf "redis test: failed\n"; exit 1)
-
 # we only run a specific subset of tests which should always work
 # independently of how the openwisp2 instance is configured
 docker exec "${container_id}" \
@@ -129,6 +111,24 @@ docker exec "${container_id}" \
         openwisp_controller.config.tests.test_admin.TestAdmin.test_vpn_not_contains_default_templates_js \
         openwisp_controller.geo.tests.test_channels \
         openwisp_controller.geo.tests.test_api
+
+# Check redis is running
+echo "Checking if redis is running"
+docker exec "${container_id}" systemctl status redis-server \
+ | grep "Active: active (running)" \
+ || docker exec "${container_id}" systemctl status redis \
+ | grep "Active: active (running)" \
+ && (printf "redis test: pass\n" && exit 0) \
+ || (printf "redis test: failed\n"; exit 1)
+
+# Check OpenWISP is running
+echo "Launching OpenWISP tests"
+docker exec "${container_id}" curl --insecure -s --head https://localhost/admin/login/?next=/admin/ \
+ | sed -n "1p" | grep -q "200" \
+ && (printf "Status code 200 test: pass\n" && exit 0) \
+ || (printf "Status code 200 test: fail\n"; \
+ docker exec "${container_id}" sh -c "tail -n 500 /opt/openwisp2/log/*.log" \
+ && exit 1)
 
 if [ "$test_idempotence" = true ]; then
   # Run Ansible playbook again (idempotence test).
