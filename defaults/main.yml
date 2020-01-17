@@ -1,6 +1,6 @@
 openwisp2_python: python3
 openwisp2_network_topology: false
-openwisp2_controller_pip: false
+openwisp2_controller_pip: "openwisp-controller~=0.4"
 openwisp2_users_pip: false
 openwisp2_utils_pip: false
 openwisp2_django_netjsonconfig_pip: false
