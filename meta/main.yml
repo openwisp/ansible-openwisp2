@@ -8,7 +8,7 @@ dependencies:
 
 galaxy_info:
   author: Federico Capoano
-  company: Cineca
+  company: OpenWISP
   description: Official role to install and upgrade openwisp2 controller
   license: BSD
   min_ansible_version: 2.5
