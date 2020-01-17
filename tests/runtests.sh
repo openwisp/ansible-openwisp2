@@ -76,17 +76,6 @@ printf "\n"
 printf ${green}"Running command: docker exec $container_id env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/$playbook"${neutral}
 docker exec $container_id env TERM=xterm env ANSIBLE_FORCE_COLOR=1 ansible-playbook /etc/ansible/roles/role_under_test/tests/$playbook -e $ansible_opts
 
-if [ "$test_idempotence" = true ]; then
-  # Run Ansible playbook again (idempotence test).
-  printf ${green}"Running playbook again: idempotence test"${neutral}
-  idempotence=$(mktemp)
-  docker exec $container_id  env TERM=xterm env ANSIBLE_FORCE_COLOR=1 ansible-playbook /etc/ansible/roles/role_under_test/tests/$playbook -e $ansible_opts --diff | tee -a $idempotence
-  tail $idempotence \
-    | grep -q "changed=0.*failed=0" \
-    && (printf ${green}"Idempotence test: pass"${neutral}"\n") \
-    || (printf ${red}"Idempotence test: fail"${neutral}"\n" && exit 1)
-fi
-
 # Check OpenWISP is running
 echo "Launching OpenWISP tests"
 docker exec "${container_id}" curl --insecure -s --head https://localhost/admin/login/?next=/admin/ \
@@ -140,6 +129,17 @@ docker exec "${container_id}" \
         openwisp_controller.config.tests.test_admin.TestAdmin.test_vpn_not_contains_default_templates_js \
         openwisp_controller.geo.tests.test_channels \
         openwisp_controller.geo.tests.test_api
+
+if [ "$test_idempotence" = true ]; then
+  # Run Ansible playbook again (idempotence test).
+  printf ${green}"Running playbook again: idempotence test"${neutral}
+  idempotence=$(mktemp)
+  docker exec $container_id  env TERM=xterm env ANSIBLE_FORCE_COLOR=1 ansible-playbook /etc/ansible/roles/role_under_test/tests/$playbook -e $ansible_opts --diff | tee -a $idempotence
+  tail $idempotence \
+    | grep -q "changed=0.*failed=0" \
+    && (printf ${green}"Idempotence test: pass"${neutral}"\n") \
+    || (printf ${red}"Idempotence test: fail"${neutral}"\n$(tail $idempotence)" && exit 1)
+fi
 
 # Remove the Docker container (if configured).
 if [ "$cleanup" = true ]; then
