@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'openwisp_controller.pki',
     'openwisp_controller.config',
     'openwisp_controller.geo',
+    'openwisp_controller.connection',
 {% if openwisp2_network_topology %}
     'openwisp_network_topology',
 {% endif %}
@@ -121,6 +122,10 @@ TEMPLATES = [
         },
     },
 ]
+
+CELERY_TASK_ACKS_LATE = {{ openwisp2_celery_task_acks_late }}
+CELERY_WORKER_PREFETCH_MULTIPLIER = {{ openwisp2_celery_worker_prefetch_multiplier }}
+CELERY_BROKER_URL = '{{ openwisp2_celery_broker_url }}'
 
 # FOR DJANGO REDIS
 

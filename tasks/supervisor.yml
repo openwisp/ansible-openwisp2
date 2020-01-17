@@ -21,3 +21,9 @@
     src: supervisor/daphne.j2
     dest: "{{ supervisor_path | format('daphne') }}"
   notify: reload supervisor
+
+- name: supervisor celery
+  template:
+    src: celery.j2
+    dest: "{{ supervisor_path | format('celery') }}"
+  notify: reload supervisor
