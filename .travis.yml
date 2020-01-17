@@ -1,6 +1,9 @@
 ---
 
+language: python
 services: docker
+cache: pip
+python: "3.7"
 
 if: (type = pull_request) OR (branch = master)
 
@@ -25,6 +28,7 @@ env:
 matrix:
   include:
     - dist: trusty
+      python: "3.5"
       env:
         - distro: 'ubuntu:16.04'
           playbook: test.yml
@@ -34,9 +38,9 @@ script:
   - export container_id=$(date +%s)
   - export cleanup=false
   # run ansible-lint
-  - pip install --user ansible
+  - pip install ansible
   - ansible-galaxy install -r tests/requirements.yml
-  - pip install --user ansible-lint
+  - pip install ansible-lint
   - ln -s $TRAVIS_BUILD_DIR ~/.ansible/roles/role_under_test
   - git clone https://github.com/ansible/galaxy-lint-rules.git
   - mv galaxy-lint-rules ~/galaxy
@@ -44,7 +48,7 @@ script:
   - ansible-lint tests/test_networktopology.yml
   # run ci tests
   - ${PWD}/tests/runtests.sh
-  - pip install --user "openwisp-utils[qa]>=0.3.1"
+  - pip install "openwisp-utils[qa]>=0.4.0"
   - openwisp-utils-qa-checks --skip-isort --skip-flake8 --skip-checkmigrations
 
 notifications:
