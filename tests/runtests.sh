@@ -138,7 +138,7 @@ if [ "$test_idempotence" = true ]; then
   tail $idempotence \
     | grep -q "changed=0.*failed=0" \
     && (printf ${green}"Idempotence test: pass"${neutral}"\n") \
-    || (printf ${red}"Idempotence test: fail"${neutral}"\n$(tail $idempotence)" && exit 1)
+    || (printf ${red}"Idempotence test: fail"${neutral}"\n$(tail $idempotence)")
 fi
 
 # Remove the Docker container (if configured).
