@@ -82,7 +82,7 @@ docker exec "${container_id}" curl --insecure -s --head https://localhost/admin/
  | sed -n "1p" | grep -q "200" \
  && (printf "Status code 200 test: pass\n" && exit 0) \
  || (printf "Status code 200 test: fail\n"; \
- docker exec "${container_id}" sh -c "tail -n 500/opt/openwisp2/log/*.log" \
+ docker exec "${container_id}" sh -c "tail -n 500 /opt/openwisp2/log/*.log" \
  && exit 1)
 
 # Check redis is running
