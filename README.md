@@ -509,8 +509,11 @@ Below are listed all the variables you can customize (you may also want to take 
   # you can add other roles here
     - openwisp.openwisp2
   vars:
+    # openwisp-controler version
+    openwisp2_controller_version: "0.4"
     # optional openwisp2 modules
     openwisp2_network_topology: false
+    openwisp2_network_topology_version: "0.2"
     # you may replace the values of these variables with any URL
     # supported by pip (the python package installer)
     # use these to install forks, branches or development versions

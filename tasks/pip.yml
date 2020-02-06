@@ -53,8 +53,8 @@
 - name: Install openwisp2 controller and its dependencies
   pip:
     name:
-      - openwisp-controller
-      - asgi_redis
+      - "openwisp-controller~={{ openwisp2_controller_version }}"
+      - channels_redis
       - service_identity
     state: latest
     virtualenv: "{{ virtualenv_path }}"
@@ -82,7 +82,7 @@
 - name: Install openwisp2 network topology and its dependencies
   when: openwisp2_network_topology
   pip:
-    name: openwisp-network-topology
+    name: "openwisp-network-topology~={{ openwisp2_network_topology_version }}"
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
