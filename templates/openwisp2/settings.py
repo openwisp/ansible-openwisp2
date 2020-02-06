@@ -260,6 +260,10 @@ LOGGING = {
             'backupCount': 3,
             'formatter': 'verbose'
         },
+        'null': {
+            'level': 'DEBUG',
+            'class': 'logging.NullHandler',
+        },
 {% if openwisp2_sentry.get('dsn') %}
         'sentry': {
             'level': 'ERROR',
@@ -278,6 +282,12 @@ LOGGING = {
             'sentry'
 {% endif %}
         ]
+    },
+    'loggers': {
+        'django.security.DisallowedHost': {
+            'handlers': ['null'],
+            'propagate': False,
+        }
     }
 }
 
