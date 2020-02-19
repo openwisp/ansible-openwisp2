@@ -43,18 +43,21 @@ enough space for users to upload floor plan images.
 
 Hardware (Minimum, excluding uploaded data)
 -------------------------------------------
+
 - 1GB Memory
 - 2GB free disk space
 - Single core processor
 
 Hardware (Recommended)
 ----------------------
+
 - 2GB Memory
 - Disk space - depends on the projected size of your database and uploaded photo images
 - Dual core processor
 
 Software
 --------
+
 Generally a fresh installation of one of the supported operating systems is sufficient; no pre-configuration required.  The
 Ansible Playbook will install and configure all dependencies and leave you with a running OpenWISP installation.
 
@@ -64,10 +67,9 @@ that Ansible can access your target machine by SSH, be it either with a key or p
 
 Supported Operating Systems
 ---------------------------
-- Ubuntu and Ubuntu Server 16.04
-- Ubuntu and Ubuntu Server 18.04
-- Debian 9
-- Debian 10
+
+See the section "OS Platforms" on the
+[ansible-galaxy page of ansible-openwisp2](https://galaxy.ansible.com/openwisp/openwisp2).
 
 Usage (tutorial)
 ================
