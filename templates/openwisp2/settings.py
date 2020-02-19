@@ -95,11 +95,11 @@ ROOT_URLCONF = 'openwisp2.urls'
 
 CHANNEL_LAYERS = {
     'default': {
-        'BACKEND': 'asgi_redis.RedisChannelLayer',
-        'CONFIG': {'hosts': [('localhost', 6379)]},
-        'ROUTING': 'openwisp_controller.geo.channels.routing.channel_routing',
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {"hosts": [('localhost', 6379)]},
     },
 }
+ASGI_APPLICATION = "openwisp_controller.geo.channels.routing.channel_routing"
 
 TEMPLATES = [
     {
@@ -118,6 +118,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'openwisp_utils.admin_theme.context_processor.menu_items'
             ],
         },
     },

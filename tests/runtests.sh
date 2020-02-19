@@ -109,7 +109,6 @@ docker exec "${container_id}" \
         openwisp_controller.config.tests.test_admin.TestAdmin.test_device_contains_default_templates_js \
         openwisp_controller.config.tests.test_admin.TestAdmin.test_template_not_contains_default_templates_js \
         openwisp_controller.config.tests.test_admin.TestAdmin.test_vpn_not_contains_default_templates_js \
-        openwisp_controller.geo.tests.test_channels \
         openwisp_controller.geo.tests.test_api
 
 # Check redis is running

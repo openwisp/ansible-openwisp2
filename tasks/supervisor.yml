@@ -10,12 +10,6 @@
     dest: "{{ supervisor_path | format('openwisp2') }}"
   notify: reload supervisor
 
-- name: supervisor runworker
-  template:
-    src: supervisor/runworker.j2
-    dest: "{{ supervisor_path | format('runworker') }}"
-  notify: reload supervisor
-
 - name: supervisor daphne
   template:
     src: supervisor/daphne.j2
