@@ -615,6 +615,8 @@ Below are listed all the variables you can customize (you may also want to take 
             - "application/xml"
             - "application/x-font-ttf"
             - "font/opentype"
+    # uwsgi gid, omitted by default
+    openwisp2_uwsgi_gid: null
     # the following setting controls which ip address range
     # is allowed to access the openwisp2 admin web interface
     # (by default any IP is allowed)

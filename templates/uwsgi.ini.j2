@@ -13,3 +13,6 @@ vacuum=True
 enable-threads=True
 env=HTTPS=on
 buffer-size=8192
+{% if openwisp2_uwsgi_gid %}
+gid={{ openwisp2_uwsgi_gid }}
+{% endif %}
