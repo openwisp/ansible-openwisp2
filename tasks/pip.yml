@@ -187,3 +187,17 @@
   register: result
   until: result is success
   notify: reload supervisor
+
+- name: Remove jsonfield2
+  pip:
+    name:
+      - jsonfield2
+    state: absent
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+    virtualenv_site_packages: yes
+  retries: 2
+  delay: 5
+  register: result
+  until: result is success
+  notify: reload supervisor
