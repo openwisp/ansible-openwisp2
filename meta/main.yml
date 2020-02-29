@@ -1,10 +1,11 @@
 ---
 
 dependencies:
-  - src: https://github.com/nemesisdesign/Stouts.postfix
+  - src: https://github.com/Stouts/Stouts.postfix
     version: origin/develop
     name: Stouts.postfix
     postfix_smtp_sasl_auth_enable: "{{ postfix_smtp_sasl_auth_enable_override | default(false) }}"
+    postfix_smtpd_relay_restrictions: "{{ postfix_smtpd_relay_restrictions_override }}"
 
 galaxy_info:
   author: Federico Capoano

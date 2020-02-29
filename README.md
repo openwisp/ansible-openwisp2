@@ -670,6 +670,8 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_celery_task_acks_late: True
     # allow overriding default `postfix_smtp_sasl_auth_enable` variable
     postfix_smtp_sasl_auth_enable_override: yes
+    # allow overriding postfix_smtpd_relay_restrictions
+    postfix_smtpd_relay_restrictions_override: permit_mynetworks
 ```
 
 Support
