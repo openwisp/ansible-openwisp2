@@ -28,16 +28,8 @@ if [ $distro = "centos:7" ]; then
 elif [ $distro = "ubuntu:18.04" ]; then
   init="/lib/systemd/systemd"
   opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-# Ubuntu 16.04
-elif [ $distro = "ubuntu:16.04" ]; then
-  init="/lib/systemd/systemd"
-  opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
 # Debian 10
 elif [ $distro = "debian:10" ]; then
-  init="/lib/systemd/systemd"
-  opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-# Debian 9
-elif [ $distro = "debian:9" ]; then
   init="/lib/systemd/systemd"
   opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
 fi

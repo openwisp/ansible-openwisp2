@@ -145,7 +145,6 @@ Substitute `openwisp2.mydomain.com` with your **production server**'s hostname -
 `openwisp2.mydomain.com` WITH AN IP ADDRESS**, otherwise email sending through postfix will break,
 causing 500 internal server errors on some operations.
 
-
 Create playbook file
 --------------------
 
@@ -273,9 +272,7 @@ Pull docker image with this command:
 Substitute `<distro>` with one of these variants:
 
 * `ubuntu:18.04`
-* `ubuntu:16.04`
 * `debian:10`
-* `debian:9`
 
 **Step 4**: Run docker container
 
@@ -322,7 +319,7 @@ customisations of *OpenWISP*.
 ### Installing Debian 9 on VirtualBox
 
 Install [VirtualBox](https://virtualbox.org) and create a new Virtual Machine running
-Debian 9. A step-by-step guide is available
+Debian 10. A step-by-step guide is available
 [here](http://www.brianlinkletter.com/installing-debian-linux-in-a-virtualbox-virtual-machine/),
 however we need to change a few things to get ansible working.
 
