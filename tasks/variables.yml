@@ -3,29 +3,8 @@
     supervisor_path: '/etc/supervisor/conf.d/%s.conf'
   when: ansible_os_family == 'Debian'
 
-- name: Set supervisor path (RedHat)
-  set_fact:
-    supervisor_path: '/etc/supervisord.d/%s.ini'
-  when: ansible_os_family == 'RedHat'
-
 - name: Set www user (Debian)
   set_fact:
     www_group: 'www-data'
     www_user:  'www-data'
   when: ansible_os_family == 'Debian'
-
-- name: Set www user (RedHat)
-  set_fact:
-    www_group: 'nginx'
-    www_user:  'nginx'
-  when: ansible_os_family == 'RedHat'
-
-- name: Set python3_package_prefix for CentOS/RedHat
-  set_fact:
-    python3_package_prefix: python34
-  when: ansible_distribution in ['RedHat', 'CentOS']
-
-- name: Set python3_package_prefix for Fedora
-  set_fact:
-    python3_package_prefix: python3
-  when: ansible_distribution == 'Fedora'

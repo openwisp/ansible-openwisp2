@@ -39,10 +39,3 @@
     state: link
   notify: restart nginx
   when: ansible_os_family == 'Debian'
-
-- name: nginx site
-  template:
-    src: nginx.j2
-    dest: "/etc/nginx/conf.d/{{ inventory_hostname }}.conf"
-  notify: restart nginx
-  when: ansible_os_family == 'RedHat'

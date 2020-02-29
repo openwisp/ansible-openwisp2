@@ -40,15 +40,6 @@ elif [ $distro = "debian:10" ]; then
 elif [ $distro = "debian:9" ]; then
   init="/lib/systemd/systemd"
   opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-# Fedora 27
-elif [ $distro = "fedora:27" ]; then
-  init="/usr/lib/systemd/systemd"
-  opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-# Fedora 28
-elif [ $distro = "fedora:28" ]; then
-  init="/usr/lib/systemd/systemd"
-  opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-  ansible_opts="ansible_python_interpreter=/usr/bin/python3"
 fi
 
 # Run the container using the supplied OS
