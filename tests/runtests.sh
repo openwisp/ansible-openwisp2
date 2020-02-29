@@ -28,27 +28,10 @@ if [ $distro = "centos:7" ]; then
 elif [ $distro = "ubuntu:18.04" ]; then
   init="/lib/systemd/systemd"
   opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-# Ubuntu 16.04
-elif [ $distro = "ubuntu:16.04" ]; then
-  init="/lib/systemd/systemd"
-  opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
 # Debian 10
 elif [ $distro = "debian:10" ]; then
   init="/lib/systemd/systemd"
   opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-# Debian 9
-elif [ $distro = "debian:9" ]; then
-  init="/lib/systemd/systemd"
-  opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-# Fedora 27
-elif [ $distro = "fedora:27" ]; then
-  init="/usr/lib/systemd/systemd"
-  opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-# Fedora 28
-elif [ $distro = "fedora:28" ]; then
-  init="/usr/lib/systemd/systemd"
-  opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-  ansible_opts="ansible_python_interpreter=/usr/bin/python3"
 fi
 
 # Run the container using the supplied OS

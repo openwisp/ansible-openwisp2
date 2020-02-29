@@ -101,11 +101,11 @@ terraform-apply:
   dependencies:
     - terraform-plan
 
-Ubuntu1604:
-  variables:
-    distro: 'ubuntu:16.04'
-    playbook: test.yml
-  <<: *testing_script
+# Ubuntu1604:
+#   variables:
+#     distro: 'ubuntu:16.04'
+#     playbook: test.yml
+#   <<: *testing_script
 
 Ubuntu1804:
   variables:
@@ -113,11 +113,11 @@ Ubuntu1804:
     playbook: test.yml
   <<: *testing_script
 
-Debian9:
-  variables:
-    distro: debian:9
-    playbook: test.yml
-  <<: *testing_script
+# Debian9:
+#   variables:
+#     distro: debian:9
+#     playbook: test.yml
+#   <<: *testing_script
 
 Debian10:
   variables:

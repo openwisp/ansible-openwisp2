@@ -1,11 +1,4 @@
-- name: Set spatialite_path for Fedora <= 27
-  set_fact:
-    openwisp2_spatialite_path: "mod_spatialite"
-  when: >
-    (ansible_distribution == 'Fedora'
-    and ansible_distribution_version is version_compare('27', 'le'))
-
-- name: Set spatialite_path (Ubuntu >= 18.04 or Debian >= 10 or Fedora >= 28)
+- name: Set spatialite_path (Ubuntu >= 18.04 or Debian >= 10)
   set_fact:
     openwisp2_spatialite_path: "mod_spatialite.so"
   when: >
@@ -13,14 +6,3 @@
     and ansible_distribution_version is version_compare('18.04', 'ge'))
     or (ansible_distribution == 'Debian' and
     ansible_distribution_version is version_compare('10', 'ge'))
-    or (ansible_distribution == 'Fedora' and
-    ansible_distribution_version is version_compare('28', 'ge'))
-
-- name: Set spatialite_path (Ubuntu >= 16.04 or Debian >= 9)
-  set_fact:
-    openwisp2_spatialite_path: "mod_spatialite"
-  when: >
-    (ansible_distribution == 'Ubuntu'
-    and ansible_distribution_version is version_compare('16.04', 'ge'))
-    or (ansible_distribution == 'Debian'
-    and ansible_distribution_version is version_compare('9', 'ge'))

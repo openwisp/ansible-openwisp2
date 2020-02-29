@@ -16,11 +16,15 @@ galaxy_info:
   platforms:
   - name: Debian
     versions:
-    - stretch
+    # (send patch if you want this to be supported!)
+    # https://github.com/openwisp/ansible-openwisp2/issues/169#issuecomment-592983139
+    # - stretch
     - buster
   - name: Ubuntu
     versions:
-    - xenial
+    # (send patch if you want this to be supported!)
+    # https://github.com/openwisp/ansible-openwisp2/issues/169#issuecomment-592983139
+    # - xenial
     - bionic
   # we don't have the resources now to maintain these distros
   # - name: Fedora

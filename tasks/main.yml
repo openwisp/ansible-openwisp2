@@ -15,26 +15,12 @@
   tags: [openwisp2, apt]
   when: ansible_os_family == 'Debian'
 
-- import_tasks: yum.yml
-  tags: [openwisp2, yum]
-  when: ansible_os_family == 'RedHat'
-
 - import_tasks: pip.yml
   tags: [openwisp2, pip]
 
 # comprises django_secret_key.yml
 - import_tasks: django.yml
   tags: [openwisp2, django]
-
-- import_tasks: firewalld.yml
-  tags: [openwisp2, firewalld]
-  when:
-    - ansible_os_family == 'RedHat'
-    - ansible_distribution_major_version|int >= 7
-
-- import_tasks: selinux.yml
-  tags: [openwisp2, selinux]
-  when: ansible_os_family == 'RedHat' and ansible_virtualization_type != 'docker'
 
 - import_tasks: supervisor.yml
   tags: [openwisp2, supervisor]
