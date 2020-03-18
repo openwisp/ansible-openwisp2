@@ -43,7 +43,7 @@ openwisp2_http_allowed_ip: false
 openwisp2_nginx_spdy: false
 openwisp2_nginx_http2: false
 openwisp2_nginx_ipv6: false
-openwisp2_nginx_client_max_body_size: 10M
+openwisp2_nginx_client_max_body_size: 20M
 openwisp2_uwsgi_gid: null
 openwisp2_admin_allowed_network: null
 openwisp2_install_ntp: true
