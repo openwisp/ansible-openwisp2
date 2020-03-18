@@ -662,8 +662,8 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_default_ca_validity: 3650
     # redis cache url
     openwisp2_redis_cache_url: redis://127.0.0.1:6379/1
-    # celery eventlet pool size
-    openwisp2_eventlet_concurrency: 10
+    # celery gevent pool size
+    openwisp2_celery_concurrency: 10
     # celery settings
     openwisp2_celery_broker_url: redis://127.0.0.1:6379/3
     openwisp2_celery_worker_prefetch_multiplier: 1

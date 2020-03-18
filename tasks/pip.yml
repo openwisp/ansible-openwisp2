@@ -147,9 +147,9 @@
   until: result is success
   notify: reload supervisor
 
-- name: Install eventlet
+- name: Install gevent
   pip:
-    name: eventlet
+    name: gevent
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"

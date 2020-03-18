@@ -1,7 +1,7 @@
 [program:celery]
 user={{ www_user }}
 directory={{ openwisp2_path }}
-command={{ openwisp2_path }}/env/bin/celery -A openwisp2 worker -l info --pool=eventlet --concurrency={{ openwisp2_eventlet_concurrency }} -Ofair
+command={{ openwisp2_path }}/env/bin/celery -A openwisp2 worker -l info --pool=gevent --concurrency={{ openwisp2_celery_concurrency }} -Ofair
 autostart=true
 autorestart=true
 stopsignal=INT
