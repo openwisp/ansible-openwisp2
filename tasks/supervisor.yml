@@ -18,6 +18,6 @@
 
 - name: supervisor celery
   template:
-    src: celery.j2
+    src: supervisor/celery.j2
     dest: "{{ supervisor_path | format('celery') }}"
   notify: reload supervisor
