@@ -30,6 +30,7 @@
     state: directory
     group: "{{ www_group }}"
     mode: 0775
+    recurse: yes
 
 - name: manage.py
   notify: reload supervisor
@@ -101,6 +102,16 @@
     state: file
     group: "{{ www_group }}"
     mode: 0775
+
+- name: set permissions to "{{ openwisp2_path }}/static"
+  file:
+    path: "{{ openwisp2_path }}/static"
+    state: directory
+    group: "{{ www_group }}"
+    owner: "{{ www_user }}"
+    # sets executable only to directories
+    mode: u=rwX,g=rX,o=rX
+    recurse: yes
 
 - name: collectstatic
   notify: reload supervisor

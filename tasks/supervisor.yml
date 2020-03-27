@@ -18,6 +18,12 @@
 
 - name: supervisor celery
   template:
-    src: celery.j2
+    src: supervisor/celery.j2
     dest: "{{ supervisor_path | format('celery') }}"
+  notify: reload supervisor
+
+- name: Remove supervisor runworker.conf (obsolete)
+  file:
+    dest: "{{ supervisor_path | format('runworker') }}"
+    state: absent
   notify: reload supervisor
