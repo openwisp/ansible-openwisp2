@@ -1,6 +1,6 @@
 openwisp2_python: python3
 openwisp2_network_topology: false
-openwisp2_controller_version: "0.5"
+openwisp2_controller_version: "0.6"
 openwisp2_network_topology_version: "0.3"
 openwisp2_controller_pip: false
 openwisp2_users_pip: false
