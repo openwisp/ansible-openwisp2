@@ -254,11 +254,11 @@ LOGGING = {
             'class': 'django.utils.log.AdminEmailHandler'
         },
         'main_log': {
-            'level': 'ERROR',
+            'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
             'formatter': 'verbose',
-            'filename': os.path.join(BASE_DIR, 'log/error.log'),
-            'maxBytes': 5242880.0,
+            'filename': os.path.join(BASE_DIR, 'log/openwisp2.log'),
+            'maxBytes': 15728640,
             'backupCount': 3,
             'formatter': 'verbose'
         },
