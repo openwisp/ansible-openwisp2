@@ -1,7 +1,7 @@
 from django.conf.urls import include, url
+from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.generic import RedirectView
-from openwisp_utils.admin_theme.admin import admin
 
 try:
     from django.urls import reverse_lazy
