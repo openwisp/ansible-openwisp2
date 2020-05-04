@@ -79,6 +79,8 @@
   delay: 10
   register: result
   until: result is success
+  tags:
+    - molecule-idempotence-notest
 
 - name: Install django-redis
   pip:

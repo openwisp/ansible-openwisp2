@@ -1,0 +1,28 @@
+---
+
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint: |
+  set -e
+  # yamllint .
+  ansible-lint
+platforms:
+  - name: "${ROLE_NAME:-instance}-${MOLECULE_DISTRO:-centos7}"
+    image: "geerlingguy/docker-${MOLECULE_DISTRO:-centos7}-ansible:${tag:-latest}"
+    command: ${MOLECULE_DOCKER_COMMAND:-""}
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    pre_build_image: true
+provisioner:
+  name: ansible
+  playbooks:
+    converge: ${MOLECULE_PLAYBOOK:-converge.yml}
+  config_options:
+    defaults:
+      stdout_callback: yaml
+      bin_ansible_callbacks: yes
+verifier:
+  name: ansible
