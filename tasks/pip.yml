@@ -14,11 +14,11 @@
 
 - name: Set openwisp2_python_packages
   set_fact:
-    openwisp2_python_packages: []
+    openwisp2_python_packages: "{{ openwisp2_python_packages | default([]) }}"
 
 - name: Set custom package list
   set_fact:
-    openwisp2_python_packages: "{{ openwisp2_python_packages  + [item] }}"
+    openwisp2_python_packages: "{{ openwisp2_python_packages + [item] }}"
   with_items:
     - "{{ openwisp2_controller_pip }}"
     - "{{ openwisp2_users_pip }}"
@@ -27,7 +27,7 @@
     - "{{ openwisp2_django_x509_pip }}"
     - "{{ openwisp2_django_loci_pip }}"
     - "{{ openwisp2_netjsonconfig_pip }}"
-  when: item | bool
+  when: item is defined and item
 
 - name: Add network_topology to custom package list if set and enabled
   set_fact:
@@ -107,20 +107,6 @@
   register: result
   until: result is success
 
-- name: Install custom OpenWISP 2 Python packages
-  when: openwisp2_python_packages
-  pip:
-    name: "{{ openwisp2_python_packages }}"
-    state: latest
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-    virtualenv_site_packages: yes
-  notify: reload supervisor
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
-
 - name: Install extra python packages
   pip:
     name: "{{ openwisp2_extra_python_packages }}"
@@ -133,6 +119,21 @@
   register: result
   until: result is success
   notify: reload supervisor
+
+- name: Install custom OpenWISP 2 Python packages
+  when: openwisp2_python_packages
+  pip:
+    name: "{{ openwisp2_python_packages }}"
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+    virtualenv_site_packages: yes
+    extra_args: "--no-deps"
+  notify: reload supervisor
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
 
 - name: Install uwsgi
   pip:
