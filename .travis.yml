@@ -1,7 +1,7 @@
 ---
 
 os: linux
-dist: xenial
+dist: bionic
 language: python
 services: docker
 
