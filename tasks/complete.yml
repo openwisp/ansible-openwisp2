@@ -2,3 +2,5 @@
   when: '"created" in load_initial_data_result.stdout'
   debug:
     msg: "Change your admin password at https://{{ inventory_hostname }}/admin/password_change/"
+  tags:
+    - molecule-idempotence-notest

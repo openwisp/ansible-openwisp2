@@ -1,52 +1,33 @@
 ---
 
+os: linux
+dist: bionic
 language: python
 services: docker
-cache: pip
-python: "3.7"
-
-if: (type = pull_request) OR (branch = master)
 
 env:
-  matrix:
-  - distro: 'ubuntu:18.04'
-    playbook: test.yml
-  - distro: debian:10
-    playbook: test.yml
-  - distro: 'ubuntu:18.04'
-    playbook: test_networktopology.yml
-  # we don't have the resources now to maintain these distros
-  # - distro: debian:9
-  #   playbook: test.yml
-  # - distro: fedora:27
-  #   playbook: test.yml
-  # - distro: fedora:28
-  #   playbook: test.yml
-  # - distro: centos:7
-  #   playbook: test.yml
-# matrix:
-#   include:
-#     - dist: trusty
-#       python: "3.5"
-#       env:
-#         - distro: 'ubuntu:16.04'
-#           playbook: test.yml
+  global:
+    - ROLE_NAME: openwisp2
+  jobs:
+    - MOLECULE_DISTRO: ubuntu1804
+    - MOLECULE_DISTRO: debian10
+
+jobs:
+  fast_finish: true
+
+install:
+  # Install test dependencies.
+  - pip install molecule yamllint ansible-lint docker
+
+before_script:
+  # Use actual Ansible Galaxy role name for the project directory.
+  - cd ../
+  - mv ansible-$ROLE_NAME openwisp.$ROLE_NAME
+  - cd openwisp.$ROLE_NAME
 
 script:
-  # Configure test script so we can run extra tests after playbook is run.
-  - export container_id=$(date +%s)
-  - export cleanup=false
-  # run ansible-lint
-  - pip install ansible
-  - ansible-galaxy install -r tests/requirements.yml
-  - pip install ansible-lint
-  - ln -s $TRAVIS_BUILD_DIR ~/.ansible/roles/role_under_test
-  - git clone https://github.com/ansible/galaxy-lint-rules.git
-  - mv galaxy-lint-rules ~/galaxy
-  - ansible-lint tests/test.yml
-  - ansible-lint tests/test_networktopology.yml
-  # run ci tests
-  - ${PWD}/tests/runtests.sh
+  # Run tests.
+  - molecule test
   - pip install "openwisp-utils[qa]>=0.4.0"
   - openwisp-utils-qa-checks --skip-isort --skip-flake8 --skip-checkmigrations
 
