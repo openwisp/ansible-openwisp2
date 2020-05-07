@@ -9,8 +9,8 @@ lint: |
   # yamllint .
   ansible-lint
 platforms:
-  - name: "${ROLE_NAME:-instance}-${MOLECULE_DISTRO:-centos7}"
-    image: "geerlingguy/docker-${MOLECULE_DISTRO:-centos7}-ansible:${tag:-latest}"
+  - name: "${ROLE_NAME:-instance}-${MOLECULE_DISTRO}"
+    image: "geerlingguy/docker-${MOLECULE_DISTRO}-ansible:${tag:-latest}"
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
