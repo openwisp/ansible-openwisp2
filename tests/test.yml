@@ -4,6 +4,9 @@
 
   become: true
 
+  vars:
+    openwisp2_network_topology: true
+
   pre_tasks:
     - name: Update apt cache
       apt:
