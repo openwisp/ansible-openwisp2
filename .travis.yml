@@ -28,8 +28,8 @@ before_script:
 script:
   # Run tests.
   - molecule test
-  - pip install "openwisp-utils[qa]>=0.4.0"
-  - openwisp-utils-qa-checks --skip-isort --skip-flake8 --skip-checkmigrations
+  - pip install "openwisp-utils[qa]~=0.5"
+  - openwisp-qa-check --skip-isort --skip-flake8 --skip-checkmigrations --skip-black
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
