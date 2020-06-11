@@ -238,7 +238,7 @@ LOGGING = {
             'format': '[%(levelname)s] %(message)s'
         },
         'verbose': {
-            'format': '\n\n[%(levelname)s %(asctime)s] module: %(module)s, process: %(process)d, thread: %(thread)d\n%(message)s'
+            'format': '[%(levelname)s %(asctime)s] module: %(module)s, process: %(process)d, thread: %(thread)d\n%(message)s\n'
         },
     },
     'handlers': {
