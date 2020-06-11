@@ -76,6 +76,8 @@ openwisp2_nginx_ssl_config:
         - "application/xml"
         - "application/x-font-ttf"
         - "font/opentype"
+openwisp2_nginx_access_log: "{{ openwisp2_path }}/log/nginx.access.log"
+openwisp2_nginx_error_log: "{{ openwisp2_path }}/log/nginx.error.log error"
 openwisp2_redis_cache_url: redis://127.0.0.1:6379/1
 # keep backward compatibility with old variable openwisp2_eventlet_concurrency
 openwisp2_celery_concurrency: "{{ openwisp2_eventlet_concurrency | default(10) }}"

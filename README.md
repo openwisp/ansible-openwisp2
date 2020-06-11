@@ -647,6 +647,9 @@ Below are listed all the variables you can customize (you may also want to take 
             - "application/xml"
             - "application/x-font-ttf"
             - "font/opentype"
+    # nginx error log configuration
+    openwisp2_nginx_access_log: "{{ openwisp2_path }}/log/nginx.access.log"
+    openwisp2_nginx_error_log: "{{ openwisp2_path }}/log/nginx.error.log error"
     # uwsgi gid, omitted by default
     openwisp2_uwsgi_gid: null
     # the following setting controls which ip address range

@@ -11,9 +11,9 @@ server {
     root {{ openwisp2_path }}/public_html;
     index index.html index.htm;
 
-    # error log
-    access_log {{ openwisp2_path }}/log/nginx.access.log;
-    error_log {{ openwisp2_path }}/log/nginx.error.log error;
+    # logging
+    access_log {{ openwisp2_nginx_access_log }};
+    error_log {{ openwisp2_nginx_error_log }};
 
     # set client body size #
     client_max_body_size {{ openwisp2_nginx_client_max_body_size }};
