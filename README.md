@@ -668,6 +668,11 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_celery_broker_url: redis://127.0.0.1:6379/3
     openwisp2_celery_worker_prefetch_multiplier: 1
     openwisp2_celery_task_acks_late: True
+    # whether to activate the django logging configuration in celery
+    # if set to True, will log all the celery events in the same log stream used by django
+    # which will cause log lines to be written to "{{ openwisp2_path }}/log/openwisp2.log"
+    # instead of "{{ openwisp2_path }}/log/celery.log" and "{{ openwisp2_path }}/log/celerybeat.log"
+    openwisp2_django_celery_logging: False
     # allow overriding default `postfix_smtp_sasl_auth_enable` variable
     postfix_smtp_sasl_auth_enable_override: yes
     # allow overriding postfix_smtpd_relay_restrictions

@@ -9,8 +9,17 @@ app = Celery('openwisp2')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks()
 
+{% if openwisp2_django_celery_logging %}
+from celery.signals import setup_logging
+from logging.config import dictConfig
+
+@setup_logging.connect
+def config_loggers(*args, **kwargs):
+    dictConfig(settings.LOGGING)
+{% else %}
 if hasattr(settings, 'RAVEN_CONFIG'):
     from raven.contrib.celery import register_logger_signal, register_signal
     from raven.contrib.django.raven_compat.models import client
     register_logger_signal(client)
     register_signal(client, ignore_expected=True)
+{% endif %}
