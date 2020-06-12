@@ -65,9 +65,6 @@ EXTENDED_APPS = [
     'django_netjsonconfig',
     'django_x509',
     'django_loci',
-{% if openwisp2_network_topology %}
-    'django_netjsongraph',
-{% endif %}
 ]
 
 AUTH_USER_MODEL = 'openwisp_users.User'

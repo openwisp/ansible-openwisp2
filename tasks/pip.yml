@@ -27,15 +27,14 @@
     - "{{ openwisp2_django_x509_pip }}"
     - "{{ openwisp2_django_loci_pip }}"
     - "{{ openwisp2_netjsonconfig_pip }}"
-  when: item is defined and item
+  when: item is defined and item is string
 
 - name: Add network_topology to custom package list if set and enabled
   set_fact:
     openwisp2_python_packages: "{{ openwisp2_python_packages + [item] }}"
   with_items:
-    - "{{ openwisp2_django_netjsongraph_pip }}"
     - "{{ openwisp2_network_topology_pip }}"
-  when: item and openwisp2_network_topology
+  when: item is defined and item is string and openwisp2_network_topology
 
 - name: Update pip & related tools
   pip:
@@ -124,7 +123,7 @@
   notify: reload supervisor
 
 - name: Install custom OpenWISP 2 Python packages
-  when: openwisp2_python_packages
+  when: openwisp2_python_packages|length > 0
   pip:
     name: "{{ openwisp2_python_packages }}"
     state: latest
