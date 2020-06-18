@@ -1,3 +1,19 @@
+- name: Update pip & related tools
+  pip:
+    name:
+      - pip
+      - setuptools
+      - wheel
+      - attrs
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+    virtualenv_site_packages: yes
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
+
 - name: Remove jsonfield2
   pip:
     name:
@@ -35,22 +51,6 @@
   with_items:
     - "{{ openwisp2_network_topology_pip }}"
   when: item is defined and item is string and openwisp2_network_topology
-
-- name: Update pip & related tools
-  pip:
-    name:
-      - pip
-      - setuptools
-      - wheel
-      - attrs
-    state: latest
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-    virtualenv_site_packages: yes
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
 
 - name: Install cryptography from pip
   pip:
