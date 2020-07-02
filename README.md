@@ -542,7 +542,7 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_controller_version: "0.4"
     # optional openwisp2 modules
     openwisp2_network_topology: false
-    openwisp2_network_topology_version: "0.2"
+    openwisp2_network_topology_version: "0.4"
     # you may replace the values of these variables with any URL
     # supported by pip (the python package installer)
     # use these to install forks, branches or development versions
@@ -555,7 +555,6 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_django_x509_pip: false
     openwisp2_netjsonconfig_pip: false
     openwisp2_network_topology_pip: false
-    openwisp2_django_netjsongraph_pip: false
     # by default python3 is used, if may need to set this to python2.7 for older systems
     openwisp2_python: python2.7
     # customize the app_path
