@@ -2,11 +2,13 @@
   file:
     path: "{{ openwisp2_path }}/public_html"
     state: directory
+    mode: 0775
 
 - name: create "{{ openwisp2_path }}/ssl"
   file:
     path: "{{ openwisp2_path }}/ssl"
     state: directory
+    mode: 0770
 
 - name: create SSL cert if not exists yet
   command: >
@@ -29,6 +31,7 @@
   template:
     src: nginx.j2
     dest: "/etc/nginx/sites-available/{{ inventory_hostname }}"
+    mode: 0644
   notify: restart nginx
   when: ansible_os_family == 'Debian'
 

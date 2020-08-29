@@ -2,24 +2,28 @@
   template:
     src: uwsgi.ini.j2
     dest: "{{ openwisp2_path }}/uwsgi.ini"
+    mode: 0644
   notify: reload supervisor
 
 - name: supervisor uwsgi
   template:
     src: supervisor/openwisp2.j2
     dest: "{{ supervisor_path | format('openwisp2') }}"
+    mode: 0644
   notify: reload supervisor
 
 - name: supervisor daphne
   template:
     src: supervisor/daphne.j2
     dest: "{{ supervisor_path | format('daphne') }}"
+    mode: 0644
   notify: reload supervisor
 
 - name: supervisor celery
   template:
     src: supervisor/celery.j2
     dest: "{{ supervisor_path | format('celery') }}"
+    mode: 0644
   notify: reload supervisor
 
 - name: Remove supervisor runworker.conf (obsolete)

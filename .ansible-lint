@@ -4,5 +4,6 @@ skip_list:
   - '303'
   - '306'
   - '403'
+  - '106'
 exclude_paths:
   - /home/travis/.ansible/roles/Stouts.postfix/

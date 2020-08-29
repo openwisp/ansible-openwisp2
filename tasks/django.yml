@@ -36,6 +36,7 @@
     src: openwisp2/celery.py
     dest: "{{ openwisp2_path }}/openwisp2/celery.py"
     group: "{{ www_group }}"
+    mode: 0664
 
 - name: __init__.py
   notify: reload supervisor
@@ -43,6 +44,7 @@
     src: openwisp2/__init__.py
     dest: "{{ openwisp2_path }}/openwisp2/__init__.py"
     group: "{{ www_group }}"
+    mode: 0664
 
 - name: urls.py
   notify: reload supervisor
@@ -50,6 +52,7 @@
     src: openwisp2/urls.py
     dest: "{{ openwisp2_path }}/openwisp2/urls.py"
     group: "{{ www_group }}"
+    mode: 0664
 
 - name: wsgi.py
   notify: reload supervisor
@@ -57,6 +60,7 @@
     src: openwisp2/wsgi.py
     dest: "{{ openwisp2_path }}/openwisp2/wsgi.py"
     group: "{{ www_group }}"
+    mode: 0664
 
 - name: asgi.py
   notify: reload supervisor
@@ -64,6 +68,7 @@
     src: openwisp2/asgi.py
     dest: "{{ openwisp2_path }}/openwisp2/asgi.py"
     group: "{{ www_group }}"
+    mode: 0664
 
 # set openwisp2_secret_key if not defined explicitly
 - import_tasks: django_secret_key.yml
@@ -75,6 +80,7 @@
     src: openwisp2/settings.py
     dest: "{{ openwisp2_path }}/openwisp2/settings.py"
     group: "{{ www_group }}"
+    mode: 0664
 
 - name: migrate
   notify: reload supervisor
