@@ -1,4 +1,5 @@
 [fcgi-program:daphne]
+user={{ www_user }}
 socket=tcp://localhost:8000
 directory={{ openwisp2_path }}
 command={{ openwisp2_path }}/env/bin/daphne --fd 0 -u /run/daphne%(process_num)d.sock --access-log - --proxy-headers openwisp2.asgi:application
