@@ -1,15 +1,3 @@
-- name: openwisp_users present in settings.py?
-  shell: >
-    test -f {{ openwisp2_path }}/openwisp2/settings.py &&
-    grep openwisp_users {{ openwisp2_path }}/openwisp2/settings.py | wc -l
-  failed_when: false
-  changed_when: false
-  register: openwisp_users_check
-
-# perform migration to multitenant version of OpenWISP 2
-- import_tasks: multitenancy_migration.yml
-  when: openwisp_users_check.rc == 0 and openwisp_users_check.stdout == "0"
-
 - name: create {{ openwisp2_path }}
   file:
     path: "{{ openwisp2_path }}"
