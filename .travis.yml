@@ -12,6 +12,11 @@ env:
     - MOLECULE_DISTRO: ubuntu1804
     - MOLECULE_DISTRO: debian10
 
+notifications:
+  # will post a summary as comment on githubin case of failure
+  webhooks: https://www.travisbuddy.com/
+  on_success: never
+
 jobs:
   fast_finish: true
 
