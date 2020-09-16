@@ -10,6 +10,7 @@ env:
     - ROLE_NAME: openwisp2
   jobs:
     - MOLECULE_DISTRO: ubuntu1804
+    - MOLECULE_DISTRO: ubuntu2004
     - MOLECULE_DISTRO: debian10
 
 notifications:

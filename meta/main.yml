@@ -27,6 +27,7 @@ galaxy_info:
     # https://github.com/openwisp/ansible-openwisp2/issues/169#issuecomment-592983139
     # - xenial
     - bionic
+    - focal
   # we don't have the resources now to maintain these distros
   # - name: Fedora
   #   versions:

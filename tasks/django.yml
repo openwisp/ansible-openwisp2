@@ -108,6 +108,8 @@
     # sets executable only to directories
     mode: u=rwX,g=rX,o=rX
     recurse: yes
+  tags:
+    - molecule-idempotence-notest
 
 - name: collectstatic
   notify: reload supervisor

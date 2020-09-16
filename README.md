@@ -241,6 +241,8 @@ From here on you can follow the instructions available at the following sections
 
 **Note:** Please remember to [install ansible](#install-ansible).
 
+**ProTip:** Use `molecule test --destroy=never` to speed up between each run.
+
 All done!
 
 How to run tests
