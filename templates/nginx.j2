@@ -146,6 +146,7 @@ server {
 server {
     listen 443 ssl default_server;
     {% if openwisp2_nginx_ipv6 %}listen [::]:443 ssl default_server; # ipv6{% endif %}
+
     server_name _;
 
     ssl on;
