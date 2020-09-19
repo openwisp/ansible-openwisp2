@@ -8,7 +8,7 @@
     openwisp2_network_topology: true
 
   pre_tasks:
-    - name: Update apt cache.
+    - name: Update apt cache
       apt: update_cache=true cache_valid_time=600
       when: ansible_os_family == 'Debian'
 

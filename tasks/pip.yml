@@ -1,3 +1,19 @@
+- name: Update pip & related tools
+  pip:
+    name:
+      - pip
+      - setuptools
+      - wheel
+      - attrs
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+    virtualenv_site_packages: yes
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
+
 - name: Remove jsonfield2
   pip:
     name:
@@ -36,22 +52,6 @@
     - "{{ openwisp2_network_topology_pip }}"
   when: item is defined and item is string and openwisp2_network_topology
 
-- name: Update pip & related tools
-  pip:
-    name:
-      - pip
-      - setuptools
-      - wheel
-      - attrs
-    state: latest
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-    virtualenv_site_packages: yes
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
-
 - name: Install cryptography from pip
   pip:
     name: cryptography
@@ -68,13 +68,29 @@
   pip:
     name:
       - "openwisp-controller~={{ openwisp2_controller_version }}"
-      - channels_redis~=2.4
+      - channels_redis
       - service_identity
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: yes
   notify: reload supervisor
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
+  tags:
+    - molecule-idempotence-notest
+
+- name: Pin channels_redis to 2.4 for redis 4 compatibility
+  when: use_redis5.failed
+  pip:
+    name:
+      - channels_redis~=2.4
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+    virtualenv_site_packages: yes
   retries: 5
   delay: 10
   register: result

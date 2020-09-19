@@ -17,17 +17,32 @@
       - openssl
       - libssl-dev
       - libffi-dev
-      - python-dev
-      - redis-server
+      - python3
+      - virtualenv
       - cron
-  notify:
-    - reload systemd
-    - start redis
   ignore_errors: yes
   retries: 5
   delay: 10
   register: result
   until: result is success
+
+- name: Install redis 5 if available
+  apt:
+    name: "redis-server=5:5*"
+  notify:
+    - reload systemd
+    - start redis
+  ignore_errors: yes
+  register: use_redis5
+
+- name: Install redis 4 (fallback)
+  when: use_redis5.failed
+  apt:
+    name: "redis-server=5:4*"
+  notify:
+    - reload systemd
+    - start redis
+  ignore_errors: yes
 
 # On the newer versions of redis, by default redis
 # binds to localhost on ipv6 address which wouldn't
@@ -91,33 +106,11 @@
   until: result is success
 
 - name: Install python3 packages
-  when: openwisp2_python == "python3"
   apt:
     name:
-      - python3
       - python3-pip
       - python3-dev
-      - python-virtualenv
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
-
-- name: Install python wheel (optional, allowed to fail)
-  ignore_errors: yes
-  apt:
-    name:
-      - python-wheel
-      - python3-wheel
-  retries: 1
-  delay: 10
-  register: result
-  until: result is success
-
-- name: Install python3-virtualenv
-  ignore_errors: yes
-  when: ansible_distribution != 'Ubuntu'
-  apt: name=python3-virtualenv
+      - python3-virtualenv
   retries: 5
   delay: 10
   register: result
