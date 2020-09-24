@@ -11,8 +11,22 @@ lint: |
   yamllint . || true
   ansible-lint || true
 platforms:
-  - name: "${ROLE_NAME:-instance}-${MOLECULE_DISTRO}"
-    image: "geerlingguy/docker-${MOLECULE_DISTRO}-ansible:${tag:-latest}"
+  - name: "openwisp2-ubuntu2004"
+    image: "geerlingguy/docker-ubuntu2004-ansible:latest"
+    command: ${MOLECULE_DOCKER_COMMAND:-""}
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    pre_build_image: true
+  - name: "openwisp2-ubuntu1804"
+    image: "geerlingguy/docker-ubuntu1804-ansible:latest"
+    command: ${MOLECULE_DOCKER_COMMAND:-""}
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    pre_build_image: true
+  - name: "openwisp2-debian10"
+    image: "geerlingguy/docker-debian10-ansible:latest"
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro

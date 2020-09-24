@@ -265,36 +265,13 @@ If you haven't installed docker yet, you need to install it (example for linux d
 
     sudo apt-get install docker.io
 
-**Step 3**: Pull docker image
+**Step 3**: Install molecule and dependences
 
-Pull docker image with this command:
+    pip install molecule yamllint ansible-lint
 
-    docker pull registry.gitlab.com/ninuxorg/docker/ansible-<distro>
+**Step 4**: Run molecule test
 
-Substitute `<distro>` with one of these variants:
-
-* `ubuntu:18.04`
-* `debian:10`
-
-**Step 4**: Run docker container
-
-To create and start docker container run this command:
-
-    docker run -d --volume=${PWD}/ansible-openwisp2:/etc/ansible/roles/role_under_test:rw --name <name> --privileged registry.gitlab.com/ninuxorg/docker/ansible-<distro> /lib/systemd/systemd
-
-Substitute `<name>` with the desired container name and `<distro>` with the option you have chosen in **Step 3**.
-
-**Step 5** Install requirements in docker container
-
-Now install the requirements with:
-
-    docker exec -t <name> ansible-galaxy install -r /etc/ansible/roles/role_under_test/tests/requirements.yml
-
-**Step 6** Run tests
-
-Run tests with:
-
-    docker exec -t <name> ansible-playbook /etc/ansible/roles/role_under_test/tests/test.yml
+    molecule test -s local
 
 If you don't get any error message it means that the tests ran successfully without errors.
 

@@ -18,4 +18,4 @@
         state: absent
 
   roles:
-    - role: openwisp.openwisp2
+    - role: ansible-openwisp2

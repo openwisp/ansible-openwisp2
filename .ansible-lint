@@ -1,9 +1,7 @@
 skip_list:
-  - '204'
-  - '301'
-  - '303'
-  - '306'
-  - '403'
-  - '106'
-exclude_paths:
-  - /home/travis/.ansible/roles/Stouts.postfix/
+  - '204' # Lines should be no longer than 160 chars
+  - '301' # Commands should not change things if nothing needs doing
+  - '303' # Using command rather than module
+  - '306' # Shells that use pipes should set the pipefail option
+  - '403' # Package installs should not use latest
+  - '106' # Role name {} does not match ``^[a-z][a-z0-9_]+$`` pattern'
