@@ -241,8 +241,6 @@ From here on you can follow the instructions available at the following sections
 
 **Note:** Please remember to [install ansible](#install-ansible).
 
-**ProTip:** Use `molecule test --destroy=never` to speed up between each run.
-
 All done!
 
 How to run tests
@@ -274,6 +272,8 @@ If you haven't installed docker yet, you need to install it (example for linux d
     molecule test -s local
 
 If you don't get any error message it means that the tests ran successfully without errors.
+
+**ProTip:** Use `molecule test --destroy=never` to speed up subsequent test runs.
 
 Install OpenWISP2 for testing in a VirtualBox VM
 -------------------------------------------------
