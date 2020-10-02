@@ -18,12 +18,11 @@ jobs:
 
 install:
   # Install test dependencies.
-  - pip install molecule yamllint ansible-lint docker
+  - pip install molecule yamllint ansible-lint docker openwisp-utils[qa]
 
 script:
   # Run tests.
   - molecule test
-  - pip install "openwisp-utils[qa]~=0.5"
   - openwisp-qa-check --skip-isort --skip-flake8 --skip-checkmigrations --skip-black
 
 notifications:

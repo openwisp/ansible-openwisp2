@@ -34,6 +34,8 @@ platforms:
     pre_build_image: true
 provisioner:
   name: ansible
+  env:
+    MOLECULE_NO_LOG: false
   playbooks:
     converge: ../resources/${MOLECULE_PLAYBOOK:-converge.yml}
     verify: ../resources/verify.yml
