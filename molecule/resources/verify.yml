@@ -49,7 +49,7 @@
       command: systemctl status redis
       changed_when: false
 
-    - name: Ceck Openwisp
+    - name: Check Openwisp
       block:
         - name: Check if OpenWISP is running
           uri:
