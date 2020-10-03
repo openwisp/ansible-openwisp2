@@ -1,9 +1,3 @@
-- name: create {{ openwisp2_path }}
-  file:
-    path: "{{ openwisp2_path }}"
-    state: directory
-    group: "{{ www_group }}"
-    mode: 0775
 
 - name: create "{{ openwisp2_path }}/openwisp2"
   file:

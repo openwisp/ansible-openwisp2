@@ -1,3 +1,11 @@
+
+- name: Create {{ openwisp2_path }}
+  file:
+    path: "{{ openwisp2_path }}"
+    state: directory
+    group: "{{ www_group }}"
+    mode: 0775
+
 - name: Update pip & related tools
   pip:
     name:
