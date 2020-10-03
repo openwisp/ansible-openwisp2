@@ -13,29 +13,23 @@ env:
     - MOLECULE_DISTRO: ubuntu2004
     - MOLECULE_DISTRO: debian10
 
-notifications:
-  # will post a summary as comment on githubin case of failure
-  webhooks: https://www.travisbuddy.com/
-  on_success: never
-
 jobs:
   fast_finish: true
 
 install:
   # Install test dependencies.
-  - pip install molecule yamllint ansible-lint docker
-
-before_script:
-  # Use actual Ansible Galaxy role name for the project directory.
-  - cd ../
-  - mv ansible-$ROLE_NAME openwisp.$ROLE_NAME
-  - cd openwisp.$ROLE_NAME
+  - pip install molecule yamllint ansible-lint docker openwisp-utils[qa]
 
 script:
   # Run tests.
   - molecule test
-  - pip install "openwisp-utils[qa]~=0.5"
   - openwisp-qa-check --skip-isort --skip-flake8 --skip-checkmigrations --skip-black
 
 notifications:
-  webhooks: https://galaxy.ansible.com/api/v1/notifications/
+  webhooks:
+    - urls:
+        # will post a summary as comment on github in case of failure
+        - https://www.travisbuddy.com/
+      on_success: never
+    - urls:
+        - https://galaxy.ansible.com/api/v1/notifications/

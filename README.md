@@ -241,8 +241,6 @@ From here on you can follow the instructions available at the following sections
 
 **Note:** Please remember to [install ansible](#install-ansible).
 
-**ProTip:** Use `molecule test --destroy=never` to speed up between each run.
-
 All done!
 
 How to run tests
@@ -265,38 +263,23 @@ If you haven't installed docker yet, you need to install it (example for linux d
 
     sudo apt-get install docker.io
 
-**Step 3**: Pull docker image
+**Step 3**: Install molecule and dependences
 
-Pull docker image with this command:
+    pip install molecule yamllint ansible-lint docker
 
-    docker pull registry.gitlab.com/ninuxorg/docker/ansible-<distro>
+**Step 4**: Download docker images
 
-Substitute `<distro>` with one of these variants:
+    docker pull geerlingguy/docker-ubuntu2004-ansible:latest
+    docker pull geerlingguy/docker-ubuntu1804-ansible:latest
+    docker pull geerlingguy/docker-debian10-ansible:latest
 
-* `ubuntu:18.04`
-* `debian:10`
+**Step 5**: Run molecule test
 
-**Step 4**: Run docker container
-
-To create and start docker container run this command:
-
-    docker run -d --volume=${PWD}/ansible-openwisp2:/etc/ansible/roles/role_under_test:rw --name <name> --privileged registry.gitlab.com/ninuxorg/docker/ansible-<distro> /lib/systemd/systemd
-
-Substitute `<name>` with the desired container name and `<distro>` with the option you have chosen in **Step 3**.
-
-**Step 5** Install requirements in docker container
-
-Now install the requirements with:
-
-    docker exec -t <name> ansible-galaxy install -r /etc/ansible/roles/role_under_test/tests/requirements.yml
-
-**Step 6** Run tests
-
-Run tests with:
-
-    docker exec -t <name> ansible-playbook /etc/ansible/roles/role_under_test/tests/test.yml
+    molecule test -s local
 
 If you don't get any error message it means that the tests ran successfully without errors.
+
+**ProTip:** Use `molecule test --destroy=never` to speed up subsequent test runs.
 
 Install OpenWISP2 for testing in a VirtualBox VM
 -------------------------------------------------
