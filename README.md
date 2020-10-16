@@ -265,7 +265,7 @@ If you haven't installed docker yet, you need to install it (example for linux d
 
 **Step 3**: Install molecule and dependences
 
-    pip install molecule yamllint ansible-lint docker
+    pip install molecule[docker] yamllint ansible-lint docker
 
 **Step 4**: Download docker images
 
