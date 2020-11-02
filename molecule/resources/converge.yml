@@ -6,6 +6,11 @@
 
   vars:
     openwisp2_network_topology: true
+    # Remove when openwisp-controller==0.8 is released
+    openwisp2_controller_pip: https://github.com/openwisp/openwisp-controller/tarball/master
+    openwisp2_extra_python_packages:
+      - django-flat-json-widget
+      - https://github.com/openwisp/openwisp-notifications/tarball/master
 
   pre_tasks:
     - name: Update apt cache

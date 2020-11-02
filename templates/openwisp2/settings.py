@@ -3,6 +3,8 @@ import sys
 
 TESTING = 'test' in sys.argv
 
+from datetime import timedelta
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -28,9 +30,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.gis',
-    # openwisp2 admin theme
-    # (must be loaded here)
-    'openwisp_utils.admin_theme',
     # all-auth
     'django.contrib.sites',
     # overrides allauth templates
@@ -46,10 +45,14 @@ INSTALLED_APPS = [
     'openwisp_controller.config',
     'openwisp_controller.geo',
     'openwisp_controller.connection',
+    'openwisp_notifications',
     'flat_json_widget',
 {% if openwisp2_network_topology %}
     'openwisp_network_topology',
 {% endif %}
+    # openwisp2 admin theme
+    # (must be loaded here)
+    'openwisp_utils.admin_theme',
     # admin
     'django.contrib.admin',
     'django.forms',
@@ -102,7 +105,7 @@ CHANNEL_LAYERS = {
         "CONFIG": {"hosts": [('localhost', 6379)]},
     },
 }
-ASGI_APPLICATION = "openwisp_controller.geo.channels.routing.channel_routing"
+ASGI_APPLICATION = 'openwisp2.routing.application'
 
 TEMPLATES = [
     {
@@ -122,7 +125,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'openwisp_utils.admin_theme.context_processor.menu_items',
-                'openwisp_utils.admin_theme.context_processor.admin_theme_settings'
+                'openwisp_utils.admin_theme.context_processor.admin_theme_settings',
+                'openwisp_notifications.context_processors.notification_api_settings',
             ],
         },
     },
@@ -137,6 +141,19 @@ else:
     CELERY_TASK_ALWAYS_EAGER = True
     CELERY_TASK_EAGER_PROPAGATES = True
     CELERY_BROKER_URL = 'memory://'
+
+# Workaround for stalled migrate command
+CELERY_BROKER_TRANSPORT_OPTIONS = {
+    'max_retries': {{ openwisp2_celery_broker_max_tries }},
+}
+
+CELERY_BEAT_SCHEDULE = {
+    'delete_old_notifications': {
+        'task': 'openwisp_notifications.tasks.delete_old_notifications',
+        'schedule': timedelta(days=1),
+        'args': ({{ openwisp2_notifications_delete_old_notifications }},),
+    },
+}
 
 # FOR DJANGO REDIS
 

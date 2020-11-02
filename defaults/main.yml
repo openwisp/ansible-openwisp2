@@ -51,6 +51,7 @@ openwisp2_sentry:
 openwisp2_default_cert_validity: 1825
 openwisp2_default_ca_validity: 3650
 openwisp2_default_organization_id: 78f74fdd-67c6-4064-97e1-ce761da30745
+openwisp2_notifications_delete_old_notifications: 90
 openwisp2_topology_update_frequency:
     day: "*"
     hour: "*"
@@ -83,5 +84,6 @@ openwisp2_celery_concurrency: "{{ openwisp2_eventlet_concurrency | default(10) }
 openwisp2_celery_broker_url: redis://127.0.0.1:6379/3
 openwisp2_celery_worker_prefetch_multiplier: 1
 openwisp2_celery_task_acks_late: True
+openwisp2_celery_broker_max_tries: 10
 openwisp2_django_celery_logging: False
 postfix_smtpd_relay_restrictions_override: "permit_sasl_authenticated, permit_mynetworks, check_relay_domains, reject_unauth_destination, reject"

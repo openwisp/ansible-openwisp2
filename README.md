@@ -199,8 +199,9 @@ Substitute `openwisp2.mydomain.com` with your production server's hostname.
 Now proceed with the following steps:
 
 1. change the password (and the username if you like) of the superuser as soon as possible
-2. edit the information of the default organization
-3. in the default organization you just updated, note down the automatically generated *shared secret*
+2. update the `name` field of the default `Site` object to accurately display site name in email notifications
+3. edit the information of the default organization
+4. in the default organization you just updated, note down the automatically generated *shared secret*
    option, you will need it to use the [auto-registration feature of openwisp-config](https://github.com/openwisp/openwisp-config#automatic-registration)
 
 Now you are ready to start configuring your network! **If you need help** you can ask questions
@@ -536,6 +537,8 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_controller_pip: false
     openwisp2_users_pip: false
     openwisp2_utils_pip: false
+    openwisp2_notifications_pip: false
+    openwisp2_django_netjsonconfig_pip: false
     openwisp2_django_x509_pip: false
     openwisp2_netjsonconfig_pip: false
     openwisp2_network_topology_pip: false
@@ -654,6 +657,8 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_celery_broker_url: redis://127.0.0.1:6379/3
     openwisp2_celery_worker_prefetch_multiplier: 1
     openwisp2_celery_task_acks_late: True
+    # maximum number of retries by celery before giving up when broker is unreachable
+    openwisp2_celery_broker_max_tries: 10
     # whether to activate the django logging configuration in celery
     # if set to True, will log all the celery events in the same log stream used by django
     # which will cause log lines to be written to "{{ openwisp2_path }}/log/openwisp2.log"
@@ -663,6 +668,8 @@ Below are listed all the variables you can customize (you may also want to take 
     postfix_smtp_sasl_auth_enable_override: yes
     # allow overriding postfix_smtpd_relay_restrictions
     postfix_smtpd_relay_restrictions_override: permit_mynetworks
+    # allows overriding the default duration for keeping notifications
+    openwisp2_notifications_delete_old_notifications: 10
 ```
 
 Support
