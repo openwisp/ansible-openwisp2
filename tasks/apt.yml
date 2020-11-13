@@ -65,6 +65,7 @@
       - libproj-dev
       - libgeos-dev
       - libspatialite-dev
+      - openssh-client
   retries: 5
   delay: 10
   register: result

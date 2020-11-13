@@ -203,6 +203,9 @@ Now proceed with the following steps:
 3. edit the information of the default organization
 4. in the default organization you just updated, note down the automatically generated *shared secret*
    option, you will need it to use the [auto-registration feature of openwisp-config](https://github.com/openwisp/openwisp-config#automatic-registration)
+4. this Ansible role creates a default template to update ``authorized_keys`` on networking devices
+   using the default access credentials. The role will either use an existing SSH key pair or create
+   a new one if no SSH key pair exists on the host machine.
 
 Now you are ready to start configuring your network! **If you need help** you can ask questions
 on one of the official [OpenWISP Support Channels](http://openwisp.org/support.html).

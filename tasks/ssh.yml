@@ -1,0 +1,19 @@
+- name: Create default SSH key pair
+  become: true
+  user:
+    name: root
+    generate_ssh_key: yes
+    ssh_key_bits: 4096
+    ssh_key_file: .ssh/id_rsa
+
+- name: Get default private SSH key
+  become: true
+  command: cat /root/.ssh/id_rsa
+  register: default_private_ssh_key
+  changed_when: false
+
+- name: Get default public SSH key
+  become: true
+  command: cat /root/.ssh/id_rsa.pub
+  register: default_public_ssh_key
+  changed_when: false
