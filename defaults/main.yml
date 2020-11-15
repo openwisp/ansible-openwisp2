@@ -1,8 +1,10 @@
 openwisp2_python: python3
 ansible_python_interpreter: /usr/bin/python3
 openwisp2_network_topology: false
-openwisp2_controller_version: "0.8.1"
-openwisp2_network_topology_version: "0.5.1"
+openwisp2_firmware_upgrader: false
+openwisp2_controller_version: "0.7.post1"
+openwisp2_network_topology_version: "0.4"
+openwisp2_firmware_upgrader_version: "0.1"
 openwisp2_controller_pip: false
 openwisp2_users_pip: false
 openwisp2_utils_pip: false
@@ -10,6 +12,7 @@ openwisp2_django_x509_pip: false
 openwisp2_django_loci_pip: false
 openwisp2_netjsonconfig_pip: false
 openwisp2_network_topology_pip: false
+openwisp2_firmware_upgrader_pip: false
 openwisp2_extra_python_packages: [bpython]
 openwisp2_extra_django_apps: []
 openwisp2_extra_django_settings: {}

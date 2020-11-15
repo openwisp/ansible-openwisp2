@@ -52,6 +52,13 @@
     - "{{ openwisp2_network_topology_pip }}"
   when: item is defined and item is string and openwisp2_network_topology
 
+- name: Add firmware_upgrader to custom package list if set and enabled
+  set_fact:
+    openwisp2_python_packages: "{{ openwisp2_python_packages + [item] }}"
+  with_items:
+    - "{{ openwisp2_firmware_upgrader_pip }}"
+  when: item is defined and item is string and openwisp2_firmware_upgrader
+
 - name: Install cryptography from pip
   pip:
     name: cryptography
@@ -124,6 +131,21 @@
   delay: 10
   register: result
   until: result is success
+
+# TODO: Uncomment when openwisp-firmware-upgrader is released
+# - name: Install openwisp firmware upgrader and its dependencies
+#   when: openwisp2_firmware_upgrader
+#   pip:
+#     name: "openwisp-firmware-upgrader~={{ openwisp2_firmware_upgrader_version }}"
+#     state: latest
+#     virtualenv: "{{ virtualenv_path }}"
+#     virtualenv_python: "{{ openwisp2_python }}"
+#     virtualenv_site_packages: yes
+#   notify: reload supervisor
+#   retries: 5
+#   delay: 10
+#   register: result
+#   until: result is success
 
 - name: Install extra python packages
   pip:

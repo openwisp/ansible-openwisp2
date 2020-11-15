@@ -429,6 +429,53 @@ When the playbook is done running, if you got no errors you can login at:
     username: admin
     password: admin
 
+
+Enabling the firmware upgrader module
+-------------------------------------
+
+To enable the firmware upgrader module you need to set `openwisp2_firmware_upgrader` to `true` in
+your `playbook.yml` file. Here's a short summary of how to do this:
+
+**Step 1**: [Install ansible](#install-ansible)
+
+**Step 2**: [Install this role](#install-this-role)
+
+**Step 3**: [Create inventory file](#create-inventory-file)
+
+**Step 4**: Create a playbook file with following contents:
+
+```yaml
+- hosts: openwisp2
+  become: "{{ become | default('yes') }}"
+  roles:
+    - openwisp.openwisp2
+  vars:
+    openwisp2_firmware_upgrader: true
+```
+
+**Step 5**: [Run the playbook](#run-the-playbook)
+
+When the playbook is done running, if you got no errors you can login at:
+
+    https://openwisp2.mydomain.com/admin
+    username: admin
+    password: admin
+
+**Note**: You can configure `openwisp-firmware-upgrader specific settings <https://github.com/openwisp/openwisp-firmware-upgrader#settings>`_
+using `openwisp2_extra_django_settings` variable of this ansible role.
+For example if you want to enable the `APIs of openwisp-firmware-upgrader <https://github.com/openwisp/openwisp-firmware-upgrader#rest-api>`_,
+you will update the above playbook as follows:
+
+```yaml
+- hosts: openwisp2
+  become: "{{ become | default('yes') }}"
+  roles:
+    - openwisp.openwisp2
+  vars:
+    openwisp2_firmware_upgrader: true
+      OPENWISP_FIRMWARE_UPGRADER_API: True
+```
+
 Troubleshooting
 ===============
 
@@ -529,6 +576,8 @@ Below are listed all the variables you can customize (you may also want to take 
     # optional openwisp2 modules
     openwisp2_network_topology: false
     openwisp2_network_topology_version: "0.4"
+    openwisp2_firmware_upgrader: false
+    openwisp2_firmware_upgrader_version: "0.1"
     # you may replace the values of these variables with any URL
     # supported by pip (the python package installer)
     # use these to install forks, branches or development versions
@@ -541,6 +590,7 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_django_x509_pip: false
     openwisp2_netjsonconfig_pip: false
     openwisp2_network_topology_pip: false
+    openwisp2_firmware_upgrader_pip: false
     # by default python3 is used, if may need to set this to python2.7 for older systems
     openwisp2_python: python2.7
     # customize the app_path

@@ -6,7 +6,14 @@
 
   vars:
     openwisp2_network_topology: true
+    openwisp2_firmware_upgrader: true
 
+    #TODO: Remove before merging
+    openwisp2_firmware_upgrader_pip : https://github.com/openwisp/openwisp-firmware-upgrader/tarball/refactor-urls
+    openwisp2_controller_pip: https://github.com/openwisp/openwisp-controller/tarball/master
+    openwisp2_extra_python_packages:
+      - https://github.com/openwisp/openwisp-firmware-upgrader/tarball/refactor-urls
+      - https://github.com/openwisp/openwisp-controller/tarball/master
   pre_tasks:
     - name: Update apt cache
       apt: update_cache=true cache_valid_time=600

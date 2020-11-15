@@ -50,6 +50,9 @@ INSTALLED_APPS = [
 {% if openwisp2_network_topology %}
     'openwisp_network_topology',
 {% endif %}
+{% if openwisp2_firmware_upgrader %}
+    'openwisp_firmware_upgrader',
+{% endif %}
     # openwisp2 admin theme
     # (must be loaded here)
     'openwisp_utils.admin_theme',
