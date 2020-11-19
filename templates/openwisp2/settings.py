@@ -302,6 +302,19 @@ LOGGING = {
     }
 }
 
+# HTML minification with django pipeline
+INSTALLED_APPS.append('pipeline')
+MIDDLEWARE.append('pipeline.middleware.MinifyHTMLMiddleware')
+PIPELINE = {
+    'PIPELINE_ENABLED': True
+}
+
+# static files minification and invalidation with django-compress-staticfiles
+STATICFILES_STORAGE = 'compress_staticfiles.storage.CompressStaticFilesStorage'
+# GZIP compression is handled by nginx
+BROTLI_STATIC_COMPRESSION = False
+GZIP_STATIC_COMPRESSION = False 
+
 {% if openwisp2_sentry.get('dsn') %}
 RAVEN_CONFIG = {{ openwisp2_sentry|to_nice_json }}
 {% endif %}

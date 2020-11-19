@@ -7,6 +7,26 @@
   vars:
     openwisp2_network_topology: true
 
+    # TODO: Remove before merging
+    openwisp2_controller_pip: https://github.com/openwisp/openwisp-controller/tarball/master
+    openwisp2_users_pip: https://github.com/openwisp/openwisp-users/tarball/master
+    openwisp2_utils_pip: https://github.com/openwisp/openwisp-utils/tarball/master
+    openwisp2_django_netjsonconfig_pip: https://github.com/openwisp/django-netjsonconfig/tarball/master
+    openwisp2_django_x509_pip: https://github.com/openwisp/django-x509/tarball/master
+    openwisp2_netjsonconfig_pip: https://github.com/openwisp/netjsonconfig/tarball/master
+    openwisp2_network_topology_pip: https://github.com/pandafy/openwisp-network-topology/tarball/jquery-ui-css
+    openwisp2_firmware_upgrader_pip: https://github.com/openwisp/openwisp-firmware-upgrader/tarball/master
+
+    openwisp2_extra_python_packages:
+      - "{{ openwisp2_controller_pip }}"
+      - "{{ openwisp2_users_pip }}"
+      - "{{ openwisp2_utils_pip }}"
+      - "{{ openwisp2_django_netjsonconfig_pip }}"
+      - "{{ openwisp2_django_x509_pip }}"
+      - "{{ openwisp2_netjsonconfig_pip }}"
+      - "{{ openwisp2_network_topology_pip }}"
+      - "{{ openwisp2_firmware_upgrader_pip }}"
+
   pre_tasks:
     - name: Update apt cache
       apt: update_cache=true cache_valid_time=600

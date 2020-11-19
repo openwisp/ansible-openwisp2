@@ -154,6 +154,21 @@
   tags:
     - molecule-idempotence-notest
 
+- name: Install static minification dependencies
+  pip:
+    name:
+      - django-pipeline~=2.0.0
+      - django-compress-staticfiles~=1.0.1b
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+    virtualenv_site_packages: yes
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
+  notify: reload supervisor
+
 - name: Install uwsgi
   pip:
     name: uwsgi
