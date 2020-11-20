@@ -30,6 +30,9 @@ INSTALLED_APPS = [
     'openwisp_utils.admin_theme',
     # all-auth
     'django.contrib.sites',
+    # overrides allauth templates
+    # must precede allauth
+    'openwisp_users.accounts',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
