@@ -536,7 +536,6 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_controller_pip: false
     openwisp2_users_pip: false
     openwisp2_utils_pip: false
-    openwisp2_django_netjsonconfig_pip: false
     openwisp2_django_x509_pip: false
     openwisp2_netjsonconfig_pip: false
     openwisp2_network_topology_pip: false
@@ -563,7 +562,7 @@ Below are listed all the variables you can customize (you may also want to take 
     # customize other django settings:
     openwisp2_language_code: en-gb
     openwisp2_time_zone: UTC
-    # django-netjsonconfig context
+    # openwisp-controller context
     openwisp2_context: {}
     # additional allowed hosts
     openwisp2_allowed_hosts:
