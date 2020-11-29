@@ -18,3 +18,11 @@
   service:
     name: redis
     state: started
+
+- name: update-ca-certificates
+  command: /usr/sbin/update-ca-certificates
+
+- name: restart freeradius
+  service:
+    name: freeradius
+    state: started

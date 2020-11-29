@@ -54,6 +54,13 @@
     - "{{ openwisp2_network_topology_pip }}"
   when: item is defined and item is string and openwisp2_network_topology
 
+- name: Add openwisp_radius to custom package list if set and enabled
+  set_fact:
+    openwisp2_python_packages: "{{ openwisp2_python_packages + [item] }}"
+  with_items:
+    - "{{ openwisp2_radius_pip }}"
+  when: item is defined and item is string and openwisp2_radius
+
 - name: Add firmware_upgrader to custom package list if set and enabled
   set_fact:
     openwisp2_python_packages: "{{ openwisp2_python_packages + [item] }}"
@@ -147,6 +154,20 @@
   when: openwisp2_monitoring
   pip:
     name: "openwisp-monitoring~={{ openwisp2_monitoring_version }}"
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+    virtualenv_site_packages: true
+  notify: reload supervisor
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
+
+- name: Install openwisp2_radius and its dependencies
+  when: openwisp2_radius
+  pip:
+    name: "openwisp-radius~={{ openwisp2_radius_version }}"
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
