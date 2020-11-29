@@ -1,0 +1,72 @@
+server default {
+    listen {
+        type = auth
+        ipaddr = *
+        port = 0
+        limit {
+            max_connections = 16
+            lifetime = 0
+            idle_timeout = 30
+        }
+    }
+
+    listen {
+        ipaddr = *
+        port = 0
+        type = acct
+        limit {}
+    }
+
+    authorize {
+        filter_username
+        rest
+        sql
+        dailycounter
+        dailybandwidthcounter
+        noresetcounter
+        expiration
+        logintime
+    }
+
+    authenticate {
+        Auth-Type PAP {
+            pap
+        }
+
+        Auth-Type CHAP {
+            chap
+        }
+
+        Auth-Type MS-CHAP {
+            mschap
+        }
+
+        Auth-Type EAP {
+            eap
+        }
+    }
+
+    preacct {
+        preprocess
+        acct_unique
+        suffix
+        files
+    }
+
+    accounting {
+        rest
+    }
+
+    session {}
+
+    post-auth {
+        rest
+
+        Post-Auth-Type REJECT {
+            rest
+        }
+    }
+
+    pre-proxy {}
+    post-proxy {}
+}

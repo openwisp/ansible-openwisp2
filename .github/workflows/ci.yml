@@ -31,15 +31,13 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
+      - name: Set default python version
+        run: sudo update-alternatives --install /usr/bin/python python ${pythonLocation}/bin/python3.8 2
+
 
       - name: Install python dependencies
         run: |
           pip install molecule[docker,ansible] molecule-docker yamllint ansible-lint docker openwisp-utils[qa]
-
       - name: Install Ansible Galaxy dependencies
         run: ansible-galaxy collection install "community.general:>=3.6.0"
 

@@ -59,3 +59,22 @@
         - name: Show OpenWisp log
           debug:
             var: openwisp_log
+
+    - name: Check Freeradius
+    # TODO: This test should work when openwisp-radius 0.3.0 is released!
+    #   block:
+    #     - name: Get radius-token for admin user
+    #       uri:
+    #         url: "https://{{ inventory_hostname }}/api/v1/default/account/token/"
+    #         validate_certs: false
+    #         method: POST
+    #         body_format: form-urlencoded
+    #         body:
+    #           username: admin
+    #           password: admin
+    #     - name: Check if freeradius is running
+    #       command: radtest admin admin localhost 0 testing123
+    #       register: freeradius_status
+    #       failed_when: '"Received Access-Accept" not in freeradius_status.stdout'
+      debug:
+        msg: "This test should work when openwisp-radius 0.3.0 is released!"
