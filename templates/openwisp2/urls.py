@@ -17,18 +17,18 @@ urlpatterns = [
     {% endif %}
     url(r'^api/v1/', include('openwisp_utils.api.urls')),
     url(r'^api/v1/', include('openwisp_users.api.urls')),
-    {% if openwisp2_network_topology %}
+{% if openwisp2_network_topology %}
     url(r'^', include('openwisp_network_topology.urls')),
-    {% endif %}
-    {% if openwisp2_firmware_upgrader %}
+{% endif %}
+{% if openwisp2_firmware_upgrader %}
     url(r'^', include('openwisp_firmware_upgrader.urls')),
-    {% endif %}
-    {% if openwisp2_radius and openwisp2_radius_urls %}
+{% endif %}
+{% if openwisp2_radius and openwisp2_radius_urls %}
     url(r'^', include('openwisp_radius.urls')),
-    {% endif %}
-    {% for extra_url in openwisp2_extra_urls %}
+{% endif %}
+{% for extra_url in openwisp2_extra_urls %}
     {{ extra_url }},
-    {% endfor %}
+{% endfor %}
     url(r'^$', redirect_view, name='index'),
 ]
 
