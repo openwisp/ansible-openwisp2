@@ -103,6 +103,26 @@
   until: result is success
   notify: reload systemd
 
+- name: Install postgresql client drivers
+  when: openwisp2_database.engine == "django.contrib.gis.db.backends.postgis"
+  apt:
+    name: libpq-dev
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
+
+- name: Install cairo
+  when: openwisp2_radius
+  apt:
+    name:
+      - libcairo2
+      - libpango-1.0-0
+      - libpangocairo-1.0-0
+      - libgdk-pixbuf2.0-0
+      - shared-mime-info
+  tags: [openwisp2, radius]
+
 - name: Install mod-spatialite (may fail on older linux distros)
   when: openwisp2_database.engine == "django.contrib.gis.db.backends.spatialite"
   apt: name=libsqlite3-mod-spatialite

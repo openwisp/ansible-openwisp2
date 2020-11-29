@@ -1,0 +1,42 @@
+sql {
+    driver = "{{ freeradius_sql.driver }}"
+    dialect = "{{ freeradius_sql.dialect }}"
+{% if freeradius_sql.dialect in ['postgresql', 'mysql'] %}
+    radius_db = "{{ openwisp2_database.name }}"
+    server = "{{ openwisp2_database.host }}"
+    port = "{{ openwisp2_database.port }}"
+    login = "{{ openwisp2_database.user }}"
+    password = "{{ openwisp2_database.password }}"
+
+{% elif freeradius_sql.dialect == 'sqlite' %}
+    sqlite {
+        filename = "{{ openwisp2_database.name }}"
+    }
+
+{% endif %}
+    acct_table1 = "radacct"
+    acct_table2 = "radacct"
+    postauth_table = "radpostauth"
+    authcheck_table = "radcheck"
+    groupcheck_table = "radgroupcheck"
+    authreply_table = "radreply"
+    groupreply_table = "radgroupreply"
+    usergroup_table = "radusergroup"
+    delete_stale_sessions = yes
+    client_table = "nas"
+    read_clients = yes
+    group_attribute = "SQL-Group"
+
+    $INCLUDE ${modconfdir}/${.:name}/main/${dialect}/queries.conf
+
+    pool {
+        start = ${thread[pool].start_servers}
+        min = ${thread[pool].min_spare_servers}
+        max = ${thread[pool].max_servers}
+        spare = ${thread[pool].max_spare_servers}
+        uses = 0
+        retry_delay = 30
+        lifetime = 0
+        idle_timeout = 60
+    }
+}

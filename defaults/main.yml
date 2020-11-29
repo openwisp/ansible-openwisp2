@@ -5,10 +5,13 @@ ansible_python_interpreter: /usr/bin/python3
 openwisp2_network_topology: false
 openwisp2_firmware_upgrader: false
 openwisp2_monitoring: true
+openwisp2_radius: false
+openwisp2_radius_urls: "{{ openwisp2_radius }}"
 openwisp2_controller_version: "0.8.2"
 openwisp2_network_topology_version: "0.5.1"
 openwisp2_firmware_upgrader_version: "0.1"
 openwisp2_monitoring_version: "0.1"
+openwisp2_radius_version: "0.2.1"
 openwisp2_controller_pip: false
 openwisp2_notifications_pip: false
 openwisp2_users_pip: false
@@ -19,6 +22,7 @@ openwisp2_netjsonconfig_pip: false
 openwisp2_network_topology_pip: false
 openwisp2_firmware_upgrader_pip: false
 openwisp2_monitoring_pip: false
+openwisp2_radius_pip: false
 openwisp2_extra_python_packages: [bpython]
 openwisp2_extra_django_apps: []
 openwisp2_extra_django_settings: {}
@@ -129,3 +133,41 @@ postfix_smtpd_relay_restrictions_override: "permit_sasl_authenticated, permit_my
 openwisp2_uwsgi_processes: 1
 openwisp2_uwsgi_threads: 1
 openwisp2_daphne_processes: 1
+openwisp2_users_auth_api: true
+openwisp2_radius_sms_backend: "sendsms.backends.console.SmsBackend"
+openwisp2_radius_sms_token_max_ip_daily: 25
+openwisp2_radius_delete_old_users: 365
+openwisp2_radius_cleanup_stale_radacct: 365
+openwisp2_radius_delete_old_postauth: 365
+openwisp2_radius_delete_old_radacct: 365
+openwisp2_radius_allowed_hosts: ["127.0.0.1"]
+openwisp2_freeradius_install: true
+freeradius_dir: /etc/freeradius/3.0
+freeradius_mods_available_dir: "{{ freeradius_dir }}/mods-available"
+freeradius_mods_enabled_dir: "{{ freeradius_dir }}/mods-enabled"
+freeradius_mods_config_dir: "{{ freeradius_dir }}/mods-config"
+freeradius_sites_available_dir: "{{ freeradius_dir }}/sites-available"
+freeradius_sites_enabled_dir: "{{ freeradius_dir }}/sites-enabled"
+freeradius_db_map:
+    django.contrib.gis.db.backends.spatialite:
+        driver: rlm_sql_sqlite
+        dialect: sqlite
+    django.contrib.gis.db.backends.postgis:
+        driver: rlm_sql_postgresql
+        dialect: postgresql
+    django.contrib.gis.db.backends.mysql:
+        driver: rlm_sql_mysql
+        dialect: mysql
+freeradius_sql:
+    driver: "{{ freeradius_db_map[openwisp2_database.engine].driver }}"
+    dialect: "{{ freeradius_db_map[openwisp2_database.engine].dialect }}"
+freeradius_rest:
+    url: "https://{{ inventory_hostname }}/api/v1/freeradius"
+freeradius_expire_attr_after_seconds: 86400
+freeradius_safe_characters: "+@abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_: /"
+cron_delete_old_notifications: "'hour': 0, 'minute': 0"
+cron_deactivate_expired_users: "'hour': 0, 'minute': 5"
+cron_delete_old_users: "'hour': 0, 'minute': 10"
+cron_cleanup_stale_radacct: "'hour': 0, 'minute': 20"
+cron_delete_old_postauth: "'hour': 0, 'minute': 30"
+cron_delete_old_radacct: "'hour': 1, 'minute': 30"

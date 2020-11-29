@@ -8,23 +8,26 @@ redirect_view = RedirectView.as_view(url=reverse_lazy('admin:index'))
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    {% if openwisp2_controller_urls %}
+{% if openwisp2_controller_urls %}
     url(r'', include('openwisp_controller.urls')),
-    {% endif %}
+{% endif %}
     url(r'^api/v1/', include('openwisp_utils.api.urls')),
     url(r'^api/v1/', include('openwisp_users.api.urls')),
-    {% if openwisp2_network_topology %}
+{% if openwisp2_network_topology %}
     url(r'^', include('openwisp_network_topology.urls')),
-    {% endif %}
-    {% if openwisp2_firmware_upgrader %}
+{% endif %}
+{% if openwisp2_firmware_upgrader %}
     url(r'^', include('openwisp_firmware_upgrader.urls')),
-    {% endif %}
-    {% if openwisp2_monitoring %}
+{% endif %}
+{% if openwisp2_monitoring %}
     url(r'^', include('openwisp_monitoring.urls')),
-    {% endif %}
-    {% for extra_url in openwisp2_extra_urls %}
+{% endif %}
+{% if openwisp2_radius and openwisp2_radius_urls %}
+    url(r'^', include('openwisp_radius.urls')),
+{% endif %}
+{% for extra_url in openwisp2_extra_urls %}
     {{ extra_url }},
-    {% endfor %}
+{% endfor %}
     url(r'^$', redirect_view, name='index'),
 ]
 

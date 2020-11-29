@@ -26,6 +26,16 @@
     warn: false
   notify: restart nginx
 
+- name: Copy SSL cert to be added to trusted Cert (for freeradius)
+  copy:
+    src: "{{ openwisp2_ssl_cert }}"
+    dest: /usr/local/share/ca-certificates/openwisp-ssl-server.crt
+    remote_src: true
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  notify: update-ca-certificates
+
 - name: disable default nginx configuration
   file:
     path: "/etc/nginx/sites-enabled/default"

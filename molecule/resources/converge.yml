@@ -7,10 +7,15 @@
   vars:
     openwisp2_network_topology: true
     openwisp2_firmware_upgrader: true
+    openwisp2_radius: true
+    # TODO: test help when openwisp-radius 0.3.0 is released!
+    # openwisp2_radius_allowed_hosts: ["0.0.0.0/0"]
 
   pre_tasks:
     - name: Update apt cache
-      apt: update_cache=true cache_valid_time=600
+      apt:
+        update_cache: true
+        cache_valid_time: 600
       when: ansible_os_family == 'Debian'
 
     - name: Remove the .dockerenv file
