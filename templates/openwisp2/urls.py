@@ -23,6 +23,11 @@ urlpatterns = [
     {% if openwisp2_firmware_upgrader %}
     url(r'^', include('openwisp_firmware_upgrader.urls')),
     {% endif %}
+    {% if openwisp2_radius %}
+    url(r'^', include('openwisp_radius.urls')),
+    url(r'^api/v1/', include('openwisp_users.api.urls')),
+    url(r'^api/v1/', include('openwisp_utils.api.urls')),
+    {% endif %}
     {% for extra_url in openwisp2_extra_urls %}
     {{ extra_url }},
     {% endfor %}

@@ -385,6 +385,10 @@ create an empty file named `playbook.yml` which contains the following:
   # the following line is needed only when an IP address is used as the inventory hostname
   vars:
       postfix_myhostname: localhost
+      # Enable the modules you want to use
+      openwisp2_network_topology: true
+      openwisp2_firmware_upgrader: true
+      openwisp2_radius: true
 ```
 
 **Step 6**: Run the playbook
@@ -399,88 +403,6 @@ When the playbook ran successfully, you can log in at:
 https://192.168.56.2/admin
 username: admin
 password: admin
-```
-
-Enabling the network topology module
-------------------------------------
-
-To enable the network topology module you need to set `openwisp2_network_topology` to `true` in
-your `playbook.yml` file. Here's a short summary of how to do this:
-
-**Step 1**: [Install ansible](#install-ansible)
-
-**Step 2**: [Install this role](#install-this-role)
-
-**Step 3**: [Create inventory file](#create-inventory-file)
-
-**Step 4**: Create a playbook file with following contents:
-
-```yaml
-- hosts: openwisp2
-  become: "{{ become | default('yes') }}"
-  roles:
-    - openwisp.openwisp2
-  vars:
-    openwisp2_network_topology: true
-```
-
-**Step 5**: [Run the playbook](#run-the-playbook)
-
-When the playbook is done running, if you got no errors you can login at:
-
-    https://openwisp2.mydomain.com/admin
-    username: admin
-    password: admin
-
-Enabling the firmware upgrader module
--------------------------------------
-
-**Note**: It is encouraged that you read the [quick-start guide of openwisp-firmware-upgrader](https://github.com/openwisp/openwisp-firmware-upgrader#quickstart)
-before going ahead.
-
-To enable the firmware upgrader module you need to set `openwisp2_firmware_upgrader` to `true` in
-your `playbook.yml` file. Here's a short summary of how to do this:
-
-**Step 1**: [Install ansible](#install-ansible)
-
-**Step 2**: [Install this role](#install-this-role)
-
-**Step 3**: [Create inventory file](#create-inventory-file)
-
-**Step 4**: Create a playbook file with following contents:
-
-```yaml
-- hosts: openwisp2
-  become: "{{ become | default('yes') }}"
-  roles:
-    - openwisp.openwisp2
-  vars:
-    openwisp2_firmware_upgrader: true
-```
-
-**Step 5**: [Run the playbook](#run-the-playbook)
-
-When the playbook is done running, if you got no errors you can login at:
-
-    https://openwisp2.mydomain.com/admin
-    username: admin
-    password: admin
-
-**Note**: You can configure [openwisp-firmware-upgrader specific settings](https://github.com/openwisp/openwisp-firmware-upgrader#settings)
-using `openwisp2_extra_django_settings` variable of this ansible role.
-For example if you want to enable the [APIs of openwisp-firmware-upgrader](https://github.com/openwisp/openwisp-firmware-upgrader#rest-api),
-you will update the above playbook as follows:
-
-```yaml
-- hosts: openwisp2
-  become: "{{ become | default('yes') }}"
-  roles:
-    - openwisp.openwisp2
-  vars:
-    openwisp2_firmware_upgrader: true
-    openwisp2_extra_django_settings:
-      OPENWISP_USERS_AUTH_API: true
-      OPENWISP_FIRMWARE_UPGRADER_API: true
 ```
 
 Troubleshooting
@@ -579,12 +501,17 @@ Below are listed all the variables you can customize (you may also want to take 
     - openwisp.openwisp2
   vars:
     # openwisp-controler version
-    openwisp2_controller_version: "0.4"
+    openwisp2_controller_version: "0.8.1"
     # optional openwisp2 modules
     openwisp2_network_topology: false
-    openwisp2_network_topology_version: "0.4"
+    openwisp2_network_topology_version: "0.5.1"
     openwisp2_firmware_upgrader: false
     openwisp2_firmware_upgrader_version: "0.1"
+    openwisp2_radius_version: "0.1"
+    # Enable the modules you want to use
+    openwisp2_network_topology: true
+    openwisp2_firmware_upgrader: true
+    openwisp2_radius: true
     # you may replace the values of these variables with any URL
     # supported by pip (the python package installer)
     # use these to install forks, branches or development versions
@@ -598,6 +525,7 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_netjsonconfig_pip: false
     openwisp2_network_topology_pip: false
     openwisp2_firmware_upgrader_pip: false
+    openwisp2_radius_pip: false
     # customize the app_path
     openwisp2_path: /opt/openwisp2
     # It is recommended that you change the value of this variable if you intend to use
@@ -761,6 +689,37 @@ Below are listed all the variables you can customize (you may also want to take 
     postfix_smtpd_relay_restrictions_override: permit_mynetworks
     # allows overriding the default duration for keeping notifications
     openwisp2_notifications_delete_old_notifications: 10
+    openwisp2_users_auth_api: true
+    openwisp2_radius_sms_backend: "sendsms.backends.console.SmsBackend"
+    openwisp2_radius_sms_token_max_ip_daily: 25
+    openwisp2_radius_delete_old_users: 365
+    openwisp2_radius_cleanup_stale_radacct: 365
+    openwisp2_radius_delete_old_postauth: 365
+    openwisp2_radius_delete_old_radacct: 365
+    openwisp2_radius_allowed_hosts: ["127.0.0.1"]
+    freeradius_dir: /etc/freeradius/3.0
+    freeradius_mods_available_dir: "{{ freeradius_dir }}/mods-available"
+    freeradius_mods_enabled_dir: "{{ freeradius_dir }}/mods-enabled"
+    freeradius_sites_available_dir: "{{ freeradius_dir }}/sites-available"
+    freeradius_sites_enabled_dir: "{{ freeradius_dir }}/sites-enabled"
+    freeradius_sql:
+        driver: rlm_sql_sqlite
+        dialect: sqlite
+        host: ""
+        port: ""
+        dbname: ""
+        user: ""
+        password: ""
+    freeradius_rest:
+        url: "https://{{ inventory_hostname }}/api/v1/freeradius"
+    freeradius_clients_ip: "0.0.0.0/0"
+    freeradius_clients_key: "admin"
+    cron_delete_old_notifications: "'hour': 0, 'minute': 0"
+    cron_deactivate_expired_users: "'hour': 0, 'minute': 0"
+    cron_delete_old_users: "'hour': 0, 'minute': 10"
+    cron_cleanup_stale_radacct: "'hour': 0, 'minute': 20"
+    cron_delete_old_postauth: "'hour': 0, 'minute': 30"
+    cron_delete_old_radacct: "'hour': 0, 'minute': 40"
 ```
 
 Support

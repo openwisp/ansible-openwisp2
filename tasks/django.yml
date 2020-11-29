@@ -98,6 +98,9 @@
     group: "{{ www_group }}"
     mode: 0640
 
+- name: start redis for migration
+  meta: flush_handlers
+
 - name: migrate
   notify: reload supervisor
   become: true

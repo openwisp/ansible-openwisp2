@@ -1,0 +1,7 @@
+# Freeradius Clients
+
+client radius_clients {
+	ipaddr     = {{ freeradius_clients_ip }}
+	secret     = {{ freeradius_clients_key }}
+	nas_type   = other
+}

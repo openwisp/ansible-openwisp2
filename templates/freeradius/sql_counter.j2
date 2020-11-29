@@ -1,0 +1,41 @@
+# The dailycounter is included by default in the freeradius conf
+
+sqlcounter dailycounter {
+    sql_module_instance = sql
+    dialect = ${modules.sql.dialect}
+
+    counter_name = Daily-Session-Time
+    check_name = Max-Daily-Session
+    reply_name = Session-Timeout
+
+    key = User-Name
+    reset = daily
+
+    $INCLUDE ${modconfdir}/sql/counter/${dialect}/${.:instance}.conf
+}
+
+# The noresetcounter is included by default in the freeradius conf
+sqlcounter noresetcounter {
+    sql_module_instance = sql
+    dialect = ${modules.sql.dialect}
+
+    counter_name = Max-All-Session-Time
+    check_name = Max-All-Session
+    key = User-Name
+    reset = never
+
+    $INCLUDE ${modconfdir}/sql/counter/${dialect}/${.:instance}.conf
+}
+
+# The dailybandwidthcounter is added for django-freeradius
+sqlcounter dailybandwidthcounter {
+   counter_name = Max-Daily-Session-Traffic
+   check_name = Max-Daily-Session-Traffic
+   sql_module_instance = sql
+   key = 'User-Name'
+   reset = daily
+   query = "SELECT SUM(acctinputoctets + acctoutputoctets) \
+            FROM radacct \
+            WHERE UserName='%{${key}}' \
+            AND UNIX_TIMESTAMP(acctstarttime) + acctsessiontime > '%%b'"
+}

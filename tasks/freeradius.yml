@@ -1,0 +1,122 @@
+---
+- name: Freeradius system packages
+  when: openwisp2_radius
+  apt:
+    name:
+      - freeradius
+      - freeradius-rest
+    state: latest
+  notify: restart freeradius
+
+- import_tasks: freeradius-mysql.yml
+  when: openwisp2_radius and freeradius_sql.dialect == "mysql"
+
+- import_tasks: freeradius-postgresql.yml
+  when: openwisp2_radius and freeradius_sql.dialect == "postgresql"
+
+- name: Radius configurations
+  when: openwisp2_radius
+  template:
+    src: freeradius/radiusd.conf.j2
+    dest: "{{ freeradius_dir }}/radiusd.conf"
+    mode: 0640
+    owner: freerad
+    group: freerad
+  notify: restart freeradius
+
+- name: Clients configuration
+  when: openwisp2_radius
+  template:
+    src: freeradius/clients.conf.j2
+    dest: "{{ freeradius_dir }}/site"
+    mode: 0640
+    owner: freerad
+    group: freerad
+  notify: restart freeradius
+
+- name: Remove unnecessary modules
+  when: openwisp2_radius
+  file:
+    dest: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ freeradius_mods_enabled_dir }}/eap"
+
+- name: SQL configuration
+  when: openwisp2_radius
+  template:
+    src: freeradius/sql.j2
+    dest: "{{ freeradius_mods_available_dir }}/sql"
+    mode: 0640
+    owner: freerad
+    group: freerad
+  notify: restart freeradius
+
+- name: Enable SQL module
+  when: openwisp2_radius
+  file:
+    src: "{{ freeradius_mods_available_dir }}/sql"
+    dest: "{{ freeradius_mods_enabled_dir }}/sql"
+    state: link
+    mode: 0640
+    owner: freerad
+    group: freerad
+
+- name: SQL Counter module
+  when: openwisp2_radius
+  template:
+    src: freeradius/sql_counter.j2
+    dest: "{{ freeradius_mods_available_dir }}/sql_counter"
+    mode: 0640
+    owner: freerad
+    group: freerad
+  notify: restart freeradius
+
+- name: Enable SQL Counter module
+  when: openwisp2_radius
+  file:
+    src: "{{ freeradius_mods_available_dir }}/sql_counter"
+    dest: "{{ freeradius_mods_enabled_dir }}/sql_counter"
+    state: link
+    mode: 0640
+    owner: freerad
+    group: freerad
+
+- name: REST configuration
+  when: openwisp2_radius
+  template:
+    src: freeradius/rest.j2
+    dest: "{{ freeradius_mods_available_dir }}/rest"
+    mode: 0640
+    owner: freerad
+    group: freerad
+  notify: restart freeradius
+
+- name: Enable REST module
+  when: openwisp2_radius
+  file:
+    src: "{{ freeradius_mods_available_dir }}/rest"
+    dest: "{{ freeradius_mods_enabled_dir }}/rest"
+    state: link
+    mode: 0640
+    owner: freerad
+    group: freerad
+
+- name: Remove default site
+  when: openwisp2_radius
+  file:
+    dest: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ freeradius_sites_enabled_dir }}/default"
+    - "{{ freeradius_sites_enabled_dir }}/inner-tunnel"
+
+- name: Site configuration
+  when: openwisp2_radius
+  template:
+    src: freeradius/openwisp_site.j2
+    dest: "{{ freeradius_sites_enabled_dir }}/openwisp_site"
+    mode: 0640
+    owner: freerad
+    group: freerad
+  notify: restart freeradius

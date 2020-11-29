@@ -19,6 +19,9 @@
 - import_tasks: django.yml
   tags: [openwisp2, django]
 
+- import_tasks: freeradius.yml
+  tags: [openwisp2, freeradius]
+
 - import_tasks: supervisor.yml
   tags: [openwisp2, supervisor]
 
