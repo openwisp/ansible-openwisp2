@@ -11,5 +11,3 @@
     msg: "Update the default site object at https://{{ inventory_hostname }}/admin/sites/site/1/change/"
   tags:
     - molecule-idempotence-notest
-
-
