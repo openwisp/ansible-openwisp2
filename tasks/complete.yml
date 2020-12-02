@@ -4,3 +4,10 @@
     msg: "Change your admin password at https://{{ inventory_hostname }}/admin/password_change/"
   tags:
     - molecule-idempotence-notest
+
+- name: Update site object hint
+  when: '"created" in load_initial_data_result.stdout'
+  debug:
+    msg: "Update the default site object at https://{{ inventory_hostname }}/admin/sites/site/1/change/"
+  tags:
+    - molecule-idempotence-notest

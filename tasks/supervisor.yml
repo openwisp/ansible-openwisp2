@@ -26,6 +26,13 @@
     mode: 0644
   notify: reload supervisor
 
+- name: supervisor celerybeat
+  template:
+    src: supervisor/celerybeat.j2
+    dest: "{{ supervisor_path | format('celerybeat') }}"
+    mode: 0644
+  notify: reload supervisor
+
 - name: Remove supervisor runworker.conf (obsolete)
   file:
     dest: "{{ supervisor_path | format('runworker') }}"

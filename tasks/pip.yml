@@ -37,6 +37,7 @@
     openwisp2_python_packages: "{{ openwisp2_python_packages + [item] }}"
   with_items:
     - "{{ openwisp2_controller_pip }}"
+    - "{{ openwisp2_notifications_pip }}"
     - "{{ openwisp2_users_pip }}"
     - "{{ openwisp2_utils_pip }}"
     - "{{ openwisp2_django_x509_pip }}"
