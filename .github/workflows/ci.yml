@@ -1,0 +1,60 @@
+---
+
+name: Ansible OpenWISP2 CI Build
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build ${{ matrix.distro }}
+    runs-on: ubuntu-20.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        distro:
+          - ubuntu1804
+          - ubuntu2004
+          - debian10
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install python dependencies
+        run: |
+          pip install molecule[docker] yamllint ansible-lint docker openwisp-utils[qa]
+
+      - name: QA checks
+        run: |
+          openwisp-qa-check --skip-isort --skip-flake8 --skip-checkmigrations --skip-black
+
+      - name: Tests
+        run: molecule test
+        env:
+          ROLE_NAME: openwisp2
+          PY_COLORS: '1'
+          ANSIBLE_FORCE_COLOR: '1'
+          MOLECULE_DISTRO: ${{ matrix.distro }}
+
+  import:
+    name: Update imports on Ansible Galaxy
+    runs-on: ubuntu-20.04
+    needs:
+      - build
+    steps:
+      - uses: robertdebock/galaxy-action@1.1.0
+        with:
+          galaxy_api_key: ${{ secrets.GALAXY_TOKEN }}
