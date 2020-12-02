@@ -67,7 +67,7 @@
   pip:
     name:
       - "openwisp-controller~={{ openwisp2_controller_version }}"
-      - channels_redis
+      - channels_redis~=3.1.0
       - service_identity
     state: latest
     virtualenv: "{{ virtualenv_path }}"

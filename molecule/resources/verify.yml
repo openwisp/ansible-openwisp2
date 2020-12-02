@@ -7,8 +7,6 @@
 
   tasks:
     - name: Run a specific subset of tests
-      environment:
-        TESTING: true
       command: >
         /opt/openwisp2/env/bin/python /opt/openwisp2/manage.py test --keepdb \
             openwisp_controller.pki \

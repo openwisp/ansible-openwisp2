@@ -1,6 +1,7 @@
 import os
+import sys
 
-TESTING = os.environ.get('TESTING', False)
+TESTING = 'test' in sys.argv
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -127,6 +128,7 @@ TEMPLATES = [
     },
 ]
 
+# Run celery in eager mode using in-memory broker while running tests
 if not TESTING:
     CELERY_TASK_ACKS_LATE = {{ openwisp2_celery_task_acks_late }}
     CELERY_WORKER_PREFETCH_MULTIPLIER = {{ openwisp2_celery_worker_prefetch_multiplier }}
