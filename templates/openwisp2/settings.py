@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_gis',
     'channels',
+    'pipeline',
 {% for app in openwisp2_extra_django_apps %}
     '{{ app }}',
 {% endfor %}
@@ -95,6 +96,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'pipeline.middleware.MinifyHTMLMiddleware'
 ]
 
 ROOT_URLCONF = 'openwisp2.urls'
@@ -318,6 +320,14 @@ LOGGING = {
         }
     }
 }
+
+# HTML minification with django pipeline
+PIPELINE = { 'PIPELINE_ENABLED': True }
+# static files minification and invalidation with django-compress-staticfiles
+STATICFILES_STORAGE = 'compress_staticfiles.storage.CompressStaticFilesStorage'
+# GZIP compression is handled by nginx
+BROTLI_STATIC_COMPRESSION = False
+GZIP_STATIC_COMPRESSION = False
 
 {% if openwisp2_sentry.get('dsn') %}
 RAVEN_CONFIG = {{ openwisp2_sentry|to_nice_json }}
