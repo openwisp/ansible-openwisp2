@@ -1,4 +1,7 @@
 import os
+import sys
+
+TESTING = 'test' in sys.argv
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -43,6 +46,7 @@ INSTALLED_APPS = [
     'openwisp_controller.config',
     'openwisp_controller.geo',
     'openwisp_controller.connection',
+    'flat_json_widget',
 {% if openwisp2_network_topology %}
     'openwisp_network_topology',
 {% endif %}
@@ -124,9 +128,15 @@ TEMPLATES = [
     },
 ]
 
-CELERY_TASK_ACKS_LATE = {{ openwisp2_celery_task_acks_late }}
-CELERY_WORKER_PREFETCH_MULTIPLIER = {{ openwisp2_celery_worker_prefetch_multiplier }}
-CELERY_BROKER_URL = '{{ openwisp2_celery_broker_url }}'
+# Run celery in eager mode using in-memory broker while running tests
+if not TESTING:
+    CELERY_TASK_ACKS_LATE = {{ openwisp2_celery_task_acks_late }}
+    CELERY_WORKER_PREFETCH_MULTIPLIER = {{ openwisp2_celery_worker_prefetch_multiplier }}
+    CELERY_BROKER_URL = '{{ openwisp2_celery_broker_url }}'
+else:
+    CELERY_TASK_ALWAYS_EAGER = True
+    CELERY_TASK_EAGER_PROPAGATES = True
+    CELERY_BROKER_URL = 'memory://'
 
 # FOR DJANGO REDIS
 
