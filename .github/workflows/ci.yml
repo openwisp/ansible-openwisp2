@@ -1,5 +1,6 @@
 ---
-name: OpenWISP CI Build
+
+name: Ansible OpenWISP2 CI Build
 
 on:
   push:
@@ -48,6 +49,12 @@ jobs:
           ANSIBLE_FORCE_COLOR: '1'
           MOLECULE_DISTRO: ${{ matrix.distro }}
 
-      - name: Update imports on Ansible Galaxy
-        run: |
-          ansible-galaxy role import --token ${{ secrets.GALAXY_TOKEN }} ${{ github.repository }} ${{ github.repository }}
+  import:
+    name: Update imports on Ansible Galaxy
+    runs-on: ubuntu-20.04
+    needs:
+      - build
+    steps:
+      - uses: robertdebock/galaxy-action@1.1.0
+        with:
+          galaxy_api_key: ${{ secrets.GALAXY_TOKEN }}
