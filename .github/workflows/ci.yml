@@ -52,9 +52,13 @@ jobs:
   import:
     name: Update imports on Ansible Galaxy
     runs-on: ubuntu-20.04
+    container: python:3-slim
     needs:
       - build
     steps:
-      - uses: robertdebock/galaxy-action@1.1.0
-        with:
-          galaxy_api_key: ${{ secrets.GALAXY_TOKEN }}
+      - name: Install ansible
+        run: pip install ansible
+
+      - name: Update imports on Ansible Galaxy
+        run: |
+          ansible-galaxy role import --api-key ${{ secrets.GALAXY_TOKEN }} openwisp ansible-openwisp2
