@@ -538,7 +538,6 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_users_pip: false
     openwisp2_utils_pip: false
     openwisp2_notifications_pip: false
-    openwisp2_django_netjsonconfig_pip: false
     openwisp2_django_x509_pip: false
     openwisp2_netjsonconfig_pip: false
     openwisp2_network_topology_pip: false
