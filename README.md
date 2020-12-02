@@ -466,7 +466,7 @@ When the playbook is done running, if you got no errors you can login at:
 
 **Note**: You can configure [openwisp-firmware-upgrader specific settings](https://github.com/openwisp/openwisp-firmware-upgrader#settings)
 using `openwisp2_extra_django_settings` variable of this ansible role.
-For example if you want to enable the `APIs of openwisp-firmware-upgrader <https://github.com/openwisp/openwisp-firmware-upgrader#rest-api>`_,
+For example if you want to enable the [APIs of openwisp-firmware-upgrader](https://github.com/openwisp/openwisp-firmware-upgrader#rest-api),
 you will update the above playbook as follows:
 
 ```yaml

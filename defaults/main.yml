@@ -2,8 +2,8 @@ openwisp2_python: python3
 ansible_python_interpreter: /usr/bin/python3
 openwisp2_network_topology: false
 openwisp2_firmware_upgrader: false
-openwisp2_controller_version: "0.7.post1"
-openwisp2_network_topology_version: "0.4"
+openwisp2_controller_version: "0.8.1"
+openwisp2_network_topology_version: "0.5.1"
 openwisp2_firmware_upgrader_version: "0.1"
 openwisp2_controller_pip: false
 openwisp2_users_pip: false
