@@ -429,7 +429,6 @@ When the playbook is done running, if you got no errors you can login at:
     username: admin
     password: admin
 
-
 Enabling the firmware upgrader module
 -------------------------------------
 
