@@ -52,6 +52,7 @@ INSTALLED_APPS = [
 {% endif %}
 {% if openwisp2_firmware_upgrader %}
     'openwisp_firmware_upgrader',
+    'private_storage',
 {% endif %}
     # openwisp2 admin theme
     # (must be loaded here)
@@ -79,6 +80,10 @@ EXTENDED_APPS = [
     'django_x509',
     'django_loci',
 ]
+
+{% if openwisp2_firmware_upgrader %}
+PRIVATE_STORAGE_ROOT = '{0}/firmware/'.format(BASE_DIR)
+{% endif %}
 
 AUTH_USER_MODEL = 'openwisp_users.User'
 SITE_ID = 1
