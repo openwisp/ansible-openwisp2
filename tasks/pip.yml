@@ -1,7 +1,7 @@
 - name: Update pip & related tools
   pip:
     name:
-      - pip
+      - pip==20.2.4
       - setuptools
       - wheel
       - attrs
