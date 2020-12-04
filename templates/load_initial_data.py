@@ -44,7 +44,7 @@ ssh_pub_key = os.environ.get('PUBLIC_KEY')
 if Credentials.objects.count() == 0:
     Credentials.objects.create(
         connector='openwisp_controller.connection.connectors.ssh.Ssh',
-        name='Default',
+        name='OpenWISP Default',
         auto_add=True,
         params={'username': 'root', 'key': ssh_private_key},
     )
@@ -56,7 +56,7 @@ queryset = Template.objects.filter(
 )
 if queryset.count() == 0:
     Template.objects.create(
-        name='Default Credentials Template',
+        name='SSH Keys',
         default=True,
         backend='netjsonconfig.OpenWrt',
         config={
