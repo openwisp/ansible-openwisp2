@@ -20,6 +20,8 @@
       - python3
       - virtualenv
       - cron
+      # needed to generate SSH key for push updates
+      - openssh-client
   ignore_errors: yes
   retries: 5
   delay: 10

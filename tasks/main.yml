@@ -15,6 +15,9 @@
   tags: [openwisp2, apt]
   when: ansible_os_family == 'Debian'
 
+- import_tasks: ssh.yml
+  tags: [openwisp2, ssh]
+
 - import_tasks: pip.yml
   tags: [openwisp2, pip]
 
