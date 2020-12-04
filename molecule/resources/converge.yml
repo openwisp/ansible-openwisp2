@@ -6,6 +6,7 @@
 
   vars:
     openwisp2_network_topology: true
+    openwisp2_firmware_upgrader: true
 
   pre_tasks:
     - name: Update apt cache

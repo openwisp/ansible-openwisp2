@@ -16,6 +16,9 @@ urlpatterns = [
     {% if openwisp2_network_topology %}
     url(r'^', include('openwisp_network_topology.urls')),
     {% endif %}
+    {% if openwisp2_firmware_upgrader %}
+    url(r'^', include('openwisp_firmware_upgrader.urls')),
+    {% endif %}
     {% for extra_url in openwisp2_extra_urls %}
     {{ extra_url }},
     {% endfor %}
