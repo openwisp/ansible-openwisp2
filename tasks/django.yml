@@ -1,3 +1,5 @@
+---
+
 - name: create {{ openwisp2_path }}
   file:
     path: "{{ openwisp2_path }}"
@@ -18,7 +20,7 @@
     state: directory
     group: "{{ www_group }}"
     mode: 0775
-    recurse: yes
+    recurse: true
   tags:
     - molecule-idempotence-notest
 
@@ -101,7 +103,7 @@
 
 - name: migrate
   notify: reload supervisor
-  become: yes
+  become: true
   become_user: "{{ www_user }}"
   django_manage:
     app_path: "{{ openwisp2_path }}"
@@ -124,13 +126,13 @@
     owner: "{{ www_user }}"
     # sets executable only to directories
     mode: u=rwX,g=rX,o=rX
-    recurse: yes
+    recurse: true
   tags:
     - molecule-idempotence-notest
 
 - name: collectstatic
   notify: reload supervisor
-  become: yes
+  become: true
   become_user: "{{ www_user }}"
   django_manage:
     app_path: "{{ openwisp2_path }}"

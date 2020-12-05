@@ -28,6 +28,6 @@ provisioner:
   config_options:
     defaults:
       stdout_callback: yaml
-      bin_ansible_callbacks: yes
+      bin_ansible_callbacks: true
 verifier:
   name: ansible

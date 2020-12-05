@@ -1,3 +1,5 @@
+---
+
 openwisp2_python: python3
 ansible_python_interpreter: /usr/bin/python3
 openwisp2_network_topology: false
@@ -86,7 +88,7 @@ openwisp2_redis_cache_url: redis://127.0.0.1:6379/1
 openwisp2_celery_concurrency: "{{ openwisp2_eventlet_concurrency | default(10) }}"
 openwisp2_celery_broker_url: redis://127.0.0.1:6379/3
 openwisp2_celery_worker_prefetch_multiplier: 1
-openwisp2_celery_task_acks_late: True
+openwisp2_celery_task_acks_late: true
 openwisp2_celery_broker_max_tries: 10
-openwisp2_django_celery_logging: False
+openwisp2_django_celery_logging: false
 postfix_smtpd_relay_restrictions_override: "permit_sasl_authenticated, permit_mynetworks, check_relay_domains, reject_unauth_destination, reject"

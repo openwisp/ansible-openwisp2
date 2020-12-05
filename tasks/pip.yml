@@ -1,3 +1,5 @@
+---
+
 - name: Update pip & related tools
   pip:
     name:
@@ -8,7 +10,7 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-    virtualenv_site_packages: yes
+    virtualenv_site_packages: true
   retries: 5
   delay: 10
   register: result
@@ -21,7 +23,7 @@
     state: absent
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-    virtualenv_site_packages: yes
+    virtualenv_site_packages: true
   retries: 2
   delay: 5
   register: result
@@ -68,7 +70,7 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-    virtualenv_site_packages: yes
+    virtualenv_site_packages: true
   notify: reload supervisor
   retries: 5
   delay: 10
@@ -85,7 +87,7 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-    virtualenv_site_packages: yes
+    virtualenv_site_packages: true
   retries: 5
   delay: 10
   register: result
@@ -99,7 +101,7 @@
     state: present
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-    virtualenv_site_packages: yes
+    virtualenv_site_packages: true
   notify: reload supervisor
   retries: 5
   delay: 10
@@ -113,7 +115,7 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-    virtualenv_site_packages: yes
+    virtualenv_site_packages: true
   notify: reload supervisor
   retries: 5
   delay: 10
@@ -127,7 +129,7 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-    virtualenv_site_packages: yes
+    virtualenv_site_packages: true
   notify: reload supervisor
   retries: 5
   delay: 10
@@ -140,7 +142,7 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-    virtualenv_site_packages: yes
+    virtualenv_site_packages: true
   retries: 5
   delay: 10
   register: result
@@ -154,7 +156,7 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-    virtualenv_site_packages: yes
+    virtualenv_site_packages: true
     extra_args: "--no-deps"
   notify: reload supervisor
   retries: 5
@@ -172,7 +174,7 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-    virtualenv_site_packages: yes
+    virtualenv_site_packages: true
   retries: 5
   delay: 10
   register: result
@@ -185,7 +187,7 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-    virtualenv_site_packages: yes
+    virtualenv_site_packages: true
   retries: 5
   delay: 10
   register: result
@@ -198,7 +200,7 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-    virtualenv_site_packages: yes
+    virtualenv_site_packages: true
   retries: 5
   delay: 10
   register: result
@@ -212,7 +214,7 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-    virtualenv_site_packages: yes
+    virtualenv_site_packages: true
   retries: 5
   delay: 10
   register: result
@@ -226,7 +228,7 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-    virtualenv_site_packages: yes
+    virtualenv_site_packages: true
   retries: 5
   delay: 10
   register: result
@@ -240,7 +242,7 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-    virtualenv_site_packages: yes
+    virtualenv_site_packages: true
   retries: 5
   delay: 10
   register: result

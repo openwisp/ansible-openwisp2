@@ -1,3 +1,5 @@
+---
+
 - name: uwsgi.ini
   template:
     src: uwsgi.ini.j2

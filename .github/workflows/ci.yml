@@ -2,7 +2,7 @@
 
 name: Ansible OpenWISP2 CI Build
 
-on:
+on:             # yamllint disable-line rule:truthy
   push:
     branches:
       - master
