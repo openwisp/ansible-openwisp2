@@ -1,1 +1,2 @@
+---
 virtualenv_path: "{{ openwisp2_path }}/env"

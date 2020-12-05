@@ -1,3 +1,4 @@
+---
 - name: Set supervisor path (Debian)
   set_fact:
     supervisor_path: '/etc/supervisor/conf.d/%s.conf'
@@ -6,5 +7,5 @@
 - name: Set www user (Debian)
   set_fact:
     www_group: 'www-data'
-    www_user:  'www-data'
+    www_user: 'www-data'
   when: ansible_os_family == 'Debian'

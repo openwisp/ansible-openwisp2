@@ -95,7 +95,7 @@
 
 - name: migrate
   notify: reload supervisor
-  become: yes
+  become: true
   become_user: "{{ www_user }}"
   django_manage:
     app_path: "{{ openwisp2_path }}"
@@ -124,7 +124,7 @@
 
 - name: collectstatic
   notify: reload supervisor
-  become: yes
+  become: true
   become_user: "{{ www_user }}"
   django_manage:
     app_path: "{{ openwisp2_path }}"
