@@ -35,6 +35,9 @@ INSTALLED_APPS = [
     # overrides allauth templates
     # must precede allauth
     'openwisp_users.accounts',
+    # openwisp2 admin theme
+    # (must be loaded here)
+    'openwisp_utils.admin_theme',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -54,9 +57,6 @@ INSTALLED_APPS = [
     'openwisp_firmware_upgrader',
     'private_storage',
 {% endif %}
-    # openwisp2 admin theme
-    # (must be loaded here)
-    'openwisp_utils.admin_theme',
     # admin
     'django.contrib.admin',
     'django.forms',
