@@ -93,6 +93,12 @@
 - name: start redis
   service: name=redis state=started
 
+- name: storage.py
+  copy:
+    src: storage.py
+    dest: "{{ openwisp2_path }}/openwisp2/storage.py"
+    mode: 0664
+
 - name: migrate
   notify: reload supervisor
   become: yes
