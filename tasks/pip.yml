@@ -59,18 +59,6 @@
     - "{{ openwisp2_firmware_upgrader_pip }}"
   when: item is defined and item is string and openwisp2_firmware_upgrader
 
-- name: Install cryptography from pip
-  pip:
-    name: cryptography
-    state: latest
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-    virtualenv_site_packages: yes
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
-
 - name: Install openwisp2 controller and its dependencies
   pip:
     name:
