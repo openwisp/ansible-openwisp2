@@ -82,6 +82,12 @@
     group: "{{ www_group }}"
     mode: 0664
 
+- name: storage.py
+  copy:
+    src: storage.py
+    dest: "{{ openwisp2_path }}/openwisp2/storage.py"
+    mode: 0664
+
 - name: routing.py
   notify: reload supervisor
   template:
@@ -92,12 +98,6 @@
 
 - name: start redis
   service: name=redis state=started
-
-- name: storage.py
-  copy:
-    src: storage.py
-    dest: "{{ openwisp2_path }}/openwisp2/storage.py"
-    mode: 0664
 
 - name: migrate
   notify: reload supervisor
