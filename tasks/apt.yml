@@ -1,3 +1,5 @@
+---
+
 - name: Update APT package cache
   apt: update_cache=yes
   changed_when: false
@@ -22,7 +24,7 @@
       - cron
       # needed to generate SSH key for push updates
       - openssh-client
-  ignore_errors: yes
+  ignore_errors: true
   retries: 5
   delay: 10
   register: result
@@ -34,7 +36,7 @@
   notify:
     - reload systemd
     - start redis
-  ignore_errors: yes
+  ignore_errors: true
   register: use_redis5
 
 - name: Install redis 4 (fallback)
@@ -44,7 +46,7 @@
   notify:
     - reload systemd
     - start redis
-  ignore_errors: yes
+  ignore_errors: true
 
 # On the newer versions of redis, by default redis
 # binds to localhost on ipv6 address which wouldn't
@@ -56,7 +58,7 @@
     path: /etc/redis/redis.conf
     regexp: '^bind 127\.0\.0\.1 ::1'
     line: 'bind 127.0.0.1'
-    backrefs: yes
+    backrefs: true
 
 - name: Install geographic libraries
   apt:
@@ -84,7 +86,7 @@
 - name: Install mod-spatialite (may fail on older linux distros)
   when: openwisp2_database.engine == "django.contrib.gis.db.backends.spatialite"
   apt: name=libsqlite3-mod-spatialite
-  ignore_errors: yes
+  ignore_errors: true
   retries: 5
   delay: 10
   register: result
@@ -98,7 +100,7 @@
   delay: 10
   register: result
   until: result is success
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: ensure supervisor is started
   service: name=supervisor state=started

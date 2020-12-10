@@ -1,3 +1,5 @@
+---
+
 - name: Set spatialite_path (Ubuntu >= 18.04 or Debian >= 10)
   set_fact:
     openwisp2_spatialite_path: "mod_spatialite.so"

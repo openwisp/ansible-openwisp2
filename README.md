@@ -712,16 +712,16 @@ Below are listed all the variables you can customize (you may also want to take 
     # celery settings
     openwisp2_celery_broker_url: redis://127.0.0.1:6379/3
     openwisp2_celery_worker_prefetch_multiplier: 1
-    openwisp2_celery_task_acks_late: True
+    openwisp2_celery_task_acks_late: true
     # maximum number of retries by celery before giving up when broker is unreachable
     openwisp2_celery_broker_max_tries: 10
     # whether to activate the django logging configuration in celery
-    # if set to True, will log all the celery events in the same log stream used by django
+    # if set to true, will log all the celery events in the same log stream used by django
     # which will cause log lines to be written to "{{ openwisp2_path }}/log/openwisp2.log"
     # instead of "{{ openwisp2_path }}/log/celery.log" and "{{ openwisp2_path }}/log/celerybeat.log"
-    openwisp2_django_celery_logging: False
+    openwisp2_django_celery_logging: false
     # allow overriding default `postfix_smtp_sasl_auth_enable` variable
-    postfix_smtp_sasl_auth_enable_override: yes
+    postfix_smtp_sasl_auth_enable_override: true
     # allow overriding postfix_smtpd_relay_restrictions
     postfix_smtpd_relay_restrictions_override: permit_mynetworks
     # allows overriding the default duration for keeping notifications

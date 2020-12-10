@@ -1,3 +1,5 @@
+---
+
 - name: create "{{ openwisp2_path }}/public_html"
   file:
     path: "{{ openwisp2_path }}/public_html"
@@ -13,19 +15,21 @@
 - name: create SSL cert if not exists yet
   command: >
     openssl req -new -nodes -x509 \
-    -subj "/C={{ openwisp2_ssl_country }}/ST={{ openwisp2_ssl_state }}/L={{ openwisp2_ssl_locality }}/O={{ openwisp2_ssl_organization }}/CN={{ openwisp2_ssl_common_name }}" \
+    -subj "/C={{ openwisp2_ssl_country }}/ST={{ openwisp2_ssl_state }} \
+           /L={{ openwisp2_ssl_locality }}/O={{ openwisp2_ssl_organization }} \
+           /CN={{ openwisp2_ssl_common_name }}" \
     -days 3650 \
     -keyout {{ openwisp2_ssl_key }} \
     -out {{ openwisp2_ssl_cert }} \
     -extensions v3_ca creates={{ openwisp2_ssl_cert }}
   args:
-    warn: False
+    warn: false
   notify: restart nginx
 
 - name: disable default nginx configuration
   file:
-   path: "/etc/nginx/sites-enabled/default"
-   state: absent
+    path: "/etc/nginx/sites-enabled/default"
+    state: absent
 
 - name: nginx site available
   template:
