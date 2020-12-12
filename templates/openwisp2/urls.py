@@ -22,7 +22,9 @@ urlpatterns = [
     {% for extra_url in openwisp2_extra_urls %}
     {{ extra_url }},
     {% endfor %}
-    url(r'^$', redirect_view, name='index')
+    url(r'^$', redirect_view, name='index'),
+    url(r'^api/v1/', include('openwisp_utils.api.urls')),
+    url(r'^api/v1/', include('openwisp_users.api.urls'))
 ]
 
 urlpatterns += staticfiles_urlpatterns()

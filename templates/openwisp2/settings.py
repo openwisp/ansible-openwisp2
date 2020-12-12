@@ -57,6 +57,8 @@ INSTALLED_APPS = [
     # openwisp2 admin theme
     # (must be loaded here)
     'openwisp_utils.admin_theme',
+    'rest_framework.authtoken',
+    'drf_yasg',
     # admin
     'django.contrib.admin',
     'django.forms',
