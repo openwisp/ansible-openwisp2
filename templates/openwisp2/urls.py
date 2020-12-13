@@ -13,6 +13,8 @@ redirect_view = RedirectView.as_view(url=reverse_lazy('admin:index'))
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'', include('openwisp_controller.urls')),
+    url(r'^api/v1/', include('openwisp_utils.api.urls')),
+    url(r'^api/v1/', include('openwisp_users.api.urls')),
     {% if openwisp2_network_topology %}
     url(r'^', include('openwisp_network_topology.urls')),
     {% endif %}
@@ -23,8 +25,6 @@ urlpatterns = [
     {{ extra_url }},
     {% endfor %}
     url(r'^$', redirect_view, name='index'),
-    url(r'^api/v1/', include('openwisp_utils.api.urls')),
-    url(r'^api/v1/', include('openwisp_users.api.urls'))
 ]
 
 urlpatterns += staticfiles_urlpatterns()
