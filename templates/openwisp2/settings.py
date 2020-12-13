@@ -66,6 +66,9 @@ INSTALLED_APPS = [
     'leaflet',
     'rest_framework',
     'rest_framework_gis',
+    'rest_framework.authtoken',
+    'django_filters',
+    'drf_yasg',
     'channels',
     'pipeline',
 {% for app in openwisp2_extra_django_apps %}
