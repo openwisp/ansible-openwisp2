@@ -156,3 +156,12 @@
     or "changed" in load_initial_data_result.stdout
   args:
     chdir: "{{ openwisp2_path }}"
+
+- name: set permissions to "{{ openwisp2_path }}"
+  file:
+    path: "{{ openwisp2_path }}"
+    state: directory
+    group: "{{ www_group }}"
+    owner: "{{ www_user }}"
+    mode: 0770
+    recurse: yes
