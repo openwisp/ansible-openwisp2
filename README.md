@@ -697,6 +697,10 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_radius_delete_old_postauth: 365
     openwisp2_radius_delete_old_radacct: 365
     openwisp2_radius_allowed_hosts: ["127.0.0.1"]
+    # this role provides a default configuration of freeradius
+    # if you manage freeradius on a different machine or you need different configurations
+    # you can disable this default behavior
+    openwisp2_freeradius_install: true
     freeradius_dir: /etc/freeradius/3.0
     freeradius_mods_available_dir: "{{ freeradius_dir }}/mods-available"
     freeradius_mods_enabled_dir: "{{ freeradius_dir }}/mods-enabled"
