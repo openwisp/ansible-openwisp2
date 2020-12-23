@@ -35,13 +35,13 @@
     group: freerad
   notify: restart freeradius
 
-- name: Remove unnecessary modules
-  when: openwisp2_radius
-  file:
-    dest: "{{ item }}"
-    state: absent
-  with_items:
-    - "{{ freeradius_mods_enabled_dir }}/eap"
+# - name: Remove unnecessary modules
+#   when: openwisp2_radius
+#   file:
+#     dest: "{{ item }}"
+#     state: absent
+#   with_items:
+#     - "{{ freeradius_mods_enabled_dir }}/eap"
 
 - name: SQL configuration
   when: openwisp2_radius
