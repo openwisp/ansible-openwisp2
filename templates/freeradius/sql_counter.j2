@@ -27,7 +27,7 @@ sqlcounter noresetcounter {
     $INCLUDE ${modconfdir}/sql/counter/${dialect}/${.:instance}.conf
 }
 
-# The dailybandwidthcounter is added for django-freeradius
+# The dailybandwidthcounter is added for openwisp-radius
 sqlcounter dailybandwidthcounter {
    counter_name = Max-Daily-Session-Traffic
    check_name = Max-Daily-Session-Traffic
