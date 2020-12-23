@@ -5,6 +5,7 @@ ansible_python_interpreter: /usr/bin/python3
 openwisp2_network_topology: false
 openwisp2_firmware_upgrader: false
 openwisp2_radius: false
+openwisp2_radius_urls: "{{ openwisp2_radius }}"
 openwisp2_controller_version: "0.8.2"
 openwisp2_network_topology_version: "0.5.1"
 openwisp2_firmware_upgrader_version: "0.1"

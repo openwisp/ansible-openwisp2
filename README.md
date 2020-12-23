@@ -512,6 +512,7 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_network_topology: true
     openwisp2_firmware_upgrader: true
     openwisp2_radius: true
+    openwisp2_radius_urls: true
     # you may replace the values of these variables with any URL
     # supported by pip (the python package installer)
     # use these to install forks, branches or development versions
