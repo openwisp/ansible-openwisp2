@@ -23,6 +23,7 @@ sql {
 	usergroup_table = "radusergroup"
 	delete_stale_sessions = yes
 	client_table = "nas"
+	read_clients = yes
 	group_attribute = "SQL-Group"
 
   $INCLUDE ${modconfdir}/${.:name}/main/${dialect}/queries.conf
