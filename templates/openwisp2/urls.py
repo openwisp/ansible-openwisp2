@@ -25,8 +25,6 @@ urlpatterns = [
     {% endif %}
     {% if openwisp2_radius and openwisp2_radius_urls %}
     url(r'^', include('openwisp_radius.urls')),
-    url(r'^api/v1/', include('openwisp_users.api.urls')),
-    url(r'^api/v1/', include('openwisp_utils.api.urls')),
     {% endif %}
     {% for extra_url in openwisp2_extra_urls %}
     {{ extra_url }},
