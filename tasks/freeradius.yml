@@ -25,15 +25,15 @@
     group: freerad
   notify: restart freeradius
 
-- name: Clients configuration
-  when: openwisp2_radius
-  template:
-    src: freeradius/clients.conf.j2
-    dest: "{{ freeradius_dir }}/site"
-    mode: 0640
-    owner: freerad
-    group: freerad
-  notify: restart freeradius
+# - name: Clients configuration
+#   when: openwisp2_radius
+#   template:
+#     src: freeradius/clients.conf.j2
+#     dest: "{{ freeradius_dir }}/site"
+#     mode: 0640
+#     owner: freerad
+#     group: freerad
+#   notify: restart freeradius
 
 # - name: Remove unnecessary modules
 #   when: openwisp2_radius
