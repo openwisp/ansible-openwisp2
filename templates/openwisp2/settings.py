@@ -129,10 +129,10 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 OPENWISP_RADIUS_SMS_TOKEN_MAX_IP_DAILY = {{ openwisp2_radius_sms_token_max_ip_daily }}
 SENDSMS_BACKEND = '{{ openwisp2_radius_sms_backend }}'
 
-OPENWISP_USERS_AUTH_API = {{ openwisp2_users_auth_api }}
 {% endif %}
 
 ROOT_URLCONF = 'openwisp2.urls'
+OPENWISP_USERS_AUTH_API = {{ openwisp2_users_auth_api }}
 
 CHANNEL_LAYERS = {
     'default': {
