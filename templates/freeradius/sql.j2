@@ -1,13 +1,18 @@
 sql {
-    driver = "{{ freeradius_sql.driver }}"
-    dialect = "{{ freeradius_sql.dialect }}"
-{% if 'postgresql' == freeradius_sql.dialect %}
-	radius_db = "host={{ freeradius_sql.host }} port={{ freeradius_sql.port }} dbname={{ freeradius_sql.dbname }}  user={{ freeradius_sql.user }}  password={{ freeradius_sql.password }}"
+  driver = "{{ freeradius_sql.driver }}"
+  dialect = "{{ freeradius_sql.dialect }}"
+{% if freeradius_sql.dialect in ['postgresql', 'mysql'] %}
+	radius_db = "{{ openwisp2_database.name }}"
+  host = "{{ openwisp2_database.host }}"
+  port = "{{ openwisp2_database.port }}"
+  user = "{{ openwisp2_database.user }}"
+  password = "{{ openwisp2_database.password }}"
 {% elif 'sqlite' == freeradius_sql.dialect %}
 	sqlite {
 		filename = "{{ openwisp2_database.name }}"
 	}
 {% endif %}
+
 	acct_table1 = "radacct"
 	acct_table2 = "radacct"
 	postauth_table = "radpostauth"
@@ -19,7 +24,9 @@ sql {
 	delete_stale_sessions = yes
 	client_table = "nas"
 	group_attribute = "SQL-Group"
-	$INCLUDE ${modconfdir}/${.:name}/main/${dialect}/queries.conf
+
+  $INCLUDE ${modconfdir}/${.:name}/main/${dialect}/queries.conf
+
 	pool {
 		start = ${thread[pool].start_servers}
 		min = ${thread[pool].min_spare_servers}
