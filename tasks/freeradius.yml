@@ -8,11 +8,12 @@
     state: latest
   notify: restart freeradius
 
-- import_tasks: freeradius-mysql.yml
-  when: openwisp2_radius and freeradius_sql.dialect == "mysql"
+# - import_tasks: freeradius-mysql.yml
+#   when: openwisp2_radius and freeradius_sql.dialect == "mysql"
+#
+# - import_tasks: freeradius-postgresql.yml
+#   when: openwisp2_radius and freeradius_sql.dialect == "postgresql"
 
-- import_tasks: freeradius-postgresql.yml
-  when: openwisp2_radius and freeradius_sql.dialect == "postgresql"
 
 - name: Radius configurations
   when: openwisp2_radius
