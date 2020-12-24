@@ -37,7 +37,6 @@
     dest: "/etc/nginx/sites-available/{{ inventory_hostname }}"
     mode: 0644
   notify: restart nginx
-  when: ansible_os_family == 'Debian'
 
 - name: nginx site enabled
   file:
@@ -45,4 +44,3 @@
     dest: "/etc/nginx/sites-enabled/{{ inventory_hostname }}"
     state: link
   notify: restart nginx
-  when: ansible_os_family == 'Debian'
