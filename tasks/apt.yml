@@ -92,6 +92,15 @@
   until: result is success
   notify: reload systemd
 
+- name: Install postgresql client drivers
+  when: openwisp2_database.engine == "django.contrib.gis.db.backends.postgis"
+  apt:
+    name: libpq-dev
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
+
 - name: Install cairo
   when: openwisp2_radius
   apt:
