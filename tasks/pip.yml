@@ -80,7 +80,7 @@
     - molecule-idempotence-notest
 
 - name: Pin channels_redis to 2.4 for redis 4 compatibility
-  when: use_redis5 is defined and use_redis5.failed
+  when: use_redis5 is defined and use_redis5.failed is defined and use_redis5.failed
   pip:
     name:
       - channels_redis~=2.4

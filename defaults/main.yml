@@ -81,12 +81,15 @@ openwisp2_nginx_ssl_config:
         - "application/xml"
         - "application/x-font-ttf"
         - "font/opentype"
+openwisp2_redis_install: true
+openwisp2_redis_host: localhost
+openwisp2_redis_port: 6379
+openwisp2_redis_cache_url: "redis://{{ openwisp2_redis_host }}:{{ openwisp2_redis_port }}/1"
 openwisp2_nginx_access_log: "{{ openwisp2_path }}/log/nginx.access.log"
 openwisp2_nginx_error_log: "{{ openwisp2_path }}/log/nginx.error.log error"
-openwisp2_redis_cache_url: redis://127.0.0.1:6379/1
 # keep backward compatibility with old variable openwisp2_eventlet_concurrency
 openwisp2_celery_concurrency: "{{ openwisp2_eventlet_concurrency | default(10) }}"
-openwisp2_celery_broker_url: redis://127.0.0.1:6379/3
+openwisp2_celery_broker_url: redis://{{ openwisp2_redis_host }}:{{ openwisp2_redis_port }}/3
 openwisp2_celery_worker_prefetch_multiplier: 1
 openwisp2_celery_task_acks_late: true
 openwisp2_celery_broker_max_tries: 10

@@ -38,9 +38,10 @@
     - start redis
   ignore_errors: true
   register: use_redis5
+  when: openwisp2_redis_install
 
 - name: Install redis 4 (fallback)
-  when: use_redis5.failed
+  when: openwisp2_redis_install and use_redis5.failed
   apt:
     name: "redis-server=5:4*"
   notify:
@@ -54,6 +55,7 @@
 # ipv6 enabled. Hence, we set redis to listen on ipv4
 - name: set redis to listen on ipv4
   notify: start redis
+  when: openwisp2_redis_install
   lineinfile:
     path: /etc/redis/redis.conf
     regexp: '^bind 127\.0\.0\.1 ::1'

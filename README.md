@@ -705,12 +705,15 @@ Below are listed all the variables you can customize (you may also want to take 
         dsn: "https://7d2e3cd61acc32eca1fb2a390f7b55e1:bf82aab5ddn4422688e34a486c7426e3@getsentry.com:443/12345"
     openwisp2_default_cert_validity: 1825
     openwisp2_default_ca_validity: 3650
-    # redis cache url
-    openwisp2_redis_cache_url: redis://127.0.0.1:6379/1
+    # the following options for redis allow to configure an external redis instance if needed
+    openwisp2_redis_install: true
+    openwisp2_redis_host: localhost
+    openwisp2_redis_port: 6379
+    openwisp2_redis_cache_url: "redis://{{ openwisp2_redis_host }}:{{ openwisp2_redis_port }}/1"
     # celery gevent pool size
     openwisp2_celery_concurrency: 10
     # celery settings
-    openwisp2_celery_broker_url: redis://127.0.0.1:6379/3
+    openwisp2_celery_broker_url: redis://{{ openwisp2_redis_host }}:{{ openwisp2_redis_port }}/3
     openwisp2_celery_worker_prefetch_multiplier: 1
     openwisp2_celery_task_acks_late: true
     # maximum number of retries by celery before giving up when broker is unreachable

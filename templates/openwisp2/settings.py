@@ -115,7 +115,7 @@ ROOT_URLCONF = 'openwisp2.urls'
 CHANNEL_LAYERS = {
     'default': {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {"hosts": [('localhost', 6379)]},
+        'CONFIG': {'hosts': [('{{ openwisp2_redis_host }}', {{ openwisp2_redis_port }})]},
     },
 }
 ASGI_APPLICATION = 'openwisp2.routing.application'
