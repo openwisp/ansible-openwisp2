@@ -5,21 +5,21 @@
     path: "{{ openwisp2_path }}"
     state: directory
     group: "{{ www_group }}"
-    mode: 0775
+    mode: 0770
 
 - name: create "{{ openwisp2_path }}/openwisp2"
   file:
     path: "{{ openwisp2_path }}/openwisp2"
     state: directory
     group: "{{ www_group }}"
-    mode: 0775
+    mode: 0770
 
 - name: create "{{ openwisp2_path }}/log"
   file:
     path: "{{ openwisp2_path }}/log"
     state: directory
     group: "{{ www_group }}"
-    mode: 0775
+    mode: 0770
     recurse: true
   tags:
     - molecule-idempotence-notest
@@ -38,7 +38,7 @@
     src: openwisp2/celery.py
     dest: "{{ openwisp2_path }}/openwisp2/celery.py"
     group: "{{ www_group }}"
-    mode: 0664
+    mode: 0640
 
 - name: __init__.py
   notify: reload supervisor
@@ -46,7 +46,7 @@
     src: openwisp2/__init__.py
     dest: "{{ openwisp2_path }}/openwisp2/__init__.py"
     group: "{{ www_group }}"
-    mode: 0664
+    mode: 0640
 
 - name: urls.py
   notify: reload supervisor
@@ -54,7 +54,7 @@
     src: openwisp2/urls.py
     dest: "{{ openwisp2_path }}/openwisp2/urls.py"
     group: "{{ www_group }}"
-    mode: 0664
+    mode: 0640
 
 - name: wsgi.py
   notify: reload supervisor
@@ -62,7 +62,7 @@
     src: openwisp2/wsgi.py
     dest: "{{ openwisp2_path }}/openwisp2/wsgi.py"
     group: "{{ www_group }}"
-    mode: 0664
+    mode: 0640
 
 - name: asgi.py
   notify: reload supervisor
@@ -70,7 +70,7 @@
     src: openwisp2/asgi.py
     dest: "{{ openwisp2_path }}/openwisp2/asgi.py"
     group: "{{ www_group }}"
-    mode: 0664
+    mode: 0640
 
 # set openwisp2_secret_key if not defined explicitly
 - import_tasks: django_secret_key.yml
@@ -82,13 +82,13 @@
     src: openwisp2/settings.py
     dest: "{{ openwisp2_path }}/openwisp2/settings.py"
     group: "{{ www_group }}"
-    mode: 0664
+    mode: 0640
 
 - name: storage.py
   copy:
     src: storage.py
     dest: "{{ openwisp2_path }}/openwisp2/storage.py"
-    mode: 0664
+    mode: 0644
 
 - name: routing.py
   notify: reload supervisor
@@ -96,7 +96,7 @@
     src: openwisp2/routing.py
     dest: "{{ openwisp2_path }}/openwisp2/routing.py"
     group: "{{ www_group }}"
-    mode: 0664
+    mode: 0640
 
 - name: start redis
   service: name=redis state=started
@@ -116,7 +116,7 @@
     path: "{{ openwisp2_database.name }}"
     state: file
     group: "{{ www_group }}"
-    mode: 0775
+    mode: 0770
 
 - name: set permissions to "{{ openwisp2_path }}/static"
   file:
