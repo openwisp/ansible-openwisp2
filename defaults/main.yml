@@ -94,4 +94,5 @@ openwisp2_celery_worker_prefetch_multiplier: 1
 openwisp2_celery_task_acks_late: true
 openwisp2_celery_broker_max_tries: 10
 openwisp2_django_celery_logging: false
+openwisp2_postfix_install: true
 postfix_smtpd_relay_restrictions_override: "permit_sasl_authenticated, permit_mynetworks, check_relay_domains, reject_unauth_destination, reject"

@@ -4,6 +4,7 @@ dependencies:
   - src: https://github.com/Stouts/Stouts.postfix
     version: origin/develop
     name: Stouts.postfix
+    when: openwisp2_postfix_install
     postfix_smtp_sasl_auth_enable: "{{ postfix_smtp_sasl_auth_enable_override | default(false) }}"
     postfix_smtpd_relay_restrictions: "{{ postfix_smtpd_relay_restrictions_override }}"
 
