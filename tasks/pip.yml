@@ -196,7 +196,7 @@
 
 - name: Install gevent
   pip:
-    name: gevent
+    name: gevent==20.9.0
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
