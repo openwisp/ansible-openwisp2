@@ -147,8 +147,8 @@
 
 - name: load initial data
   environment:
-    PRIVATE_KEY: "{{ default_private_ssh_key.stdout }}"
-    PUBLIC_KEY: "{{ default_public_ssh_key.stdout }}"
+    PRIVATE_KEY: "{{ default_private_ssh_key.stdout|default(None) }}"
+    PUBLIC_KEY: "{{ default_public_ssh_key.stdout|default(None) }}"
   command: "env/bin/python load_initial_data.py"
   register: load_initial_data_result
   changed_when: >
