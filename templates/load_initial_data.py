@@ -41,7 +41,7 @@ ssh_private_key = os.environ.get('PRIVATE_KEY')
 ssh_pub_key = os.environ.get('PUBLIC_KEY')
 
 # Create a default credentials object
-if Credentials.objects.count() == 0:
+if ssh_private_key and Credentials.objects.count() == 0:
     Credentials.objects.create(
         connector='openwisp_controller.connection.connectors.ssh.Ssh',
         name='OpenWISP Default',
@@ -54,7 +54,7 @@ if Credentials.objects.count() == 0:
 queryset = Template.objects.filter(
     default=True, config__contains='/etc/dropbear/authorized_keys'
 )
-if queryset.count() == 0:
+if ssh_pub_key and queryset.count() == 0:
     Template.objects.create(
         name='SSH Keys',
         default=True,
