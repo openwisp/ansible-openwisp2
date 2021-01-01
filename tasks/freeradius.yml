@@ -7,6 +7,20 @@
     state: latest
   notify: restart freeradius
 
+- name: Freeradius postgres packages
+  when: openwisp2_database.engine == "django.contrib.gis.db.backends.postgis"
+  apt:
+    name: freeradius-postgresql
+    state: latest
+  notify: restart freeradius
+
+- name: Freeradius mysql packages
+  when: openwisp2_database.engine == "django.contrib.gis.db.backends.mysql"
+  apt:
+    name: freeradius-mysql
+    state: latest
+  notify: restart freeradius
+
 - name: SQL configuration
   template:
     src: freeradius/sql.j2
@@ -24,6 +38,13 @@
     mode: 0640
     owner: freerad
     group: freerad
+
+- name: adding user 'freerad' to www-data group for database access
+  when: openwisp2_database.engine == "django.contrib.gis.db.backends.spatialite"
+  user:
+    name: freerad
+    groups: www-data
+    append: yes
 
 - name: SQL Counter module
   template:

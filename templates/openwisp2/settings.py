@@ -367,8 +367,7 @@ LOGGING = {
             'formatter': 'verbose',
             'filename': os.path.join(BASE_DIR, 'log/openwisp2.log'),
             'maxBytes': 15728640,
-            'backupCount': 3,
-            'formatter': 'verbose'
+            'backupCount': 3
         },
         'null': {
             'level': 'DEBUG',

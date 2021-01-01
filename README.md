@@ -823,6 +823,9 @@ Below are listed all the variables you can customize (you may also want to take 
     # if you manage freeradius on a different machine or you need different configurations
     # you can disable this default behavior
     openwisp2_freeradius_install: true
+    # Set an account to expire T seconds after first login.
+    # This variable sets the value of T.
+    freeradius_expire_attr_after_seconds: 86400
     freeradius_dir: /etc/freeradius/3.0
     freeradius_mods_available_dir: "{{ freeradius_dir }}/mods-available"
     freeradius_mods_enabled_dir: "{{ freeradius_dir }}/mods-enabled"
