@@ -125,22 +125,21 @@ freeradius_mods_enabled_dir: "{{ freeradius_dir }}/mods-enabled"
 freeradius_sites_available_dir: "{{ freeradius_dir }}/sites-available"
 freeradius_sites_enabled_dir: "{{ freeradius_dir }}/sites-enabled"
 freeradius_db_map:
-  django.contrib.gis.db.backends.spatialite:
-    driver: rlm_sql_sqlite
-    dialect: sqlite
-  django.contrib.gis.db.backends.postgis:
-    driver: rlm_sql_postgresql
-    dialect: postgresql
-  django.contrib.gis.db.backends.mysql:
-    driver: rlm_sql_mysql
-    dialect: mysql
+    django.contrib.gis.db.backends.spatialite:
+        driver: rlm_sql_sqlite
+        dialect: sqlite
+    django.contrib.gis.db.backends.postgis:
+        driver: rlm_sql_postgresql
+        dialect: postgresql
+    django.contrib.gis.db.backends.mysql:
+        driver: rlm_sql_mysql
+        dialect: mysql
 freeradius_sql:
     driver: "{{ freeradius_db_map[openwisp2_database.engine].driver }}"
     dialect: "{{ freeradius_db_map[openwisp2_database.engine].dialect }}"
 freeradius_rest:
     url: "https://{{ inventory_hostname }}/api/v1/freeradius"
-freeradius_clients_ip: "0.0.0.0/0"
-freeradius_clients_key: "admin"
+freeradius_expire_attr_after_seconds: 86400
 cron_delete_old_notifications: "'hour': 0, 'minute': 0"
 cron_deactivate_expired_users: "'hour': 0, 'minute': 0"
 cron_delete_old_users: "'hour': 0, 'minute': 10"

@@ -18,3 +18,12 @@
   service:
     name: redis
     state: started
+
+- name: update-ca-certificates
+  command: /usr/sbin/update-ca-certificates
+  when: ansible_os_family == "Debian"
+
+- name: restart freeradius
+  service:
+    name: freeradius
+    state: started

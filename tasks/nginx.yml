@@ -30,7 +30,7 @@
   copy:
     src: "{{ openwisp2_ssl_cert }}"
     dest: /usr/local/share/ca-certificates/openwisp-ssl-server.crt
-    remote_src: yes
+    remote_src: true
     owner: "root"
     group: "root"
     mode: "0644"

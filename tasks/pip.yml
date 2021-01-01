@@ -150,7 +150,7 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-    virtualenv_site_packages: yes
+    virtualenv_site_packages: true
   notify: reload supervisor
   retries: 5
   delay: 10
