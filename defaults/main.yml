@@ -8,6 +8,7 @@ openwisp2_controller_version: "0.8.2"
 openwisp2_network_topology_version: "0.5.1"
 openwisp2_firmware_upgrader_version: "0.1"
 openwisp2_controller_pip: false
+openwisp2_notifications_pip: false
 openwisp2_users_pip: false
 openwisp2_utils_pip: false
 openwisp2_django_x509_pip: false
