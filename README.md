@@ -723,6 +723,8 @@ Below are listed all the variables you can customize (you may also want to take 
     # which will cause log lines to be written to "{{ openwisp2_path }}/log/openwisp2.log"
     # instead of "{{ openwisp2_path }}/log/celery.log" and "{{ openwisp2_path }}/log/celerybeat.log"
     openwisp2_django_celery_logging: false
+    # command to start celery from command line according to changes introduced from celery version 5.0 (Singularity)
+    command_to_start_celery : celery --app openwisp2 worker
     # postfix is installed by default, set to false if you don't need it
     openwisp2_postfix_install: true
     # allow overriding default `postfix_smtp_sasl_auth_enable` variable
