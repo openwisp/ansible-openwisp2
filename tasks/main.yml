@@ -20,7 +20,7 @@
   tags: [openwisp2, django]
 
 - import_tasks: freeradius.yml
-  when: openwisp2_freeradius_install
+  when: openwisp2_radius and openwisp2_freeradius_install
   tags: [openwisp2, freeradius]
 
 - import_tasks: supervisor.yml
