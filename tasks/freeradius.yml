@@ -44,7 +44,7 @@
   user:
     name: freerad
     groups: www-data
-    append: yes
+    append: true
 
 - name: SQL Counter module
   template:

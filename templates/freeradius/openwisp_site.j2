@@ -25,7 +25,23 @@ server default {
         dailybandwidthcounter
     }
 
-    authenticate {}
+    authenticate {
+        Auth-Type PAP {
+            pap
+        }
+
+        Auth-Type CHAP {
+            chap
+        }
+
+        Auth-Type MS-CHAP {
+            mschap
+        }
+
+        Auth-Type EAP {
+            eap
+        }
+    }
 
     preacct {
         preprocess

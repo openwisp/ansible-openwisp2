@@ -618,13 +618,13 @@ Below are listed all the variables you can customize (you may also want to take 
     - openwisp.openwisp2
   vars:
     # openwisp-controler version
-    openwisp2_controller_version: "0.8.1"
+    openwisp2_controller_version: "0.8.2"
     # optional openwisp2 modules
     openwisp2_network_topology: false
     openwisp2_network_topology_version: "0.5.1"
     openwisp2_firmware_upgrader: false
     openwisp2_firmware_upgrader_version: "0.1"
-    openwisp2_radius_version: "0.1"
+    openwisp2_radius_version: "0.2.1"
     # Enable the modules you want to use
     openwisp2_network_topology: false
     openwisp2_firmware_upgrader: false

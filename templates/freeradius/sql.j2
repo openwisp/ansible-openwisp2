@@ -2,7 +2,7 @@ sql {
   driver = "{{ freeradius_sql.driver }}"
   dialect = "{{ freeradius_sql.dialect }}"
 {% if freeradius_sql.dialect in ['postgresql', 'mysql'] %}
-	radius_db = "{{ openwisp2_database.name }}"
+  radius_db = "{{ openwisp2_database.name }}"
   host = "{{ openwisp2_database.host }}"
   port = "{{ openwisp2_database.port }}"
   user = "{{ openwisp2_database.user }}"
