@@ -661,6 +661,9 @@ Below are listed all the variables you can customize (you may also want to take 
     # extra URL settings for django
     openwisp2_extra_urls:
       - "url(r'', include('my_custom_app.urls'))"
+    # controller URL are enabled by default
+    # but can be disabled in multi-VM installations if needed
+    openwisp2_controller_urls: true
     # spdy protocol support (disabled by default)
     openwisp2_nginx_spdy: false
     # HTTP2 protocol support (disabled by default)
