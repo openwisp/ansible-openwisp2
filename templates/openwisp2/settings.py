@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'openwisp_users.accounts',
     'allauth',
     'allauth.account',
+{% if openwisp2_socialaccount %}
     'allauth.socialaccount',
+{% endif %}
     'django_extensions',
     # openwisp2 modules
     'openwisp_users',
