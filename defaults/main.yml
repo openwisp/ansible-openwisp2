@@ -90,9 +90,17 @@ openwisp2_redis_cache_url: "redis://{{ openwisp2_redis_host }}:{{ openwisp2_redi
 openwisp2_nginx_access_log: "{{ openwisp2_path }}/log/nginx.access.log"
 openwisp2_nginx_error_log: "{{ openwisp2_path }}/log/nginx.error.log error"
 # keep backward compatibility with old variable openwisp2_eventlet_concurrency
-openwisp2_celery_concurrency: "{{ openwisp2_eventlet_concurrency | default(10) }}"
+openwisp2_celery_concurrency: "{{ openwisp2_eventlet_concurrency | default(None) }}"
+openwisp2_celery_autoscale: null
+openwisp2_celery_prefetch_multiplier: null
+openwisp2_celery_optimization: default
+openwisp2_celery_network: true
+openwisp2_celery_network_concurrency: null
+openwisp2_celery_network_autoscale: 2,8
+openwisp2_celery_network_prefetch_multiplier: 1
+openwisp2_celery_network_optimization: fair
+openwisp2_celery_task_routes_defaults: true
 openwisp2_celery_broker_url: redis://{{ openwisp2_redis_host }}:{{ openwisp2_redis_port }}/3
-openwisp2_celery_worker_prefetch_multiplier: 1
 openwisp2_celery_task_acks_late: true
 openwisp2_celery_broker_max_tries: 10
 openwisp2_django_celery_logging: false

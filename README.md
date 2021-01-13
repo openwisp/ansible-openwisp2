@@ -713,11 +713,40 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_redis_host: localhost
     openwisp2_redis_port: 6379
     openwisp2_redis_cache_url: "redis://{{ openwisp2_redis_host }}:{{ openwisp2_redis_port }}/1"
-    # celery gevent pool size
-    openwisp2_celery_concurrency: 10
+    # celery concurrency for the default queue, by default the number of CPUs is used
+    openwisp2_celery_concurrency: null
+    # alternatively to the previous option, the celery autoscale option can be set if needed
+    # for more info, consult the documentation of celery regarding "autoscaling"
+    openwisp2_celery_autoscale: null
+    # prefetch multiplier for the default queue,
+    # the default value is calculated automatically by celery
+    openwisp2_celery_prefetch_multiplier: null
+    # celery queuing mode for the default queue,
+    # leaving the default will work for most cases
+    openwisp2_celery_optimization: default
+    # whether the dedicated worker for the celery network queue is enabled
+    # must be turned on unless there's another server running a worker for this queue
+    openwisp2_celery_network: true
+    # concurrency option for the network queue (a worker is dedicated solely to network operations)
+    # the default is null because the autoscale option below is used
+    openwisp2_celery_network_concurrency: null
+    # the network queue is automatically set to have at least 2 workers
+    # but it can increase up to 8 worker during peaks
+    openwisp2_celery_network_autoscale: 4,8
+    # prefetch multiplier for the network queue,
+    # the default is 1, which mean no prefetching,
+    # because the network tasks are long running and is better
+    # to distribute the tasks to multiple processes
+    openwisp2_celery_network_prefetch_multiplier: 1
+    # celery queuing mode for the network queue,
+    # fair mode is used in this case, which means
+    # tasks will be equally distributed among workers
+    openwisp2_celery_network_optimization: fair
+    # whether the default celery task routes should be written to the settings.py file
+    # turn this off if you're defining custom task routing rules
+    openwisp2_celery_task_routes_defaults: true
     # celery settings
     openwisp2_celery_broker_url: redis://{{ openwisp2_redis_host }}:{{ openwisp2_redis_port }}/3
-    openwisp2_celery_worker_prefetch_multiplier: 1
     openwisp2_celery_task_acks_late: true
     # maximum number of retries by celery before giving up when broker is unreachable
     openwisp2_celery_broker_max_tries: 10

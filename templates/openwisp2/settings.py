@@ -150,7 +150,6 @@ TEMPLATES = [
 # Run celery in eager mode using in-memory broker while running tests
 if not TESTING:
     CELERY_TASK_ACKS_LATE = {{ openwisp2_celery_task_acks_late }}
-    CELERY_WORKER_PREFETCH_MULTIPLIER = {{ openwisp2_celery_worker_prefetch_multiplier }}
     CELERY_BROKER_URL = '{{ openwisp2_celery_broker_url }}'
 else:
     CELERY_TASK_ALWAYS_EAGER = True
@@ -169,6 +168,18 @@ CELERY_BEAT_SCHEDULE = {
         'args': ({{ openwisp2_notifications_delete_old_notifications }},),
     },
 }
+
+{% if openwisp2_celery_task_routes_defaults %}
+CELERY_TASK_ROUTES = {
+    # network operations, executed in the "network" queue
+    'openwisp_controller.connection.tasks.*': {'queue': 'network'},
+{% if openwisp2_firmware_upgrader %}
+    'openwisp_firmware_upgrader.tasks.upgrade_firmware': {'queue': 'network'},
+    'openwisp_firmware_upgrader.tasks.batch_upgrade_operation': {'queue': 'network'},
+{% endif %}
+    # all other tasks are routed to the default queue (named "celery")
+}
+{% endif %}
 
 # FOR DJANGO REDIS
 
