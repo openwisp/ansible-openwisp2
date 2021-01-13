@@ -1,8 +1,5 @@
 ---
 
-- import_tasks: variables.yml
-  tags: [openwisp2, apt, yum, pip, django, supervisor, nginx, variables]
-
 - import_tasks: variables-spatialite.yml
   tags: [openwisp2, apt, yum, pip, django, supervisor, nginx, variables]
   when: >
