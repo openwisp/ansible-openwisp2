@@ -11,4 +11,5 @@
   service: name=nginx state=restarted
 
 - name: start redis
+  when: openwisp2_redis_install
   service: name=redis state=started
