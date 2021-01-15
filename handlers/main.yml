@@ -1,15 +1,20 @@
 ---
 
 - name: reload systemd
-  systemd: daemon_reload=yes
+  systemd:
+    daemon_reload: yes
   when: ansible_distribution_release in ['bionic'] and ansible_service_mgr == 'systemd'
 
 - name: reload supervisor
   command: supervisorctl reload
 
 - name: restart nginx
-  service: name=nginx state=restarted
+  service:
+    name: nginx
+    state: restarted
 
 - name: start redis
   when: openwisp2_redis_install
-  service: name=redis state=started
+  service:
+    name: redis
+    state: started
