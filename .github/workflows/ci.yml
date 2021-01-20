@@ -55,6 +55,8 @@ jobs:
     container: python:3-slim
     needs:
       - build
+
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
     steps:
       - name: Install ansible
         run: pip install ansible
