@@ -3,10 +3,10 @@ sql {
   dialect = "{{ freeradius_sql.dialect }}"
 {% if freeradius_sql.dialect in ['postgresql', 'mysql'] %}
   radius_db = "{{ openwisp2_database.name }}"
-  host = "{{ openwisp2_database.host }}"
   port = "{{ openwisp2_database.port }}"
-  user = "{{ openwisp2_database.user }}"
   password = "{{ openwisp2_database.password }}"
+    server = "{{ openwisp2_database.host }}"
+    login = "{{ openwisp2_database.user }}"
 {% elif 'sqlite' == freeradius_sql.dialect %}
 	sqlite {
 		filename = "{{ openwisp2_database.name }}"
