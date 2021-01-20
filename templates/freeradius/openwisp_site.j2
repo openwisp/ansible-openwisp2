@@ -18,11 +18,15 @@ server default {
     }
 
     authorize {
+        filter_username
         rest
         sql
         dailycounter
         noresetcounter
         dailybandwidthcounter
+        noresetcounter
+        expiration
+        logintime
     }
 
     authenticate {
