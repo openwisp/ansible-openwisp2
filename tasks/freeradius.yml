@@ -33,7 +33,9 @@
 - name: Enable SQL module
   file:
     src: "{{ freeradius_mods_available_dir }}/sql"
-    dest: "{{ freeradius_mods_enabled_dir }}/sql"
+    # the "1_" prefix is put on purpose to force loading the sql module
+    # before the sqlcounter module to avoid an annoying startup error
+    dest: "{{ freeradius_mods_enabled_dir }}/1_sql"
     state: link
     mode: 0640
     owner: freerad
@@ -48,8 +50,35 @@
 
 - name: SQL Counter module
   template:
-    src: freeradius/sql_counter.j2
-    dest: "{{ freeradius_mods_available_dir }}/sql_counter"
+    src: freeradius/sqlcounter.j2
+    dest: "{{ freeradius_mods_available_dir }}/sqlcounter"
+    mode: 0640
+    owner: freerad
+    group: freerad
+  notify: restart freeradius
+
+- name: Upload Daily Bandwidth Counter config file (sqlite)
+  template:
+    src: freeradius/daily-bandwidth-counter/sqlite.j2
+    dest: "{{ freeradius_mods_config_dir }}/sql/counter/sqlite/dailybandwidthcounter.conf"
+    mode: 0640
+    owner: freerad
+    group: freerad
+  notify: restart freeradius
+
+- name: Upload Daily Bandwidth Counter config file (mysql)
+  template:
+    src: freeradius/daily-bandwidth-counter/mysql.j2
+    dest: "{{ freeradius_mods_config_dir }}/sql/counter/mysql/dailybandwidthcounter.conf"
+    mode: 0640
+    owner: freerad
+    group: freerad
+  notify: restart freeradius
+
+- name: Upload Daily Bandwidth Counter config file (postgresql)
+  template:
+    src: freeradius/daily-bandwidth-counter/postgresql.j2
+    dest: "{{ freeradius_mods_config_dir }}/sql/counter/postgresql/dailybandwidthcounter.conf"
     mode: 0640
     owner: freerad
     group: freerad
@@ -57,8 +86,8 @@
 
 - name: Enable SQL Counter module
   file:
-    src: "{{ freeradius_mods_available_dir }}/sql_counter"
-    dest: "{{ freeradius_mods_enabled_dir }}/sql_counter"
+    src: "{{ freeradius_mods_available_dir }}/sqlcounter"
+    dest: "{{ freeradius_mods_enabled_dir }}/sqlcounter"
     state: link
     mode: 0640
     owner: freerad

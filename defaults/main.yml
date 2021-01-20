@@ -122,6 +122,7 @@ openwisp2_freeradius_install: true
 freeradius_dir: /etc/freeradius/3.0
 freeradius_mods_available_dir: "{{ freeradius_dir }}/mods-available"
 freeradius_mods_enabled_dir: "{{ freeradius_dir }}/mods-enabled"
+freeradius_mods_config_dir: "{{ freeradius_dir }}/mods-config"
 freeradius_sites_available_dir: "{{ freeradius_dir }}/sites-available"
 freeradius_sites_enabled_dir: "{{ freeradius_dir }}/sites-enabled"
 freeradius_db_map:
