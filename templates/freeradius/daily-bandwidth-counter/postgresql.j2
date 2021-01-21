@@ -2,4 +2,4 @@ query = "\
         SELECT sum(AcctOutputOctets) + sum(AcctInputOctets) \
         FROM radacct WHERE \
         UserName = '%{${key}}' AND \
-        AcctStartTime::ABSTIME::INT4 + AcctSessionTime > '%%b'"
+        EXTRACT(epoch FROM AcctStartTime) + AcctSessionTime > '%%b'"

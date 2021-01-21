@@ -84,6 +84,26 @@
     group: freerad
   notify: restart freeradius
 
+- name: Fix dailycounter postgresql query
+  when: freeradius_sql.dialect == "postgresql"
+  template:
+    src: freeradius/daily-counter/postgresql.j2
+    dest: "{{ freeradius_mods_config_dir }}/sql/counter/postgresql/dailycounter.conf"
+    mode: 0640
+    owner: freerad
+    group: freerad
+  notify: restart freeradius
+
+- name: Fix monthlycounter postgresql query
+  when: freeradius_sql.dialect == "postgresql"
+  template:
+    src: freeradius/monthly-counter/postgresql.j2
+    dest: "{{ freeradius_mods_config_dir }}/sql/counter/postgresql/monthlycounter.conf"
+    mode: 0640
+    owner: freerad
+    group: freerad
+  notify: restart freeradius
+
 - name: Enable SQL Counter module
   file:
     src: "{{ freeradius_mods_available_dir }}/sqlcounter"
