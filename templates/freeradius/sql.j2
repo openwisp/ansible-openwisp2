@@ -8,7 +8,7 @@ sql {
     login = "{{ openwisp2_database.user }}"
     password = "{{ openwisp2_database.password }}"
 
-{% elif 'sqlite' == freeradius_sql.dialect %}
+{% elif freeradius_sql.dialect == 'sqlite' %}
     sqlite {
         filename = "{{ openwisp2_database.name }}"
     }

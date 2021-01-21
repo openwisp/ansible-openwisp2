@@ -118,14 +118,13 @@ MIDDLEWARE = [
 
 {% if openwisp2_radius %}
 OPENWISP_RADIUS_FREERADIUS_ALLOWED_HOSTS = {{ openwisp2_radius_allowed_hosts }}
-
-# SMS
 REST_AUTH_SERIALIZERS = {
     'PASSWORD_RESET_SERIALIZER': 'openwisp_radius.api.serializers.PasswordResetSerializer',
 }
 REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'openwisp_radius.api.serializers.RegisterSerializer',
 }
+# SMS settings
 OPENWISP_RADIUS_SMS_TOKEN_MAX_IP_DAILY = {{ openwisp2_radius_sms_token_max_ip_daily }}
 SENDSMS_BACKEND = '{{ openwisp2_radius_sms_backend }}'
 

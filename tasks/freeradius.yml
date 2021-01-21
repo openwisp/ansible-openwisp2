@@ -8,14 +8,14 @@
   notify: restart freeradius
 
 - name: Freeradius postgres packages
-  when: openwisp2_database.engine == "django.contrib.gis.db.backends.postgis"
+  when: freeradius_sql.dialect == "postgresql"
   apt:
     name: freeradius-postgresql
     state: latest
   notify: restart freeradius
 
 - name: Freeradius mysql packages
-  when: openwisp2_database.engine == "django.contrib.gis.db.backends.mysql"
+  when: freeradius_sql.dialect == "mysql"
   apt:
     name: freeradius-mysql
     state: latest
@@ -42,7 +42,7 @@
     group: freerad
 
 - name: adding user 'freerad' to www-data group for database access
-  when: openwisp2_database.engine == "django.contrib.gis.db.backends.spatialite"
+  when: freeradius_sql.dialect == "sqlite"
   user:
     name: freerad
     groups: www-data
@@ -67,6 +67,7 @@
   notify: restart freeradius
 
 - name: Upload Daily Bandwidth Counter config file (mysql)
+  when: freeradius_sql.dialect == "mysql"
   template:
     src: freeradius/daily-bandwidth-counter/mysql.j2
     dest: "{{ freeradius_mods_config_dir }}/sql/counter/mysql/dailybandwidthcounter.conf"
@@ -76,6 +77,7 @@
   notify: restart freeradius
 
 - name: Upload Daily Bandwidth Counter config file (postgresql)
+  when: freeradius_sql.dialect == "postgresql"
   template:
     src: freeradius/daily-bandwidth-counter/postgresql.j2
     dest: "{{ freeradius_mods_config_dir }}/sql/counter/postgresql/dailybandwidthcounter.conf"
