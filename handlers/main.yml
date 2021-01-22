@@ -2,7 +2,7 @@
 
 - name: reload systemd
   systemd:
-    daemon_reload: yes
+    daemon_reload: true
   when: ansible_distribution_release in ['bionic'] and ansible_service_mgr == 'systemd'
 
 - name: reload supervisor
