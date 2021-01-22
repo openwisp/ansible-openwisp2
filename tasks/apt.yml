@@ -63,6 +63,12 @@
     line: 'bind 127.0.0.1'
     backrefs: true
 
+- name: start redis
+  when: openwisp2_redis_install
+  service:
+    name: redis
+    state: started
+
 - name: Install geographic libraries
   apt:
     name:
