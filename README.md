@@ -755,8 +755,6 @@ Below are listed all the variables you can customize (you may also want to take 
     # which will cause log lines to be written to "{{ openwisp2_path }}/log/openwisp2.log"
     # instead of "{{ openwisp2_path }}/log/celery.log" and "{{ openwisp2_path }}/log/celerybeat.log"
     openwisp2_django_celery_logging: false
-    # whether allauth.socialaccount is added to INSTALLED_APPS
-    openwisp2_socialaccount: true
     # postfix is installed by default, set to false if you don't need it
     openwisp2_postfix_install: true
     # allow overriding default `postfix_smtp_sasl_auth_enable` variable
