@@ -834,11 +834,11 @@ Below are listed all the variables you can customize (you may also want to take 
     freeradius_rest:
         url: "https://{{ inventory_hostname }}/api/v1/freeradius"
     cron_delete_old_notifications: "'hour': 0, 'minute': 0"
-    cron_deactivate_expired_users: "'hour': 0, 'minute': 0"
+    cron_deactivate_expired_users: "'hour': 0, 'minute': 5"
     cron_delete_old_users: "'hour': 0, 'minute': 10"
     cron_cleanup_stale_radacct: "'hour': 0, 'minute': 20"
     cron_delete_old_postauth: "'hour': 0, 'minute': 30"
-    cron_delete_old_radacct: "'hour': 0, 'minute': 40"
+    cron_delete_old_radacct: "'hour': 1, 'minute': 30"
 ```
 
 Support
