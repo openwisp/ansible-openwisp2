@@ -186,7 +186,8 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': crontab(**{ {{ cron_delete_old_notifications }} }),
         'args': ({{ openwisp2_notifications_delete_old_notifications }},),
     },
-    {% if openwisp2_radius %}
+{% if openwisp2_radius %}
+
     'deactivate_expired_users': {
         'task': 'openwisp_radius.tasks.cleanup_stale_radacct',
         'schedule': crontab(**{ {{ cron_deactivate_expired_users }} }),
@@ -211,6 +212,7 @@ CELERY_BEAT_SCHEDULE = {
         'args': [{{ openwisp2_radius_delete_old_postauth }}],
         'relative': True,
     },
+    {% if openwisp2_radius_delete_old_radacct %}
     'delete_old_radacct': {
         'task': 'openwisp_radius.tasks.delete_old_radacct',
         'schedule': crontab(**{ {{ cron_delete_old_radacct }} }),
@@ -218,6 +220,8 @@ CELERY_BEAT_SCHEDULE = {
         'relative': True,
     },
     {% endif %}
+{% endif %}
+
 }
 
 {% if openwisp2_celery_task_routes_defaults %}
