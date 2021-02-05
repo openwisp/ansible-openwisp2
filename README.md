@@ -522,6 +522,10 @@ When the playbook is done running, if you got no errors you can login at:
     username: admin
     password: admin
 
+**Note:** for more information regarding radius configuration options,
+look for the word "radius" in the
+[Role variables](#role-variables) section of this document.
+
 Troubleshooting
 ===============
 
@@ -812,11 +816,20 @@ Below are listed all the variables you can customize (you may also want to take 
     # allows overriding the default duration for keeping notifications
     openwisp2_notifications_delete_old_notifications: 10
     openwisp2_users_auth_api: true
+    # used for SMS verification, the default is a dummy SMS backend
+    # which prints to standard output and hence does nothing
+    # one of the available providers from django-sendsms can be
+    # used or alternatively, you can write a backend class for your
+    # favorite SMS API gateway
     openwisp2_radius_sms_backend: "sendsms.backends.console.SmsBackend"
     openwisp2_radius_sms_token_max_ip_daily: 25
     openwisp2_radius_delete_old_users: 365
     openwisp2_radius_cleanup_stale_radacct: 365
     openwisp2_radius_delete_old_postauth: 365
+    # days for which the radius accounting sessions (radacct) are retained,
+    # 0 means sessions are kept forever.
+    # we highly suggest to set this number according
+    # to the privacy regulation of your jurisdiction
     openwisp2_radius_delete_old_radacct: 365
     openwisp2_radius_allowed_hosts: ["127.0.0.1"]
     # this role provides a default configuration of freeradius
