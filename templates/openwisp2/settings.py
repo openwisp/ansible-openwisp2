@@ -189,7 +189,7 @@ CELERY_BEAT_SCHEDULE = {
 {% if openwisp2_radius %}
 
     'deactivate_expired_users': {
-        'task': 'openwisp_radius.tasks.cleanup_stale_radacct',
+        'task': 'openwisp_radius.tasks.deactivate_expired_users',
         'schedule': crontab(**{ {{ cron_deactivate_expired_users }} }),
         'args': None,
         'relative': True,

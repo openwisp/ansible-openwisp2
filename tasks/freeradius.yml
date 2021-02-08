@@ -33,9 +33,7 @@
 - name: Enable SQL module
   file:
     src: "{{ freeradius_mods_available_dir }}/sql"
-    # the "1_" prefix is put on purpose to force loading the sql module
-    # before the sqlcounter module to avoid an annoying startup error
-    dest: "{{ freeradius_mods_enabled_dir }}/1_sql"
+    dest: "{{ freeradius_mods_enabled_dir }}/sql"
     state: link
     mode: 0640
     owner: freerad
@@ -50,8 +48,8 @@
 
 - name: SQL Counter module
   template:
-    src: freeradius/sqlcounter.j2
-    dest: "{{ freeradius_mods_available_dir }}/sqlcounter"
+    src: freeradius/sql_counter.j2
+    dest: "{{ freeradius_mods_available_dir }}/sql_counter"
     mode: 0640
     owner: freerad
     group: freerad
@@ -108,8 +106,8 @@
 
 - name: Enable SQL Counter module
   file:
-    src: "{{ freeradius_mods_available_dir }}/sqlcounter"
-    dest: "{{ freeradius_mods_enabled_dir }}/sqlcounter"
+    src: "{{ freeradius_mods_available_dir }}/sql_counter"
+    dest: "{{ freeradius_mods_enabled_dir }}/sql_counter"
     state: link
     mode: 0640
     owner: freerad

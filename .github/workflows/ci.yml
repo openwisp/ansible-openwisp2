@@ -28,14 +28,12 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
+      - name: Set default python version
+        run: sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 2
 
       - name: Install python dependencies
         run: |
-          pip install molecule[docker,ansible] yamllint ansible-lint docker openwisp-utils[qa]
+          sudo python3 -m pip install molecule[docker] yamllint ansible ansible-lint docker openwisp-utils[qa]
 
       - name: QA checks
         run: |
