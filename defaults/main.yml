@@ -4,9 +4,11 @@ openwisp2_python: python3
 ansible_python_interpreter: /usr/bin/python3
 openwisp2_network_topology: false
 openwisp2_firmware_upgrader: false
+openwisp2_monitoring: true
 openwisp2_controller_version: "0.8.2"
 openwisp2_network_topology_version: "0.5.1"
 openwisp2_firmware_upgrader_version: "0.1"
+openwisp2_monitoring_version: "0.1"
 openwisp2_controller_pip: false
 openwisp2_notifications_pip: false
 openwisp2_users_pip: false
@@ -16,6 +18,7 @@ openwisp2_django_loci_pip: false
 openwisp2_netjsonconfig_pip: false
 openwisp2_network_topology_pip: false
 openwisp2_firmware_upgrader_pip: false
+openwisp2_monitoring_pip: false
 openwisp2_extra_python_packages: [bpython]
 openwisp2_extra_django_apps: []
 openwisp2_extra_django_settings: {}
@@ -86,6 +89,12 @@ openwisp2_redis_install: true
 openwisp2_redis_host: localhost
 openwisp2_redis_port: 6379
 openwisp2_redis_cache_url: "redis://{{ openwisp2_redis_host }}:{{ openwisp2_redis_port }}/1"
+openwisp2_influxdb_install: true
+openwisp2_timeseries_database:
+    backend: "openwisp_monitoring.db.backends.influxdb"
+    user: "openwisp"
+    password: "openwisp"
+    name: "openwisp2"
 openwisp2_nginx_access_log: "{{ openwisp2_path }}/log/nginx.access.log"
 openwisp2_nginx_error_log: "{{ openwisp2_path }}/log/nginx.error.log error"
 # keep backward compatibility with old variable openwisp2_eventlet_concurrency

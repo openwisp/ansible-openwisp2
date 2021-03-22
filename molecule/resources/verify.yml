@@ -10,12 +10,7 @@
       command: >
         /opt/openwisp2/env/bin/python /opt/openwisp2/manage.py test --keepdb \
             openwisp_controller.pki \
-            openwisp_controller.config.tests.test_config \
-            openwisp_controller.config.tests.test_controller \
-            openwisp_controller.config.tests.test_device \
             openwisp_controller.config.tests.test_tag \
-            openwisp_controller.config.tests.test_template \
-            openwisp_controller.config.tests.test_views \
             openwisp_controller.config.tests.test_vpn \
             openwisp_controller.config.tests.test_admin.TestAdmin.test_preview_device \
             openwisp_controller.config.tests.test_admin.TestAdmin.test_device_preview_button \
