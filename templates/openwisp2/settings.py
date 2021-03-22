@@ -54,6 +54,11 @@ INSTALLED_APPS = [
     'openwisp_firmware_upgrader',
     'private_storage',
 {% endif %}
+{% if openwisp2_monitoring %}
+    'openwisp_monitoring.monitoring',
+    'openwisp_monitoring.device',
+    'openwisp_monitoring.check',
+{% endif %}
     # openwisp2 admin theme
     # (must be loaded here)
     'openwisp_utils.admin_theme',
@@ -165,12 +170,22 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': timedelta(days=1),
         'args': ({{ openwisp2_notifications_delete_old_notifications }},),
     },
+    {% if openwisp2_monitoring %}
+    'run_checks': {
+        'task': 'openwisp_monitoring.check.tasks.run_check',
+        'schedule': timedelta(minutes=5),
+    },
+    {% endif %}
 }
 
 {% if openwisp2_celery_task_routes_defaults %}
 CELERY_TASK_ROUTES = {
     # network operations, executed in the "network" queue
     'openwisp_controller.connection.tasks.*': {'queue': 'network'},
+{% if openwisp2_monitoring %}
+    'openwisp_monitoring.check.tasks.run_checks': {'queue': 'network'},
+    'openwisp_monitoring.check.tasks.perform_check': {'queue': 'network'},
+{% endif %}
 {% if openwisp2_firmware_upgrader %}
     'openwisp_firmware_upgrader.tasks.upgrade_firmware': {'queue': 'network'},
     'openwisp_firmware_upgrader.tasks.batch_upgrade_operation': {'queue': 'network'},
@@ -364,3 +379,14 @@ RAVEN_CONFIG = {{ openwisp2_sentry|to_nice_json }}
 {{ instruction }}
 
 {% endfor %}
+
+{% if openwisp2_influxdb_install %}
+TIMESERIES_DATABASE = {
+    'BACKEND': '{{ openwisp2_timeseries_database.backend }}',
+    'USER': '{{ openwisp2_timeseries_database.user }}',
+    'PASSWORD': '{{ openwisp2_timeseries_database.password }}',
+    'NAME': '{{ openwisp2_timeseries_database.name }}',
+    'HOST': '{{ openwisp2_timeseries_database.host }}',
+    'PORT': '{{ openwisp2_timeseries_database.port }}',
+}
+{% endif %}

@@ -18,3 +18,9 @@
   service:
     name: redis
     state: started
+
+- name: start influxdb
+  when: openwisp2_influxdb_install
+  service:
+    name: influxdb
+    state: started

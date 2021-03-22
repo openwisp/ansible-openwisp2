@@ -144,3 +144,11 @@
   delay: 10
   register: result
   until: result is success
+
+- name: Install influxdb
+  when: openwisp2_influxdb_install
+  apt: name=influxdb
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
