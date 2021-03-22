@@ -61,6 +61,13 @@
     - "{{ openwisp2_firmware_upgrader_pip }}"
   when: item is defined and item is string and openwisp2_firmware_upgrader
 
+- name: Add monitoring to custom package list if set and enabled
+  set_fact:
+    openwisp2_python_packages: "{{ openwisp2_python_packages + [item] }}"
+  with_items:
+    - "{{ openwisp2_monitoring_pip }}"
+  when: item is defined and item is string and openwisp2_monitoring
+
 - name: Install openwisp2 controller and its dependencies
   pip:
     name:
@@ -126,6 +133,20 @@
   when: openwisp2_firmware_upgrader
   pip:
     name: "openwisp-firmware-upgrader~={{ openwisp2_firmware_upgrader_version }}"
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+    virtualenv_site_packages: true
+  notify: reload supervisor
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
+
+- name: Install openwisp monitoring and its dependencies
+  when: openwisp2_monitoring
+  pip:
+    name: "openwisp-monitoring~={{ openwisp2_monitoring_version }}"
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"

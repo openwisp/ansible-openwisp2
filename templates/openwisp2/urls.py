@@ -19,6 +19,9 @@ urlpatterns = [
     {% if openwisp2_firmware_upgrader %}
     url(r'^', include('openwisp_firmware_upgrader.urls')),
     {% endif %}
+    {% if openwisp2_monitoring %}
+    url(r'^', include('openwisp_monitoring.urls')),
+    {% endif %}
     {% for extra_url in openwisp2_extra_urls %}
     {{ extra_url }},
     {% endfor %}
