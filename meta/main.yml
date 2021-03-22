@@ -8,6 +8,11 @@ dependencies:
     postfix_smtp_sasl_auth_enable: "{{ postfix_smtp_sasl_auth_enable_override | default(false) }}"
     postfix_smtpd_relay_restrictions: "{{ postfix_smtpd_relay_restrictions_override }}"
 
+  - src: https://github.com/openwisp/ansible-ow-influxdb
+    version: origin/master
+    name: ow-influxdb
+    when: openwisp2_influxdb_install
+
 galaxy_info:
   role_name: openwisp2
   namespace: openwisp

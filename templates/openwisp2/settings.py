@@ -45,6 +45,12 @@ INSTALLED_APPS = [
     'openwisp_controller.config',
     'openwisp_controller.geo',
     'openwisp_controller.connection',
+{% if openwisp2_monitoring %}
+    'openwisp_monitoring.monitoring',
+    'openwisp_monitoring.device',
+    'openwisp_monitoring.check',
+    'nested_admin',
+{% endif %}
     'openwisp_notifications',
     'flat_json_widget',
 {% if openwisp2_network_topology %}
@@ -165,6 +171,12 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': timedelta(days=1),
         'args': ({{ openwisp2_notifications_delete_old_notifications }},),
     },
+    {% if openwisp2_monitoring %}
+    'run_checks': {
+        'task': 'openwisp_monitoring.check.tasks.run_checks',
+        'schedule': timedelta(minutes=5),
+    },
+    {% endif %}
 }
 
 {% if openwisp2_celery_task_routes_defaults %}
@@ -172,6 +184,9 @@ CELERY_TASK_ROUTES = {
 {% if openwisp2_celery_network %}
     # network operations, executed in the "network" queue
     'openwisp_controller.connection.tasks.*': {'queue': 'network'},
+{% endif %}
+{% if openwisp2_monitoring %}
+    'openwisp_monitoring.check.tasks.perform_check': {'queue': 'network'},
 {% endif %}
 {% if openwisp2_firmware_upgrader and openwisp2_celery_firmware_upgrader %}
     # firmware upgrade operations, executed in the "firmware_upgrader" queue
@@ -359,6 +374,20 @@ GZIP_STATIC_COMPRESSION = False
 
 {% if openwisp2_sentry.get('dsn') %}
 RAVEN_CONFIG = {{ openwisp2_sentry|to_nice_json }}
+{% endif %}
+
+{% if openwisp2_monitoring %}
+TIMESERIES_DATABASE = {
+    'BACKEND': '{{ openwisp2_timeseries_database.backend }}',
+    'USER': '{{ openwisp2_timeseries_database.user }}',
+    'PASSWORD': '{{ openwisp2_timeseries_database.password }}',
+    'NAME': '{{ openwisp2_timeseries_database.name }}',
+    'HOST': '{{ influxdb_http_ip }}',
+    'PORT': '{{ influxdb_http_port }}',
+}
+
+INSTALLED_APPS.append('djcelery_email')
+EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
 {% endif %}
 
 {% for setting, value in openwisp2_extra_django_settings.items() %}

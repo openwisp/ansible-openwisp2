@@ -3,3 +3,7 @@
 - src: https://github.com/Stouts/Stouts.postfix
   version: origin/develop
   name: Stouts.postfix
+
+- src: https://github.com/openwisp/ansible-ow-influxdb
+  version: origin/master
+  name: ow-influxdb
