@@ -59,6 +59,11 @@ INSTALLED_APPS = [
 {% if openwisp2_firmware_upgrader %}
     'openwisp_firmware_upgrader',
 {% endif %}
+{% if openwisp2_monitoring %}
+    'openwisp_monitoring.monitoring',
+    'openwisp_monitoring.device',
+    'openwisp_monitoring.check',
+{% endif %}
     # openwisp2 admin theme
     # (must be loaded here)
     'openwisp_utils.admin_theme',
@@ -465,3 +470,14 @@ EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
 {{ instruction }}
 
 {% endfor %}
+
+{% if openwisp2_influxdb_install %}
+TIMESERIES_DATABASE = {
+    'BACKEND': '{{ openwisp2_timeseries_database.backend }}',
+    'USER': '{{ openwisp2_timeseries_database.user }}',
+    'PASSWORD': '{{ openwisp2_timeseries_database.password }}',
+    'NAME': '{{ openwisp2_timeseries_database.name }}',
+    'HOST': '{{ openwisp2_timeseries_database.host }}',
+    'PORT': '{{ openwisp2_timeseries_database.port }}',
+}
+{% endif %}

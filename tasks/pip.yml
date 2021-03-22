@@ -153,8 +153,7 @@
 - name: Install openwisp monitoring and its dependencies
   when: openwisp2_monitoring
   pip:
-    # name: "openwisp-monitoring~={{ openwisp2_monitoring_version }}"
-    name: "https://github.com/openwisp/openwisp-monitoring/tarball/master"
+    name: "openwisp-monitoring~={{ openwisp2_monitoring_version }}"
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
@@ -168,8 +167,7 @@
 - name: Install openwisp2_radius and its dependencies
   when: openwisp2_radius
   pip:
-    # name: "openwisp-radius~={{ openwisp2_radius_version }}"
-    name: "https://github.com/openwisp/openwisp-radius/tarball/master"
+    name: "openwisp-monitoring~={{ openwisp2_monitoring_version }}"
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"

@@ -25,4 +25,9 @@
 - name: restart freeradius
   service:
     name: freeradius
+
+- name: start influxdb
+  when: openwisp2_influxdb_install
+  service:
+    name: influxdb
     state: started

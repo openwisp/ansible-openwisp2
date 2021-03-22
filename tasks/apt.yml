@@ -168,7 +168,3 @@
   apt:
     name:
       - fping
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
