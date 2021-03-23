@@ -12,7 +12,7 @@ redirect_view = RedirectView.as_view(url=reverse_lazy('admin:index'))
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    {% if openwisp2_controller_urls or openwisp2_monitoring %}
+    {% if openwisp2_controller_urls %}
     url(r'', include('openwisp_controller.urls')),
     {% endif %}
     url(r'^api/v1/', include('openwisp_utils.api.urls')),

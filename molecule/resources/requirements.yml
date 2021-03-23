@@ -3,3 +3,7 @@
 - src: https://github.com/nemesisdesign/Stouts.postfix
   version: origin/develop
   name: Stouts.postfix
+
+- src: https://github.com/purhan/ansible-ow-influxdb
+  version: origin/add-meta
+  name: ansible-ow-influxdb

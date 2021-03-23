@@ -45,6 +45,11 @@ INSTALLED_APPS = [
     'openwisp_controller.config',
     'openwisp_controller.geo',
     'openwisp_controller.connection',
+{% if openwisp2_monitoring %}
+    'openwisp_monitoring.monitoring',
+    'openwisp_monitoring.device',
+    'openwisp_monitoring.check',
+{% endif %}
     'openwisp_notifications',
     'flat_json_widget',
 {% if openwisp2_network_topology %}
@@ -53,11 +58,6 @@ INSTALLED_APPS = [
 {% if openwisp2_firmware_upgrader %}
     'openwisp_firmware_upgrader',
     'private_storage',
-{% endif %}
-{% if openwisp2_monitoring %}
-    'openwisp_monitoring.monitoring',
-    'openwisp_monitoring.device',
-    'openwisp_monitoring.check',
 {% endif %}
     # openwisp2 admin theme
     # (must be loaded here)
@@ -380,13 +380,13 @@ RAVEN_CONFIG = {{ openwisp2_sentry|to_nice_json }}
 
 {% endfor %}
 
-{% if openwisp2_influxdb_install %}
+{% if openwisp2_monitoring %}
 TIMESERIES_DATABASE = {
     'BACKEND': '{{ openwisp2_timeseries_database.backend }}',
     'USER': '{{ openwisp2_timeseries_database.user }}',
     'PASSWORD': '{{ openwisp2_timeseries_database.password }}',
     'NAME': '{{ openwisp2_timeseries_database.name }}',
-    'HOST': '{{ openwisp2_timeseries_database.host }}',
-    'PORT': '{{ openwisp2_timeseries_database.port }}',
+    'HOST': '{{ influxdb_http_ip }}',
+    'PORT': '{{ influxdb_http_port }}',
 }
 {% endif %}
