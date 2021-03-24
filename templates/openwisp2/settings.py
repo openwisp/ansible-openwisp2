@@ -266,7 +266,11 @@ DJANGO_X509_DEFAULT_CA_VALIDITY = {{ openwisp2_default_ca_validity }}
 
 {% if openwisp2_leaflet_config %}
 LEAFLET_CONFIG = {{ openwisp2_leaflet_config|to_nice_json }}
+{% else %}
+LEAFLET_CONFIG = {}
 {% endif %}
+# always disable RESET_VIEW button
+LEAFLET_CONFIG['RESET_VIEW'] = False
 
 # Set default email
 DEFAULT_FROM_EMAIL = '{{ openwisp2_default_from_email }}'
