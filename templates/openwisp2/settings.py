@@ -348,7 +348,7 @@ LOGGING = {
 }
 
 # HTML minification with django pipeline
-PIPELINE = { 'PIPELINE_ENABLED': True }
+PIPELINE = {'PIPELINE_ENABLED': True}
 # static files minification and invalidation with django-compress-staticfiles
 STATICFILES_STORAGE = 'openwisp2.storage.CompressStaticFilesStorage'
 # GZIP compression is handled by nginx
