@@ -161,6 +161,11 @@
   pip:
     name: "{{ openwisp2_extra_python_packages }}"
     state: latest
+    # fixes bug #263, remove when support for Ubuntu 18.04 is dropped
+    extra_args: |
+      {% if ansible_distribution == 'Ubuntu' and ansible_distribution_version is version_compare('18.04', 'le') %}
+        --no-use-pep517
+      {% endif %}
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: true
