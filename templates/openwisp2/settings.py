@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'openwisp_monitoring.monitoring',
     'openwisp_monitoring.device',
     'openwisp_monitoring.check',
+    'nested_admin',
 {% endif %}
     'openwisp_notifications',
     'flat_json_widget',
@@ -172,7 +173,7 @@ CELERY_BEAT_SCHEDULE = {
     },
     {% if openwisp2_monitoring %}
     'run_checks': {
-        'task': 'openwisp_monitoring.check.tasks.run_check',
+        'task': 'openwisp_monitoring.check.tasks.run_checks',
         'schedule': timedelta(minutes=5),
     },
     {% endif %}
@@ -393,4 +394,7 @@ TIMESERIES_DATABASE = {
     'HOST': '{{ influxdb_http_ip }}',
     'PORT': '{{ influxdb_http_port }}',
 }
+
+INSTALLED_APPS.append('djcelery_email')
+EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
 {% endif %}
