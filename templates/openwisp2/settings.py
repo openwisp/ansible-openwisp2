@@ -475,4 +475,7 @@ TIMESERIES_DATABASE = {
     'HOST': '{{ influxdb_http_ip }}',
     'PORT': '{{ influxdb_http_port }}',
 }
+
+INSTALLED_APPS.append('djcelery_email')
+EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
 {% endif %}
