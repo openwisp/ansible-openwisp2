@@ -142,12 +142,20 @@
     state: absent
   with_items:
     - "{{ freeradius_sites_enabled_dir }}/default"
-    - "{{ freeradius_sites_enabled_dir }}/inner-tunnel"
 
 - name: Site configuration
   template:
     src: freeradius/openwisp_site.j2
     dest: "{{ freeradius_sites_enabled_dir }}/openwisp_site"
+    mode: 0640
+    owner: freerad
+    group: freerad
+  notify: restart freeradius
+
+- name: Inner tunnel
+  template:
+    src: freeradius/openwisp_site.j2
+    dest: "{{ freeradius_sites_enabled_dir }}/inner-tunnel"
     mode: 0640
     owner: freerad
     group: freerad
