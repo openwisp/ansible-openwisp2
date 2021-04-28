@@ -2,7 +2,7 @@
 
 sqlcounter dailycounter {
     sql_module_instance = sql
-    dialect = ${modules.sql.dialect}
+    dialect = "{{ freeradius_sql.dialect }}"
 
     counter_name = Daily-Session-Time
     check_name = Max-Daily-Session
@@ -13,11 +13,10 @@ sqlcounter dailycounter {
 
     $INCLUDE ${modconfdir}/sql/counter/${dialect}/${.:instance}.conf
 }
-
 # The dailybandwidthcounter is added by OpenWISP
 sqlcounter dailybandwidthcounter {
     sql_module_instance = sql
-    dialect = ${modules.sql.dialect}
+    dialect = "{{ freeradius_sql.dialect }}"
 
     counter_name = Max-Daily-Session-Traffic
     check_name = Max-Daily-Session-Traffic
@@ -29,7 +28,7 @@ sqlcounter dailybandwidthcounter {
 
 sqlcounter noresetcounter {
     sql_module_instance = sql
-    dialect = ${modules.sql.dialect}
+    dialect = "{{ freeradius_sql.dialect }}"
 
     counter_name = Max-All-Session-Time
     check_name = Max-All-Session
@@ -41,7 +40,7 @@ sqlcounter noresetcounter {
 
 sqlcounter monthlycounter {
     sql_module_instance = sql
-    dialect = ${modules.sql.dialect}
+    dialect = "{{ freeradius_sql.dialect }}"
 
     counter_name = Monthly-Session-Time
     check_name = Max-Monthly-Session
@@ -54,7 +53,7 @@ sqlcounter monthlycounter {
 
 sqlcounter expire_on_login {
     sql_module_instance = sql
-    dialect = ${modules.sql.dialect}
+    dialect = "{{ freeradius_sql.dialect }}"
 
     counter_name = Expire-After-Initial-Login
     check_name = Expire-After

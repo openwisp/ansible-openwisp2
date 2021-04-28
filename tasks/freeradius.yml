@@ -154,7 +154,7 @@
 
 - name: Inner tunnel
   template:
-    src: freeradius/openwisp_site.j2
+    src: freeradius/inner_tunnel.j2
     dest: "{{ freeradius_sites_enabled_dir }}/inner-tunnel"
     mode: 0640
     owner: freerad

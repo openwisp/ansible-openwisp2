@@ -29,11 +29,12 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Set default python version
-        run: sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 2
+        run: sudo update-alternatives --install /usr/bin/python python ${pythonLocation}/bin/python3.8 2
+
 
       - name: Install python dependencies
         run: |
-          sudo python3 -m pip install molecule[docker] yamllint ansible ansible-lint docker openwisp-utils[qa]
+          python -m pip install molecule[docker] yamllint ansible ansible-lint docker openwisp-utils[qa]
 
       - name: QA checks
         run: |
