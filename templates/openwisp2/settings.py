@@ -477,5 +477,5 @@ TIMESERIES_DATABASE = {
 }
 
 INSTALLED_APPS.append('djcelery_email')
-EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
+EMAIL_BACKEND = '{{ openwisp2_email_backend }}'
 {% endif %}
