@@ -466,16 +466,12 @@ EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
 
 {% endfor %}
 
-{% if openwisp2_monitoring %}
-TIMESERIES_DATABASE = {
-    'BACKEND': '{{ openwisp2_timeseries_database.backend }}',
-    'USER': '{{ openwisp2_timeseries_database.user }}',
-    'PASSWORD': '{{ openwisp2_timeseries_database.password }}',
-    'NAME': '{{ openwisp2_timeseries_database.name }}',
-    'HOST': '{{ influxdb_http_ip }}',
-    'PORT': '{{ influxdb_http_port }}',
-}
+{% for setting, value in openwisp2_extra_django_settings.items() %}
+{{ setting }} = {% if value is string %}'{{ value }}'{% else %}{{ value }}{% endif %}
 
-INSTALLED_APPS.append('djcelery_email')
-EMAIL_BACKEND = '{{ openwisp2_email_backend }}'
-{% endif %}
+{% endfor %}
+
+{% for instruction in openwisp2_extra_django_settings_instructions %}
+{{ instruction }}
+
+{% endfor %}
