@@ -375,16 +375,6 @@ GZIP_STATIC_COMPRESSION = False
 RAVEN_CONFIG = {{ openwisp2_sentry|to_nice_json }}
 {% endif %}
 
-{% for setting, value in openwisp2_extra_django_settings.items() %}
-{{ setting }} = {% if value is string %}'{{ value }}'{% else %}{{ value }}{% endif %}
-
-{% endfor %}
-
-{% for instruction in openwisp2_extra_django_settings_instructions %}
-{{ instruction }}
-
-{% endfor %}
-
 {% if openwisp2_monitoring %}
 TIMESERIES_DATABASE = {
     'BACKEND': '{{ openwisp2_timeseries_database.backend }}',
@@ -398,3 +388,13 @@ TIMESERIES_DATABASE = {
 INSTALLED_APPS.append('djcelery_email')
 EMAIL_BACKEND = '{{ openwisp2_email_backend }}'
 {% endif %}
+
+{% for setting, value in openwisp2_extra_django_settings.items() %}
+{{ setting }} = {% if value is string %}'{{ value }}'{% else %}{{ value }}{% endif %}
+
+{% endfor %}
+
+{% for instruction in openwisp2_extra_django_settings_instructions %}
+{{ instruction }}
+
+{% endfor %}
