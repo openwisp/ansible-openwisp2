@@ -5,9 +5,6 @@
   become: true
   gather_facts: false
 
-  vars:
-    openwisp2_monitoring: true
-
   tasks:
     - name: Run a specific subset of tests
       command: >
@@ -39,16 +36,6 @@
             openwisp_controller.config.tests.test_notifications \
             openwisp_controller.geo.tests.test_api
       changed_when: false
-
-    - name: Run integration tests when monitoring disabled
-      when: not openwisp2_monitoring
-      command: >
-        /opt/openwisp2/env/bin/python /opt/openwisp2/manage.py test --keepdb \
-            openwisp_controller.config.tests.test_config \
-            openwisp_controller.config.tests.test_controller \
-            openwisp_controller.config.tests.test_device \
-            openwisp_controller.config.tests.test_template \
-            openwisp_controller.config.tests.test_views \
 
     - name: Check if redis-server is running
       command: systemctl status redis-server
