@@ -4,6 +4,6 @@
   version: origin/develop
   name: Stouts.postfix
 
-- src: https://github.com/purhan/ansible-ow-influxdb
-  version: origin/add-meta
+- src: https://github.com/openwisp/ansible-ow-influxdb
+  version: origin/master
   name: ansible-ow-influxdb
