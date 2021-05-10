@@ -585,6 +585,8 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_network_topology_version: "0.4"
     openwisp2_firmware_upgrader: false
     openwisp2_firmware_upgrader_version: "0.1"
+    openwisp2_monitoring: true
+    openwisp2_monitoring_version: "0.1"
     # you may replace the values of these variables with any URL
     # supported by pip (the python package installer)
     # use these to install forks, branches or development versions
@@ -598,6 +600,7 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_netjsonconfig_pip: false
     openwisp2_network_topology_pip: false
     openwisp2_firmware_upgrader_pip: false
+    openwisp2_monitoring_pip: false
     # by default python3 is used, if may need to set this to python2.7 for older systems
     openwisp2_python: python2.7
     # customize the app_path
@@ -713,6 +716,13 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_redis_host: localhost
     openwisp2_redis_port: 6379
     openwisp2_redis_cache_url: "redis://{{ openwisp2_redis_host }}:{{ openwisp2_redis_port }}/1"
+    # the following options are required to configure influxdb which is used in openwisp-monitoring
+    openwisp2_influxdb_install: true
+    openwisp2_timeseries_database:
+        backend: "openwisp_monitoring.db.backends.influxdb"
+        user: "openwisp"
+        password: "openwisp"
+        name: "openwisp2"
     # celery concurrency for the default queue, by default the number of CPUs is used
     openwisp2_celery_concurrency: null
     # alternatively to the previous option, the celery autoscale option can be set if needed
