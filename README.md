@@ -673,11 +673,8 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_firmware_upgrader_version: "0.1"
     openwisp2_monitoring: true
     openwisp2_monitoring_version: "0.1"
-    openwisp2_radius_version: "0.2.1"
-    # Enable the modules you want to use
-    openwisp2_network_topology: false
-    openwisp2_firmware_upgrader: false
     openwisp2_radius: false
+    openwisp2_radius_version: "0.2.1"
     # when openwisp2_radius_urls is set to false, the radius module
     # is setup but it's urls are not added, which means API and social
     # views cannot be used, this is helpful if you have an external
