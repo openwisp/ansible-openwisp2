@@ -184,7 +184,6 @@ CELERY_TASK_ROUTES = {
     # network operations, executed in the "network" queue
     'openwisp_controller.connection.tasks.*': {'queue': 'network'},
 {% if openwisp2_monitoring %}
-    'openwisp_monitoring.check.tasks.run_checks': {'queue': 'network'},
     'openwisp_monitoring.check.tasks.perform_check': {'queue': 'network'},
 {% endif %}
 {% if openwisp2_firmware_upgrader %}
