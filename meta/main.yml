@@ -10,7 +10,7 @@ dependencies:
 
   - src: https://github.com/openwisp/ansible-ow-influxdb
     version: origin/master
-    name: ansible-ow-influxdb
+    name: ow-influxdb
     when: openwisp2_influxdb_install
 
 galaxy_info:
