@@ -601,8 +601,8 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_network_topology_pip: false
     openwisp2_firmware_upgrader_pip: false
     openwisp2_monitoring_pip: false
-    # by default python3 is used, if may need to set this to python2.7 for older systems
-    openwisp2_python: python2.7
+    # if you need to customize the python version in use
+    openwisp2_python: python3
     # customize the app_path
     openwisp2_path: /opt/openwisp2
     # It is recommended that you change the value of this variable if you intend to use
