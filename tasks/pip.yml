@@ -199,19 +199,6 @@
   until: result is success
   notify: reload supervisor
 
-- name: Install gevent
-  pip:
-    name: gevent==20.9.0
-    state: latest
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-    virtualenv_site_packages: true
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
-  notify: reload supervisor
-
 - name: Install psycopg2
   when: openwisp2_database.engine in ["django.db.backends.postgresql", "django.contrib.gis.db.backends.postgis"]
   pip:
