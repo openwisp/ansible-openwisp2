@@ -696,6 +696,12 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_nginx_error_log: "{{ openwisp2_path }}/log/nginx.error.log error"
     # uwsgi gid, omitted by default
     openwisp2_uwsgi_gid: null
+    # number of uWSGI process to spawn. Default value is 1.
+    openwisp2_uwsgi_processes: 1
+    # number of threads each uWSGI process will have. Default value is 1.
+    openwisp2_uwsgi_threads: 2
+    # number of daphne process to spawn. Default value is 1
+    openwisp2_daphne_processes: 2
     # the following setting controls which ip address range
     # is allowed to access the openwisp2 admin web interface
     # (by default any IP is allowed)
@@ -712,7 +718,8 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_redis_host: localhost
     openwisp2_redis_port: 6379
     openwisp2_redis_cache_url: "redis://{{ openwisp2_redis_host }}:{{ openwisp2_redis_port }}/1"
-    # celery concurrency for the default queue, by default the number of CPUs is used
+    # celery concurrency for the default queue, by default it is set to 1
+    # Setting it to "null" will make concurrency equal to number of CPUs
     openwisp2_celery_concurrency: null
     # alternatively to the previous option, the celery autoscale option can be set if needed
     # for more info, consult the documentation of celery regarding "autoscaling"
@@ -727,10 +734,10 @@ Below are listed all the variables you can customize (you may also want to take 
     # must be turned on unless there's another server running a worker for this queue
     openwisp2_celery_network: true
     # concurrency option for the network queue (a worker is dedicated solely to network operations)
-    # the default is null because the autoscale option below is used
+    # the default is 1. Setting it to "null" will make concurrency equal to number of CPUs
     openwisp2_celery_network_concurrency: null
-    # the network queue is automatically set to have at least 2 workers
-    # but it can increase up to 8 worker during peaks
+    # alternatively to the previous option, the celery autoscale option can be set if needed
+    # for more info, consult the documentation of celery regarding "autoscaling"
     openwisp2_celery_network_autoscale: 4,8
     # prefetch multiplier for the network queue,
     # the default is 1, which mean no prefetching,
@@ -763,6 +770,11 @@ Below are listed all the variables you can customize (you may also want to take 
     # allows overriding the default duration for keeping notifications
     openwisp2_notifications_delete_old_notifications: 10
 ```
+
+**Note**: The default values for settings provided to control the number of process and threads
+of uWSGI and Daphne are set conservatively. It is expected from user to update these settings
+to suit scale of their project. The same thing applies for concurrency and autoscale settings
+for celery workers.
 
 Support
 =======
