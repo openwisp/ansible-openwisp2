@@ -25,6 +25,7 @@
       - cron
       # needed to generate SSH key for push updates
       - openssh-client
+      - logrotate
   ignore_errors: true
   retries: 5
   delay: 10

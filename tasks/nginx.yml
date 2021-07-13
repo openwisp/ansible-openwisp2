@@ -44,3 +44,8 @@
     dest: "/etc/nginx/sites-enabled/{{ inventory_hostname }}"
     state: link
   notify: restart nginx
+
+- name: configure nginx log rotation
+  copy:
+    src: logrotate.d/openwisp-nginx
+    dest: /etc/logrotate.d/openwisp-nginx

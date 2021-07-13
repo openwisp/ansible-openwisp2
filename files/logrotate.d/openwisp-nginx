@@ -1,0 +1,14 @@
+/opt/openwisp2/log/nginx*.log {
+        maxsize 60M
+        missingok
+        rotate 5
+        compress
+        delaycompress
+        notifempty
+        create 0640 www-data www-data
+        su root www-data
+        sharedscripts
+        postrotate
+                service nginx reload >/dev/null 2>&1
+        endscript
+}
