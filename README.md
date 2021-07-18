@@ -27,10 +27,18 @@ Like OpenWISP? Find out how to help us!
 Architecture
 ============
 
-If you are fond of **Python**, **Django** and **Unix**/**Linux** systems, you may find interesting
-to know more about what happens under the hood in **OpenWISP 2**.
+This ansible script can install the following components on your server.
+Database, postfix, redis and third party services / modules are omitted for simplicity:
 
-![openwisp2 modules diagram](https://raw.githubusercontent.com/openwisp/ansible-openwisp2/master/docs/openwisp2-modules-diagram.png)
+![openwisp2 modules diagram](docs/ansible-openwisp2-modules-diagram.jpg)
+
+- [openwisp-controller](https://github.com/openwisp/openwisp-controller): The controller is the main part of the application that handles registeration and configuration of the devices.
+- [openwisp-monitoring](https://github.com/openwisp/openwisp-monitoring): (Optional) Helps in collection of monitoring data for your device.
+- [openwisp-firmware-upgrader](https://github.com/openwisp/openwisp-firmware-upgrader): (Optional) Helps in mass upgradation of your network's firmware.
+- [openwisp-radius](https://github.com/openwisp/openwisp-radius): (Optional) Handles your freeradius requirements by giving you and HTTP API endpoint to interact with freeradius instance. Useful for implementing public WiFi services with captive portal authentication or WPA enterprise.
+- [openwisp-network-topology](https://github.com/openwisp/openwisp-network-topology): (Optional) Helps in visualization of your network by creating a topology of all the connected devices.
+
+**Note: openwisp-monitoring, openwisp-firmware-upgrader and openwisp-ipam not available out of the box in ansible-openwisp2 today, they will become available in the future.**
 
 For more information see also [Applying the Unix Philosophy to Django projects: a report from the real world](https://www.slideshare.net/FedericoCapoano/applying-the-unix-philosophy-to-django-projects-a-report-from-the-real-world).
 
