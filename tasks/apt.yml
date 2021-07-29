@@ -143,3 +143,12 @@
   delay: 10
   register: result
   until: result is success
+
+- name: Install fping
+  when: openwisp2_monitoring is true
+  apt:
+    - fping
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success

@@ -382,8 +382,8 @@ TIMESERIES_DATABASE = {
     'USER': '{{ openwisp2_timeseries_database.user }}',
     'PASSWORD': '{{ openwisp2_timeseries_database.password }}',
     'NAME': '{{ openwisp2_timeseries_database.name }}',
-    'HOST': '{{ influxdb_http_ip }}',
-    'PORT': '{{ influxdb_http_port }}',
+    'HOST': '{{ openwisp2_timeseries_database.host }}',
+    'PORT': '{{ openwisp2_timeseries_database.port }}',
 }
 
 INSTALLED_APPS.append('djcelery_email')
