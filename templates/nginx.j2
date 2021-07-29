@@ -1,5 +1,5 @@
 upstream channels-backend {
-    server localhost:8000;
+    server unix://{{ openwisp2_path }}/daphne0.sock fail_timeout=0;
 }
 server {
     listen 443 ssl{% if openwisp2_nginx_spdy %} spdy{% endif %}{% if openwisp2_nginx_http2 %} http2{% endif %};  # ipv4
@@ -39,7 +39,7 @@ server {
     {% endfor %}
 
     location @uwsgi {
-        uwsgi_pass 127.0.0.1:3031;
+        uwsgi_pass unix://{{ openwisp2_path }}/uwsgi.sock;
         include uwsgi_params;
         uwsgi_param HTTP_X_FORWARDED_PROTO https;
     }
@@ -97,7 +97,7 @@ server {
 
     {% if openwisp2_http_allowed_ip %}
     location @uwsgi {
-        uwsgi_pass 127.0.0.1:3031;
+        uwsgi_pass unix://{{ openwisp2_path }}/uwsgi.sock;
         include uwsgi_params;
         uwsgi_param HTTP_X_FORWARDED_PROTO http;
     }
