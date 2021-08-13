@@ -144,6 +144,7 @@ freeradius_sql:
 freeradius_rest:
     url: "https://{{ inventory_hostname }}/api/v1/freeradius"
 freeradius_expire_attr_after_seconds: 86400
+freeradius_safe_characters: "+@abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_: /"
 cron_delete_old_notifications: "'hour': 0, 'minute': 0"
 cron_deactivate_expired_users: "'hour': 0, 'minute': 5"
 cron_delete_old_users: "'hour': 0, 'minute': 10"

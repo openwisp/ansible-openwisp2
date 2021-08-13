@@ -39,6 +39,14 @@
     owner: freerad
     group: freerad
 
+- name: Add plus sign to safe characters
+  lineinfile:
+    path: "{{ freeradius_mods_config_dir }}/sql/main/{{ freeradius_sql.dialect }}/queries.conf"
+    regexp: "^(.*)safe_characters =(.*)$"
+    line: "safe_characters = \"{{ freeradius_safe_characters }}\""
+    state: present
+  notify: restart freeradius
+
 - name: adding user 'freerad' to www-data group for database access
   when: freeradius_sql.dialect == "sqlite"
   user:
