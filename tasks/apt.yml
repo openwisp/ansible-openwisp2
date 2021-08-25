@@ -147,7 +147,8 @@
 - name: Install fping
   when: openwisp2_monitoring is true
   apt:
-    - fping
+    name:
+      - fping
   retries: 5
   delay: 10
   register: result

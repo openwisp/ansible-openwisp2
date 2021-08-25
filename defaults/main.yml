@@ -95,6 +95,8 @@ openwisp2_timeseries_database:
     user: "openwisp"
     password: "openwisp"
     name: "openwisp2"
+    host: "localhost"
+    port: 8086
 openwisp2_nginx_access_log: "{{ openwisp2_path }}/log/nginx.access.log"
 openwisp2_nginx_error_log: "{{ openwisp2_path }}/log/nginx.error.log error"
 # keep backward compatibility with old variable openwisp2_eventlet_concurrency
