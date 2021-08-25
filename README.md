@@ -794,6 +794,9 @@ Below are listed all the variables you can customize (you may also want to take 
         user: "openwisp"
         password: "openwisp"
         name: "openwisp2"
+        host: "localhost"
+        port: 8086
+    # celery concurrency for the default queue, by default the number of CPUs is used
     # celery concurrency for the default queue, by default it is set to 1
     # Setting it to "null" will make concurrency equal to number of CPUs if autoscaling is not used
     openwisp2_celery_concurrency: null
