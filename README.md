@@ -845,6 +845,26 @@ Below are listed all the variables you can customize (you may also want to take 
     # fair mode is used in this case, which means
     # tasks will be equally distributed among workers
     openwisp2_celery_firmware_upgrader_optimization: fair
+    # whether the dedicated worker for the celery "monitoring" queue is enabled
+    # must be turned on unless there's another server running a worker for this queue
+    openwisp2_celery_monitoring: true
+    # concurrency option for the "monitoring" queue (a worker is dedicated solely to monitoring operations)
+    # the default is 1. Setting it to "null" will make concurrency equal to number of CPUs
+    # if autoscaling is not used.
+    openwisp2_celery_monitoring_concurrency: null
+    # alternative to the previous option, the celery autoscale option can be set if needed
+    # for more info, consult the documentation of celery regarding "autoscaling"
+    # by default it is set to "null" (no autoscaling)
+    openwisp2_celery_monitoring_autoscale: 4,8
+    # prefetch multiplier for the "monitoring" queue,
+    # the default is 1, which mean no prefetching,
+    # because the monitoring tasks can be long running and is better
+    # to distribute the tasks to multiple processes
+    openwisp2_celery_monitoring_prefetch_multiplier: 1
+    # celery queuing mode for the "monitoring" queue,
+    # fair mode is used in this case, which means
+    # tasks will be equally distributed among workers
+    openwisp2_celery_monitoring_optimization: fair
     # whether the default celery task routes should be written to the settings.py file
     # turn this off if you're defining custom task routing rules
     openwisp2_celery_task_routes_defaults: true

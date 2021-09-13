@@ -44,6 +44,14 @@
   when: openwisp2_firmware_upgrader and openwisp2_celery_firmware_upgrader
   notify: reload supervisor
 
+- name: supervisor celery monitoring
+  template:
+    src: supervisor/celery_monitoring.j2
+    dest: "{{ supervisor_path | format('celery_monitoring') }}"
+    mode: 0644
+  when: openwisp2_monitoring and openwisp2_celery_monitoring
+  notify: reload supervisor
+
 - name: supervisor celerybeat
   template:
     src: supervisor/celerybeat.j2

@@ -112,6 +112,11 @@ openwisp2_celery_firmware_upgrader_concurrency: 1
 openwisp2_celery_firmware_upgrader_autoscale: null
 openwisp2_celery_firmware_upgrader_prefetch_multiplier: 1
 openwisp2_celery_firmware_upgrader_optimization: fair
+openwisp2_celery_monitoring: true
+openwisp2_celery_monitoring_concurrency: 1
+openwisp2_celery_monitoring_autoscale: null
+openwisp2_celery_monitoring_prefetch_multiplier: 1
+openwisp2_celery_monitoring_optimization: fair
 openwisp2_celery_task_routes_defaults: true
 openwisp2_celery_broker_url: redis://{{ openwisp2_redis_host }}:{{ openwisp2_redis_port }}/3
 openwisp2_celery_task_acks_late: true
