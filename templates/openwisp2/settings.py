@@ -169,11 +169,14 @@ CELERY_BEAT_SCHEDULE = {
 
 {% if openwisp2_celery_task_routes_defaults %}
 CELERY_TASK_ROUTES = {
+{% if openwisp2_celery_network %}
     # network operations, executed in the "network" queue
     'openwisp_controller.connection.tasks.*': {'queue': 'network'},
-{% if openwisp2_firmware_upgrader %}
-    'openwisp_firmware_upgrader.tasks.upgrade_firmware': {'queue': 'network'},
-    'openwisp_firmware_upgrader.tasks.batch_upgrade_operation': {'queue': 'network'},
+{% endif %}
+{% if openwisp2_firmware_upgrader and openwisp2_celery_firmware_upgrader %}
+    # firmware upgrade operations, executed in the "firmware_upgrader" queue
+    'openwisp_firmware_upgrader.tasks.upgrade_firmware': {'queue': 'firmware_upgrader'},
+    'openwisp_firmware_upgrader.tasks.batch_upgrade_operation': {'queue': 'firmware_upgrader'},
 {% endif %}
     # all other tasks are routed to the default queue (named "celery")
 }
