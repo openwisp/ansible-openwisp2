@@ -185,8 +185,9 @@ CELERY_TASK_ROUTES = {
     # network operations, executed in the "network" queue
     'openwisp_controller.connection.tasks.*': {'queue': 'network'},
 {% endif %}
-{% if openwisp2_monitoring %}
-    'openwisp_monitoring.check.tasks.perform_check': {'queue': 'network'},
+{% if openwisp2_monitoring and openwisp2_celery_monitoring %}
+    # monitoring checks are executed in a dedicated "monitoring" queue
+    'openwisp_monitoring.check.tasks.perform_check': {'queue': 'monitoring'},
 {% endif %}
 {% if openwisp2_firmware_upgrader and openwisp2_celery_firmware_upgrader %}
     # firmware upgrade operations, executed in the "firmware_upgrader" queue

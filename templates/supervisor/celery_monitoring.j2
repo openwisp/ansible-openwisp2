@@ -1,0 +1,11 @@
+[program:celery_monitoring]
+user={{ www_user }}
+directory={{ openwisp2_path }}
+command={{ openwisp2_path }}/env/bin/celery -A openwisp2 worker -l info --queue monitoring -O {{ openwisp2_celery_monitoring_optimization }}{% if openwisp2_celery_monitoring_concurrency %} --concurrency={{ openwisp2_celery_monitoring_concurrency }}{% elif openwisp2_celery_monitoring_autoscale %} --autoscale {{ openwisp2_celery_monitoring_autoscale }}{% endif %}{% if openwisp2_celery_monitoring_prefetch_multiplier %} --prefetch-multiplier {{ openwisp2_celery_monitoring_prefetch_multiplier }}{% endif %} -n monitoring@%%h
+autostart=true
+autorestart=true
+stopsignal=INT
+redirect_stderr=true
+stdout_logfile={{ openwisp2_path }}/log/celery-monitoring.log
+stdout_logfile_maxbytes=30MB
+stdout_logfile_backups=5
