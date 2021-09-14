@@ -115,6 +115,11 @@ via `ansible-galaxy` (which was installed when installing ansible), therefore ru
 
     ansible-galaxy install openwisp.openwisp2
 
+Ensure that you have correct version of [`community.general`](https://github.com/ansible-collections/community.general)
+collection installed
+
+    ansible-galaxy collection install "community.general:>=3.6.0"
+
 Choose a working directory
 --------------------------
 
