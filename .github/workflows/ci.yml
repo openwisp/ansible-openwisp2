@@ -35,7 +35,7 @@ jobs:
 
       - name: Install python dependencies
         run: |
-          pip install molecule[docker,ansible] yamllint ansible-lint docker openwisp-utils[qa]
+          pip install molecule[docker,ansible] molecule-docker yamllint ansible-lint docker openwisp-utils[qa]
 
       - name: Install Ansible Galaxy dependencies
         run: ansible-galaxy collection install "community.general:>=3.6.0"
