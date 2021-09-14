@@ -18,7 +18,6 @@ server {
     # set client body size #
     client_max_body_size {{ openwisp2_nginx_client_max_body_size }};
 
-    ssl on;
     ssl_certificate {{ openwisp2_ssl_cert }};
     ssl_certificate_key {{ openwisp2_ssl_key }};
     # optimizations
@@ -149,7 +148,6 @@ server {
 
     server_name _;
 
-    ssl on;
     ssl_certificate {{ openwisp2_ssl_cert }};
     ssl_certificate_key {{ openwisp2_ssl_key }};
 
