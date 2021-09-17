@@ -268,7 +268,7 @@ Clone `ansible-openwisp2` and `Stouts.postfix` as follows:
 
 ```bash
     git clone https://github.com/openwisp/ansible-openwisp2.git openwisp.openwisp2
-    git clone https://github.com/nemesisdesign/Stouts.postfix
+    git clone https://github.com/Stouts/Stouts.postfix
 ```
 
 Now, go to the parent directory & create hosts file and playbook.yml:
