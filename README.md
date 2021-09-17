@@ -71,6 +71,44 @@ Supported Operating Systems
 See the section "OS Platforms" on the
 [ansible-galaxy page of ansible-openwisp2](https://galaxy.ansible.com/openwisp/openwisp2).
 
+Useful commands and locations
+============================
+
+OpenWISP 2 is deployed using **uWSGI**, it also uses **daphne** for WebSockets and **celery** as task queue. All this services are run by **supervisor**.
+
+```
+sudo service supervisor start|stop|status
+```
+
+You can view each individual process run by supervisor with the next command. More info at [Running supervisorctl](http://supervisord.org/running.html#running-supervisorctl)
+
+```
+sudo supervisorctl status
+```
+
+**nginx** is in front of **uWSGI**. You can control it with next command
+
+```
+service nginx status start|stop|status
+```
+
+OpenWISP 2 is installed in `/opt/openwisp2` (unless you changed the ``openwisp2_path`` variable in the ansible playbook configuration). This are some useful locations.
+
+| Location                  | Description                   |
+|---------------------------|-------------------------------|
+| /opt/openwisp2            | All OpenWisp 2 stuff in here. |
+| /opt/openwisp2/log        | Log files                     |
+| /opt/openwisp2/env        | Python virtual env            |
+| /opt/openwisp2/db.sqlite3 | OpenWisp 2 database           |
+
+All processes are running as ``www-data`` user. If you need to copy or edit files, you can switch to ``www-data`` user with the commands
+
+```
+sudo su www-data -s /bin/bash
+cd /opt/openwisp2
+source env/bin/activate
+```
+
 Usage (tutorial)
 ================
 
@@ -114,6 +152,11 @@ For the sake of simplicity, the easiest thing is to install this role **on your 
 via `ansible-galaxy` (which was installed when installing ansible), therefore run:
 
     ansible-galaxy install openwisp.openwisp2
+
+Ensure that you have correct version of [`community.general`](https://github.com/ansible-collections/community.general)
+collection installed
+
+    ansible-galaxy collection install "community.general:>=3.6.0"
 
 Choose a working directory
 --------------------------

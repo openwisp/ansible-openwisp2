@@ -78,7 +78,6 @@ openwisp2_nginx_ssl_config:
     gzip_min_length: "1000"
     gzip_types:
         - "text/plain"
-        - "text/html"
         - "image/svg+xml"
         - "application/json"
         - "application/javascript"

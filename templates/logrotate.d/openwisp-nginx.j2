@@ -1,12 +1,12 @@
-/opt/openwisp2/log/nginx*.log {
+{{ openwisp2_path }}/log/nginx*.log {
         maxsize 60M
         missingok
         rotate 5
         compress
         delaycompress
         notifempty
-        create 0640 www-data www-data
-        su root www-data
+        create 0640 {{ www_user }} {{ www_group }}
+        su root {{ www_user }}
         sharedscripts
         postrotate
                 service nginx reload >/dev/null 2>&1

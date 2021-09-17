@@ -138,6 +138,9 @@
     app_path: "{{ openwisp2_path }}"
     command: "collectstatic --noinput"
     virtualenv: "{{ virtualenv_path }}"
+  register: collectstatic_output
+  changed_when: '"\n0 static files" not in collectstatic_output.out'
+  tags: collectstatic
 
 - name: create load_initial_data.py script
   template:
