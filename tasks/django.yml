@@ -115,6 +115,7 @@
     group: "{{ www_group }}"
     mode: 0770
 
+# to make mo path writable
 - name: set permissions to "{{ openwisp2_path }}/static"
   file:
     path: "{{ openwisp2_path }}/static"
@@ -140,6 +141,7 @@
   tags: collectstatic
 
 - name: set permissions to "{{ virtualenv_path }}"
+  when: openwisp2_internationalization
   file:
     path: "{{ virtualenv_path }}"
     state: directory
@@ -155,6 +157,7 @@
   notify: reload supervisor
   become: true
   become_user: "{{ www_user }}"
+  when: openwisp2_internationalization
   django_manage:
     app_path: "{{openwisp2_path}}"
     command: "compilemessages"
