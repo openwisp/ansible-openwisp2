@@ -115,7 +115,6 @@
     group: "{{ www_group }}"
     mode: 0770
 
-# to make mo path writable
 - name: set permissions to "{{ openwisp2_path }}/static"
   file:
     path: "{{ openwisp2_path }}/static"
@@ -140,6 +139,8 @@
   changed_when: '"\n0 static files" not in collectstatic_output.out'
   tags: collectstatic
 
+# needed to run compilemessages
+# some .mo files are created in virtualenv_path
 - name: set permissions to "{{ virtualenv_path }}"
   when: openwisp2_internationalization
   file:
