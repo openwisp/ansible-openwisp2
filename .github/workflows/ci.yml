@@ -6,9 +6,11 @@ on:             # yamllint disable-line rule:truthy
   push:
     branches:
       - master
+      - dev
   pull_request:
     branches:
       - master
+      - dev
 
 jobs:
   build:
