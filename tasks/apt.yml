@@ -137,3 +137,8 @@
 - name: Install gettext
   apt:
     name: gettext
+  when: openwisp2_internationalization
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
