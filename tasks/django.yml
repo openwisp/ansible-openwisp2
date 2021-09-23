@@ -139,6 +139,27 @@
   changed_when: '"\n0 static files" not in collectstatic_output.out'
   tags: collectstatic
 
+- name: set permissions to "{{ virtualenv_path }}"
+  file:
+    path: "{{ virtualenv_path }}"
+    state: directory
+    group: "{{ www_group }}"
+    owner: "{{ www_user }}"
+    # sets executable only to directories
+    mode: u=rwX,g=rX,o=rX
+    recurse: true
+  tags:
+    - molecule-idempotence-notest
+
+- name: compilemessages
+  notify: reload supervisor
+  become: true
+  become_user: "{{ www_user }}"
+  django_manage:
+    app_path: "{{openwisp2_path}}"
+    command: "compilemessages"
+    virtualenv: "{{ virtualenv_path }}"
+
 - name: create load_initial_data.py script
   template:
     src: load_initial_data.py

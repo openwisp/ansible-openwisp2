@@ -812,6 +812,8 @@ Below are listed all the variables you can customize (you may also want to take 
     postfix_smtpd_relay_restrictions_override: permit_mynetworks
     # allows overriding the default duration for keeping notifications
     openwisp2_notifications_delete_old_notifications: 10
+    # to add multi-language support
+    openwisp2_internationalization: true
 ```
 
 **Note**: The default values for settings provided to control the number of process and threads
