@@ -153,7 +153,8 @@
 - name: Install openwisp monitoring and its dependencies
   when: openwisp2_monitoring
   pip:
-    name: "openwisp-monitoring~={{ openwisp2_monitoring_version }}"
+    # name: "openwisp-monitoring~={{ openwisp2_monitoring_version }}"
+    name: "https://github.com/openwisp/openwisp-monitoring/tarball/master"
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
