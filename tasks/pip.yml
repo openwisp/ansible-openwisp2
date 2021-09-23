@@ -167,7 +167,8 @@
 - name: Install openwisp2_radius and its dependencies
   when: openwisp2_radius
   pip:
-    name: "openwisp-radius~={{ openwisp2_radius_version }}"
+    # name: "openwisp-radius~={{ openwisp2_radius_version }}"
+    name: "https://github.com/openwisp/openwisp-radius/tarball/master"
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
