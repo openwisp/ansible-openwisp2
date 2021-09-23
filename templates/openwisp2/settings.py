@@ -1,9 +1,9 @@
 import os
 import sys
+from celery.schedules import crontab
+from datetime import timedelta
 
 TESTING = 'test' in sys.argv
-
-from datetime import timedelta
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -45,6 +45,12 @@ INSTALLED_APPS = [
     'openwisp_controller.config',
     'openwisp_controller.geo',
     'openwisp_controller.connection',
+{% if openwisp2_monitoring %}
+    'openwisp_monitoring.monitoring',
+    'openwisp_monitoring.device',
+    'openwisp_monitoring.check',
+    'nested_admin',
+{% endif %}
     'openwisp_notifications',
     'flat_json_widget',
 {% if openwisp2_network_topology %}
@@ -52,7 +58,6 @@ INSTALLED_APPS = [
 {% endif %}
 {% if openwisp2_firmware_upgrader %}
     'openwisp_firmware_upgrader',
-    'private_storage',
 {% endif %}
     # openwisp2 admin theme
     # (must be loaded here)
@@ -68,6 +73,14 @@ INSTALLED_APPS = [
     'rest_framework_gis',
     'rest_framework.authtoken',
     'django_filters',
+{% if openwisp2_radius %}
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+    'openwisp_radius',
+{% endif %}
+{% if openwisp2_firmware_upgrader or openwisp2_radius %}
+    'private_storage',
+{% endif %}
     'drf_yasg',
     'channels',
     'pipeline',
@@ -84,7 +97,7 @@ EXTENDED_APPS = [
     'django_loci',
 ]
 
-{% if openwisp2_firmware_upgrader %}
+{% if openwisp2_firmware_upgrader or openwisp2_radius %}
 PRIVATE_STORAGE_ROOT = os.path.join(BASE_DIR, 'private')
 {% endif %}
 
@@ -113,11 +126,26 @@ MIDDLEWARE = [
     'pipeline.middleware.MinifyHTMLMiddleware'
 ]
 
+{% if openwisp2_radius %}
+OPENWISP_RADIUS_FREERADIUS_ALLOWED_HOSTS = {{ openwisp2_radius_allowed_hosts }}
+REST_AUTH_SERIALIZERS = {
+    'PASSWORD_RESET_SERIALIZER': 'openwisp_radius.api.serializers.PasswordResetSerializer',
+}
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'openwisp_radius.api.serializers.RegisterSerializer',
+}
+# SMS settings
+OPENWISP_RADIUS_SMS_TOKEN_MAX_IP_DAILY = {{ openwisp2_radius_sms_token_max_ip_daily }}
+SENDSMS_BACKEND = '{{ openwisp2_radius_sms_backend }}'
+
+{% endif %}
+
 ROOT_URLCONF = 'openwisp2.urls'
+OPENWISP_USERS_AUTH_API = {{ openwisp2_users_auth_api }}
 
 CHANNEL_LAYERS = {
     'default': {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {'hosts': [('{{ openwisp2_redis_host }}', {{ openwisp2_redis_port }})]},
     },
 }
@@ -165,18 +193,68 @@ CELERY_BROKER_TRANSPORT_OPTIONS = {
 CELERY_BEAT_SCHEDULE = {
     'delete_old_notifications': {
         'task': 'openwisp_notifications.tasks.delete_old_notifications',
-        'schedule': timedelta(days=1),
+        'schedule': crontab(**{ {{ cron_delete_old_notifications }} }),
         'args': ({{ openwisp2_notifications_delete_old_notifications }},),
     },
+{% if openwisp2_monitoring %}
+
+    'run_checks': {
+        'task': 'openwisp_monitoring.check.tasks.run_checks',
+        'schedule': timedelta(minutes=5),
+    },
+{% endif %}
+{% if openwisp2_radius %}
+
+    'deactivate_expired_users': {
+        'task': 'openwisp_radius.tasks.deactivate_expired_users',
+        'schedule': crontab(**{ {{ cron_deactivate_expired_users }} }),
+        'args': None,
+        'relative': True,
+    },
+    'delete_old_users': {
+        'task': 'openwisp_radius.tasks.delete_old_users',
+        'schedule': crontab(**{ {{ cron_delete_old_users }} }),
+        'args': [{{ openwisp2_radius_delete_old_users }}],
+        'relative': True,
+    },
+    'cleanup_stale_radacct': {
+        'task': 'openwisp_radius.tasks.cleanup_stale_radacct',
+        'schedule': crontab(**{ {{ cron_cleanup_stale_radacct }} }),
+        'args': [{{ openwisp2_radius_cleanup_stale_radacct }}],
+        'relative': True,
+    },
+    'delete_old_postauth': {
+        'task': 'openwisp_radius.tasks.delete_old_postauth',
+        'schedule': crontab(**{ {{ cron_delete_old_postauth }} }),
+        'args': [{{ openwisp2_radius_delete_old_postauth }}],
+        'relative': True,
+    },
+
+{% if openwisp2_radius_delete_old_radacct %}
+    'delete_old_radacct': {
+        'task': 'openwisp_radius.tasks.delete_old_radacct',
+        'schedule': crontab(**{ {{ cron_delete_old_radacct }} }),
+        'args': [{{ openwisp2_radius_delete_old_radacct }}],
+        'relative': True,
+    },
+{% endif %}
+{% endif %}
 }
 
 {% if openwisp2_celery_task_routes_defaults %}
 CELERY_TASK_ROUTES = {
+{% if openwisp2_celery_network %}
     # network operations, executed in the "network" queue
     'openwisp_controller.connection.tasks.*': {'queue': 'network'},
-{% if openwisp2_firmware_upgrader %}
-    'openwisp_firmware_upgrader.tasks.upgrade_firmware': {'queue': 'network'},
-    'openwisp_firmware_upgrader.tasks.batch_upgrade_operation': {'queue': 'network'},
+{% endif %}
+{% if openwisp2_monitoring and openwisp2_celery_monitoring %}
+    # monitoring checks are executed in a dedicated "monitoring" queue
+    'openwisp_monitoring.check.tasks.perform_check': {'queue': 'monitoring'},
+{% endif %}
+{% if openwisp2_firmware_upgrader and openwisp2_celery_firmware_upgrader %}
+    # firmware upgrade operations, executed in the "firmware_upgrader" queue
+    'openwisp_firmware_upgrader.tasks.upgrade_firmware': {'queue': 'firmware_upgrader'},
+    'openwisp_firmware_upgrader.tasks.batch_upgrade_operation': {'queue': 'firmware_upgrader'},
 {% endif %}
     # all other tasks are routed to the default queue (named "celery")
 }
@@ -185,17 +263,17 @@ CELERY_TASK_ROUTES = {
 # FOR DJANGO REDIS
 
 CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "{{ openwisp2_redis_cache_url }}",
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': '{{ openwisp2_redis_cache_url }}',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }
     }
 }
 
-SESSION_ENGINE = "django.contrib.sessions.backends.cache"
-SESSION_CACHE_ALIAS = "default"
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+SESSION_CACHE_ALIAS = 'default'
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
@@ -256,8 +334,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
-STATIC_ROOT = '%s/static' % BASE_DIR
-MEDIA_ROOT = '%s/media' % BASE_DIR
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
@@ -362,6 +440,20 @@ GZIP_STATIC_COMPRESSION = False
 
 {% if openwisp2_sentry.get('dsn') %}
 RAVEN_CONFIG = {{ openwisp2_sentry|to_nice_json }}
+{% endif %}
+
+{% if openwisp2_monitoring %}
+TIMESERIES_DATABASE = {
+    'BACKEND': '{{ openwisp2_timeseries_database.backend }}',
+    'USER': '{{ openwisp2_timeseries_database.user }}',
+    'PASSWORD': '{{ openwisp2_timeseries_database.password }}',
+    'NAME': '{{ openwisp2_timeseries_database.name }}',
+    'HOST': '{{ openwisp2_timeseries_database.host }}',
+    'PORT': '{{ openwisp2_timeseries_database.port }}',
+}
+
+INSTALLED_APPS.append('djcelery_email')
+EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
 {% endif %}
 
 {% for setting, value in openwisp2_extra_django_settings.items() %}

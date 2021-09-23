@@ -1,0 +1,170 @@
+---
+- name: Freeradius system packages
+  apt:
+    name:
+      - freeradius
+      - freeradius-rest
+    state: latest
+  notify: restart freeradius
+
+- name: Freeradius postgres packages
+  when: freeradius_sql.dialect == "postgresql"
+  apt:
+    name: freeradius-postgresql
+    state: latest
+  notify: restart freeradius
+
+- name: Freeradius mysql packages
+  when: freeradius_sql.dialect == "mysql"
+  apt:
+    name: freeradius-mysql
+    state: latest
+  notify: restart freeradius
+
+- name: SQL configuration
+  template:
+    src: freeradius/sql.j2
+    dest: "{{ freeradius_mods_available_dir }}/sql"
+    mode: 0640
+    owner: freerad
+    group: freerad
+  notify: restart freeradius
+
+- name: Enable SQL module
+  file:
+    src: "{{ freeradius_mods_available_dir }}/sql"
+    dest: "{{ freeradius_mods_enabled_dir }}/sql"
+    state: link
+    mode: 0640
+    owner: freerad
+    group: freerad
+
+- name: Add plus sign to safe characters
+  lineinfile:
+    path: "{{ freeradius_mods_config_dir }}/sql/main/{{ freeradius_sql.dialect }}/queries.conf"
+    regexp: "^(.*)safe_characters =(.*)$"
+    line: "safe_characters = \"{{ freeradius_safe_characters }}\""
+    state: present
+  notify: restart freeradius
+
+- name: adding user 'freerad' to www-data group for database access
+  when: freeradius_sql.dialect == "sqlite"
+  user:
+    name: freerad
+    groups: www-data
+    append: true
+
+- name: SQL Counter module
+  template:
+    src: freeradius/sql_counter.j2
+    dest: "{{ freeradius_mods_available_dir }}/sql_counter"
+    mode: 0640
+    owner: freerad
+    group: freerad
+  notify: restart freeradius
+
+- name: Upload Daily Bandwidth Counter config file (sqlite)
+  template:
+    src: freeradius/daily-bandwidth-counter/sqlite.j2
+    dest: "{{ freeradius_mods_config_dir }}/sql/counter/sqlite/dailybandwidthcounter.conf"
+    mode: 0640
+    owner: freerad
+    group: freerad
+  notify: restart freeradius
+
+- name: Upload Daily Bandwidth Counter config file (mysql)
+  when: freeradius_sql.dialect == "mysql"
+  template:
+    src: freeradius/daily-bandwidth-counter/mysql.j2
+    dest: "{{ freeradius_mods_config_dir }}/sql/counter/mysql/dailybandwidthcounter.conf"
+    mode: 0640
+    owner: freerad
+    group: freerad
+  notify: restart freeradius
+
+- name: Upload Daily Bandwidth Counter config file (postgresql)
+  when: freeradius_sql.dialect == "postgresql"
+  template:
+    src: freeradius/daily-bandwidth-counter/postgresql.j2
+    dest: "{{ freeradius_mods_config_dir }}/sql/counter/postgresql/dailybandwidthcounter.conf"
+    mode: 0640
+    owner: freerad
+    group: freerad
+  notify: restart freeradius
+
+- name: Fix dailycounter postgresql query
+  when: freeradius_sql.dialect == "postgresql"
+  template:
+    src: freeradius/daily-counter/postgresql.j2
+    dest: "{{ freeradius_mods_config_dir }}/sql/counter/postgresql/dailycounter.conf"
+    mode: 0640
+    owner: freerad
+    group: freerad
+  notify: restart freeradius
+
+- name: Fix monthlycounter postgresql query
+  when: freeradius_sql.dialect == "postgresql"
+  template:
+    src: freeradius/monthly-counter/postgresql.j2
+    dest: "{{ freeradius_mods_config_dir }}/sql/counter/postgresql/monthlycounter.conf"
+    mode: 0640
+    owner: freerad
+    group: freerad
+  notify: restart freeradius
+
+- name: Enable SQL Counter module
+  file:
+    src: "{{ freeradius_mods_available_dir }}/sql_counter"
+    dest: "{{ freeradius_mods_enabled_dir }}/sql_counter"
+    state: link
+    mode: 0640
+    owner: freerad
+    group: freerad
+
+- name: Add Attributes to freeradius dictionary
+  lineinfile:
+    path: "{{ freeradius_dir }}/dictionary"
+    line: "ATTRIBUTE      Expire-After         {{ freeradius_expire_attr_after_seconds }}    integer"
+
+- name: REST configuration
+  template:
+    src: freeradius/rest.j2
+    dest: "{{ freeradius_mods_available_dir }}/rest"
+    mode: 0640
+    owner: freerad
+    group: freerad
+  notify: restart freeradius
+
+- name: Enable REST module
+  file:
+    src: "{{ freeradius_mods_available_dir }}/rest"
+    dest: "{{ freeradius_mods_enabled_dir }}/rest"
+    state: link
+    mode: 0640
+    owner: freerad
+    group: freerad
+
+- name: Remove default site
+  file:
+    dest: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ freeradius_sites_enabled_dir }}/default"
+
+- name: Site configuration
+  template:
+    src: freeradius/openwisp_site.j2
+    dest: "{{ freeradius_sites_enabled_dir }}/openwisp_site"
+    mode: 0640
+    owner: freerad
+    group: freerad
+  notify: restart freeradius
+
+- name: Inner tunnel
+  template:
+    src: freeradius/inner_tunnel.j2
+    dest: "{{ freeradius_sites_enabled_dir }}/inner-tunnel"
+    mode: 0640
+    owner: freerad
+    group: freerad
+  notify: restart freeradius

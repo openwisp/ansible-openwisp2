@@ -526,6 +526,49 @@ you will update the above playbook as follows:
       OPENWISP_FIRMWARE_UPGRADER_API: true
 ```
 
+Enabling the radius module
+--------------------------
+
+To enable the radius module you need to set `openwisp2_radius` to `true` in
+your `playbook.yml` file. Here's a short summary of how to do this:
+
+**Step 1**: [Install ansible](#install-ansible)
+
+**Step 2**: [Install this role](#install-this-role)
+
+**Step 3**: [Create inventory file](#create-inventory-file)
+
+**Step 4**: Create a playbook file with following contents:
+
+```yaml
+- hosts: openwisp2
+  become: "{{ become | default('yes') }}"
+  roles:
+    - openwisp.openwisp2
+  vars:
+    openwisp2_radius: true
+    openwisp2_freeradius_install: true
+    # set to false when you don't want to register openwisp-radius
+    # API endpoints.
+    openwisp2_radius_urls: true
+```
+
+**Note:** `openwisp2_freeradius_install` option provides a basic configuration of freeradius for openwisp,
+it sets up the [radius user token mechanism](https://openwisp-radius.readthedocs.io/en/latest/user/api.html#radius-user-token-recommended) if you want to use another mechanism or manage your freeradius separately,
+please disable this option by setting it to `false`.
+
+**Step 5**: [Run the playbook](#run-the-playbook)
+
+When the playbook is done running, if you got no errors you can login at:
+
+    https://openwisp2.mydomain.com/admin
+    username: admin
+    password: admin
+
+**Note:** for more information regarding radius configuration options,
+look for the word "radius" in the
+[Role variables](#role-variables) section of this document.
+
 Troubleshooting
 ===============
 
@@ -622,12 +665,24 @@ Below are listed all the variables you can customize (you may also want to take 
     - openwisp.openwisp2
   vars:
     # openwisp-controler version
-    openwisp2_controller_version: "0.4"
+    openwisp2_controller_version: "0.8.2"
     # optional openwisp2 modules
     openwisp2_network_topology: false
-    openwisp2_network_topology_version: "0.4"
+    openwisp2_network_topology_version: "0.5.1"
     openwisp2_firmware_upgrader: false
     openwisp2_firmware_upgrader_version: "0.1"
+    openwisp2_monitoring: true
+    openwisp2_monitoring_version: "0.1"
+    openwisp2_radius_version: "0.2.1"
+    # Enable the modules you want to use
+    openwisp2_network_topology: false
+    openwisp2_firmware_upgrader: false
+    openwisp2_radius: false
+    # when openwisp2_radius_urls is set to false, the radius module
+    # is setup but it's urls are not added, which means API and social
+    # views cannot be used, this is helpful if you have an external
+    # radius instance.
+    openwisp2_radius_urls: "{{ openwisp2_radius }}"
     # you may replace the values of these variables with any URL
     # supported by pip (the python package installer)
     # use these to install forks, branches or development versions
@@ -642,6 +697,8 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_netjsonconfig_pip: false
     openwisp2_network_topology_pip: false
     openwisp2_firmware_upgrader_pip: false
+    openwisp2_monitoring_pip: false
+    openwisp2_radius_pip: false
     # customize the app_path
     openwisp2_path: /opt/openwisp2
     # It is recommended that you change the value of this variable if you intend to use
@@ -761,36 +818,87 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_redis_host: localhost
     openwisp2_redis_port: 6379
     openwisp2_redis_cache_url: "redis://{{ openwisp2_redis_host }}:{{ openwisp2_redis_port }}/1"
+    # the following options are required to configure influxdb which is used in openwisp-monitoring
+    openwisp2_influxdb_install: true
+    openwisp2_timeseries_database:
+        backend: "openwisp_monitoring.db.backends.influxdb"
+        user: "openwisp"
+        password: "openwisp"
+        name: "openwisp2"
+        host: "localhost"
+        port: 8086
+    # celery concurrency for the default queue, by default the number of CPUs is used
     # celery concurrency for the default queue, by default it is set to 1
-    # Setting it to "null" will make concurrency equal to number of CPUs
+    # Setting it to "null" will make concurrency equal to number of CPUs if autoscaling is not used
     openwisp2_celery_concurrency: null
-    # alternatively to the previous option, the celery autoscale option can be set if needed
+    # alternative to the previous option, the celery autoscale option can be set if needed
     # for more info, consult the documentation of celery regarding "autoscaling"
-    openwisp2_celery_autoscale: null
+    # by default it is set to "null" (no autoscaling)
+    openwisp2_celery_autoscale: 1,4
     # prefetch multiplier for the default queue,
     # the default value is calculated automatically by celery
     openwisp2_celery_prefetch_multiplier: null
     # celery queuing mode for the default queue,
     # leaving the default will work for most cases
     openwisp2_celery_optimization: default
-    # whether the dedicated worker for the celery network queue is enabled
+    # whether the dedicated worker for the celery "network" queue is enabled
     # must be turned on unless there's another server running a worker for this queue
     openwisp2_celery_network: true
-    # concurrency option for the network queue (a worker is dedicated solely to network operations)
-    # the default is 1. Setting it to "null" will make concurrency equal to number of CPUs
+    # concurrency option for the "network" queue (a worker is dedicated solely to network operations)
+    # the default is 1. Setting it to "null" will make concurrency equal to number of CPUs if autoscaling is not used.
     openwisp2_celery_network_concurrency: null
-    # alternatively to the previous option, the celery autoscale option can be set if needed
+    # alternative to the previous option, the celery autoscale option can be set if needed
     # for more info, consult the documentation of celery regarding "autoscaling"
+    # by default it is set to "null" (no autoscaling)
     openwisp2_celery_network_autoscale: 4,8
-    # prefetch multiplier for the network queue,
+    # prefetch multiplier for the "network" queue,
     # the default is 1, which mean no prefetching,
     # because the network tasks are long running and is better
     # to distribute the tasks to multiple processes
     openwisp2_celery_network_prefetch_multiplier: 1
-    # celery queuing mode for the network queue,
+    # celery queuing mode for the "network" queue,
     # fair mode is used in this case, which means
     # tasks will be equally distributed among workers
     openwisp2_celery_network_optimization: fair
+    # whether the dedicated worker for the celery "firmware_upgrader" queue is enabled
+    # must be turned on unless there's another server running a worker for this queue
+    openwisp2_celery_firmware_upgrader: true
+    # concurrency option for the "firmware_upgrader" queue (a worker is dedicated solely to firmware upgrade operations)
+    # the default is 1. Setting it to "null" will make concurrency equal to number of CPUs if autoscaling is not used
+    openwisp2_celery_firmware_upgrader_concurrency: null
+    # alternative to the previous option, the celery autoscale option can be set if needed
+    # for more info, consult the documentation of celery regarding "autoscaling"
+    # by default it is set to "null" (no autoscaling)
+    openwisp2_celery_firmware_upgrader_autoscale: 4,8
+    # prefetch multiplier for the "firmware_upgrader" queue,
+    # the default is 1, which mean no prefetching,
+    # because the firmware upgrade tasks are long running and is better
+    # to distribute the tasks to multiple processes
+    openwisp2_celery_firmware_upgrader_prefetch_multiplier: 1
+    # celery queuing mode for the "firmware_upgrader" queue,
+    # fair mode is used in this case, which means
+    # tasks will be equally distributed among workers
+    openwisp2_celery_firmware_upgrader_optimization: fair
+    # whether the dedicated worker for the celery "monitoring" queue is enabled
+    # must be turned on unless there's another server running a worker for this queue
+    openwisp2_celery_monitoring: true
+    # concurrency option for the "monitoring" queue (a worker is dedicated solely to monitoring operations)
+    # the default is 1. Setting it to "null" will make concurrency equal to number of CPUs
+    # if autoscaling is not used.
+    openwisp2_celery_monitoring_concurrency: null
+    # alternative to the previous option, the celery autoscale option can be set if needed
+    # for more info, consult the documentation of celery regarding "autoscaling"
+    # by default it is set to "null" (no autoscaling)
+    openwisp2_celery_monitoring_autoscale: 4,8
+    # prefetch multiplier for the "monitoring" queue,
+    # the default is 1, which mean no prefetching,
+    # because the monitoring tasks can be long running and is better
+    # to distribute the tasks to multiple processes
+    openwisp2_celery_monitoring_prefetch_multiplier: 1
+    # celery queuing mode for the "monitoring" queue,
+    # fair mode is used in this case, which means
+    # tasks will be equally distributed among workers
+    openwisp2_celery_monitoring_optimization: fair
     # whether the default celery task routes should be written to the settings.py file
     # turn this off if you're defining custom task routing rules
     openwisp2_celery_task_routes_defaults: true
@@ -814,6 +922,44 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_notifications_delete_old_notifications: 10
     # to add multi-language support
     openwisp2_internationalization: true
+    openwisp2_users_auth_api: true
+    # used for SMS verification, the default is a dummy SMS backend
+    # which prints to standard output and hence does nothing
+    # one of the available providers from django-sendsms can be
+    # used or alternatively, you can write a backend class for your
+    # favorite SMS API gateway
+    openwisp2_radius_sms_backend: "sendsms.backends.console.SmsBackend"
+    openwisp2_radius_sms_token_max_ip_daily: 25
+    openwisp2_radius_delete_old_users: 365
+    openwisp2_radius_cleanup_stale_radacct: 365
+    openwisp2_radius_delete_old_postauth: 365
+    # days for which the radius accounting sessions (radacct) are retained,
+    # 0 means sessions are kept forever.
+    # we highly suggest to set this number according
+    # to the privacy regulation of your jurisdiction
+    openwisp2_radius_delete_old_radacct: 365
+    openwisp2_radius_allowed_hosts: ["127.0.0.1"]
+    # this role provides a default configuration of freeradius
+    # if you manage freeradius on a different machine or you need different configurations
+    # you can disable this default behavior
+    openwisp2_freeradius_install: true
+    # Set an account to expire T seconds after first login.
+    # This variable sets the value of T.
+    freeradius_expire_attr_after_seconds: 86400
+    freeradius_dir: /etc/freeradius/3.0
+    freeradius_mods_available_dir: "{{ freeradius_dir }}/mods-available"
+    freeradius_mods_enabled_dir: "{{ freeradius_dir }}/mods-enabled"
+    freeradius_sites_available_dir: "{{ freeradius_dir }}/sites-available"
+    freeradius_sites_enabled_dir: "{{ freeradius_dir }}/sites-enabled"
+    freeradius_rest:
+        url: "https://{{ inventory_hostname }}/api/v1/freeradius"
+    freeradius_safe_characters: "+@abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_: /"
+    cron_delete_old_notifications: "'hour': 0, 'minute': 0"
+    cron_deactivate_expired_users: "'hour': 0, 'minute': 5"
+    cron_delete_old_users: "'hour': 0, 'minute': 10"
+    cron_cleanup_stale_radacct: "'hour': 0, 'minute': 20"
+    cron_delete_old_postauth: "'hour': 0, 'minute': 30"
+    cron_delete_old_radacct: "'hour': 1, 'minute': 30"
 ```
 
 **Note**: The default values for settings provided to control the number of process and threads
