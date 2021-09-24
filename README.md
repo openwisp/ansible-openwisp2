@@ -943,6 +943,8 @@ Below are listed all the variables you can customize (you may also want to take 
     postfix_smtpd_relay_restrictions_override: permit_mynetworks
     # allows overriding the default duration for keeping notifications
     openwisp2_notifications_delete_old_notifications: 10
+    # to add multi-language support
+    openwisp2_internationalization: true
     openwisp2_users_auth_api: true
     # used for SMS verification, the default is a dummy SMS backend
     # which prints to standard output and hence does nothing
