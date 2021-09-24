@@ -11,8 +11,8 @@ lint: |
   yamllint . || true
   ansible-lint || true
 platforms:
-  - name: "${ROLE_NAME:-instance}-${MOLECULE_DISTRO}"
-    image: "geerlingguy/docker-${MOLECULE_DISTRO}-ansible:${tag:-latest}"
+  - name: 'ubuntu2004'
+    image: "geerlingguy/docker-ubuntu2004-ansible:latest"
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro

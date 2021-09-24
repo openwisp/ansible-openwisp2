@@ -23,6 +23,7 @@
       - python3
       - virtualenv
       - cron
+      - curl
       # needed to generate SSH key for push updates
       - openssh-client
       - logrotate
