@@ -158,7 +158,7 @@
   apt:
     name: gettext
   when: openwisp2_internationalization
-  etries: 5
+  retries: 5
   delay: 10
   register: result
   until: result is success
