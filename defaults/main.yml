@@ -133,6 +133,8 @@ postfix_smtpd_relay_restrictions_override: "permit_sasl_authenticated, permit_my
 openwisp2_uwsgi_processes: 1
 openwisp2_uwsgi_threads: 1
 openwisp2_daphne_processes: 1
+# internationalization
+openwisp2_internationalization: false
 openwisp2_users_auth_api: true
 openwisp2_radius_sms_backend: "sendsms.backends.console.SmsBackend"
 openwisp2_radius_sms_token_max_ip_daily: 25

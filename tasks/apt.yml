@@ -164,8 +164,17 @@
   register: result
   until: result is success
 
+- name: Install gettext
+  apt:
+    name: gettext
+  when: openwisp2_internationalization
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
+
 - name: Install fping
-  when: openwisp2_monitoring is true
+  when: openwisp2_monitoring
   apt:
     name:
       - fping

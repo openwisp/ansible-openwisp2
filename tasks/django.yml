@@ -142,6 +142,31 @@
   changed_when: '"\n0 static files" not in collectstatic_output.out'
   tags: collectstatic
 
+# needed to run compilemessages
+# some .mo files are created in virtualenv_path
+- name: set permissions to "{{ virtualenv_path }}"
+  when: openwisp2_internationalization
+  file:
+    path: "{{ virtualenv_path }}"
+    state: directory
+    group: "{{ www_group }}"
+    owner: "{{ www_user }}"
+    # sets executable only to directories
+    mode: u=rwX,g=rX,o=rX
+    recurse: true
+  tags:
+    - molecule-idempotence-notest
+
+- name: compilemessages
+  notify: reload supervisor
+  become: true
+  become_user: "{{ www_user }}"
+  when: openwisp2_internationalization
+  django_manage:
+    app_path: "{{openwisp2_path}}"
+    command: "compilemessages"
+    virtualenv: "{{ virtualenv_path }}"
+
 - name: create load_initial_data.py script
   template:
     src: load_initial_data.py
