@@ -140,7 +140,8 @@
     virtualenv: "{{ virtualenv_path }}"
   register: collectstatic_output
   changed_when: '"\n0 static files" not in collectstatic_output.out'
-  tags: collectstatic
+  tags:
+    - molecule-idempotence-notest
 
 # needed to run compilemessages
 # some .mo files are created in virtualenv_path
