@@ -53,14 +53,13 @@
   when: openwisp2_redis_install and use_redis6 is failed
 
 - name: Install redis 4 (fallback)
-  when: openwisp2_redis_install and (use_redis5 is failed or use_redis6 is failed)
+  when: openwisp2_redis_install and (use_redis5 is failed and use_redis6 is failed)
   apt:
     name: "redis-server=5:4*"
   register: use_redis4
   notify:
     - reload systemd
     - start redis
-  ignore_errors: true
 
 # On the newer versions of redis, by default redis
 # binds to localhost on ipv6 address which wouldn't
