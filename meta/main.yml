@@ -24,6 +24,7 @@ galaxy_info:
         # https://github.com/openwisp/ansible-openwisp2/issues/169#issuecomment-592983139
         # - stretch
         - buster
+        - bullseye
     - name: Ubuntu
       versions:
         # (send patch if you want this to be supported!)
