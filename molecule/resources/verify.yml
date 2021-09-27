@@ -9,7 +9,8 @@
     - name: Run a specific subset of tests
       command: >
         /opt/openwisp2/env/bin/python /opt/openwisp2/manage.py test --keepdb \
-            openwisp_controller.pki \
+            openwisp_controller.pki.tests.test_admin \
+            openwisp_controller.pki.tests.test_models \
             openwisp_controller.config.tests.test_tag \
             openwisp_controller.config.tests.test_vpn \
             openwisp_controller.config.tests.test_admin.TestAdmin.test_preview_device \
