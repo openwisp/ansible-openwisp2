@@ -32,6 +32,16 @@
   register: result
   until: result is success
 
+- name: Install redis 6 if available
+  apt:
+    name: "redis-server=5:6*"
+  notify:
+    - reload systemd
+    - start redis
+  ignore_errors: true
+  register: use_redis6
+  when: openwisp2_redis_install
+
 - name: Install redis 5 if available
   apt:
     name: "redis-server=5:5*"
@@ -40,12 +50,13 @@
     - start redis
   ignore_errors: true
   register: use_redis5
-  when: openwisp2_redis_install
+  when: openwisp2_redis_install and use_redis6 is failed
 
 - name: Install redis 4 (fallback)
-  when: openwisp2_redis_install and use_redis5.failed
+  when: openwisp2_redis_install and ( use_redis5 is failed or use_redis6 is failed)
   apt:
     name: "redis-server=5:4*"
+  register: use_redis4
   notify:
     - reload systemd
     - start redis
