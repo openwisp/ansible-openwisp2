@@ -572,10 +572,10 @@ look for the word "radius" in the
 Using development version
 =========================
 
-Following steps will help you setup and install the development version of
+The following steps will help you set up and install the development version of
 this role.
 
-Create a directory for organizing your playbook and roles, in this example
+Create a directory for organizing your playbook and roles. In this example,
 `openwisp-dev` is used. Create a directory `roles` inside this directory.
 
 ```
@@ -601,7 +601,7 @@ Follow instructions in ["Create inventory file"](#create-inventory-file) section
 configure `hosts` file.
 
 You can reference the example playbook below (tested on Debian 11) for installing
-a fully featured version of OpenWISP.
+a fully-featured version of OpenWISP.
 
 ```yml
 - hosts: openwisp2
@@ -612,12 +612,14 @@ a fully featured version of OpenWISP.
     openwisp2_network_topology: true
     openwisp2_firmware_upgrader: true
     openwisp2_radius: true
+    openwisp2_monitoring: true # monitoring is enabled by default
 ```
 
 Read ["Role Variables"](#role-variables) section to learn about
 available configuration variables.
-Follow instructions in ["Run the playbook"](#run-the-playbook) section, for
-running above playbook.
+
+Follow instructions in ["Run the playbook"](#run-the-playbook) section to
+run above playbook.
 
 Troubleshooting
 ===============
