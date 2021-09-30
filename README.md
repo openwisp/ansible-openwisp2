@@ -574,6 +574,58 @@ When the playbook is done running, if you got no errors you can login at:
 look for the word "radius" in the
 [Role variables](#role-variables) section of this document.
 
+Using development version
+=========================
+
+The following steps will help you set up and install the development version of
+this role.
+
+Create a directory for organizing your playbook and roles. In this example,
+`openwisp-dev` is used. Create a directory `roles` inside this directory.
+
+```
+mkdir -p ~/openwisp-dev/roles
+cd ~/openwisp-dev/roles
+```
+
+Clone the development version of this role:
+
+```
+git clone https://github.com/openwisp/ansible-openwisp2.git --branch=dev openwisp.openwisp2
+```
+
+Now, go to the parent directory & create hosts file and playbook.yml:
+
+```
+cd ../
+touch hosts
+touch playbook.yml
+```
+
+Follow instructions in ["Create inventory file"](#create-inventory-file) section to
+configure `hosts` file.
+
+You can reference the example playbook below (tested on Debian 11) for installing
+a fully-featured version of OpenWISP.
+
+```yml
+- hosts: openwisp2
+  become: "{{ become | default('yes') }}"
+  roles:
+    - openwisp.openwisp2
+  vars:
+    openwisp2_network_topology: true
+    openwisp2_firmware_upgrader: true
+    openwisp2_radius: true
+    openwisp2_monitoring: true # monitoring is enabled by default
+```
+
+Read ["Role Variables"](#role-variables) section to learn about
+available configuration variables.
+
+Follow instructions in ["Run the playbook"](#run-the-playbook) section to
+run above playbook.
+
 Troubleshooting
 ===============
 
