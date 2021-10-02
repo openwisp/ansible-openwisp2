@@ -209,7 +209,7 @@ Create a new playbook file `playbook.yml` **on your local machine** with the fol
 
 The line `become: "{{ become | default('yes') }}"` means ansible  will use the `sudo`
 program to run each command. You may remove this line if you don't need it (eg: if you are
-using the `root` user on the production server).
+ `root` user on the production server).
 
 You may replace `openwisp2` on the `hosts` field with your production server's hostname if you desire.
 
@@ -574,11 +574,14 @@ When the playbook is done running, if you got no errors you can login at:
 look for the word "radius" in the
 [Role variables](#role-variables) section of this document.
 
-Using development version
-=========================
+Deploying the upcoming release of OpenWISP
+==========================================
 
-The following steps will help you set up and install the development version of
-this role.
+The following steps will help you set up and install the new version of OpenWISP
+which is not released yet, but ships new modules like
+[OpenWISP Monitoring](https://github.com/openwisp/openwisp-monitoring)
+and [OpenWISP RADIUS](https://github.com/openwisp/openwisp-radius),
+which many users need.
 
 Create a directory for organizing your playbook and roles. In this example,
 `openwisp-dev` is used. Create a directory `roles` inside this directory.
