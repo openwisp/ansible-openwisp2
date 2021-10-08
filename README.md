@@ -1032,6 +1032,9 @@ Below are listed all the variables you can customize (you may also want to take 
     freeradius_rest:
         url: "https://{{ inventory_hostname }}/api/v1/freeradius"
     freeradius_safe_characters: "+@abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_: /"
+    # Sets the source path of the template that contains freeradius site configuration.
+    # Defaults to "templates/freeradius/openwisp_site.j2" shipped in the role.
+    freeradius_openwisp_site_template_src: custom_freeradius_site.j2
     cron_delete_old_notifications: "'hour': 0, 'minute': 0"
     cron_deactivate_expired_users: "'hour': 0, 'minute': 5"
     cron_delete_old_users: "'hour': 0, 'minute': 10"
