@@ -14,7 +14,7 @@ Tested on **Debian (Buster, Bullseye)**, **Ubuntu (18/20 LTS)**.
 
 **NOTE**: it is highly suggested to use this procedure on clean virtual machines or linux containers.
 
-**Minimum ansible version supported**: 2.10.
+**Recommended ansible version**: 2.10.
 
 Help OpenWISP
 =============
@@ -136,8 +136,8 @@ please read [Install OpenWISP2 for testing in a VirtualBox VM](#install-openwisp
 Install ansible
 ---------------
 
-Install ansible (version 2.10 or higher) **on your local machine** (not the production server!) if
-you haven't done already.
+Install ansible (recommended version 2.10) **on your local machine**
+(not the production server!) if you haven't done already.
 
 To **install ansible** we suggest you follow the official [ansible installation guide](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-ansible-in-a-virtual-environment-with-pip). It is recommended to install ansible through a virtual environment to avoid dependency issues.
 
@@ -583,24 +583,54 @@ which is not released yet, but ships new modules like
 and [OpenWISP RADIUS](https://github.com/openwisp/openwisp-radius),
 which many users need.
 
-Create a directory for organizing your playbook and roles. In this example,
-`openwisp-dev` is used. Create a directory `roles` inside this directory.
+Create a directory for organizing your playbook, roles and collections. In this example,
+`openwisp-dev` is used. Create `roles` and `collections` directories in `~/openwisp-dev`.
 
 ```
 mkdir -p ~/openwisp-dev/roles
-cd ~/openwisp-dev/roles
+mkdir -p ~/openwisp-dev/collections
 ```
 
-Clone the development version of this role:
+Change directory to `~/openwisp-dev/` in terminal and create configuration
+and requirement files for Ansible.
 
 ```
-git clone https://github.com/openwisp/ansible-openwisp2.git --branch=dev openwisp.openwisp2
+cd ~/openwisp-dev/
+touch ansible.cfg
+touch requirements.yml
 ```
 
-Now, go to the parent directory & create hosts file and playbook.yml:
+Setup `roles_path` and `collections_paths` variables in `ansible.cfg` as follows:
 
 ```
-cd ../
+[defaults]
+roles_path=~/openwisp-dev/roles
+collections_paths=~/openwisp-dev/collections
+```
+
+Ensure your `requirements.yml` contains following content:
+
+```yml
+---
+roles:
+  - src: https://github.com/openwisp/ansible-openwisp2.git
+    version: dev
+    name: openwisp.openwisp2-dev
+
+collections:
+  - name: community.general
+    version: ">=3.6.0"
+```
+
+Install requirements from the `requirements.yml` as follows
+
+```
+ansible-galaxy install -r requirements.yml
+```
+
+Now, create hosts file and playbook.yml:
+
+```
 touch hosts
 touch playbook.yml
 ```
@@ -608,14 +638,14 @@ touch playbook.yml
 Follow instructions in ["Create inventory file"](#create-inventory-file) section to
 configure `hosts` file.
 
-You can reference the example playbook below (tested on Debian 11) for installing
-a fully-featured version of OpenWISP.
+You can reference the example playbook below (tested on Debian 11 with ansible 2.10.9)
+for installing a fully-featured version of OpenWISP.
 
 ```yml
 - hosts: openwisp2
   become: "{{ become | default('yes') }}"
   roles:
-    - openwisp.openwisp2
+    - openwisp.openwisp2-dev
   vars:
     openwisp2_network_topology: true
     openwisp2_firmware_upgrader: true
@@ -764,7 +794,7 @@ Below are listed all the variables you can customize (you may also want to take 
     # WARNING: only do this if you know what you are doing; disruption
     # of service is very likely to occur during development
     # Custom OpenWISP 2 Python packages will be installed with "--no-deps"
-    # parameter, be aware that you will have to add new dependencies if 
+    # parameter, be aware that you will have to add new dependencies if
     # necessary to "openwisp2_extra_python_packages" var
     openwisp2_controller_pip: false
     openwisp2_notifications_pip: false
