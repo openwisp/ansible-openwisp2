@@ -141,7 +141,7 @@ you haven't done already.
 
 To **install ansible** we suggest you follow the official [ansible installation guide](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-ansible-in-a-virtual-environment-with-pip). It is recommended to install ansible through a virtual environment to avoid dependency issues.
 
-Ensure that you have the correct version of Jinja installed in your Python environment
+Please ensure that you have the correct version of Jinja installed in your Python environment:
 ```
 pip install Jinja>=2.11
 ```
