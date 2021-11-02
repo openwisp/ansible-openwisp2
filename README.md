@@ -139,7 +139,12 @@ Install ansible
 Install ansible (version 2.5 or higher) **on your local machine** (not the production server!) if
 you haven't done already.
 
-To **install ansible** we suggest you follow the official [ansible installation guide](http://docs.ansible.com/ansible/latest/intro_installation.html).
+To **install ansible** we suggest you follow the official [ansible installation guide](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-ansible-in-a-virtual-environment-with-pip). It is recommended to install ansible through a virtual environment to avoid dependency issues.
+
+Please ensure that you have the correct version of Jinja installed in your Python environment:
+```
+pip install Jinja>=2.11
+```
 
 After having installed ansible, **you need to install git** (example for linux debian/ubuntu systems):
 
