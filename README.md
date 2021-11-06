@@ -653,6 +653,9 @@ Below are listed all the variables you can customize (you may also want to take 
     # use these to install forks, branches or development versions
     # WARNING: only do this if you know what you are doing; disruption
     # of service is very likely to occur during development
+    # Custom OpenWISP 2 Python packages will be installed with "--no-deps"
+    # parameter, be aware that you will have to add new dependencies if 
+    # necessary to "openwisp2_extra_python_packages" var
     openwisp2_controller_pip: false
     openwisp2_notifications_pip: false
     openwisp2_users_pip: false
