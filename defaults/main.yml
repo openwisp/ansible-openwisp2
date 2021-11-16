@@ -66,6 +66,7 @@ openwisp2_default_cert_validity: 1825
 openwisp2_default_ca_validity: 3650
 openwisp2_default_organization_id: 78f74fdd-67c6-4064-97e1-ce761da30745
 openwisp2_notifications_delete_old_notifications: 90
+openwisp2_firmware_upgrader_max_file_size: 31457280  # 30MB
 openwisp2_topology_update_frequency:
     day: "*"
     hour: "*"

@@ -1,4 +1,9 @@
 ---
+- name: Set nginx max upload size
+  # Required to allow uploading firmware images
+  set_fact:
+    openwisp2_nginx_client_max_body_size: "{{openwisp2_firmware_upgrader_max_file_size}}"
+  when: openwisp2_firmware_upgrader
 
 - name: create "{{ openwisp2_path }}/public_html"
   file:
