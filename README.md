@@ -790,7 +790,7 @@ Below are listed all the variables you can customize (you may also want to take 
     # alternative to the previous option, the celery autoscale option can be set if needed
     # for more info, consult the documentation of celery regarding "autoscaling"
     # by default it is set to "null" (no autoscaling)
-    openwisp2_celery_autoscale: 1,4
+    openwisp2_celery_autoscale: 4,1
     # prefetch multiplier for the default queue,
     # the default value is calculated automatically by celery
     openwisp2_celery_prefetch_multiplier: null
@@ -806,7 +806,7 @@ Below are listed all the variables you can customize (you may also want to take 
     # alternative to the previous option, the celery autoscale option can be set if needed
     # for more info, consult the documentation of celery regarding "autoscaling"
     # by default it is set to "null" (no autoscaling)
-    openwisp2_celery_network_autoscale: 4,8
+    openwisp2_celery_network_autoscale: 8,4
     # prefetch multiplier for the "network" queue,
     # the default is 1, which mean no prefetching,
     # because the network tasks are long running and is better
@@ -825,7 +825,7 @@ Below are listed all the variables you can customize (you may also want to take 
     # alternative to the previous option, the celery autoscale option can be set if needed
     # for more info, consult the documentation of celery regarding "autoscaling"
     # by default it is set to "null" (no autoscaling)
-    openwisp2_celery_firmware_upgrader_autoscale: 4,8
+    openwisp2_celery_firmware_upgrader_autoscale: 8,4
     # prefetch multiplier for the "firmware_upgrader" queue,
     # the default is 1, which mean no prefetching,
     # because the firmware upgrade tasks are long running and is better
