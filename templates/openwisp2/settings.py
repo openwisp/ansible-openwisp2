@@ -99,6 +99,7 @@ EXTENDED_APPS = [
 
 {% if openwisp2_firmware_upgrader or openwisp2_radius %}
 PRIVATE_STORAGE_ROOT = os.path.join(BASE_DIR, 'private')
+OPENWISP_FIRMWARE_UPGRADER_MAX_FILE_SIZE = {{ openwisp2_firmware_upgrader_max_file_size }}
 {% endif %}
 
 AUTH_USER_MODEL = 'openwisp_users.User'
