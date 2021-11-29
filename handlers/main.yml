@@ -9,7 +9,7 @@
   command: supervisorctl reload
   notify: remove celerybeat schedule
 
-# The schedule file becomes corrupted between updates.
+# Clean up the schedule file beacause it may become corrupted after updates
 - name: remove celerybeat schedule
   file:
     path: "{{ openwisp2_path }}/celerybeat-schedule.db"
