@@ -7,6 +7,13 @@
 
 - name: reload supervisor
   command: supervisorctl reload
+  notify: remove celerybeat schedule
+
+# Clean up the schedule file beacause it may become corrupted after updates
+- name: remove celerybeat schedule
+  file:
+    path: "{{ openwisp2_path }}/celerybeat-schedule.db"
+    state: absent
 
 - name: restart nginx
   service:

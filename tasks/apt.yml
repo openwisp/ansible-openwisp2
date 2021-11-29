@@ -26,6 +26,8 @@
       # needed to generate SSH key for push updates
       - openssh-client
       - logrotate
+      # required for celerybeat
+      - python3-gdbm
   ignore_errors: true
   retries: 5
   delay: 10
