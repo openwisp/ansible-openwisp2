@@ -614,7 +614,7 @@ Ensure your `requirements.yml` contains following content:
 ---
 roles:
   - src: https://github.com/openwisp/ansible-openwisp2.git
-    version: dev
+    version: master
     name: openwisp.openwisp2-dev
 
 collections:
