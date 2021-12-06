@@ -910,6 +910,8 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_uwsgi_threads: 2
     # number of daphne process to spawn. Default value is 1
     openwisp2_daphne_processes: 2
+    # maximum time to allow a websocket to be connected (in seconds)
+    openwisp2_daphne_websocket_timeout: 1800
     # the following setting controls which ip address range
     # is allowed to access the openwisp2 admin web interface
     # (by default any IP is allowed)

@@ -147,7 +147,10 @@ OPENWISP_USERS_AUTH_API = {{ openwisp2_users_auth_api }}
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {'hosts': [('{{ openwisp2_redis_host }}', {{ openwisp2_redis_port }})]},
+        'CONFIG': {
+            'hosts': [('{{ openwisp2_redis_host }}', {{ openwisp2_redis_port }})],
+            'group_expiry': {{ openwisp2_daphne_websocket_timeout }},
+        },
     },
 }
 ASGI_APPLICATION = 'openwisp2.routing.application'
