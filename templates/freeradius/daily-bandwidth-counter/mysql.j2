@@ -1,5 +1,0 @@
-query = "\
-        SELECT SUM(acctinputoctets + acctoutputoctets) \
-        FROM radacct \
-        WHERE UserName='%{${key}}' \
-        AND UNIX_TIMESTAMP(acctstarttime) + acctsessiontime > '%%b'"

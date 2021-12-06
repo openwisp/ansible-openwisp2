@@ -1,5 +1,0 @@
-query = "\
-        SELECT sum(AcctOutputOctets) + sum(AcctInputOctets) \
-        FROM radacct WHERE \
-        UserName = '%{${key}}' AND \
-        EXTRACT(epoch FROM AcctStartTime) + AcctSessionTime > '%%b'"
