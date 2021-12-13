@@ -574,6 +574,19 @@ When the playbook is done running, if you got no errors you can login at:
 look for the word "radius" in the
 [Role variables](#role-variables) section of this document.
 
+Deploying custom static content
+===============================
+
+For deploying custom static content (HTML files, etc.) add all
+the static content in `files/static/custom` directory. The files inside
+`files/static/custom` will be uploaded to remote `static` directory while running
+the playbook.
+
+This is helpful for [customizing OpenWISP's theme](https://github.com/openwisp/openwisp-utils#openwisp_admin_theme_links).
+
+E.g., if you added a custom CSS file in `files/static/custom/css/custom.css`, the
+file location to use in [OPENWISP_ADMIN_THEME_LINKS](https://github.com/openwisp/openwisp-utils#openwisp_admin_theme_links) setting will be `css/custom.css`. 
+
 Deploying the upcoming release of OpenWISP
 ==========================================
 
