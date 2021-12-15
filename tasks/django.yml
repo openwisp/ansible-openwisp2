@@ -24,9 +24,9 @@
   tags:
     - molecule-idempotence-notest
 
-- name: create "{{ openwisp2_path }}/openwisp2/static/custom"
+- name: create "{{ openwisp2_path }}/static-custom"
   file:
-    path: "{{ openwisp2_path }}/openwisp2/static/custom"
+    path: "{{ openwisp2_path }}/static-custom"
     state: directory
     group: "{{ www_group }}"
     mode: 0770
