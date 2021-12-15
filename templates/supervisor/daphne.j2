@@ -2,7 +2,7 @@
 user={{ www_user }}
 socket=unix://{{ openwisp2_path }}/daphne0.sock
 directory={{ openwisp2_path }}
-command={{ openwisp2_path }}/env/bin/daphne --fd 0 -u {{ openwisp2_path }}/daphne%(process_num)d.sock --access-log - --proxy-headers openwisp2.asgi:application
+command={{ openwisp2_path }}/env/bin/daphne --fd 0 -u {{ openwisp2_path }}/daphne%(process_num)d.sock --access-log - --websocket_timeout {{ openwisp2_daphne_websocket_timeout }} --proxy-headers openwisp2.asgi:application
 process_name=asgi%(process_num)d
 numprocs={{ openwisp2_daphne_processes }}
 autostart=true
