@@ -24,12 +24,14 @@
   tags:
     - molecule-idempotence-notest
 
-- name: create "{{ openwisp2_path }}/static-custom"
+- name: create "{{ openwisp2_path }}/ow2_static"
   file:
-    path: "{{ openwisp2_path }}/static-custom"
+    path: "{{ openwisp2_path }}/ow2_static"
     state: directory
     group: "{{ www_group }}"
     mode: 0770
+  tags:
+    - openwisp2_theme
 
 - name: manage.py
   notify: reload supervisor
@@ -141,11 +143,13 @@
   become: true
   copy:
     src: static/custom/
-    dest: "{{ openwisp2_path }}/openwisp2/static/custom"
+    dest: "{{ openwisp2_path }}/ow2_static"
     owner: "{{ www_user }}"
     group: "{{ www_group }}"
     mode: 0640
   failed_when: false
+  tags:
+    - openwisp2_theme
 
 - name: collectstatic
   notify: reload supervisor
