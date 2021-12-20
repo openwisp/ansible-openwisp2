@@ -11,6 +11,8 @@
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: true
+  environment:
+    SETUPTOOLS_USE_DISTUTILS: stdlib
   retries: 5
   delay: 10
   register: result
@@ -24,6 +26,8 @@
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: true
+  environment:
+    SETUPTOOLS_USE_DISTUTILS: stdlib
   retries: 2
   delay: 5
   register: result
@@ -87,8 +91,8 @@
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: true
   environment:
+    SETUPTOOLS_USE_DISTUTILS: stdlib
     LC_CTYPE: "en_US.UTF-8"
-
   notify: reload supervisor
   retries: 5
   delay: 10
@@ -106,7 +110,9 @@
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: true
-  retries: 5
+  environment:
+    SETUPTOOLS_USE_DISTUTILS: stdlib
+  retries: 1
   delay: 10
   register: result
   until: result is success
@@ -120,6 +126,8 @@
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: true
+  environment:
+    SETUPTOOLS_USE_DISTUTILS: stdlib
   notify: reload supervisor
   retries: 5
   delay: 10
@@ -135,6 +143,8 @@
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: true
+  environment:
+    SETUPTOOLS_USE_DISTUTILS: stdlib
   notify: reload supervisor
   retries: 5
   delay: 10
@@ -152,6 +162,8 @@
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: true
+  environment:
+    SETUPTOOLS_USE_DISTUTILS: stdlib
   notify: reload supervisor
   retries: 5
   delay: 10
@@ -169,6 +181,8 @@
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: true
+  environment:
+    SETUPTOOLS_USE_DISTUTILS: stdlib
   notify: reload supervisor
   retries: 5
   delay: 10
@@ -186,6 +200,8 @@
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: true
+  environment:
+    SETUPTOOLS_USE_DISTUTILS: stdlib
   notify: reload supervisor
   retries: 5
   delay: 10
@@ -206,6 +222,8 @@
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: true
+  environment:
+    SETUPTOOLS_USE_DISTUTILS: stdlib
   retries: 5
   delay: 10
   register: result
@@ -221,6 +239,8 @@
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: true
     extra_args: "--no-deps"
+  environment:
+    SETUPTOOLS_USE_DISTUTILS: stdlib
   notify: reload supervisor
   retries: 5
   delay: 10
@@ -238,6 +258,8 @@
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: true
+  environment:
+    SETUPTOOLS_USE_DISTUTILS: stdlib
   retries: 5
   delay: 10
   register: result
@@ -251,6 +273,8 @@
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: true
+  environment:
+    SETUPTOOLS_USE_DISTUTILS: stdlib
   retries: 5
   delay: 10
   register: result
@@ -265,6 +289,8 @@
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: true
+  environment:
+    SETUPTOOLS_USE_DISTUTILS: stdlib
   retries: 5
   delay: 10
   register: result
@@ -279,6 +305,8 @@
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: true
+  environment:
+    SETUPTOOLS_USE_DISTUTILS: stdlib
   retries: 5
   delay: 10
   register: result
@@ -293,6 +321,8 @@
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
     virtualenv_site_packages: true
+  environment:
+    SETUPTOOLS_USE_DISTUTILS: stdlib
   retries: 5
   delay: 10
   register: result
