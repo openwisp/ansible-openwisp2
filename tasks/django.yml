@@ -24,9 +24,9 @@
   tags:
     - molecule-idempotence-notest
 
-- name: create "{{ openwisp2_path }}/ow2_static"
+- name: create "{{ openwisp2_path }}/static_custom"
   file:
-    path: "{{ openwisp2_path }}/ow2_static"
+    path: "{{ openwisp2_path }}/static_custom"
     state: directory
     group: "{{ www_group }}"
     mode: 0770
@@ -142,8 +142,8 @@
 - name: copy static files
   become: true
   copy:
-    src: static/custom/
-    dest: "{{ openwisp2_path }}/ow2_static"
+    src: ow2_static/
+    dest: "{{ openwisp2_path }}/static_custom"
     owner: "{{ www_user }}"
     group: "{{ www_group }}"
     mode: 0640
