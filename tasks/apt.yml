@@ -147,6 +147,47 @@
 - name: ensure supervisor is started
   service: name=supervisor state=started
 
+- name: Should Install Python 3.7
+  block:
+    - name: Check installed python version
+      shell: "{{ openwisp2_python }} --version"
+      register: openwisp2_installed_python
+      changed_when: false
+    - set_fact:
+        openwisp2_should_install_python_37: |
+          {{ openwisp2_installed_python.stdout.split(' ')[1] is version_compare('3.7', 'le') }}
+
+- name: Install Python 3.7 and required packages from ppa:deadsnakes/ppa
+  block:
+    - name: Install software-properties-common
+      apt:
+        name:
+          - software-properties-common
+      ignore_errors: true
+      retries: 5
+      delay: 10
+      register: result
+      until: result is success
+    - name: Add deadsnakes PPA
+      apt_repository:
+        repo: ppa:deadsnakes/ppa
+        state: present
+    - name: Install Python 3.7
+      apt:
+        name:
+          - python3.7
+          - python3.7-dev
+          - python3.7-venv
+      ignore_errors: true
+      retries: 5
+      delay: 10
+      register: result
+      until: result is success
+    - name:
+      set_fact:
+        openwisp2_python: python3.7
+  when: openwisp2_should_install_python_37 == "True\n"
+
 - name: Install python3 packages
   apt:
     name:
@@ -157,6 +198,7 @@
   delay: 10
   register: result
   until: result is success
+  when: openwisp2_should_install_python_37 == "False\n"
 
 - name: Install ntp
   when: openwisp2_install_ntp
