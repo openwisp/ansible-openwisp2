@@ -7,6 +7,21 @@ from django.conf import settings
 
 
 class FileHashedNameMixin:
+    # Workaround for DRF-yasg: https://github.com/axnsan12/drf-yasg/issues/761.
+    # TODO: Remove this when DRF-Yasg introduces proper Django 4.0 support.
+    patterns = (
+        (
+            "*.css",
+            (
+                "(?P<matched>url\\(['\"]{0,1}\\s*(?P<url>.*?)[\"']{0,1}\\))",
+                (
+                    "(?P<matched>@import\\s*[\"']\\s*(?P<url>.*?)[\"'])",
+                    '@import url("%(url)s")',
+                ),
+            ),
+        ),
+    )
+
     default_excluded_patterns = [
         # Exclude PNGs files of leaflet
         'leaflet/*/*.png'
