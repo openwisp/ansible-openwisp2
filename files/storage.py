@@ -7,8 +7,8 @@ from django.conf import settings
 
 
 class FileHashedNameMixin:
-    # Workaround for modules that do not completely support Django 4.
-    # TODO: Remove this while adding Django 4.0 support.
+    # Workaround for DRF-yasg: https://github.com/axnsan12/drf-yasg/issues/761.
+    # TODO: Remove this when DRF-Yasg introduces proper Django 4.0 support.
     patterns = (
         (
             "*.css",
