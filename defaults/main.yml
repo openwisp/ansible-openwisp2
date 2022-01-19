@@ -79,6 +79,7 @@ openwisp2_topology_save_snapshot_frequency:
     day: "*"
     hour: "23"
     minute: "30"
+openwisp2_django_sesame_max_age: 1800 # 30 minutes
 openwisp2_nginx_ssl_config:
     gzip: "on"
     gzip_comp_level: "6"

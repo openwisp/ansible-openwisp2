@@ -131,6 +131,9 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    {% if openwisp2_radius %}
+    'sesame.middleware.AuthenticationMiddleware',
+    {% endif %}
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'pipeline.middleware.MinifyHTMLMiddleware'
@@ -152,6 +155,12 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 OPENWISP_RADIUS_SMS_TOKEN_MAX_IP_DAILY = {{ openwisp2_radius_sms_token_max_ip_daily }}
 SENDSMS_BACKEND = '{{ openwisp2_radius_sms_backend }}'
 
+# django-sesame configuration for magic sign-in links.
+# Refer https://github.com/aaugustin/django-sesame#django-sesame.
+AUTHENTICATION_BACKENDS += [
+    'sesame.backends.ModelBackend',
+]
+SESAME_MAX_AGE = {{ openwisp2_django_sesame_max_age }}
 {% endif %}
 
 ROOT_URLCONF = 'openwisp2.urls'

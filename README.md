@@ -1048,6 +1048,9 @@ Below are listed all the variables you can customize (you may also want to take 
     postfix_smtpd_relay_restrictions_override: permit_mynetworks
     # allows overriding the default duration for keeping notifications
     openwisp2_notifications_delete_old_notifications: 10
+    # Expiration time limit (in seconds) of magic sign-in links.
+    # Magic sign-in links are used only when OpenWISP RADIUS is enabled.
+    openwisp2_django_sesame_max_age: 1800 # 30 minutes
     # Maximum file size(in bytes) allowed to be uploaded as firmware image.
     # It overrides "openwisp2_nginx_client_max_body_size" setting
     # and updates nginx configuration accordingly.
