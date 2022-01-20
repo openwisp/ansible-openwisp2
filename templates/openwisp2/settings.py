@@ -45,6 +45,9 @@ INSTALLED_APPS = [
     'openwisp_controller.config',
     'openwisp_controller.geo',
     'openwisp_controller.connection',
+{% if openwisp2_controller_subnet_division %}
+    'openwisp_controller.subnet_division',
+{% endif %}
 {% if openwisp2_monitoring %}
     'openwisp_monitoring.monitoring',
     'openwisp_monitoring.device',
@@ -59,6 +62,7 @@ INSTALLED_APPS = [
 {% if openwisp2_firmware_upgrader %}
     'openwisp_firmware_upgrader',
 {% endif %}
+    'openwisp_ipam',
     # openwisp2 admin theme
     # (must be loaded here)
     'openwisp_utils.admin_theme',
