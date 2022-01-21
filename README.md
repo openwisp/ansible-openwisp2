@@ -796,6 +796,11 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_network_topology: false
     openwisp2_firmware_upgrader: false
     openwisp2_radius: false
+    # Setting this to true will enable subnet division feature of
+    # openwisp-controller. Refer openwisp-controller documentation
+    # for more information. https://github.com/openwisp/openwisp-controller#subnet-division-app
+    # By default, it is set to false.
+    openwisp2_controller_subnet_division: true
     # when openwisp2_radius_urls is set to false, the radius module
     # is setup but it's urls are not added, which means API and social
     # views cannot be used, this is helpful if you have an external
