@@ -143,7 +143,7 @@ To **install ansible** we suggest you follow the official [ansible installation 
 
 Please ensure that you have the correct version of Jinja installed in your Python environment:
 ```
-pip install Jinja>=2.11
+pip install Jinja2>=2.11
 ```
 
 After having installed ansible, **you need to install git** (example for linux debian/ubuntu systems):
