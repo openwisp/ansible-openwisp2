@@ -885,7 +885,7 @@ Below are listed all the variables you can customize (you may also want to take 
         - TEMPLATES[0]['OPTIONS']['loaders'].insert(0, 'apptemplates.Loader')
     # extra URL settings for django
     openwisp2_extra_urls:
-      - "url(r'', include('my_custom_app.urls'))"
+      - "path(r'', include('my_custom_app.urls'))"
     # controller URL are enabled by default
     # but can be disabled in multi-VM installations if needed
     openwisp2_controller_urls: true
