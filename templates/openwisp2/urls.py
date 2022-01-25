@@ -27,7 +27,7 @@ urlpatterns = [
 {% for extra_url in openwisp2_extra_urls %}
     {{ extra_url }},
 {% endfor %}
-    path('$', redirect_view, name='index'),
+    path('', redirect_view, name='index'),
 ]
 
 urlpatterns += staticfiles_urlpatterns()
