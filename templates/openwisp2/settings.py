@@ -63,6 +63,11 @@ INSTALLED_APPS = [
     'openwisp_firmware_upgrader',
 {% endif %}
     'openwisp_ipam',
+{% if openwisp2_radius %}
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+    'openwisp_radius',
+{% endif %}
     # openwisp2 admin theme
     # (must be loaded here)
     'openwisp_utils.admin_theme',
@@ -77,11 +82,6 @@ INSTALLED_APPS = [
     'rest_framework_gis',
     'rest_framework.authtoken',
     'django_filters',
-{% if openwisp2_radius %}
-    'dj_rest_auth',
-    'dj_rest_auth.registration',
-    'openwisp_radius',
-{% endif %}
 {% if openwisp2_firmware_upgrader or openwisp2_radius %}
     'private_storage',
 {% endif %}
