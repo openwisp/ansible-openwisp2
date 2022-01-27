@@ -11,6 +11,12 @@
     state: directory
     mode: 0775
 
+- name: create "{{ openwisp2_path }}/nginx-conf/openwisp2"
+  file:
+    path: "{{ openwisp2_path }}/nginx-conf/openwisp2"
+    state: directory
+    mode: 0770
+
 - name: create "{{ openwisp2_path }}/ssl"
   file:
     path: "{{ openwisp2_path }}/ssl"
@@ -46,9 +52,16 @@
     path: "/etc/nginx/sites-enabled/default"
     state: absent
 
+- name: nginx SSL configuration
+  template:
+    src: nginx/ssl-conf.j2
+    dest: "{{ openwisp2_path }}/nginx-conf/openwisp2/ssl.conf"
+    mode: 0644
+  notify: restart nginx
+
 - name: nginx site available
   template:
-    src: nginx.j2
+    src: nginx/site-conf.j2
     dest: "/etc/nginx/sites-available/{{ inventory_hostname }}"
     mode: 0644
   notify: restart nginx
