@@ -18,14 +18,8 @@ server {
     # set client body size #
     client_max_body_size {{ openwisp2_nginx_client_max_body_size }};
 
-    ssl_certificate {{ openwisp2_ssl_cert }};
-    ssl_certificate_key {{ openwisp2_ssl_key }};
-    # optimizations
-    ssl_session_cache shared:SSL:20m;
-    ssl_session_timeout 10m;
-    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-    ssl_prefer_server_ciphers on;
-    ssl_ciphers ECDH+AESGCM:ECDH+AES256:ECDH+AES128:DH+3DES:!ADH:!AECDH:!MD5;
+    include {{ openwisp2_path }}/nginx-conf/openwisp2/ssl.conf;
+
     add_header Strict-Transport-Security "max-age=31536000";
     add_header X-Content-Type-Options nosniff;
 
@@ -148,8 +142,7 @@ server {
 
     server_name _;
 
-    ssl_certificate {{ openwisp2_ssl_cert }};
-    ssl_certificate_key {{ openwisp2_ssl_key }};
+    include ssl.conf;
 
     return 404;
 }
