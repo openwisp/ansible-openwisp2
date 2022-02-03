@@ -920,6 +920,12 @@ Below are listed all the variables you can customize (you may also want to take 
     # nginx error log configuration
     openwisp2_nginx_access_log: "{{ openwisp2_path }}/log/nginx.access.log"
     openwisp2_nginx_error_log: "{{ openwisp2_path }}/log/nginx.error.log error"
+    # nginx Content Security Policy header
+    openwisp2_nginx_csp: >
+      "default-src http: https: data: blob: 'unsafe-inline';
+      script-src 'unsafe-eval' https: 'unsafe-inline' 'self';
+      frame-ancestors 'self'; connect-src https://{{ inventory_hostname }} wss: 'self';
+      worker-src https://{{ inventory_hostname }} blob: 'self';" always;
     # uwsgi gid, omitted by default
     openwisp2_uwsgi_gid: null
     # number of uWSGI process to spawn. Default value is 1.
