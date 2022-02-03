@@ -59,6 +59,13 @@
     mode: 0644
   notify: restart nginx
 
+- name: nginx security configuration
+  template:
+    src: nginx/security-conf.j2
+    dest: "{{ openwisp2_path }}/nginx-conf/openwisp2/security.conf"
+    mode: 0644
+  notify: restart nginx
+
 - name: nginx site available
   template:
     src: nginx/site-conf.j2

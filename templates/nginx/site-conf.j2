@@ -19,9 +19,7 @@ server {
     client_max_body_size {{ openwisp2_nginx_client_max_body_size }};
 
     include {{ openwisp2_path }}/nginx-conf/openwisp2/ssl.conf;
-
-    add_header Strict-Transport-Security "max-age=31536000";
-    add_header X-Content-Type-Options nosniff;
+    include {{ openwisp2_path }}/nginx-conf/openwisp2/security.conf;
 
     {% for key, value in openwisp2_nginx_ssl_config.items() %}
         {% if value is sequence and value is not string -%}
@@ -142,7 +140,8 @@ server {
 
     server_name _;
 
-    include ssl.conf;
+    include {{ openwisp2_path }}/nginx-conf/openwisp2/ssl.conf;
+    include {{ openwisp2_path }}/nginx-conf/openwisp2/security.conf;
 
     return 404;
 }
