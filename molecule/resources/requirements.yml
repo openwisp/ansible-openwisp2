@@ -6,4 +6,4 @@
 
 - src: https://github.com/openwisp/ansible-ow-influxdb
   version: origin/master
-  name: ow-influxdb
+  name: openwisp.ow_influxdb
