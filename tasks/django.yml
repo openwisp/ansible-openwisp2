@@ -93,12 +93,6 @@
     group: "{{ www_group }}"
     mode: 0640
 
-- name: storage.py
-  copy:
-    src: storage.py
-    dest: "{{ openwisp2_path }}/openwisp2/storage.py"
-    mode: 0644
-
 - name: routing.py
   notify: reload supervisor
   template:
