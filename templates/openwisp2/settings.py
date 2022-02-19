@@ -94,6 +94,9 @@ INSTALLED_APPS = [
 {% if openwisp2_sentry.get('dsn') %}
     'raven.contrib.django.raven_compat',
 {% endif %}
+{% if openwisp2_email_backend == "djcelery_email.backends.CeleryEmailBackend"%}
+    'djcelery_email',
+{% endif %}
 ]
 
 EXTENDED_APPS = [
@@ -384,6 +387,7 @@ LEAFLET_CONFIG['RESET_VIEW'] = False
 
 # Set default email
 DEFAULT_FROM_EMAIL = '{{ openwisp2_default_from_email }}'
+EMAIL_BACKEND = '{{ openwisp2_email_backend }}'
 # See http://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.
 LOGGING = {
@@ -477,9 +481,6 @@ TIMESERIES_DATABASE = {
     'HOST': '{{ openwisp2_timeseries_database.host }}',
     'PORT': '{{ openwisp2_timeseries_database.port }}',
 }
-
-INSTALLED_APPS.append('djcelery_email')
-EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
 {% endif %}
 
 {% for setting, value in openwisp2_extra_django_settings.items() %}

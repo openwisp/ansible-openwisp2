@@ -830,6 +830,10 @@ Below are listed all the variables you can customize (you may also want to take 
     # It is recommended that you change the value of this variable if you intend to use
     # OpenWISP2 in production, as a misconfiguration may result in emails not being sent
     openwisp2_default_from_email: "openwisp2@yourhostname.com"
+    # Email backend used by Django for sending emails. By default, the role
+    # uses "CeleryEmailBackend" from django-celery-email.
+    # (https://github.com/pmclanahan/django-celery-email)
+    openwisp2_email_backend: "djcelery_email.backends.CeleryEmailBackend"
     # edit database settings only if you are not using sqlite
     openwisp2_database:
         engine: django.db.backends.postgresql
