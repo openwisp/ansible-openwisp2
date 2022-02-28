@@ -344,3 +344,18 @@
   register: result
   until: result is success
   notify: reload supervisor
+
+- name: Install django
+  pip:
+    name: "django~=3.2.0"
+    state: present
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+    virtualenv_site_packages: true
+  environment:
+    SETUPTOOLS_USE_DISTUTILS: stdlib
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
+  notify: reload supervisor
