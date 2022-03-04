@@ -85,3 +85,14 @@
     src: logrotate.d/openwisp-nginx.j2
     dest: /etc/logrotate.d/openwisp-nginx
     mode: 0644
+
+- name: disable nginx server tokens
+  lineinfile:
+    dest: "/etc/nginx/nginx.conf"
+    regexp: '^\s*server_tokens'
+    line: "server_tokens off;"
+    insertafter: "http {"
+    mode: 0640
+    owner: "root"
+    group: "root"
+  notify: restart nginx
