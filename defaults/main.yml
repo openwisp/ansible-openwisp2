@@ -13,7 +13,7 @@ openwisp2_network_topology_version: "0.5.1"
 openwisp2_firmware_upgrader_version: "0.1"
 openwisp2_monitoring_version: "0.1"
 openwisp2_radius_version: "0.2.1"
-openwisp2_django_version: "3.2.0"
+openwisp2_django_version: "~=3.2.0"
 openwisp2_controller_pip: false
 openwisp2_notifications_pip: false
 openwisp2_users_pip: false
