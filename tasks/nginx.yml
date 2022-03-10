@@ -87,12 +87,9 @@
     mode: 0644
 
 - name: disable nginx server tokens
-  lineinfile:
-    dest: "/etc/nginx/nginx.conf"
-    regexp: '^\s*server_tokens'
-    line: "server_tokens off;"
-    insertafter: "http {"
-    mode: 0640
-    owner: "root"
-    group: "root"
+  replace:
+    path: /etc/nginx/nginx.conf
+    regexp: '#(\s+)server_tokens off'
+    replace: 'server_tokens off'
+    backup: yes
   notify: restart nginx
