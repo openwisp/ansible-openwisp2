@@ -331,7 +331,7 @@
 
 - name: Install django
   pip:
-    name: "django~=3.2.0"
+    name: "django{{ openwisp2_django_version}}"
     state: present
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
