@@ -328,3 +328,19 @@
   register: result
   until: result is success
   notify: reload supervisor
+
+- name: Install django-celery-email
+  pip:
+    name: django-celery-email
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+    virtualenv_site_packages: true
+  environment:
+    SETUPTOOLS_USE_DISTUTILS: stdlib
+  when: openwisp2_email_backend == "djcelery_email.backends.CeleryEmailBackend"
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
+  notify: reload supervisor
