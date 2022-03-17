@@ -37,7 +37,7 @@
             openwisp_controller.config.tests.test_notifications \
             openwisp_controller.geo.tests.test_api \
             openwisp_controller.subnet_division.tests.test_models \
-            openwisp_notifications.tests.test_admin
+            openwisp_notifications.tests.test_admin.TestAdmin
       changed_when: false
 
     - name: Check if redis-server is running
