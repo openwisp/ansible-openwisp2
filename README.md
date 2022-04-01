@@ -27,12 +27,9 @@ Like OpenWISP? Find out how to help us!
 Architecture
 ============
 
-If you are fond of **Python**, **Django** and **Unix**/**Linux** systems, you may find interesting
-to know more about what happens under the hood in **OpenWISP 2**.
+For more information, see [OpenWISP Architecture](https://openwisp.io/docs/general/architecture.html).
 
-![openwisp2 modules diagram](https://raw.githubusercontent.com/openwisp/ansible-openwisp2/master/docs/openwisp2-modules-diagram.png)
-
-For more information see also [Applying the Unix Philosophy to Django projects: a report from the real world](https://www.slideshare.net/FedericoCapoano/applying-the-unix-philosophy-to-django-projects-a-report-from-the-real-world).
+[![openwisp2 modules diagram](https://raw.githubusercontent.com/openwisp/ansible-openwisp2/master/docs/openwisp2-modules-diagram.png)](https://openwisp.io/docs/general/architecture.html)
 
 System Requirements
 ===================
