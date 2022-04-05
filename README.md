@@ -68,9 +68,12 @@ Supported Operating Systems
 See the section "OS Platforms" on the
 [ansible-galaxy page of ansible-openwisp2](https://galaxy.ansible.com/openwisp/openwisp2).
 
-
 Usage (tutorial)
 ================
+
+**Note**: if you need modules like OpenWISP Monitoring and OpenWISP RADIUS,
+you will have to use the development version of this role to
+[deploy the upcoming release of OpenWISP](#deploying-the-upcoming-release-of-openwisp).
 
 If you don't know how to use ansible, don't panic, this procedure will
 guide you towards a fully working basic openwisp2 installation.
@@ -249,7 +252,6 @@ From here on you can follow the instructions available at the following sections
 - [Create inventory file](#create-inventory-file)
 - [Create playbook file](#create-playbook-file)
 - [Run the playbook](#run-the-playbook)
-
 
 **Note:** Please remember to [install ansible](#install-ansible).
 
@@ -494,6 +496,9 @@ you will update the above playbook as follows:
 Enabling the radius module
 --------------------------
 
+**Note**: to enable the RADIUS module you need use the development version
+of this role to [deploy the upcoming release of OpenWISP](#deploying-the-upcoming-release-of-openwisp).
+
 To enable the radius module you need to set `openwisp2_radius` to `true` in
 your `playbook.yml` file. Here's a short summary of how to do this:
 
@@ -630,7 +635,7 @@ Read ["Role Variables"](#role-variables) section to learn about
 available configuration variables.
 
 Follow instructions in ["Run the playbook"](#run-the-playbook) section to
-run above playbook.
+run the above playbook.
 
 Troubleshooting
 ===============
