@@ -800,6 +800,7 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_monitoring: true
     openwisp2_monitoring_version: "0.1"
     openwisp2_radius_version: "0.2.1"
+    openwisp2_django_version: "3.2.0"
     # Enable the modules you want to use
     openwisp2_network_topology: false
     openwisp2_firmware_upgrader: false
