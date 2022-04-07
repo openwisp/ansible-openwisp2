@@ -7,6 +7,7 @@ pidfile={{ openwisp2_path }}/uwsgi.pid
 socket={{ openwisp2_path }}/uwsgi.sock
 processes={{ openwisp2_uwsgi_processes }}
 threads={{ openwisp2_uwsgi_threads }}
+listen={{ openwisp2_uwsgi_listen }}
 harakiri=20
 max-requests=5000
 vacuum=True

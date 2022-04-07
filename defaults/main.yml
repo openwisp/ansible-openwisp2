@@ -145,6 +145,7 @@ openwisp2_postfix_install: true
 postfix_smtpd_relay_restrictions_override: "permit_sasl_authenticated, permit_mynetworks, check_relay_domains, reject_unauth_destination, reject"
 openwisp2_uwsgi_processes: 1
 openwisp2_uwsgi_threads: 1
+openwisp2_uwsgi_listen: 100
 openwisp2_daphne_processes: 1
 openwisp2_daphne_websocket_timeout: 3600 # in seconds
 # internationalization

@@ -945,6 +945,8 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_uwsgi_processes: 1
     # number of threads each uWSGI process will have. Default value is 1.
     openwisp2_uwsgi_threads: 2
+    # value of the listen queue of uWSGI
+    openwisp2_uwsgi_listen: 100
     # number of daphne process to spawn. Default value is 1
     openwisp2_daphne_processes: 2
     # maximum time to allow a websocket to be connected (in seconds)
