@@ -1,8 +1,91 @@
 ---
+- name: Add freeradius repository into Ubuntu focal sources list
+  shell: |
+    echo "deb http://packages.networkradius.com/freeradius-3.0/ubuntu/focal focal main" | \
+    tee /etc/apt/sources.list.d/networkradius.list > /dev/null
+  become: true
+  when:
+    - ansible_distribution|string == 'Ubuntu'
+    - ansible_distribution_release|string == 'focal'
+  tags:
+    - molecule-idempotence-notest
+
+- name: Add freeradius repository into Ubuntu bionic sources list
+  shell: |
+    echo "deb http://packages.networkradius.com/freeradius-3.0/ubuntu/bionic bionic main" | \
+    tee /etc/apt/sources.list.d/networkradius.list > /dev/null
+  become: true
+  when:
+    - ansible_distribution|string == 'Ubuntu'
+    - ansible_distribution_release|string == 'bionic'
+  tags:
+    - molecule-idempotence-notest
+
+- name: Add freeradius repository into Ubuntu xenial sources list and Network RADIUS PGP public key
+  shell: |
+    echo "deb http://packages.networkradius.com/freeradius-3.0/ubuntu/xenial xenial main" | \
+    tee /etc/apt/sources.list.d/networkradius.list > /dev/null
+    curl -s 'https://packages.networkradius.com/pgp/packages%40networkradius.com' | \
+    sudo apt-key add -
+  become: true
+  when:
+    - ansible_distribution|string == 'Ubuntu'
+    - ansible_distribution_release|string == 'xenial'
+  tags:
+    - molecule-idempotence-notest
+
+- name: Add freeradius repository into Debian bullseye sources list
+  shell: |
+    echo "deb http://packages.networkradius.com/freeradius-3.0/debian/bullseye bullseye main" | \
+    sudo tee /etc/apt/sources.list.d/networkradius.list > /dev/null
+  become: true
+  when:
+    - ansible_distribution|string == 'Debian'
+    - ansible_distribution_release|string == 'bullseye'
+  tags:
+    - molecule-idempotence-notest
+
+- name: Add freeradius repository into Debian buster sources list
+  shell: |
+    echo "deb http://packages.networkradius.com/freeradius-3.0/debian/buster buster main" | \
+    sudo tee /etc/apt/sources.list.d/networkradius.list > /dev/null
+  become: true
+  when:
+    - ansible_distribution|string == 'Debian'
+    - ansible_distribution_release|string == 'buster'
+  tags:
+    - molecule-idempotence-notest
+
+- name: Add freeradius repository into Debian stretch sources list
+  shell: |
+    echo "deb http://packages.networkradius.com/freeradius-3.0/debian/stretch stretch main" | \
+    sudo tee /etc/apt/sources.list.d/networkradius.list > /dev/null
+  become: true
+  when:
+    - ansible_distribution|string == 'Debian'
+    - ansible_distribution_release|string == 'stretch'
+  tags:
+    - molecule-idempotence-notest
+
+- name: Add Network RADIUS PGP public key
+  become: true
+  shell: |
+    curl -s 'https://packages.networkradius.com/pgp/packages%40networkradius.com' | \
+    tee /etc/apt/trusted.gpg.d/packages.networkradius.com.asc > /dev/null
+  when:
+    - ansible_distribution|string == 'Ubuntu' or ansible_distribution|string == 'Debian'
+    - ansible_distribution_release|string != 'xenial'
+  tags:
+    - molecule-idempotence-notest
+
+- name: Update and upgrade apt packages
+  apt:
+    upgrade: true
+    update_cache: true
+
 - name: Freeradius system packages
   apt:
     name:
-      - freeradius
       - freeradius-rest
     state: latest
   notify: restart freeradius
@@ -43,7 +126,7 @@
   lineinfile:
     path: "{{ freeradius_mods_config_dir }}/sql/main/{{ freeradius_sql.dialect }}/queries.conf"
     regexp: "^(.*)safe_characters =(.*)$"
-    line: "safe_characters = \"{{ freeradius_safe_characters }}\""
+    line: 'safe_characters = "{{ freeradius_safe_characters }}"'
     state: present
   notify: restart freeradius
 
