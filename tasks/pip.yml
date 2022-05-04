@@ -3,8 +3,8 @@
 - name: Update pip & related tools
   pip:
     name:
-      - pip==20.2.4
-      - setuptools~=59.6.0
+      - pip
+      - setuptools
       - wheel
       - attrs
     state: latest
