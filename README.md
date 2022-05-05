@@ -1032,7 +1032,7 @@ Below are listed all the variables you can customize (you may also want to take 
     # must be turned on unless there's another server running a worker for this queue
     openwisp2_celery_monitoring: true
     # concurrency option for the "monitoring" queue (a worker is dedicated solely to monitoring operations)
-    # the default is 1. Setting it to "null" will make concurrency equal to number of CPUs
+    # the default is 2. Setting it to "null" will make concurrency equal to number of CPUs
     # if autoscaling is not used.
     openwisp2_celery_monitoring_concurrency: null
     # alternative to the previous option, the celery autoscale option can be set if needed
