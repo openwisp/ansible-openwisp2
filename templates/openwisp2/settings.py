@@ -280,7 +280,7 @@ CELERY_TASK_ROUTES = {
 {% if openwisp2_monitoring and openwisp2_celery_monitoring %}
     # monitoring checks are executed in a dedicated "monitoring" queue
     'openwisp_monitoring.check.tasks.perform_check': {'queue': 'monitoring'},
-    'openwisp_monitoring.monitoring.tasks.migrate_timeseries_database': {'queue': 'influxdb_migration'},
+    'openwisp_monitoring.monitoring.tasks.migrate_timeseries_database': {'queue': 'monitoring'},
 {% endif %}
 {% if openwisp2_firmware_upgrader and openwisp2_celery_firmware_upgrader %}
     # firmware upgrade operations, executed in the "firmware_upgrader" queue
