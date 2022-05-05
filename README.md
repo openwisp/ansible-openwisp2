@@ -283,9 +283,11 @@ If you haven't installed docker yet, you need to install it (example for linux d
 
 **Step 4**: Download docker images
 
+    docker pull geerlingguy/docker-ubuntu2204-ansible:latest
     docker pull geerlingguy/docker-ubuntu2004-ansible:latest
     docker pull geerlingguy/docker-ubuntu1804-ansible:latest
     docker pull geerlingguy/docker-debian10-ansible:latest
+    docker pull geerlingguy/docker-debian11-ansible:latest
 
 **Step 5**: Run molecule test
 
