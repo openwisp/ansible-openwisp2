@@ -10,7 +10,7 @@ ansible-openwisp2
 
 Ansible role that installs the openwisp2 controller.
 
-Tested on **Debian (Buster, Bullseye)**, **Ubuntu (18/20 LTS)**.
+Tested on **Debian (Buster, Bullseye)**, **Ubuntu (18/20/22 LTS)**.
 
 **NOTE**: it is highly suggested to use this procedure on clean virtual machines or linux containers.
 
