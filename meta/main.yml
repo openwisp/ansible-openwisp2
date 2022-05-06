@@ -37,6 +37,7 @@ galaxy_info:
         # - xenial
         - bionic
         - focal
+        - jammy
   # we don't have the resources now to maintain these distros
   # - name: Fedora
   #   versions:

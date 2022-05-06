@@ -6,7 +6,7 @@
   become: true
   when:
     - ansible_distribution|string == 'Ubuntu'
-    - ansible_distribution_release|string == 'focal'
+    - ansible_distribution_release|string == 'focal' or ansible_distribution_release|string == 'jammy'
   tags:
     - molecule-idempotence-notest
 
