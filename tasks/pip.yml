@@ -34,56 +34,10 @@
   until: result is success
   notify: reload supervisor
 
-- name: Set openwisp2_python_packages
-  set_fact:
-    openwisp2_python_packages: "{{ openwisp2_python_packages | default([]) }}"
-
-- name: Set custom package list
-  set_fact:
-    openwisp2_python_packages: "{{ openwisp2_python_packages + [item] }}"
-  with_items:
-    - "{{ openwisp2_controller_pip }}"
-    - "{{ openwisp2_notifications_pip }}"
-    - "{{ openwisp2_users_pip }}"
-    - "{{ openwisp2_utils_pip }}"
-    - "{{ openwisp2_django_x509_pip }}"
-    - "{{ openwisp2_django_loci_pip }}"
-    - "{{ openwisp2_netjsonconfig_pip }}"
-  when: item is string
-
-- name: Add network_topology to custom package list if set and enabled
-  set_fact:
-    openwisp2_python_packages: "{{ openwisp2_python_packages + [item] }}"
-  with_items:
-    - "{{ openwisp2_network_topology_pip }}"
-  when: item is defined and item is string and openwisp2_network_topology
-
-- name: Add openwisp_radius to custom package list if set and enabled
-  set_fact:
-    openwisp2_python_packages: "{{ openwisp2_python_packages + [item] }}"
-  with_items:
-    - "{{ openwisp2_radius_pip }}"
-  when: item is defined and item is string and openwisp2_radius
-
-- name: Add firmware_upgrader to custom package list if set and enabled
-  set_fact:
-    openwisp2_python_packages: "{{ openwisp2_python_packages + [item] }}"
-  with_items:
-    - "{{ openwisp2_firmware_upgrader_pip }}"
-  when: item is defined and item is string and openwisp2_firmware_upgrader
-
-- name: Add monitoring to custom package list if set and enabled
-  set_fact:
-    openwisp2_python_packages: "{{ openwisp2_python_packages + [item] }}"
-  with_items:
-    - "{{ openwisp2_monitoring_pip }}"
-  when: item is defined and item is string and openwisp2_monitoring
-
 - name: Install openwisp2 controller and its dependencies
   pip:
     name:
-      # - "openwisp-controller~={{ openwisp2_controller_version }}"
-      - "https://github.com/openwisp/openwisp-controller/tarball/master"
+      - "{{ openwisp2_controller_version }}"
       - service_identity
     state: latest
     virtualenv: "{{ virtualenv_path }}"
@@ -136,8 +90,7 @@
 - name: Install openwisp2 network topology and its dependencies
   when: openwisp2_network_topology
   pip:
-    name: "https://github.com/openwisp/openwisp-network-topology/tarball/master"
-    # name: "openwisp-network-topology~={{ openwisp2_network_topology_version }}"
+    name: "{{ openwisp2_network_topology_version }}"
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
@@ -155,8 +108,7 @@
 - name: Install openwisp firmware upgrader and its dependencies
   when: openwisp2_firmware_upgrader
   pip:
-    name: "https://github.com/openwisp/openwisp-firmware-upgrader/tarball/master"
-    # name: "openwisp-firmware-upgrader~={{ openwisp2_firmware_upgrader_version }}"
+    name: "{{ openwisp2_firmware_upgrader_version }}"
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
@@ -174,8 +126,7 @@
 - name: Install openwisp monitoring and its dependencies
   when: openwisp2_monitoring
   pip:
-    # name: "openwisp-monitoring~={{ openwisp2_monitoring_version }}"
-    name: "https://github.com/openwisp/openwisp-monitoring/tarball/master"
+    name: "{{ openwisp2_monitoring_version }}"
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
@@ -193,8 +144,7 @@
 - name: Install openwisp2_radius and its dependencies
   when: openwisp2_radius
   pip:
-    # name: "openwisp-radius~={{ openwisp2_radius_version }}"
-    name: "https://github.com/openwisp/openwisp-radius/tarball/master"
+    name: "{{ openwisp2_radius_version }}"
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
@@ -229,30 +179,10 @@
   until: result is success
   notify: reload supervisor
 
-- name: Install custom OpenWISP 2 Python packages
-  when: openwisp2_python_packages|length > 0
-  pip:
-    name: "{{ openwisp2_python_packages }}"
-    state: latest
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-    virtualenv_site_packages: true
-    extra_args: "--no-deps"
-  environment:
-    SETUPTOOLS_USE_DISTUTILS: stdlib
-  notify: reload supervisor
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
-  tags:
-    - molecule-idempotence-notest
-
 - name: Install static minification dependencies
   pip:
     name:
       - django-pipeline~=2.0.0
-      - django-compress-staticfiles~=1.0.1b
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
@@ -346,7 +276,7 @@
 
 - name: Install django
   pip:
-    name: "django~={{ openwisp2_django_version }}"
+    name: "{{ openwisp2_django_version }}"
     state: present
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
@@ -358,3 +288,5 @@
   register: result
   until: result is success
   notify: reload supervisor
+  tags:
+    - molecule-idempotence-notest

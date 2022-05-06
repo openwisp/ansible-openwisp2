@@ -792,21 +792,22 @@ Below are listed all the variables you can customize (you may also want to take 
   # you can add other roles here
     - openwisp.openwisp2
   vars:
-    # openwisp-controler version
-    openwisp2_controller_version: "0.8.2"
-    # optional openwisp2 modules
-    openwisp2_network_topology: false
-    openwisp2_network_topology_version: "0.5.1"
-    openwisp2_firmware_upgrader: false
-    openwisp2_firmware_upgrader_version: "0.1"
-    openwisp2_monitoring: true
-    openwisp2_monitoring_version: "0.1"
-    openwisp2_radius_version: "0.2.1"
-    openwisp2_django_version: "3.2.0"
     # Enable the modules you want to use
     openwisp2_network_topology: false
     openwisp2_firmware_upgrader: false
-    openwisp2_radius: false
+    openwisp2_monitoring: true
+    # you may replace the values of these variables with any value or URL
+    # supported by pip (the python package installer)
+    # use these to install forks, branches or development versions
+    # WARNING: only do this if you know what you are doing; disruption
+    # of service is very likely to occur if these variables are changed
+    # without careful analysis and testing
+    openwisp2_controller_version: "openwisp-controller~=1.0.0"
+    openwisp2_network_topology_version: "openwisp-network-topology~=1.0.0"
+    openwisp2_firmware_upgrader_version: "openwisp-firmware-upgrader~=1.0.0"
+    openwisp2_monitoring_version: "openwisp-monitoring~=1.0.0"
+    openwisp2_radius_version: "openwisp-radius~=1.0.0"
+    openwisp2_django_version: "django~=3.2.13"
     # Setting this to true will enable subnet division feature of
     # openwisp-controller. Refer openwisp-controller documentation
     # for more information. https://github.com/openwisp/openwisp-controller#subnet-division-app
@@ -817,26 +818,6 @@ Below are listed all the variables you can customize (you may also want to take 
     # views cannot be used, this is helpful if you have an external
     # radius instance.
     openwisp2_radius_urls: "{{ openwisp2_radius }}"
-    # you may replace the values of these variables with any URL
-    # supported by pip (the python package installer)
-    # use these to install forks, branches or development versions
-    # WARNING: only do this if you know what you are doing; disruption
-    # of service is very likely to occur during development
-    # Custom OpenWISP 2 Python packages will be installed with "--no-deps"
-    # parameter, be aware that you will have to add new dependencies if
-    # necessary to "openwisp2_extra_python_packages" var
-    openwisp2_controller_pip: false
-    openwisp2_notifications_pip: false
-    openwisp2_users_pip: false
-    openwisp2_utils_pip: false
-    openwisp2_django_x509_pip: false
-    openwisp2_django_loci_pip: false
-    openwisp2_netjsonconfig_pip: false
-    openwisp2_network_topology_pip: false
-    openwisp2_firmware_upgrader_pip: false
-    openwisp2_monitoring_pip: false
-    openwisp2_radius_pip: false
-    # customize the app_path
     openwisp2_path: /opt/openwisp2
     # It is recommended that you change the value of this variable if you intend to use
     # OpenWISP2 in production, as a misconfiguration may result in emails not being sent
