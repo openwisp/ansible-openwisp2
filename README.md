@@ -1037,6 +1037,45 @@ Below are listed all the variables you can customize (you may also want to take 
     cron_cleanup_stale_radacct: "'hour': 0, 'minute': 20"
     cron_delete_old_postauth: "'hour': 0, 'minute': 30"
     cron_delete_old_radacct: "'hour': 1, 'minute': 30"
+    # cross-origin resource sharing (CORS) settings
+    # https://pypi.org/project/django-cors-headers/
+    django_cors:   
+      # enable/disable django-cors-headers.
+      # By default it is set to false.                                 
+      enabled: false
+      # If true, all origins will be allowed. Other settings restricting allowed origins will be ignored.
+      allow_all_origins: false
+      # A list of origins that are authorized to make cross-site HTTP requests.
+      allowed_origins_list: []
+      # Set true to add origins_regexes in allowed_origins_regexes_list.
+      allowed_origins_regexes: false
+      # A list of strings representing regexes that match Origins that are authorized to make cross-site HTTP requests.
+      allowed_origins_regexes_list: []
+      # A regex which restricts the URL’s for which the CORS headers will be sent. Defaults to r'^.*$'.
+      urls_regex: r'^.*$'
+      # Set false to extend it with your custom_methods in custom_methods_list.
+      # Default methods: "DELETE","GET","POST","OPTIONS","PATCH","PUT".  
+      allow_methods_default: true
+      # Add your custom methods.
+      custom_methods_list: []
+      # Set false to extend it with your custom_headers in custom_headers_list. 
+      # Default headers: "accept","accept-encoding","authorization","content-type","dnt","origin","user-agent","x-csrftoken","x-requested-with".
+      allow_headers_default: true
+      # Add your custom headers.
+      custom_headers_list: []
+      # List of HTTP headers that are to be exposed to the browser.
+      expose_headers_list: []
+      # The number of seconds a client/browser can cache the preflight response.
+      # If this is 0 (or any falsey value), no max age header will be sent.
+      # Defaults to 86400 (one day).
+      preflight_max_age: 86400
+      # If true, cookies will be allowed to be included in cross-site HTTP requests.
+      allow_credentials: false
+      # CSRF Integration, Add trusted origins eg. ["openwisp2.allowed.com"]
+      csrf_trusted_origin: []
+      # If true, CorsMiddleware will change the Referer header to something that will pass Django’s CSRF checks whenever the CORS checks pass. 
+      # Defaults to False.
+      replace_https_referer: false
 ```
 
 **Note**: The default values for settings provided to control the number of process and threads
