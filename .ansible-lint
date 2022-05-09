@@ -6,3 +6,4 @@ skip_list:
   - '306'  # Shells that use pipes should set the pipefail option
   - '403'  # Package installs should not use latest
   - '106'  # Role name {} does not match ``^[a-z][a-z0-9_]+$`` pattern'
+  - 'fqcn-builtins'  # This rule is implicit by default(ansible-lint 6), We need to skip this.
