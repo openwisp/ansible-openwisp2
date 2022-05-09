@@ -109,7 +109,7 @@
   become_user: "{{ www_user }}"
   when: openwisp2_geocoding_check
   django_manage:
-    app_path: "{{openwisp2_path}}"
+    app_path: "{{ openwisp2_path }}"
     command: "check --deploy --tag geocoding"
     virtualenv: "{{ virtualenv_path }}"
 
