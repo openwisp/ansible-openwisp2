@@ -8,8 +8,8 @@
 - name: reload supervisor
   command: supervisorctl reload
   notify:
-   - remove celerybeat schedule
-   - migrate timeseries database
+    - remove celerybeat schedule
+    - migrate timeseries database
 
 # Clean up the schedule file because it may become corrupted after updates
 - name: remove celerybeat schedule

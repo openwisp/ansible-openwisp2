@@ -152,10 +152,11 @@
 - name: Should Install Python 3.7
   block:
     - name: Check installed python version
-      shell: "{{ openwisp2_python }} --version"
+      command: "{{ openwisp2_python }} --version"
       register: openwisp2_installed_python
       changed_when: false
-    - set_fact:
+    - name: Check openwisp2 should install python 3.7
+      set_fact:
         openwisp2_should_install_python_37: |
           {{ openwisp2_installed_python.stdout.split(' ')[1] is version_compare('3.7', 'le') }}
 
@@ -185,7 +186,7 @@
       delay: 10
       register: result
       until: result is success
-    - name:
+    - name: Set python 3.7
       set_fact:
         openwisp2_python: python3.7
   when: openwisp2_should_install_python_37 == "True\n"

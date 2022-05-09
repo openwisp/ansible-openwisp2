@@ -179,7 +179,7 @@
   become_user: "{{ www_user }}"
   when: openwisp2_internationalization
   django_manage:
-    app_path: "{{openwisp2_path}}"
+    app_path: "{{ openwisp2_path }}"
     command: "compilemessages"
     virtualenv: "{{ virtualenv_path }}"
 

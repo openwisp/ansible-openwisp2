@@ -73,7 +73,7 @@ openwisp2_topology_save_snapshot_frequency:
     day: "*"
     hour: "23"
     minute: "30"
-openwisp2_django_sesame_max_age: 1800 # 30 minutes
+openwisp2_django_sesame_max_age: 1800  # 30 minutes
 openwisp2_nginx_ssl_config:
     gzip: "on"
     gzip_comp_level: "6"
@@ -134,7 +134,7 @@ openwisp2_uwsgi_processes: 1
 openwisp2_uwsgi_threads: 1
 openwisp2_uwsgi_listen: 100
 openwisp2_daphne_processes: 1
-openwisp2_daphne_websocket_timeout: 3600 # in seconds
+openwisp2_daphne_websocket_timeout: 3600  # in seconds
 # internationalization
 openwisp2_internationalization: false
 openwisp2_users_auth_api: true
