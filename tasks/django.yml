@@ -104,6 +104,15 @@
 - name: start redis for migration
   meta: flush_handlers
 
+- name: run geocoding check
+  become: true
+  become_user: "{{ www_user }}"
+  when: openwisp2_geocoding_check
+  django_manage:
+    app_path: "{{ openwisp2_path }}"
+    command: "check --deploy --tag geocoding"
+    virtualenv: "{{ virtualenv_path }}"
+
 - name: migrate
   notify: reload supervisor
   become: true
