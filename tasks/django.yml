@@ -104,7 +104,7 @@
 - name: start redis for migration
   meta: flush_handlers
 
-- name: run geocoding checks
+- name: run geocoding check
   become: true
   become_user: "{{ www_user }}"
   when: openwisp2_geocoding_check
