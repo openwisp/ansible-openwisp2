@@ -500,9 +500,9 @@ TIMESERIES_DATABASE = {
 from corsheaders.defaults import default_methods, default_headers
 
 INSTALLED_APPS.append('corsheaders')
-MIDDLEWARE.insert(2, 'corsheaders.middleware.CorsMiddleware')
+MIDDLEWARE.insert(MIDDLEWARE.index('django.middleware.common.CommonMiddleware'), 'corsheaders.middleware.CorsMiddleware')
 {% if django_cors.replace_https_referer %}
-MIDDLEWARE.insert(6, 'corsheaders.middleware.CorsPostCsrfMiddleware')
+MIDDLEWARE.insert(MIDDLEWARE.index('django.middleware.csrf.CsrfViewMiddleware') + 1, 'corsheaders.middleware.CorsPostCsrfMiddleware')
 {% endif %}
 
 {% if django_cors.allow_all_origins %}
