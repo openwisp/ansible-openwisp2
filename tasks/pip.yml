@@ -291,7 +291,7 @@
   notify: reload supervisor
 
 - name: Install django-cors-headers
-  when: "{{ django_cors.enabled }}"
+  when: django_cors.get('enabled')
   pip:
     name: django-cors-headers
     state: latest
