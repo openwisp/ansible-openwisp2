@@ -2,9 +2,6 @@ import os
 import sys
 from celery.schedules import crontab
 from datetime import timedelta
-{% if django_cors.enabled %}
-from corsheaders.defaults import default_methods, default_headers
-{% endif %}
 
 TESTING = 'test' in sys.argv
 
@@ -101,9 +98,6 @@ INSTALLED_APPS = [
 {% if openwisp2_email_backend == "djcelery_email.backends.CeleryEmailBackend"%}
     'djcelery_email',
 {% endif %}
-{% if django_cors.enabled %}
-'corsheaders',
-{% endif %}
 ]
 
 EXTENDED_APPS = [
@@ -135,17 +129,11 @@ STATICFILES_FINDERS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    {% if django_cors.enabled %}
-    'corsheaders.middleware.CorsMiddleware',
-    {% endif %}
     {% if openwisp2_internationalization %}
     'django.middleware.locale.LocaleMiddleware',
     {% endif %}
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    {% if django_cors.enabled and django_cors.replace_https_referer %}
-    'corsheaders.middleware.CorsPostCsrfMiddleware',
-    {% endif %}
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     {% if openwisp2_radius %}
     'sesame.middleware.AuthenticationMiddleware',
@@ -508,6 +496,14 @@ TIMESERIES_DATABASE = {
 {% endfor %}
 
 {% if django_cors.enabled %}
+
+from corsheaders.defaults import default_methods, default_headers
+
+INSTALLED_APPS.append('corsheaders')
+MIDDLEWARE.insert(2, 'corsheaders.middleware.CorsMiddleware')
+{% if django_cors.replace_https_referer %}
+MIDDLEWARE.insert(6, 'corsheaders.middleware.CorsPostCsrfMiddleware')
+{% endif %}
 
 {% if django_cors.allow_all_origins %}
 CORS_ORIGIN_ALLOW_ALL = True
