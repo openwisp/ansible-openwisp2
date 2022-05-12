@@ -8,7 +8,7 @@ ansible-openwisp2
 [![Galaxy](https://img.shields.io/ansible/role/d/14542.svg?style=flat-square)](https://galaxy.ansible.com/openwisp/openwisp2/)
 [![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg?style=flat-square)](https://gitter.im/openwisp/general)
 
-Ansible role that installs the openwisp2 controller.
+Ansible role that installs the OpenWISP Server Application.
 
 Tested on **Debian (Buster, Bullseye)**, **Ubuntu (18/20/22 LTS)**.
 
@@ -411,10 +411,18 @@ username: admin
 password: admin
 ```
 
-Enabling the network topology module
+Enabling the Monitoring module
+------------------------------
+
+The [Monitoring module](https://openwisp.io/docs/user/monitoring.html)
+is enabled by default, it can be disabled by setting
+``openwisp2_monitoring`` to ``false``.
+
+Enabling the Network Topology module
 ------------------------------------
 
-To enable the network topology module you need to set `openwisp2_network_topology` to `true` in
+To enable the [Network Topology module](https://openwisp.io/docs/user/network-topology.html)
+you need to set `openwisp2_network_topology` to `true` in
 your `playbook.yml` file. Here's a short summary of how to do this:
 
 **Step 1**: [Install ansible](#install-ansible)
@@ -442,13 +450,15 @@ When the playbook is done running, if you got no errors you can login at:
     username: admin
     password: admin
 
-Enabling the firmware upgrader module
+Enabling the Firmware Upgrader module
 -------------------------------------
 
-**Note**: It is encouraged that you read the [quick-start guide of openwisp-firmware-upgrader](https://github.com/openwisp/openwisp-firmware-upgrader#quickstart)
+**Note**: It is encouraged that you read the
+[quick-start guide of openwisp-firmware-upgrader](https://openwisp.io/docs/user/firmware-upgrades.html#quickstart-guide)
 before going ahead.
 
-To enable the firmware upgrader module you need to set `openwisp2_firmware_upgrader` to `true` in
+To enable the [Firmware Upgrader](https://openwisp.io/docs/user/firmware-upgrades.html)
+module you need to set `openwisp2_firmware_upgrader` to `true` in
 your `playbook.yml` file. Here's a short summary of how to do this:
 
 **Step 1**: [Install ansible](#install-ansible)
@@ -477,9 +487,10 @@ When the playbook is done running, if you got no errors you can login at:
     password: admin
 
 **Note**: You can configure [openwisp-firmware-upgrader specific settings](https://github.com/openwisp/openwisp-firmware-upgrader#settings)
-using `openwisp2_extra_django_settings` variable of this ansible role.
-For example if you want to enable the [APIs of openwisp-firmware-upgrader](https://github.com/openwisp/openwisp-firmware-upgrader#rest-api),
-you will update the above playbook as follows:
+using the `openwisp2_extra_django_settings` or
+`openwisp2_extra_django_settings_instructions`.
+
+E.g:
 
 ```yaml
 - hosts: openwisp2
@@ -488,15 +499,21 @@ you will update the above playbook as follows:
     - openwisp.openwisp2
   vars:
     openwisp2_firmware_upgrader: true
-    openwisp2_extra_django_settings:
-      OPENWISP_USERS_AUTH_API: true
-      OPENWISP_FIRMWARE_UPGRADER_API: true
+    openwisp2_extra_django_settings_instructions:
+      - |
+        OPENWISP_CUSTOM_OPENWRT_IMAGES = (
+            ('my-custom-image-squashfs-sysupgrade.bin', {
+                'label': 'My Custom Image',
+                'boards': ('MyCustomImage',)
+            }),
+        )
 ```
 
-Enabling the radius module
+Enabling the RADIUS module
 --------------------------
 
-To enable the radius module you need to set `openwisp2_radius` to `true` in
+To enable the [RADIUS module](https://openwisp.io/docs/user/radius.html)
+you need to set `openwisp2_radius` to `true` in
 your `playbook.yml` file. Here's a short summary of how to do this:
 
 **Step 1**: [Install ansible](#install-ansible)
@@ -520,8 +537,10 @@ your `playbook.yml` file. Here's a short summary of how to do this:
     openwisp2_radius_urls: true
 ```
 
-**Note:** `openwisp2_freeradius_install` option provides a basic configuration of freeradius for openwisp,
-it sets up the [radius user token mechanism](https://openwisp-radius.readthedocs.io/en/latest/user/api.html#radius-user-token-recommended) if you want to use another mechanism or manage your freeradius separately,
+**Note:** `openwisp2_freeradius_install` option provides a basic
+configuration of freeradius for openwisp, it sets up the
+[radius user token mechanism](https://openwisp-radius.readthedocs.io/en/latest/user/api.html#radius-user-token-recommended)
+if you want to use another mechanism or manage your freeradius separately,
 please disable this option by setting it to `false`.
 
 **Step 5**: [Run the playbook](#run-the-playbook)
@@ -548,91 +567,6 @@ This is helpful for [customizing OpenWISP's theme](https://github.com/openwisp/o
 
 E.g., if you added a custom CSS file in `files/ow2_static/css/custom.css`, the
 file location to use in [OPENWISP_ADMIN_THEME_LINKS](https://github.com/openwisp/openwisp-utils#openwisp_admin_theme_links) setting will be `css/custom.css`.
-
-Deploying the upcoming release of OpenWISP
-==========================================
-
-The following steps will help you set up and install the new version of OpenWISP
-which is not released yet, but ships new modules like
-[OpenWISP Monitoring](https://github.com/openwisp/openwisp-monitoring)
-and [OpenWISP RADIUS](https://github.com/openwisp/openwisp-radius),
-which many users need.
-
-Create a directory for organizing your playbook, roles and collections. In this example,
-`openwisp-dev` is used. Create `roles` and `collections` directories in `~/openwisp-dev`.
-
-```
-mkdir -p ~/openwisp-dev/roles
-mkdir -p ~/openwisp-dev/collections
-```
-
-Change directory to `~/openwisp-dev/` in terminal and create configuration
-and requirement files for Ansible.
-
-```
-cd ~/openwisp-dev/
-touch ansible.cfg
-touch requirements.yml
-```
-
-Setup `roles_path` and `collections_paths` variables in `ansible.cfg` as follows:
-
-```
-[defaults]
-roles_path=~/openwisp-dev/roles
-collections_paths=~/openwisp-dev/collections
-```
-
-Ensure your `requirements.yml` contains following content:
-
-```yml
----
-roles:
-  - src: https://github.com/openwisp/ansible-openwisp2.git
-    version: master
-    name: openwisp.openwisp2-dev
-
-collections:
-  - name: community.general
-    version: ">=3.6.0"
-```
-
-Install requirements from the `requirements.yml` as follows
-
-```
-ansible-galaxy install -r requirements.yml
-```
-
-Now, create hosts file and playbook.yml:
-
-```
-touch hosts
-touch playbook.yml
-```
-
-Follow instructions in ["Create inventory file"](#create-inventory-file) section to
-configure `hosts` file.
-
-You can reference the example playbook below (tested on Debian 11 with ansible 2.10.9)
-for installing a fully-featured version of OpenWISP.
-
-```yml
-- hosts: openwisp2
-  become: "{{ become | default('yes') }}"
-  roles:
-    - openwisp.openwisp2-dev
-  vars:
-    openwisp2_network_topology: true
-    openwisp2_firmware_upgrader: true
-    openwisp2_radius: true
-    openwisp2_monitoring: true # monitoring is enabled by default
-```
-
-Read ["Role Variables"](#role-variables) section to learn about
-available configuration variables.
-
-Follow instructions in ["Run the playbook"](#run-the-playbook) section to
-run above playbook.
 
 Troubleshooting
 ===============
@@ -760,6 +694,9 @@ Once you have set up all the variables correctly, run the playbook again.
 
 Upgrading openwisp2
 ===================
+
+**It's highly recommended to back up your current instance
+before upgrading**.
 
 Update this ansible-role via `ansible-galaxy`:
 
