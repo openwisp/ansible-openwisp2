@@ -269,7 +269,7 @@ To do that, proceed with the following steps:
 
 Clone repository by:
 
-    git clone https://github.com/<your_fork>/ansible-openwisp2.git
+    git clone https://github.com/<your_fork>/ansible-openwisp2.git openwisp.openwisp2
 
 **Step 2**: Install docker
 
