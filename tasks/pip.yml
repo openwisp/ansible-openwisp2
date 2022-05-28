@@ -54,11 +54,27 @@
   tags:
     - molecule-idempotence-notest
 
-- name: Pin channels_redis to 2.4 for redis 4 compatibility
-  when: use_redis4 is defined and use_redis4 is succeeded
+- name: Install channels-redis~=3.4.0
+  when: ansible_distribution_release not in ['buster', 'bionic']
   pip:
     name:
-      - channels_redis~=2.4
+      - channels-redis~=3.4.0
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+    virtualenv_site_packages: true
+  environment:
+    SETUPTOOLS_USE_DISTUTILS: stdlib
+  retries: 1
+  delay: 10
+  register: result
+  until: result is success
+
+- name: Install channels-redis~=2.4.0 for redis 4 compatibility
+  when: ansible_distribution_release in ['buster', 'bionic']
+  pip:
+    name:
+      - channels-redis~=2.4.0
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"

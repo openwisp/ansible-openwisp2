@@ -8,11 +8,11 @@ openwisp2_monitoring: true
 openwisp2_radius: false
 openwisp2_controller_subnet_division: false
 openwisp2_radius_urls: "{{ openwisp2_radius }}"
-openwisp2_controller_version: "openwisp-controller~=1.0.0"
+openwisp2_controller_version: "openwisp-controller~=1.0.1"
 openwisp2_network_topology_version: "openwisp-network-topology~=1.0.0"
 openwisp2_firmware_upgrader_version: "openwisp-firmware-upgrader~=1.0.0"
 openwisp2_monitoring_version: "openwisp-monitoring~=1.0.0"
-openwisp2_radius_version: "openwisp-radius~=1.0.0"
+openwisp2_radius_version: "openwisp-radius~=1.0.1"
 openwisp2_django_version: "{{ 'django~=4.0.0' if ansible_distribution_release|string in ['focal', 'bullseye'] else 'django~=3.2.13' }}"
 openwisp2_extra_python_packages:
     - bpython

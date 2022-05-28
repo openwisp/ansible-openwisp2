@@ -35,7 +35,6 @@ jobs:
       - name: Set default python version
         run: sudo update-alternatives --install /usr/bin/python python ${pythonLocation}/bin/python3.8 2
 
-
       - name: Install python dependencies
         run: |
           pip install molecule[docker,ansible] molecule-docker yamllint ansible-lint docker openwisp-utils[qa]
@@ -47,7 +46,10 @@ jobs:
           openwisp-qa-check --skip-isort --skip-flake8 --skip-checkmigrations --skip-black
 
       - name: Tests
-        run: molecule test
+        run: |
+          mkdir -p ~/.ansible/roles
+          ln -s $GITHUB_WORKSPACE ~/.ansible/roles/openwisp.openwisp2
+          molecule test
         env:
           ROLE_NAME: openwisp2
           PY_COLORS: '1'

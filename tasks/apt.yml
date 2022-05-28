@@ -36,34 +36,13 @@
   register: result
   until: result is success
 
-- name: Install redis 6 if available
+- name: Install redis
   apt:
-    name: "redis-server=5:6*"
+    name: redis-server
   notify:
     - reload systemd
     - start redis
-  ignore_errors: true
-  register: use_redis6
   when: openwisp2_redis_install
-
-- name: Install redis 5 if available
-  apt:
-    name: "redis-server=5:5*"
-  notify:
-    - reload systemd
-    - start redis
-  ignore_errors: true
-  register: use_redis5
-  when: openwisp2_redis_install and use_redis6 is failed
-
-- name: Install redis 4 (fallback)
-  when: openwisp2_redis_install and (use_redis5 is failed and use_redis6 is failed)
-  apt:
-    name: "redis-server=5:4*"
-  register: use_redis4
-  notify:
-    - reload systemd
-    - start redis
 
 # On the newer versions of redis, by default redis
 # binds to localhost on ipv6 address which wouldn't
@@ -77,6 +56,7 @@
     regexp: '^bind 127\.0\.0\.1 ::1'
     line: 'bind 127.0.0.1'
     backrefs: true
+  ignore_errors: true
 
 - name: start redis
   when: openwisp2_redis_install
@@ -189,7 +169,7 @@
     - name: Set python 3.7
       set_fact:
         openwisp2_python: python3.7
-  when: openwisp2_should_install_python_37 == "True\n"
+  when: openwisp2_should_install_python_37 == true
 
 - name: Install python3 packages
   apt:
