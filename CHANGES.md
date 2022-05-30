@@ -1,5 +1,9 @@
 # Change log
 
+## Version 22.05.1 [2022-05-30]
+
+- Fixed redis installation issue on some Ubuntu versions
+
 ## Version 22.05 [2022-05-12]
 
 ### Changes
