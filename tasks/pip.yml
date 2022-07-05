@@ -175,6 +175,22 @@
   tags:
     - molecule-idempotence-notest
 
+- name: Install django-cors-headers
+  when: openwisp2_django_cors.get('enabled')
+  pip:
+    name: django-cors-headers
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+    virtualenv_site_packages: true
+  environment:
+    SETUPTOOLS_USE_DISTUTILS: stdlib
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
+  notify: reload supervisor
+
 - name: Install extra python packages
   pip:
     name: "{{ openwisp2_extra_python_packages }}"
@@ -290,21 +306,6 @@
   until: result is success
   notify: reload supervisor
 
-- name: Install django-cors-headers
-  when: django_cors.get('enabled')
-  pip:
-    name: django-cors-headers
-    state: latest
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-    virtualenv_site_packages: true
-  environment:
-    SETUPTOOLS_USE_DISTUTILS: stdlib
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
-  notify: reload supervisor
 
 - name: Install django
   pip:

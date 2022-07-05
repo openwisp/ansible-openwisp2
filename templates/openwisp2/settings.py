@@ -495,36 +495,13 @@ TIMESERIES_DATABASE = {
 
 {% endfor %}
 
-{% if django_cors.enabled %}
-
-from corsheaders.defaults import default_methods, default_headers
-
+{% if openwisp2_django_cors.enabled %}
+# CORS configuration
 INSTALLED_APPS.append('corsheaders')
 MIDDLEWARE.insert(MIDDLEWARE.index('django.middleware.common.CommonMiddleware'), 'corsheaders.middleware.CorsMiddleware')
-{% if django_cors.replace_https_referer %}
+{% if openwisp2_django_cors.get('replace_https_referer', False) %}
 MIDDLEWARE.insert(MIDDLEWARE.index('django.middleware.csrf.CsrfViewMiddleware') + 1, 'corsheaders.middleware.CorsPostCsrfMiddleware')
+CORS_REPLACE_HTTPS_REFERER = {{ openwisp2_django_cors.get('replace_https_referer', False) }}
 {% endif %}
-
-{% if django_cors.allow_all_origins %}
-CORS_ORIGIN_ALLOW_ALL = True
-{% elif django_cors.allowed_origins_regexes %}
-CORS_ALLOWED_ORIGIN_REGEXES = {{ django_cors.allowed_origins_regexes_list }}
-{% else %}
-CORS_ALLOWED_ORIGINS = {{ django_cors.allowed_origins_list }}
-{% endif %}
-
-{% if not django_cors.allow_methods_default %}
-CORS_ALLOW_METHODS = list(default_methods) + {{ django_cors.custom_methods_list }}
-{% endif %}
-{% if not django_cors.allow_headers_default %}
-CORS_ALLOW_HEADERS = list(default_headers) + {{ django_cors.custom_headers_list }}
-{% endif %}
-
-CORS_EXPOSE_HEADERS = {{ django_cors.expose_headers_list }}
-CSRF_TRUSTED_ORIGINS = {{ django_cors.csrf_trusted_origin }}
-CORS_URLS_REGEX = {{ django_cors.urls_regex }}
-CORS_PREFLIGHT_MAX_AGE = {{ django_cors.preflight_max_age }}
-CORS_ALLOW_CREDENTIALS = {{ django_cors.allow_credentials }}
-CORS_REPLACE_HTTPS_REFERER = {{ django_cors.replace_https_referer }}
-
+CORS_ALLOWED_ORIGINS = {{ openwisp2_django_cors.get('allowed_origins_list', []) }}
 {% endif %}
