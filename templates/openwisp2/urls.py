@@ -2,6 +2,14 @@ from django.urls import include, path, reverse_lazy
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.generic import RedirectView
+{% if openwisp2_firmware_upgrader %}
+# When using S3_REVERSE_PROXY feature of django-private-storage,
+# the storage backend reverse the "serve_private_file" URL
+# pattern in order to proxy the file with the correct URL.
+from openwisp_firmware_upgrader.private_storage.urls import (
+    urlpatterns as fw_private_storage_urls,
+)
+{% endif %}
 
 redirect_view = RedirectView.as_view(url=reverse_lazy('admin:index'))
 
@@ -17,6 +25,10 @@ urlpatterns = [
 {% endif %}
 {% if openwisp2_firmware_upgrader %}
     path('', include('openwisp_firmware_upgrader.urls')),
+    path(
+        '',
+        include((fw_private_storage_urls, 'firmware'), namespace='firmware'),
+    ),
 {% endif %}
 {% if openwisp2_monitoring %}
     path('', include('openwisp_monitoring.urls')),
