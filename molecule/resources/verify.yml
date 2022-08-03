@@ -8,7 +8,7 @@
   tasks:
     - name: Run a specific subset of tests
       command: >
-        /opt/openwisp2/env/bin/python /opt/openwisp2/manage.py test --keepdb \
+        /opt/openwisp2/env/bin/python /opt/openwisp2/manage.py test --keepdb --exclude skip_prod \
             openwisp_controller.pki.tests.test_admin \
             openwisp_controller.pki.tests.test_models \
             openwisp_controller.config.tests.test_tag \
