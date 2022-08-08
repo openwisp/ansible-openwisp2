@@ -177,3 +177,8 @@ cron_delete_old_users: "'hour': 0, 'minute': 10"
 cron_cleanup_stale_radacct: "'hour': 0, 'minute': 20"
 cron_delete_old_postauth: "'hour': 0, 'minute': 30"
 cron_delete_old_radacct: "'hour': 1, 'minute': 30"
+# Cross-Origin Resource Sharing (CORS) settings
+openwisp2_django_cors:
+    enabled: false
+    allowed_origins_list: []
+    replace_https_referer: false
