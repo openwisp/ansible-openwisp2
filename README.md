@@ -556,6 +556,76 @@ When the playbook is done running, if you got no errors you can login at:
 look for the word "radius" in the
 [Role variables](#role-variables) section of this document.
 
+Configuring CORS Headers
+------------------------
+
+While integrating OpenWISP with external services, you can
+run into issues related to [CORS (Cross-Origin Resource Sharing)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS). This role
+allows users to configure the CORS headers with the help of
+[django-cors-headers](https://github.com/adamchainz/django-cors-headers)
+package. Here's a short summary of how to do this:
+
+**Step 1**: [Install ansible](#install-ansible)
+
+**Step 2**: [Install this role](#install-this-role)
+
+**Step 3**: [Create inventory file](#create-inventory-file)
+
+**Step 4**: Create a playbook file with following contents:
+
+```yaml
+- hosts: openwisp2
+  become: "{{ become | default('yes') }}"
+  roles:
+    - openwisp.openwisp2
+  vars:
+    # Cross-Origin Resource Sharing (CORS) settings
+    openwisp2_django_cors:
+      enabled: true
+      allowed_origins_list:
+        - https://frontend.openwisp.org
+        - https://logs.openwisp.org
+```
+
+**Note:** to learn about the supported fields of the `openwisp2_django_cors` variable,
+look for the word "openwisp2_django_cors" in the
+[Role variables](#role-variables) section of this document.
+
+**Step 5**: [Run the playbook](#run-the-playbook)
+
+When the playbook is done running, if you got no errors you can login at:
+
+```
+https://openwisp2.mydomain.com/admin
+username: admin
+password: admin
+```
+
+The ansible-openwisp2 only provides abstraction (variables)
+for handful of settings available in [django-cors-headers](https://github.com/adamchainz/django-cors-headers)
+module. Use the `openwisp2_extra_django_settings_instructions` or
+`openwisp2_extra_django_settings` variable to configure additional
+setting of `django-cors-headers` as shown in the following example:
+
+```yaml
+- hosts: openwisp2
+  become: "{{ become | default('yes') }}"
+  roles:
+    - openwisp.openwisp2
+  vars:
+    openwisp2_django_cors:
+      enabled: true
+      allowed_origins_list:
+        - https://frontend.openwisp.org
+        - https://logs.openwisp.org
+      replace_https_referer: true
+    # Configuring additional settings for django-cors-headers
+    openwisp2_extra_django_settings_instructions:
+      - |
+        CORS_ALLOW_CREDENTIALS = True
+        CORS_ALLOW_ALL_ORIGINS = True
+```
+
 Deploying custom static content
 ===============================
 
@@ -1037,6 +1107,24 @@ Below are listed all the variables you can customize (you may also want to take 
     cron_cleanup_stale_radacct: "'hour': 0, 'minute': 20"
     cron_delete_old_postauth: "'hour': 0, 'minute': 30"
     cron_delete_old_radacct: "'hour': 1, 'minute': 30"
+    # cross-origin resource sharing (CORS) settings
+    # https://pypi.org/project/django-cors-headers/
+    openwisp2_django_cors:
+      # Setting this to "true" will install the django-cors-headers package
+      # and configure the Django middleware setting to support CORS.
+      # By default, it is set to false.
+      enabled: true
+      # Configures "CORS_ALLOWED_ORIGINS" setting of the django-cors-headers
+      # package. A list of origins that are authorized to make cross-site
+      # HTTP requests. Read https://github.com/adamchainz/django-cors-headers#cors_allowed_origins-sequencestr
+      # for detail. By default, it is set to an empty list.
+      allowed_origins_list: ["https://log.openwisp.org"]
+      # Configures "CORS_REPLACE_HTTPS_REFERER" setting of the django-cors-headers
+      # package. Read https://github.com/adamchainz/django-cors-headers#cors_replace_https_referer-bool
+      # for detail. Setting this to "true" will also configure the
+      # Django middleware setting to add "CorsPostCsrfMiddleware".
+      # By default, it is set to false.
+      replace_https_referer: true
 ```
 
 **Note**: The default values for settings provided to control the number of process and threads

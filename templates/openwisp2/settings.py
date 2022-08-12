@@ -494,3 +494,14 @@ TIMESERIES_DATABASE = {
 {{ instruction }}
 
 {% endfor %}
+
+{% if openwisp2_django_cors.enabled %}
+# CORS configuration
+INSTALLED_APPS.append('corsheaders')
+MIDDLEWARE.insert(MIDDLEWARE.index('django.middleware.common.CommonMiddleware'), 'corsheaders.middleware.CorsMiddleware')
+{% if openwisp2_django_cors.get('replace_https_referer', False) %}
+MIDDLEWARE.insert(MIDDLEWARE.index('django.middleware.csrf.CsrfViewMiddleware') + 1, 'corsheaders.middleware.CorsPostCsrfMiddleware')
+CORS_REPLACE_HTTPS_REFERER = {{ openwisp2_django_cors.get('replace_https_referer', False) }}
+{% endif %}
+CORS_ALLOWED_ORIGINS = {{ openwisp2_django_cors.get('allowed_origins_list', []) }}
+{% endif %}
