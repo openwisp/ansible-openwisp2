@@ -181,7 +181,7 @@
   delay: 10
   register: result
   until: result is success
-  when: openwisp2_should_install_python_37 == "False\n"
+  when: openwisp2_should_install_python_37 == false
 
 - name: Install ntp
   when: openwisp2_install_ntp
