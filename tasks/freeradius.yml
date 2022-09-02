@@ -88,21 +88,21 @@
     name:
       - freeradius-rest
     state: latest
-  notify: restart freeradius
+  notify: Restart freeradius
 
 - name: Freeradius postgres packages
   when: freeradius_sql.dialect == "postgresql"
   apt:
     name: freeradius-postgresql
     state: latest
-  notify: restart freeradius
+  notify: Restart freeradius
 
 - name: Freeradius mysql packages
   when: freeradius_sql.dialect == "mysql"
   apt:
     name: freeradius-mysql
     state: latest
-  notify: restart freeradius
+  notify: Restart freeradius
 
 - name: SQL configuration
   template:
@@ -111,7 +111,7 @@
     mode: 0640
     owner: freerad
     group: freerad
-  notify: restart freeradius
+  notify: Restart freeradius
 
 - name: Enable SQL module
   file:
@@ -128,9 +128,9 @@
     regexp: "^(.*)safe_characters =(.*)$"
     line: 'safe_characters = "{{ freeradius_safe_characters }}"'
     state: present
-  notify: restart freeradius
+  notify: Restart freeradius
 
-- name: adding user 'freerad' to www-data group for database access
+- name: Adding user 'freerad' to www-data group for database access
   when: freeradius_sql.dialect == "sqlite"
   user:
     name: freerad
@@ -149,7 +149,7 @@
     mode: 0640
     owner: freerad
     group: freerad
-  notify: restart freeradius
+  notify: Restart freeradius
 
 - name: Enable REST module
   file:
@@ -174,7 +174,7 @@
     mode: 0640
     owner: freerad
     group: freerad
-  notify: restart freeradius
+  notify: Restart freeradius
 
 - name: Inner tunnel
   template:
@@ -183,4 +183,4 @@
     mode: 0640
     owner: freerad
     group: freerad
-  notify: restart freeradius
+  notify: Restart freeradius

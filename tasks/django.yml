@@ -1,20 +1,20 @@
 ---
 
-- name: create {{ openwisp2_path }}
+- name: Create {{ openwisp2_path }}
   file:
     path: "{{ openwisp2_path }}"
     state: directory
     group: "{{ www_group }}"
     mode: 0770
 
-- name: create "{{ openwisp2_path }}/openwisp2"
+- name: Create "{{ openwisp2_path }}/openwisp2"
   file:
     path: "{{ openwisp2_path }}/openwisp2"
     state: directory
     group: "{{ www_group }}"
     mode: 0770
 
-- name: create "{{ openwisp2_path }}/log"
+- name: Create "{{ openwisp2_path }}/log"
   file:
     path: "{{ openwisp2_path }}/log"
     state: directory
@@ -24,7 +24,7 @@
   tags:
     - molecule-idempotence-notest
 
-- name: create "{{ openwisp2_path }}/static_custom"
+- name: Create "{{ openwisp2_path }}/static_custom"
   file:
     path: "{{ openwisp2_path }}/static_custom"
     state: directory
@@ -33,48 +33,48 @@
   tags:
     - openwisp2_theme
 
-- name: manage.py
-  notify: reload supervisor
+- name: Template manage.py
+  notify: Reload supervisor
   template:
     src: manage.py
     dest: "{{ openwisp2_path }}/manage.py"
     group: "{{ www_group }}"
     mode: 0754
 
-- name: celery.py
-  notify: reload supervisor
+- name: Template celery.py
+  notify: Reload supervisor
   template:
     src: openwisp2/celery.py
     dest: "{{ openwisp2_path }}/openwisp2/celery.py"
     group: "{{ www_group }}"
     mode: 0640
 
-- name: __init__.py
-  notify: reload supervisor
+- name: Template __init__.py
+  notify: Reload supervisor
   template:
     src: openwisp2/__init__.py
     dest: "{{ openwisp2_path }}/openwisp2/__init__.py"
     group: "{{ www_group }}"
     mode: 0640
 
-- name: urls.py
-  notify: reload supervisor
+- name: Template urls.py
+  notify: Reload supervisor
   template:
     src: openwisp2/urls.py
     dest: "{{ openwisp2_path }}/openwisp2/urls.py"
     group: "{{ www_group }}"
     mode: 0640
 
-- name: wsgi.py
-  notify: reload supervisor
+- name: Template wsgi.py
+  notify: Reload supervisor
   template:
     src: openwisp2/wsgi.py
     dest: "{{ openwisp2_path }}/openwisp2/wsgi.py"
     group: "{{ www_group }}"
     mode: 0640
 
-- name: asgi.py
-  notify: reload supervisor
+- name: Template asgi.py
+  notify: Reload supervisor
   template:
     src: openwisp2/asgi.py
     dest: "{{ openwisp2_path }}/openwisp2/asgi.py"
@@ -85,26 +85,26 @@
 - import_tasks: django_secret_key.yml
   when: openwisp2_secret_key is not defined
 
-- name: settings.py
-  notify: reload supervisor
+- name: Template settings.py
+  notify: Reload supervisor
   template:
     src: openwisp2/settings.py
     dest: "{{ openwisp2_path }}/openwisp2/settings.py"
     group: "{{ www_group }}"
     mode: 0640
 
-- name: routing.py
-  notify: reload supervisor
+- name: Template routing.py
+  notify: Reload supervisor
   template:
     src: openwisp2/routing.py
     dest: "{{ openwisp2_path }}/openwisp2/routing.py"
     group: "{{ www_group }}"
     mode: 0640
 
-- name: start redis for migration
+- name: Start redis for migration
   meta: flush_handlers
 
-- name: run geocoding check
+- name: Run geocoding check
   become: true
   become_user: "{{ www_user }}"
   when: openwisp2_geocoding_check
@@ -113,8 +113,8 @@
     command: "check --deploy --tag geocoding"
     virtualenv: "{{ virtualenv_path }}"
 
-- name: migrate
-  notify: reload supervisor
+- name: Migrate
+  notify: Reload supervisor
   become: true
   become_user: "{{ www_user }}"
   django_manage:
@@ -122,7 +122,7 @@
     command: migrate
     virtualenv: "{{ virtualenv_path }}"
 
-- name: set permissions to sqlite db
+- name: Set permissions to sqlite db
   when: openwisp2_database.engine == "django.db.backends.sqlite3"
   file:
     path: "{{ openwisp2_database.name }}"
@@ -130,7 +130,7 @@
     group: "{{ www_group }}"
     mode: 0770
 
-- name: set permissions to "{{ openwisp2_path }}/static"
+- name: Set permissions to "{{ openwisp2_path }}/static"
   file:
     path: "{{ openwisp2_path }}/static"
     state: directory
@@ -142,7 +142,7 @@
   tags:
     - molecule-idempotence-notest
 
-- name: copy static files
+- name: Copy static files
   become: true
   copy:
     src: ow2_static/
@@ -154,8 +154,8 @@
   tags:
     - openwisp2_theme
 
-- name: collectstatic
-  notify: reload supervisor
+- name: Collectstatic
+  notify: Reload supervisor
   become: true
   become_user: "{{ www_user }}"
   django_manage:
@@ -169,7 +169,7 @@
 
 # needed to run compilemessages
 # some .mo files are created in virtualenv_path
-- name: set permissions to "{{ virtualenv_path }}"
+- name: Set permissions to "{{ virtualenv_path }}"
   when: openwisp2_internationalization
   file:
     path: "{{ virtualenv_path }}"
@@ -182,8 +182,8 @@
   tags:
     - molecule-idempotence-notest
 
-- name: compilemessages
-  notify: reload supervisor
+- name: Compilemessages
+  notify: Reload supervisor
   become: true
   become_user: "{{ www_user }}"
   when: openwisp2_internationalization
@@ -192,13 +192,13 @@
     command: "compilemessages"
     virtualenv: "{{ virtualenv_path }}"
 
-- name: create load_initial_data.py script
+- name: Create load_initial_data.py script
   template:
     src: load_initial_data.py
     dest: "{{ openwisp2_path }}/load_initial_data.py"
     mode: 0754
 
-- name: load initial data
+- name: Load initial data
   environment:
     PRIVATE_KEY: "{{ default_private_ssh_key.stdout | default(None) }}"
     PUBLIC_KEY: "{{ default_public_ssh_key.stdout | default(None) }}"
