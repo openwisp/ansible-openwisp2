@@ -887,10 +887,10 @@ Below are listed all the variables you can customize (you may also want to take 
     # extra URL settings for django
     openwisp2_extra_urls:
       - "path(r'', include('my_custom_app.urls'))"
-    # allows to specify imports that are used in the websocket routes
+    # allows to specify imports that are used in the websocket routes, eg:
     openwisp2_websocket_extra_imports:
       - from my_custom_app.websockets.routing import get_routes as get_custom_app_routes
-    # allows to specify extra websocket routes.
+    # allows to specify extra websocket routes, eg:
     openwisp2_websocket_extra_routes:
       # Callable that returns a list of routes
       - get_custom_app_routes()
