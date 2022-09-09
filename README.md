@@ -1075,7 +1075,7 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_radius_sms_backend: "sendsms.backends.console.SmsBackend"
     openwisp2_radius_sms_token_max_ip_daily: 25
     openwisp2_radius_delete_old_users: 365
-    openwisp2_radius_cleanup_stale_radacct: 365
+    openwisp2_radius_cleanup_stale_radacct: 1
     openwisp2_radius_delete_old_postauth: 365
     # days for which the radius accounting sessions (radacct) are retained,
     # 0 means sessions are kept forever.
