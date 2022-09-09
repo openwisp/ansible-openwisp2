@@ -1,25 +1,25 @@
 ---
 
-- name: reload systemd
+- name: Reload systemd
   systemd:
     daemon_reload: true
   when: ansible_distribution_release in ['bionic'] and ansible_service_mgr == 'systemd'
 
-- name: reload supervisor
+- name: Reload supervisor
   command: supervisorctl reload
   notify:
-    - remove celerybeat schedule
-    - migrate timeseries database
+    - Remove celerybeat schedule
+    - Migrate timeseries database
 
 # Clean up the schedule file because it may become corrupted after updates
-- name: remove celerybeat schedule
+- name: Remove celerybeat schedule
   file:
     path: "{{ openwisp2_path }}/celerybeat-schedule.db"
     state: absent
 
 # NOTE: Related to https://github.com/openwisp/openwisp-monitoring/pull/368
 # TODO: Remove this when openwisp-monitoring 1.1.0 is released
-- name: migrate timeseries database
+- name: Migrate timeseries database
   become: true
   become_user: "{{ www_user }}"
   django_manage:
@@ -28,21 +28,21 @@
     virtualenv: "{{ virtualenv_path }}"
   when: openwisp2_monitoring
 
-- name: restart nginx
+- name: Restart nginx
   service:
     name: nginx
     state: restarted
 
-- name: start redis
+- name: Start redis
   when: openwisp2_redis_install
   service:
     name: redis
     state: started
 
-- name: update-ca-certificates
+- name: Update-ca-certificates
   command: /usr/sbin/update-ca-certificates
 
-- name: restart freeradius
+- name: Restart freeradius
   service:
     name: freeradius
     state: started

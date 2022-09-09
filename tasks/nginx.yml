@@ -5,25 +5,25 @@
     openwisp2_nginx_client_max_body_size: "{{ openwisp2_firmware_upgrader_max_file_size }}"
   when: openwisp2_firmware_upgrader
 
-- name: create "{{ openwisp2_path }}/public_html"
+- name: Create "{{ openwisp2_path }}/public_html"
   file:
     path: "{{ openwisp2_path }}/public_html"
     state: directory
     mode: 0775
 
-- name: create "{{ openwisp2_path }}/nginx-conf/openwisp2"
+- name: Create "{{ openwisp2_path }}/nginx-conf/openwisp2"
   file:
     path: "{{ openwisp2_path }}/nginx-conf/openwisp2"
     state: directory
     mode: 0770
 
-- name: create "{{ openwisp2_path }}/ssl"
+- name: Create "{{ openwisp2_path }}/ssl"
   file:
     path: "{{ openwisp2_path }}/ssl"
     state: directory
     mode: 0770
 
-- name: create SSL cert if not exists yet
+- name: Create SSL cert if not exists yet
   command: >
     openssl req -new -nodes -x509 \
     -subj "/C={{ openwisp2_ssl_country }}/ST={{ openwisp2_ssl_state }} \
@@ -35,7 +35,7 @@
     -extensions v3_ca creates={{ openwisp2_ssl_cert }}
   args:
     warn: false
-  notify: restart nginx
+  notify: Restart nginx
 
 - name: Copy SSL cert to be added to trusted Cert (for freeradius)
   copy:
@@ -45,51 +45,51 @@
     owner: "root"
     group: "root"
     mode: "0644"
-  notify: update-ca-certificates
+  notify: Update-ca-certificates
 
-- name: disable default nginx configuration
+- name: Disable default nginx configuration
   file:
     path: "/etc/nginx/sites-enabled/default"
     state: absent
 
-- name: nginx SSL configuration
+- name: Nginx SSL configuration
   template:
     src: nginx/ssl-conf.j2
     dest: "{{ openwisp2_path }}/nginx-conf/openwisp2/ssl.conf"
     mode: 0644
-  notify: restart nginx
+  notify: Restart nginx
 
-- name: nginx security configuration
+- name: Nginx security configuration
   template:
     src: nginx/security-conf.j2
     dest: "{{ openwisp2_path }}/nginx-conf/openwisp2/security.conf"
     mode: 0644
-  notify: restart nginx
+  notify: Restart nginx
 
-- name: nginx site available
+- name: Nginx site available
   template:
     src: nginx/site-conf.j2
     dest: "/etc/nginx/sites-available/{{ inventory_hostname }}"
     mode: 0644
-  notify: restart nginx
+  notify: Restart nginx
 
-- name: nginx site enabled
+- name: Nginx site enabled
   file:
     src: "/etc/nginx/sites-available/{{ inventory_hostname }}"
     dest: "/etc/nginx/sites-enabled/{{ inventory_hostname }}"
     state: link
-  notify: restart nginx
+  notify: Restart nginx
 
-- name: configure nginx log rotation
+- name: Configure nginx log rotation
   template:
     src: logrotate.d/openwisp-nginx.j2
     dest: /etc/logrotate.d/openwisp-nginx
     mode: 0644
 
-- name: disable nginx server tokens
+- name: Disable nginx server tokens
   replace:
     path: /etc/nginx/nginx.conf
     regexp: '#(\s+)server_tokens off'
     replace: 'server_tokens off'
     backup: true
-  notify: restart nginx
+  notify: Restart nginx

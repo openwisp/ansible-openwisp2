@@ -13,7 +13,7 @@ openwisp2_network_topology_version: "openwisp-network-topology~=1.0.0"
 openwisp2_firmware_upgrader_version: "openwisp-firmware-upgrader~=1.0.1"
 openwisp2_monitoring_version: "openwisp-monitoring~=1.0.0"
 openwisp2_radius_version: "openwisp-radius~=1.0.1"
-openwisp2_django_version: "{{ 'django~=4.0.0' if ansible_distribution_release|string in ['focal', 'bullseye'] else 'django~=3.2.13' }}"
+openwisp2_django_version: "{{ 'django~=4.0.0' if ansible_distribution_release | string in ['focal', 'bullseye'] else 'django~=3.2.13' }}"
 openwisp2_extra_python_packages:
     - bpython
 openwisp2_extra_django_apps: []
@@ -147,7 +147,7 @@ openwisp2_radius_delete_old_postauth: 365
 openwisp2_radius_delete_old_radacct: 365
 openwisp2_radius_allowed_hosts: ["127.0.0.1"]
 openwisp2_freeradius_install: true
-freeradius_dir: "{{ '/etc/freeradius/3.0' if ansible_distribution_release|string == 'jammy' else '/etc/freeradius' }}"
+freeradius_dir: "{{ '/etc/freeradius/3.0' if ansible_distribution_release | string == 'jammy' else '/etc/freeradius' }}"
 freeradius_mods_available_dir: "{{ freeradius_dir }}/mods-available"
 freeradius_mods_enabled_dir: "{{ freeradius_dir }}/mods-enabled"
 freeradius_mods_config_dir: "{{ freeradius_dir }}/mods-config"
