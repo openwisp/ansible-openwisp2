@@ -182,3 +182,4 @@ openwisp2_django_cors:
     enabled: false
     allowed_origins_list: []
     replace_https_referer: false
+openwisp2_extra_supervisor_restart: []

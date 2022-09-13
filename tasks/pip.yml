@@ -32,7 +32,7 @@
   delay: 5
   register: result
   until: result is success
-  notify: Reload supervisor
+  notify: Reload application
 
 - name: Install openwisp2 controller and its dependencies
   pip:
@@ -46,7 +46,7 @@
   environment:
     SETUPTOOLS_USE_DISTUTILS: stdlib
     LC_CTYPE: "en_US.UTF-8"
-  notify: Reload supervisor
+  notify: Reload application
   retries: 5
   delay: 10
   register: result
@@ -97,7 +97,7 @@
     virtualenv_site_packages: true
   environment:
     SETUPTOOLS_USE_DISTUTILS: stdlib
-  notify: Reload supervisor
+  notify: Reload application
   retries: 5
   delay: 10
   register: result
@@ -113,7 +113,7 @@
     virtualenv_site_packages: true
   environment:
     SETUPTOOLS_USE_DISTUTILS: stdlib
-  notify: Reload supervisor
+  notify: Reload application
   retries: 5
   delay: 10
   register: result
@@ -131,7 +131,7 @@
     virtualenv_site_packages: true
   environment:
     SETUPTOOLS_USE_DISTUTILS: stdlib
-  notify: Reload supervisor
+  notify: Reload application
   retries: 5
   delay: 10
   register: result
@@ -149,7 +149,7 @@
     virtualenv_site_packages: true
   environment:
     SETUPTOOLS_USE_DISTUTILS: stdlib
-  notify: Reload supervisor
+  notify: Reload application
   retries: 5
   delay: 10
   register: result
@@ -167,7 +167,7 @@
     virtualenv_site_packages: true
   environment:
     SETUPTOOLS_USE_DISTUTILS: stdlib
-  notify: Reload supervisor
+  notify: Reload application
   retries: 5
   delay: 10
   register: result
@@ -189,7 +189,7 @@
   delay: 10
   register: result
   until: result is success
-  notify: Reload supervisor
+  notify: Reload application
 
 - name: Install extra python packages
   pip:
@@ -209,7 +209,7 @@
   delay: 10
   register: result
   until: result is success
-  notify: Reload supervisor
+  notify: Reload application
 
 - name: Install static minification dependencies
   pip:
@@ -225,7 +225,7 @@
   delay: 10
   register: result
   until: result is success
-  notify: Reload supervisor
+  notify: Reload application
 
 - name: Install uwsgi
   pip:
@@ -240,7 +240,7 @@
   delay: 10
   register: result
   until: result is success
-  notify: Reload supervisor
+  notify: Reload application
 
 - name: Install psycopg2
   when: openwisp2_database.engine in ["django.db.backends.postgresql", "django.contrib.gis.db.backends.postgis"]
@@ -256,7 +256,7 @@
   delay: 10
   register: result
   until: result is success
-  notify: Reload supervisor
+  notify: Reload application
 
 - name: Install MySQL-python
   when: openwisp2_database.engine in ["django.db.backends.mysql", "django.contrib.gis.db.backends.mysql"]
@@ -272,7 +272,7 @@
   delay: 10
   register: result
   until: result is success
-  notify: Reload supervisor
+  notify: Reload application
 
 - name: Install raven (sentry client)
   when: openwisp2_sentry.get('dsn')
@@ -288,7 +288,7 @@
   delay: 10
   register: result
   until: result is success
-  notify: Reload supervisor
+  notify: Reload application
 
 - name: Install django-celery-email
   pip:
@@ -304,7 +304,7 @@
   delay: 10
   register: result
   until: result is success
-  notify: Reload supervisor
+  notify: Reload application
 
 
 - name: Install django
@@ -320,6 +320,6 @@
   delay: 10
   register: result
   until: result is success
-  notify: Reload supervisor
+  notify: Reload application
   tags:
     - molecule-idempotence-notest
