@@ -945,6 +945,11 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_admin_allowed_network: null
     # install ntp client (enabled by default)
     openwisp2_install_ntp: true
+    # if you have any custom supervisor service, you can
+    # configure it to restart along with other supervisor services
+    openwisp2_extra_supervisor_restart:
+        - name: my_custom_service
+          when: my_custom_service_enabled
     # enable sentry example
     openwisp2_sentry:
         dsn: "https://7d2e3cd61acc32eca1fb2a390f7b55e1:bf82aab5ddn4422688e34a486c7426e3@getsentry.com:443/12345"
