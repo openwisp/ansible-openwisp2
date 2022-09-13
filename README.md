@@ -890,6 +890,8 @@ Below are listed all the variables you can customize (you may also want to take 
     # controller URL are enabled by default
     # but can be disabled in multi-VM installations if needed
     openwisp2_controller_urls: true
+    # whether redis should be installed
+    openwisp2_nginx_install: true
     # spdy protocol support (disabled by default)
     openwisp2_nginx_spdy: false
     # HTTP2 protocol support (disabled by default)
@@ -898,6 +900,9 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_nginx_ipv6: false
     # nginx client_max_body_size setting
     openwisp2_nginx_client_max_body_size: 10M
+    # list of upstream servers for OpenWISP
+    openwisp2_nginx_openwisp_server:
+      - "localhost:8000"
     # dictionary containing more nginx settings for
     # the 443 section of the openwisp2 nginx configuration
     # IMPORTANT: 1. you can add more nginx settings in this dictionary
@@ -937,6 +942,8 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_uwsgi_listen: 100
     # number of daphne process to spawn. Default value is 1
     openwisp2_daphne_processes: 2
+    # socket on which uwsgi should listen. Defaults to UNIX socket
+    openwisp2_uwsgi_socket: 127.0.0.1:8000
     # maximum time to allow a websocket to be connected (in seconds)
     openwisp2_daphne_websocket_timeout: 1800
     # the following setting controls which ip address range

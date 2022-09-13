@@ -47,6 +47,9 @@ openwisp2_ssl_locality: "San Francisco"
 openwisp2_ssl_organization: "IT dep."
 openwisp2_ssl_common_name: "{{ inventory_hostname }}"
 openwisp2_http_allowed_ip: false
+openwisp2_nginx_install: true
+openwisp2_nginx_openwisp_server:
+    - "unix://{{ openwisp2_path }}/uwsgi.sock"
 openwisp2_nginx_spdy: false
 openwisp2_nginx_http2: false
 openwisp2_nginx_ipv6: false
@@ -134,6 +137,7 @@ postfix_smtpd_relay_restrictions_override: "permit_sasl_authenticated, permit_my
 openwisp2_uwsgi_processes: 1
 openwisp2_uwsgi_threads: 1
 openwisp2_uwsgi_listen: 100
+openwisp2_uwsgi_socket: "{{ openwisp2_path }}/uwsgi.sock"
 openwisp2_daphne_processes: 1
 openwisp2_daphne_websocket_timeout: 3600  # in seconds
 # internationalization

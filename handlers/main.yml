@@ -32,6 +32,7 @@
   service:
     name: nginx
     state: restarted
+  when: openwisp2_nginx_install
 
 - name: Start redis
   when: openwisp2_redis_install
