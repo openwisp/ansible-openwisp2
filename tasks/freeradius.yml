@@ -1,4 +1,15 @@
 ---
+- name: Add freeradius repository into Ubuntu jammy sources list
+  shell: |
+    echo "deb http://packages.networkradius.com/freeradius-3.2/ubuntu/jammy jammy main" | \
+    tee /etc/apt/sources.list.d/networkradius.list > /dev/null
+  become: true
+  when:
+    - ansible_distribution|string == 'Ubuntu'
+    - ansible_distribution_release|string == 'jammy'
+  tags:
+    - molecule-idempotence-notest
+
 - name: Add freeradius repository into Ubuntu focal sources list
   shell: |
     echo "deb http://packages.networkradius.com/freeradius-3.0/ubuntu/focal focal main" | \
@@ -6,7 +17,7 @@
   become: true
   when:
     - ansible_distribution|string == 'Ubuntu'
-    - ansible_distribution_release|string == 'focal' or ansible_distribution_release|string == 'jammy'
+    - ansible_distribution_release|string == 'focal'
   tags:
     - molecule-idempotence-notest
 
