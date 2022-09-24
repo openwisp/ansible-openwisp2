@@ -185,3 +185,4 @@ openwisp2_django_cors:
     allowed_origins_list: []
     replace_https_referer: false
 openwisp2_extra_supervisor_restart: []
+openwisp2_monitoring_default_retention_policy: "26280h0m0s"  # 3 years

@@ -1139,6 +1139,8 @@ Below are listed all the variables you can customize (you may also want to take 
       # Django middleware setting to add "CorsPostCsrfMiddleware".
       # By default, it is set to false.
       replace_https_referer: true
+    # The default retention policy that applies to the timeseries data
+    openwisp2_monitoring_default_retention_policy: "26280h0m0s" # 3 years
 ```
 
 **Note**: The default values for settings provided to control the number of process and threads
