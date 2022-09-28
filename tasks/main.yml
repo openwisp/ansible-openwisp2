@@ -12,6 +12,10 @@
 - import_tasks: ssh.yml
   tags: [openwisp2, ssh]
 
+- name: Import system tasks
+  import_tasks: system.yml
+  tags: [openwisp2, system]
+
 - import_tasks: pip.yml
   tags: [openwisp2, pip]
 

@@ -1,0 +1,13 @@
+---
+
+- name: Add inventory_hostname in /etc/hosts
+  lineinfile:
+    path: /etc/hosts
+    regexp: "^127.0.0.1"
+    line: "127.0.0.1  localhost {{ inventory_hostname }}"
+    state: present
+  tags:
+    # Docker does not allow updating /etc/hosts file at
+    # container level, hence this task would fail with molecule.
+    # https://github.com/ansible-community/molecule/issues/959
+    - molecule-notest
