@@ -899,6 +899,9 @@ Below are listed all the variables you can customize (you may also want to take 
     # controller URL are enabled by default
     # but can be disabled in multi-VM installations if needed
     openwisp2_controller_urls: true
+    # The default retention policy that applies to the timeseries data
+    # https://github.com/openwisp/openwisp-monitoring#openwisp-monitoring-default-retention-policy
+    openwisp2_monitoring_default_retention_policy: "26280h0m0s" # 3 years
     # spdy protocol support (disabled by default)
     openwisp2_nginx_spdy: false
     # HTTP2 protocol support (disabled by default)
@@ -1139,8 +1142,6 @@ Below are listed all the variables you can customize (you may also want to take 
       # Django middleware setting to add "CorsPostCsrfMiddleware".
       # By default, it is set to false.
       replace_https_referer: true
-    # The default retention policy that applies to the timeseries data
-    openwisp2_monitoring_default_retention_policy: "26280h0m0s" # 3 years
 ```
 
 **Note**: The default values for settings provided to control the number of process and threads
