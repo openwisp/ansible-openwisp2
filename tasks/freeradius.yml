@@ -1,9 +1,36 @@
 ---
 - name: Add freeradius repository into Ubuntu jammy sources list
-  shell: |
-    echo "deb http://packages.networkradius.com/freeradius-3.2/ubuntu/jammy jammy main" | \
-    tee /etc/apt/sources.list.d/networkradius.list > /dev/null
-  become: true
+  # NOTE: The older version of openwisp.openwisp2 used to install
+  # FreeRADIUS 3.0.x on Ubuntu 22.04. After the release of
+  # Ubuntu 22.04.1, FreeRADIUS 3.0.x can no longer be installed.
+  # This block contains tasks that configures FreeRADIUS server
+  # on Ubuntu 22.04 in a backward compatible manner, i.e. if
+  # FreeRADIUS 3.0.x is installed on the VM, then the role will continue
+  # using FreeRADIUS 3.0.x. On new installations, FreeRADIUS 3.2.x
+  # will be used.
+  block:
+    - name: Check installed FreeRADIUS version
+      shell: >
+        which freeradius > /dev/null &&
+          freeradius -v | sed -n 2p | awk {'print $3'} |
+          awk -F '.' {'printf("%1s.%s", $1, $2)'}
+      ignore_errors: true
+      register: openwisp2_installed_freeradius_version
+    - name: Add FreeRADIUS 3.0.x repository to sources list
+      shell: >
+        echo "deb http://packages.networkradius.com/freeradius-3.0/ubuntu/focal focal main" |
+          tee /etc/apt/sources.list.d/networkradius.list > /dev/null
+      when: openwisp2_installed_freeradius_version.stdout == '3.0'
+    - name: Add FreeRADIUS 3.2.x repository to sources list
+      shell: >
+        echo "deb http://packages.networkradius.com/freeradius-3.2/ubuntu/jammy jammy main" |
+          tee /etc/apt/sources.list.d/networkradius.list > /dev/null
+      when: openwisp2_installed_freeradius_version.stdout != '3.0'
+    - name: Update freeradius_dir variable
+      set_fact:
+        freeradius_dir: '/etc/freeradius/3.0'
+      when: openwisp2_installed_freeradius_version.stdout == '3.0'
+
   when:
     - ansible_distribution|string == 'Ubuntu'
     - ansible_distribution_release|string == 'jammy'
