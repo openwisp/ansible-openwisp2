@@ -150,7 +150,7 @@ openwisp2_radius_delete_old_postauth: 365
 openwisp2_radius_delete_old_radacct: 365
 openwisp2_radius_allowed_hosts: ["127.0.0.1"]
 openwisp2_freeradius_install: true
-freeradius_dir: "{{ '/etc/freeradius/3.0' if ansible_distribution_release | string == 'jammy' else '/etc/freeradius' }}"
+freeradius_dir: /etc/freeradius
 freeradius_mods_available_dir: "{{ freeradius_dir }}/mods-available"
 freeradius_mods_enabled_dir: "{{ freeradius_dir }}/mods-enabled"
 freeradius_mods_config_dir: "{{ freeradius_dir }}/mods-config"
