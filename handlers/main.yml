@@ -5,11 +5,43 @@
     daemon_reload: true
   when: ansible_distribution_release in ['bionic'] and ansible_service_mgr == 'systemd'
 
-- name: Reload supervisor
-  command: supervisorctl reload
+- name: Update supervisor configuration
+  command: supervisorctl update all
+  register: supervisord_update_all
+
+- name: Reload application
+  debug:
+    msg: "Restarting application services"
+  changed_when: true
   notify:
+    - Reload uwsgi
+    - Restart daphne
+    - Restart other supervisor managed services
     - Remove celerybeat schedule
     - Migrate timeseries database
+
+- name: Reload uwsgi
+  command: "{{ virtualenv_path }}/bin/uwsgi --reload {{ openwisp2_path }}/uwsgi.pid"
+  # Skips reloading uwsgi if it's supervisor configuration has changed.
+  # Otherwise, the process will be restarted twice.
+  when: not (supervisord_update_all is defined and "openwisp2:" in supervisord_update_all.stdout)
+
+# Daphne does not support graceful reloading.
+# Read https://github.com/django/daphne/issues/177
+- name: Restart daphne
+  command: "supervisorctl restart daphne:asgi0"
+  # Skips restarting daphne if it's supervisor configuration has changed.
+  # Otherwise, the process will be restarted twice.
+  when: not (supervisord_update_all is defined and "daphne:" in supervisord_update_all.stdout)
+
+- name: Restart other supervisor managed services
+  command: "supervisorctl restart {{ item.name }}"
+  # Skips restarting service if it's supervisor configuration has changed.
+  # Otherwise, the process will be restarted twice.
+  when: "item.when and not (supervisord_update_all is defined and item.name ~ ':' in supervisord_update_all.stdout)"
+  loop: "{{ openwisp2_default_supervisor_restart + openwisp2_extra_supervisor_restart }}"
+  loop_control:
+    loop_var: item
 
 # Clean up the schedule file because it may become corrupted after updates
 - name: Remove celerybeat schedule

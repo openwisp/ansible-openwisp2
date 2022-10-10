@@ -5,28 +5,28 @@
     src: uwsgi.ini.j2
     dest: "{{ openwisp2_path }}/uwsgi.ini"
     mode: 0644
-  notify: Reload supervisor
+  notify: Update supervisor configuration
 
 - name: Template for supervisor uwsgi
   template:
     src: supervisor/openwisp2.j2
     dest: "{{ supervisor_path | format('openwisp2') }}"
     mode: 0644
-  notify: Reload supervisor
+  notify: Update supervisor configuration
 
 - name: Template for supervisor daphne
   template:
     src: supervisor/daphne.j2
     dest: "{{ supervisor_path | format('daphne') }}"
     mode: 0644
-  notify: Reload supervisor
+  notify: Update supervisor configuration
 
 - name: Template for supervisor celery
   template:
     src: supervisor/celery.j2
     dest: "{{ supervisor_path | format('celery') }}"
     mode: 0644
-  notify: Reload supervisor
+  notify: Update supervisor configuration
 
 - name: Template for supervisor celery network
   template:
@@ -34,7 +34,7 @@
     dest: "{{ supervisor_path | format('celery_network') }}"
     mode: 0644
   when: openwisp2_celery_network
-  notify: Reload supervisor
+  notify: Update supervisor configuration
 
 - name: Template for supervisor celery firmware_upgrader
   template:
@@ -42,7 +42,7 @@
     dest: "{{ supervisor_path | format('celery_firmware_upgrader') }}"
     mode: 0644
   when: openwisp2_firmware_upgrader and openwisp2_celery_firmware_upgrader
-  notify: Reload supervisor
+  notify: Update supervisor configuration
 
 - name: Template for supervisor celery monitoring
   template:
@@ -50,17 +50,17 @@
     dest: "{{ supervisor_path | format('celery_monitoring') }}"
     mode: 0644
   when: openwisp2_monitoring and openwisp2_celery_monitoring
-  notify: Reload supervisor
+  notify: Update supervisor configuration
 
 - name: Template for supervisor celerybeat
   template:
     src: supervisor/celerybeat.j2
     dest: "{{ supervisor_path | format('celerybeat') }}"
     mode: 0644
-  notify: Reload supervisor
+  notify: Update supervisor configuration
 
 - name: Remove supervisor runworker.conf (obsolete)
   file:
     dest: "{{ supervisor_path | format('runworker') }}"
     state: absent
-  notify: Reload supervisor
+  notify: Update supervisor configuration

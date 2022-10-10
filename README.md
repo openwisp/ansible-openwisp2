@@ -887,6 +887,15 @@ Below are listed all the variables you can customize (you may also want to take 
     # extra URL settings for django
     openwisp2_extra_urls:
       - "path(r'', include('my_custom_app.urls'))"
+    # allows to specify imports that are used in the websocket routes, eg:
+    openwisp2_websocket_extra_imports:
+      - from my_custom_app.websockets.routing import get_routes as get_custom_app_routes
+    # allows to specify extra websocket routes, eg:
+    openwisp2_websocket_extra_routes:
+      # Callable that returns a list of routes
+      - get_custom_app_routes()
+      # List of routes
+      - "[path('ws/custom-app/', consumer.CustomAppConsumer.as_asgi())]"
     # controller URL are enabled by default
     # but can be disabled in multi-VM installations if needed
     openwisp2_controller_urls: true
@@ -953,6 +962,11 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_admin_allowed_network: null
     # install ntp client (enabled by default)
     openwisp2_install_ntp: true
+    # if you have any custom supervisor service, you can
+    # configure it to restart along with other supervisor services
+    openwisp2_extra_supervisor_restart:
+        - name: my_custom_service
+          when: my_custom_service_enabled
     # enable sentry example
     openwisp2_sentry:
         dsn: "https://7d2e3cd61acc32eca1fb2a390f7b55e1:bf82aab5ddn4422688e34a486c7426e3@getsentry.com:443/12345"

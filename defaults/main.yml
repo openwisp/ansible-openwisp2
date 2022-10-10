@@ -21,6 +21,8 @@ openwisp2_extra_django_settings: {}
 openwisp2_extra_django_settings_instructions: []
 openwisp2_controller_urls: true
 openwisp2_extra_urls: []
+openwisp2_websocket_extra_imports: []
+openwisp2_websocket_extra_routes: []
 openwisp2_path: "/opt/openwisp2"
 openwisp2_default_from_email: "openwisp2@{{ inventory_hostname }}"
 openwisp2_email_backend: "djcelery_email.backends.CeleryEmailBackend"
@@ -151,7 +153,7 @@ openwisp2_radius_delete_old_postauth: 365
 openwisp2_radius_delete_old_radacct: 365
 openwisp2_radius_allowed_hosts: ["127.0.0.1"]
 openwisp2_freeradius_install: true
-freeradius_dir: "{{ '/etc/freeradius/3.0' if ansible_distribution_release | string == 'jammy' else '/etc/freeradius' }}"
+freeradius_dir: /etc/freeradius
 freeradius_mods_available_dir: "{{ freeradius_dir }}/mods-available"
 freeradius_mods_enabled_dir: "{{ freeradius_dir }}/mods-enabled"
 freeradius_mods_config_dir: "{{ freeradius_dir }}/mods-config"
@@ -186,3 +188,4 @@ openwisp2_django_cors:
     enabled: false
     allowed_origins_list: []
     replace_https_referer: false
+openwisp2_extra_supervisor_restart: []
