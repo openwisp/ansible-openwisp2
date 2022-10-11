@@ -16,6 +16,12 @@ Tested on **Debian (Buster, Bullseye)**, **Ubuntu (18/20/22 LTS)**.
 
 **Recommended ansible version**: 2.10.
 
+Demo
+====
+
+[Try the OpenWISP Demo](https://openwisp.org/demo.html) to get a quick
+overview of what OpenWISP can do for you.
+
 Help OpenWISP
 =============
 
