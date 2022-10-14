@@ -31,6 +31,7 @@
   tags: [openwisp2, supervisor]
 
 - import_tasks: nginx.yml
+  when: openwisp2_nginx_install
   tags: [openwisp2, nginx]
 
 - import_tasks: cron.yml
