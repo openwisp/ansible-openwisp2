@@ -1129,6 +1129,9 @@ Below are listed all the variables you can customize (you may also want to take 
     # Sets the source path of the template that contains freeradius site configuration.
     # Defaults to "templates/freeradius/openwisp_site.j2" shipped in the role.
     freeradius_openwisp_site_template_src: custom_freeradius_site.j2
+    # FreeRADIUS listen address for the openwisp_site.
+    # Defaults to "*", i.e. listen on all interfaces.
+    freeradius_openwisp_site_listen_ipaddr: "10.8.0.1"
     cron_delete_old_notifications: "'hour': 0, 'minute': 0"
     cron_deactivate_expired_users: "'hour': 0, 'minute': 5"
     cron_delete_old_users: "'hour': 0, 'minute': 10"
