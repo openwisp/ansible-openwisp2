@@ -12,6 +12,10 @@
 - import_tasks: ssh.yml
   tags: [openwisp2, ssh]
 
+- name: Import system tasks
+  import_tasks: system.yml
+  tags: [openwisp2, system]
+
 - import_tasks: pip.yml
   tags: [openwisp2, pip]
 
@@ -27,6 +31,7 @@
   tags: [openwisp2, supervisor]
 
 - import_tasks: nginx.yml
+  when: openwisp2_nginx_install
   tags: [openwisp2, nginx]
 
 - import_tasks: cron.yml
