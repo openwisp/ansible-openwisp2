@@ -18,7 +18,6 @@
       - software-properties-common
       - build-essential
       - supervisor
-      - nginx
       - openssl
       - libssl-dev
       - libffi-dev
@@ -35,6 +34,11 @@
   delay: 10
   register: result
   until: result is success
+
+- name: Install nginx
+  apt:
+    name: nginx
+  when: openwisp2_nginx_install
 
 - name: Install redis
   apt:
