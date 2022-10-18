@@ -138,7 +138,7 @@
     - name: Check openwisp2 should install python 3.7
       set_fact:
         openwisp2_should_install_python_37: |
-          {{ openwisp2_installed_python.stdout.split(' ')[1] is version_compare('3.7', 'le') }}
+          {{ ansible_python_version is version_compare('3.7', 'lt') }}
 
 - name: Install Python 3.7 and required packages from ppa:deadsnakes/ppa
   block:
