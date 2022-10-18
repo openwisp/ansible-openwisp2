@@ -1,5 +1,12 @@
 # Change log
 
+## Version 22.05.2 [2022-10-18]
+
+- Removed sql module from default freeradius site which was generating errors
+- Fixed ``openwisp2_should_install_python_37`` false test
+- Fixed installation of Python 3.7 on old systems
+- Fixed installation of freeradius on Ubuntu 22.04.1
+
 ## Version 22.05.1 [2022-05-30]
 
 - Fixed redis installation issue on some Ubuntu versions
