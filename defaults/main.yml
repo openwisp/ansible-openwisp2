@@ -109,6 +109,7 @@ openwisp2_timeseries_database:
     port: 8086
 openwisp2_nginx_access_log: "{{ openwisp2_path }}/log/nginx.access.log"
 openwisp2_nginx_error_log: "{{ openwisp2_path }}/log/nginx.error.log error"
+openwisp2_celerybeat: true
 # keep backward compatibility with old variable openwisp2_eventlet_concurrency
 openwisp2_celery_concurrency: "{{ openwisp2_eventlet_concurrency | default(1) }}"
 openwisp2_celery_autoscale: null
@@ -140,6 +141,7 @@ openwisp2_uwsgi_processes: 1
 openwisp2_uwsgi_threads: 1
 openwisp2_uwsgi_listen: 100
 openwisp2_uwsgi_socket: "{{ openwisp2_path }}/uwsgi.sock"
+openwisp2_daphne_install: true
 openwisp2_daphne_processes: 1
 openwisp2_daphne_websocket_timeout: 3600  # in seconds
 # internationalization
