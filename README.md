@@ -955,6 +955,9 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_uwsgi_threads: 2
     # value of the listen queue of uWSGI
     openwisp2_uwsgi_listen: 100
+    # whether daphne should be installed
+    # must be enabled for serving websocket requests
+    openwisp2_daphne_install: true
     # number of daphne process to spawn. Default value is 1
     openwisp2_daphne_processes: 2
     # socket on which uwsgi should listen. Defaults to UNIX socket
@@ -1006,6 +1009,10 @@ Below are listed all the variables you can customize (you may also want to take 
     # celery queuing mode for the default queue,
     # leaving the default will work for most cases
     openwisp2_celery_optimization: default
+    # whether the dedicated celerybeat worker is enabled which is
+    # responsible for triggering periodic tasks
+    # must be turned on unless there's another server running celerybeat
+    openwisp2_celerybeat: true
     # whether the dedicated worker for the celery "network" queue is enabled
     # must be turned on unless there's another server running a worker for this queue
     openwisp2_celery_network: true
