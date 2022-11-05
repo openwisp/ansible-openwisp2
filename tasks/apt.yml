@@ -133,18 +133,7 @@
 - name: Ensure supervisor is started
   service: name=supervisor state=started
 
-- name: Should Install Python 3.7
-  block:
-    - name: Check installed python version
-      command: "{{ openwisp2_python }} --version"
-      register: openwisp2_installed_python
-      changed_when: false
-    - name: Check openwisp2 should install python 3.7
-      set_fact:
-        openwisp2_should_install_python_37: |
-          {{ ansible_python_version is version_compare('3.7', 'lt') }}
-
-- name: Install Python 3.7 and required packages from ppa:deadsnakes/ppa
+- name: Install Python 3.7 and required packages from ppa:deadsnakes/ppa for Ubuntu
   block:
     - name: Install software-properties-common
       apt:
@@ -170,10 +159,33 @@
       delay: 10
       register: result
       until: result is success
-    - name: Set python 3.7
-      set_fact:
-        openwisp2_python: python3.7
-  when: openwisp2_should_install_python_37
+  when: ansible_distribution == 'Ubuntu'
+
+
+- name: Install Python 3.9 and required packages for Debian Bullseye
+  block:
+    - name: Install software-properties-common
+      apt:
+        name:
+          - software-properties-common
+      ignore_errors: true
+      retries: 5
+      delay: 10
+      register: result
+      until: result is success
+    - name: Install Python 3.9
+      apt:
+        name:
+          - python3.9
+          - python3.9-dev
+          - python3.9-venv
+      ignore_errors: true
+      retries: 5
+      delay: 10
+      register: result
+      until: result is success
+  when: ansible_distribution == 'Debian' and ansible_distribution_release == 'bullseye'
+
 
 - name: Install python3 packages
   apt:
@@ -185,7 +197,6 @@
   delay: 10
   register: result
   until: result is success
-  when: not openwisp2_should_install_python_37
 
 - name: Install ntp
   when: openwisp2_install_ntp
