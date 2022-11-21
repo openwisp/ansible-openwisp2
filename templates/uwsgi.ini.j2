@@ -20,3 +20,6 @@ gid={{ openwisp2_uwsgi_gid }}
 ignore-sigpipe
 ignore-write-errors
 disable-write-exception
+{% if openwisp2_uwsgi_extra_conf %}
+{{ openwisp2_uwsgi_extra_conf }}
+{% endif %}

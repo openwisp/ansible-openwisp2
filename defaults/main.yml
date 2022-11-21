@@ -141,6 +141,7 @@ openwisp2_uwsgi_processes: 1
 openwisp2_uwsgi_threads: 1
 openwisp2_uwsgi_listen: 100
 openwisp2_uwsgi_socket: "{{ openwisp2_path }}/uwsgi.sock"
+openwisp2_uwsgi_extra_conf: null
 openwisp2_daphne_install: true
 openwisp2_daphne_processes: 1
 openwisp2_daphne_websocket_timeout: 3600  # in seconds
