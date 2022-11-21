@@ -955,14 +955,18 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_uwsgi_threads: 2
     # value of the listen queue of uWSGI
     openwisp2_uwsgi_listen: 100
+    # socket on which uwsgi should listen. Defaults to UNIX socket
+    # at "{{ openwisp2_path }}/uwsgi.sock"
+    openwisp2_uwsgi_socket: 127.0.0.1:8000
+    # configure/add uwsgi configuration parameters that cannot be
+    # configured using the ansible variables
+    openwisp2_uwsgi_extra_conf: |
+      single-interpreter=True
     # whether daphne should be installed
     # must be enabled for serving websocket requests
     openwisp2_daphne_install: true
     # number of daphne process to spawn. Default value is 1
     openwisp2_daphne_processes: 2
-    # socket on which uwsgi should listen. Defaults to UNIX socket
-    # at "{{ openwisp2_path }}/uwsgi.sock"
-    openwisp2_uwsgi_socket: 127.0.0.1:8000
     # maximum time to allow a websocket to be connected (in seconds)
     openwisp2_daphne_websocket_timeout: 1800
     # the following setting controls which ip address range
