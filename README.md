@@ -836,14 +836,16 @@ Below are listed all the variables you can customize (you may also want to take 
     # (https://github.com/pmclanahan/django-celery-email)
     openwisp2_email_backend: "djcelery_email.backends.CeleryEmailBackend"
     # edit database settings only if you are not using sqlite
+    # eg, for deploying with PostgreSQL (recommended for production usage)
+    # you will need the PostGIS spatial extension, find more info at:
+    # https://docs.djangoproject.com/en/4.1/ref/contrib/gis/tutorial/
     openwisp2_database:
-        engine: django.db.backends.postgresql
-        name: openwisp2
-        user: postgres
-        password: ""
-        host: ""
-        port: ""
-        options: {}
+        engine: django.contrib.gis.db.backends.postgis
+        name: "{{ DB_NAME }}"
+        user: "{{ DB_USER }}"
+        host: "{{ DB_HOST }}"
+        password: "{{ DB_PASSWORD }}"
+        port: 5432
     # SPATIALITE_LIBRARY_PATH django setting
     # The role will attempt determining the right mod-spatialite path automatically
     # But you can use this variable to customize the path or fix future arising issues
