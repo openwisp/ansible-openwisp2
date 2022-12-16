@@ -835,6 +835,11 @@ Below are listed all the variables you can customize (you may also want to take 
     # uses "CeleryEmailBackend" from django-celery-email.
     # (https://github.com/pmclanahan/django-celery-email)
     openwisp2_email_backend: "djcelery_email.backends.CeleryEmailBackend"
+    # Email timeout in seconds used by Django for blocking operations
+    # like connection attempts. For more info read the Django documentation,
+    # https://docs.djangoproject.com/en/3.2/ref/settings/#email-timeout.
+    # Defaults to 10 seconds.
+    openwisp2_email_timeout: 5
     # edit database settings only if you are not using sqlite
     # eg, for deploying with PostgreSQL (recommended for production usage)
     # you will need the PostGIS spatial extension, find more info at:
