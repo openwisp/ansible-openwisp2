@@ -965,10 +965,14 @@ Below are listed all the variables you can customize (you may also want to take 
     # socket on which uwsgi should listen. Defaults to UNIX socket
     # at "{{ openwisp2_path }}/uwsgi.sock"
     openwisp2_uwsgi_socket: 127.0.0.1:8000
-    # configure/add uwsgi configuration parameters that cannot be
-    # configured using the ansible variables
+    # extra uwsgi configuration parameters that cannot be
+    # configured using dedicated ansible variables
     openwisp2_uwsgi_extra_conf: |
       single-interpreter=True
+      log-4xx=True
+      log-5xx=True
+      disable-logging=True
+      auto-procname=True
     # whether daphne should be installed
     # must be enabled for serving websocket requests
     openwisp2_daphne_install: true
