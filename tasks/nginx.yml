@@ -33,8 +33,6 @@
     -keyout {{ openwisp2_ssl_key }} \
     -out {{ openwisp2_ssl_cert }} \
     -extensions v3_ca creates={{ openwisp2_ssl_cert }}
-  args:
-    warn: false
   notify: Restart nginx
 
 - name: Copy SSL cert to be added to trusted Cert (for freeradius)
