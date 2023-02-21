@@ -1,5 +1,10 @@
 # Change log
 
+## Version 22.05.3 [2023-02-21]
+
+- Updated source for Stouts.postfix role dependency
+- Fix: updated openssl command syntax
+
 ## Version 22.05.2 [2022-10-18]
 
 - Removed sql module from default freeradius site which was generating errors
