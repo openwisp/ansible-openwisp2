@@ -689,7 +689,7 @@ If you need to copy or edit files, you can switch to ``www-data``
 user with the commands
 
 ```
-sudo su www-data -s /bin/bash
+sudo su www-data -s /bin/bash (or apache instead of www-data for RHEL and CentOS)
 cd /opt/openwisp2
 source env/bin/activate
 ```

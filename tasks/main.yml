@@ -1,13 +1,18 @@
 ---
 
 - import_tasks: variables-spatialite.yml
-  tags: [openwisp2, apt, yum, pip, django, supervisor, nginx, variables]
+  tags: [openwisp2, apt, rpm, yum, pip, django, supervisor, nginx, variables]
   when: >
     openwisp2_database.engine == "django.contrib.gis.db.backends.spatialite"
     and openwisp2_spatialite_path is none
 
 - import_tasks: apt.yml
   tags: [openwisp2, apt]
+  when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
+
+- import_tasks: rpm.yml
+  tags: [openwisp2, rpm]
+  when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
 
 - import_tasks: ssh.yml
   tags: [openwisp2, ssh]
@@ -36,6 +41,9 @@
 
 - import_tasks: cron.yml
   tags: [openwisp2, cron]
+
+- import_tasks: security.yml
+  tags: [openwisp2, security]
 
 - import_tasks: complete.yml
   tags: [openwisp2]

@@ -1,38 +1,56 @@
 ---
 - name: Set Apache user and group
   set_fact:
-    www_group: "www-data"
-    www_user: "www-data"
+    www_group: "nginx"
+    www_user: "nginx"
 
-- name: Update APT package cache
-  apt:
-    update_cache: true
-  changed_when: false
+- name: Set Supervisor config path
+  set_fact:
+    supervisor_path: "/etc/supervisord.d/%s.ini"
+
+- name: Set nginx log path
+  set_fact:
+    openwisp2_nginx_access_log: "/var/log/nginx/openwisp.access.log"
+    openwisp2_nginx_error_log: "/var/log/nginx/openwisp.error.log error"
+
+- name: Enable Codeready Builder Repo (RHEL only)
+  community.general.rhsm_repository:
+    name: codeready-builder-for-rhel-9-x86_64-rpms
+  when: ansible_distribution == 'RedHat'
+
+- name: Enable EPEL9
+  dnf:
+    name: 'https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm'
+    state: present
+
+- name: Install system packages
+  dnf:
+    name:
+      - sudo
+      - gcc
+      - make
+      - supervisor
+      - openssl
+      - openssl-devel
+      - libffi-devel
+      - python3
+      - python3-virtualenv
+      - python3-pip
+      - chrony
+      # needed to generate SSH key for push updates
+      - openssh-clients
+      - logrotate
+      # required for celerybeat
+      # - python3-gdbm - No RPM, Installed with pip
+  ignore_errors: true
   retries: 5
   delay: 10
   register: result
   until: result is success
-  tags:
-    - molecule-idempotence-notest
 
-- name: Install system packages
-  apt:
-    name:
-      - sudo
-      - software-properties-common
-      - build-essential
-      - supervisor
-      - openssl
-      - libssl-dev
-      - libffi-dev
-      - python3
-      - virtualenv
-      - cron
-      # needed to generate SSH key for push updates
-      - openssh-client
-      - logrotate
-      # required for celerybeat
-      - python3-gdbm
+- name: Install PIP packages
+  ansible.builtin.pip:
+    name: gdbm_compat
   ignore_errors: true
   retries: 5
   delay: 10
@@ -40,13 +58,13 @@
   until: result is success
 
 - name: Install nginx
-  apt:
+  dnf:
     name: nginx
   when: openwisp2_nginx_install
 
 - name: Install redis
-  apt:
-    name: redis-server
+  dnf:
+    name: redis
   notify:
     - Reload systemd
     - Start redis
@@ -73,11 +91,11 @@
     state: started
 
 - name: Install geographic libraries
-  apt:
+  dnf:
     name:
-      - gdal-bin
-      - libproj-dev
-      - libgeos-dev
+      - gdal
+      - proj-devel
+      - geos-devel
   retries: 5
   delay: 10
   register: result
@@ -85,10 +103,10 @@
 
 - name: Install spatialite
   when: openwisp2_database.engine == "django.contrib.gis.db.backends.spatialite"
-  apt:
+  dnf:
     name:
-      - sqlite3
-      - libspatialite-dev
+      - sqlite
+      - libspatialite-devel
   retries: 5
   delay: 10
   register: result
@@ -97,8 +115,8 @@
 
 - name: Install postgresql client drivers
   when: openwisp2_database.engine == "django.contrib.gis.db.backends.postgis"
-  apt:
-    name: libpq-dev
+  dnf:
+    name: libpq-devel
   retries: 5
   delay: 10
   register: result
@@ -106,27 +124,18 @@
 
 - name: Install cairo
   when: openwisp2_radius
-  apt:
+  dnf:
     name:
-      - libcairo2
-      - libpango-1.0-0
-      - libpangocairo-1.0-0
-      - libgdk-pixbuf2.0-0
+      - cairo
+      - pango
+      # - libpangocairo-1.0-0 - TODO
+      - gdk-pixbuf2
       - shared-mime-info
   tags: [openwisp2, radius]
 
-- name: Install mod-spatialite (may fail on older linux distros)
-  when: openwisp2_database.engine == "django.contrib.gis.db.backends.spatialite"
-  apt: name=libsqlite3-mod-spatialite
-  ignore_errors: true
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
-
 # fixes issue described in https://docs.ansible.com/ansible/become.html#becoming-an-unprivileged-user
 - name: Install acl if acting as non-root user
-  apt: name=acl
+  dnf: name=acl
   when: ansible_user is not defined or ansible_user != 'root'
   retries: 5
   delay: 10
@@ -135,72 +144,29 @@
   ignore_errors: true
 
 - name: Ensure supervisor is started
-  service: name=supervisor state=started
-
-- name: Should Install Python 3.7
-  block:
-    - name: Check installed python version
-      command: "{{ openwisp2_python }} --version"
-      register: openwisp2_installed_python
-      changed_when: false
-    - name: Check openwisp2 should install python 3.7
-      set_fact:
-        openwisp2_should_install_python_37: |
-          {{ ansible_python_version is version_compare('3.7', 'lt') }}
-
-- name: Install Python 3.7 and required packages from ppa:deadsnakes/ppa
-  block:
-    - name: Install software-properties-common
-      apt:
-        name:
-          - software-properties-common
-      ignore_errors: true
-      retries: 5
-      delay: 10
-      register: result
-      until: result is success
-    - name: Add deadsnakes PPA
-      apt_repository:
-        repo: ppa:deadsnakes/ppa
-        state: present
-    - name: Install Python 3.7
-      apt:
-        name:
-          - python3.7
-          - python3.7-dev
-          - python3.7-venv
-      ignore_errors: true
-      retries: 5
-      delay: 10
-      register: result
-      until: result is success
-    - name: Set python 3.7
-      set_fact:
-        openwisp2_python: python3.7
-  when: openwisp2_should_install_python_37
+  service: name=supervisord state=started
 
 - name: Install python3 packages
-  apt:
+  dnf:
     name:
       - python3-pip
-      - python3-dev
+      - python3-devel
       - python3-virtualenv
   retries: 5
   delay: 10
   register: result
   until: result is success
-  when: not openwisp2_should_install_python_37
 
-- name: Install ntp
-  when: openwisp2_install_ntp
-  apt: name=ntp
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
+    #- name: Install ntp
+    #  when: openwisp2_install_ntp
+    #dnf: name=ntp
+    #retries: 5
+    #delay: 10
+    #register: result
+    #until: result is success
 
 - name: Install gettext
-  apt:
+  dnf:
     name: gettext
   when: openwisp2_internationalization
   retries: 5
@@ -210,7 +176,7 @@
 
 - name: Install fping
   when: openwisp2_monitoring
-  apt:
+  dnf:
     name:
       - fping
   retries: 5

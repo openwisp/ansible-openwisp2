@@ -1,0 +1,26 @@
+---
+- name: Open port 80 in firewalld
+  ansible.posix.firewalld:
+    service: http
+    permanent: true
+    immediate: true
+    state: enabled
+
+- name: Open port 443 in firewalld
+  ansible.posix.firewalld:
+    service: https
+    permanent: true
+    immediate: true
+    state: enabled
+
+- name: Copy SELinux policy
+  copy:
+    src: files/nginx-socket.te
+    dest: /tmp/nginx-socket.te
+
+- name: Compile and install SELinux policy
+  ansible.builtin.shell: "{{ item }}"
+  with_items:
+    - checkmodule -M -m -o /tmp/nginx-socket.mod /tmp/nginx-socket.te
+    - semodule_package -o /tmp/nginx-socket.pp -m /tmp/nginx-socket.mod
+    - semodule -i /tmp/nginx-socket.pp
