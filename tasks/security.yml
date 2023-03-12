@@ -6,6 +6,7 @@
     immediate: true
     state: enabled
 
+
 - name: Open port 443 in firewalld
   ansible.posix.firewalld:
     service: https

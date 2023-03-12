@@ -44,6 +44,7 @@
 
 - import_tasks: security.yml
   tags: [openwisp2, security]
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
 
 - import_tasks: complete.yml
   tags: [openwisp2]
