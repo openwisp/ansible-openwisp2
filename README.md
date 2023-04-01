@@ -367,8 +367,9 @@ and assign an IP address to the VM.
 Make sure you can access your VM via ssh:
 
 ```bash
-ssh 192.168.56.2
+ssh username@192.168.56.2
 ```
+  Replace `username` with the username of your VM.
 
 #### Back to your local machine
 
@@ -387,8 +388,9 @@ Create an ansible inventory file named `hosts` **in your working directory**
 
 ```
 [openwisp2]
-192.168.56.2
+username@192.168.56.2
 ```
+  Replace username with the username of your VM.
 
 **Step 5**: Create the ansible playbook
 
