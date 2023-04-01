@@ -390,7 +390,7 @@ Create an ansible inventory file named `hosts` **in your working directory**
 [openwisp2]
 username@192.168.56.2
 ```
-  Replace username with the username of your VM.
+  Replace `username` with the username of your VM.
 
 **Step 5**: Create the ansible playbook
 
