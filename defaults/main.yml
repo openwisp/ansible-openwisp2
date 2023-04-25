@@ -26,6 +26,7 @@ openwisp2_websocket_extra_routes: []
 openwisp2_path: "/opt/openwisp2"
 openwisp2_default_from_email: "openwisp2@{{ inventory_hostname }}"
 openwisp2_email_backend: "djcelery_email.backends.CeleryEmailBackend"
+openwisp2_email_timeout: 10
 openwisp2_database:
     engine: "django.contrib.gis.db.backends.spatialite"
     name: "{{ openwisp2_path }}/db.sqlite3"
@@ -110,6 +111,7 @@ openwisp2_timeseries_database:
 openwisp2_monitoring_default_retention_policy: "26280h0m0s"  # 3 years
 openwisp2_nginx_access_log: "{{ openwisp2_path }}/log/nginx.access.log"
 openwisp2_nginx_error_log: "{{ openwisp2_path }}/log/nginx.error.log error"
+openwisp2_celerybeat: true
 # keep backward compatibility with old variable openwisp2_eventlet_concurrency
 openwisp2_celery_concurrency: "{{ openwisp2_eventlet_concurrency | default(1) }}"
 openwisp2_celery_autoscale: null
@@ -141,6 +143,13 @@ openwisp2_uwsgi_processes: 1
 openwisp2_uwsgi_threads: 1
 openwisp2_uwsgi_listen: 100
 openwisp2_uwsgi_socket: "{{ openwisp2_path }}/uwsgi.sock"
+openwisp2_uwsgi_extra_conf: |
+  single-interpreter=True
+  log-4xx=True
+  log-5xx=True
+  disable-logging=True
+  auto-procname=True
+openwisp2_daphne_install: true
 openwisp2_daphne_processes: 1
 openwisp2_daphne_websocket_timeout: 3600  # in seconds
 # internationalization
@@ -178,6 +187,7 @@ freeradius_rest:
     url: "https://{{ inventory_hostname }}/api/v1/freeradius"
 freeradius_expire_attr_after_seconds: 86400
 freeradius_safe_characters: "+@abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_: /"
+freeradius_openwisp_site_listen_ipaddr: "*"
 cron_delete_old_notifications: "'hour': 0, 'minute': 0"
 cron_deactivate_expired_users: "'hour': 0, 'minute': 5"
 cron_delete_old_users: "'hour': 0, 'minute': 10"

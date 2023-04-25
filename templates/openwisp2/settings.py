@@ -390,6 +390,7 @@ LEAFLET_CONFIG['RESET_VIEW'] = False
 # Set default email
 DEFAULT_FROM_EMAIL = '{{ openwisp2_default_from_email }}'
 EMAIL_BACKEND = '{{ openwisp2_email_backend }}'
+EMAIL_TIMEOUT = {{ openwisp2_email_timeout }}
 # See http://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.
 LOGGING = {

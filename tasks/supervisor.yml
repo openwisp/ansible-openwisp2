@@ -19,6 +19,7 @@
     src: supervisor/daphne.j2
     dest: "{{ supervisor_path | format('daphne') }}"
     mode: 0644
+  when: openwisp2_daphne_install
   notify: Update supervisor configuration
 
 - name: Template for supervisor celery
@@ -57,6 +58,7 @@
     src: supervisor/celerybeat.j2
     dest: "{{ supervisor_path | format('celerybeat') }}"
     mode: 0644
+  when: openwisp2_celerybeat
   notify: Update supervisor configuration
 
 - name: Remove supervisor runworker.conf (obsolete)

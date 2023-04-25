@@ -835,15 +835,22 @@ Below are listed all the variables you can customize (you may also want to take 
     # uses "CeleryEmailBackend" from django-celery-email.
     # (https://github.com/pmclanahan/django-celery-email)
     openwisp2_email_backend: "djcelery_email.backends.CeleryEmailBackend"
+    # Email timeout in seconds used by Django for blocking operations
+    # like connection attempts. For more info read the Django documentation,
+    # https://docs.djangoproject.com/en/3.2/ref/settings/#email-timeout.
+    # Defaults to 10 seconds.
+    openwisp2_email_timeout: 5
     # edit database settings only if you are not using sqlite
+    # eg, for deploying with PostgreSQL (recommended for production usage)
+    # you will need the PostGIS spatial extension, find more info at:
+    # https://docs.djangoproject.com/en/4.1/ref/contrib/gis/tutorial/
     openwisp2_database:
-        engine: django.db.backends.postgresql
-        name: openwisp2
-        user: postgres
-        password: ""
-        host: ""
-        port: ""
-        options: {}
+        engine: django.contrib.gis.db.backends.postgis
+        name: "{{ DB_NAME }}"
+        user: "{{ DB_USER }}"
+        host: "{{ DB_HOST }}"
+        password: "{{ DB_PASSWORD }}"
+        port: 5432
     # SPATIALITE_LIBRARY_PATH django setting
     # The role will attempt determining the right mod-spatialite path automatically
     # But you can use this variable to customize the path or fix future arising issues
@@ -958,11 +965,22 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_uwsgi_threads: 2
     # value of the listen queue of uWSGI
     openwisp2_uwsgi_listen: 100
-    # number of daphne process to spawn. Default value is 1
-    openwisp2_daphne_processes: 2
     # socket on which uwsgi should listen. Defaults to UNIX socket
     # at "{{ openwisp2_path }}/uwsgi.sock"
     openwisp2_uwsgi_socket: 127.0.0.1:8000
+    # extra uwsgi configuration parameters that cannot be
+    # configured using dedicated ansible variables
+    openwisp2_uwsgi_extra_conf: |
+      single-interpreter=True
+      log-4xx=True
+      log-5xx=True
+      disable-logging=True
+      auto-procname=True
+    # whether daphne should be installed
+    # must be enabled for serving websocket requests
+    openwisp2_daphne_install: true
+    # number of daphne process to spawn. Default value is 1
+    openwisp2_daphne_processes: 2
     # maximum time to allow a websocket to be connected (in seconds)
     openwisp2_daphne_websocket_timeout: 1800
     # the following setting controls which ip address range
@@ -1009,6 +1027,10 @@ Below are listed all the variables you can customize (you may also want to take 
     # celery queuing mode for the default queue,
     # leaving the default will work for most cases
     openwisp2_celery_optimization: default
+    # whether the dedicated celerybeat worker is enabled which is
+    # responsible for triggering periodic tasks
+    # must be turned on unless there's another server running celerybeat
+    openwisp2_celerybeat: true
     # whether the dedicated worker for the celery "network" queue is enabled
     # must be turned on unless there's another server running a worker for this queue
     openwisp2_celery_network: true
@@ -1132,6 +1154,9 @@ Below are listed all the variables you can customize (you may also want to take 
     # Sets the source path of the template that contains freeradius site configuration.
     # Defaults to "templates/freeradius/openwisp_site.j2" shipped in the role.
     freeradius_openwisp_site_template_src: custom_freeradius_site.j2
+    # FreeRADIUS listen address for the openwisp_site.
+    # Defaults to "*", i.e. listen on all interfaces.
+    freeradius_openwisp_site_listen_ipaddr: "10.8.0.1"
     cron_delete_old_notifications: "'hour': 0, 'minute': 0"
     cron_deactivate_expired_users: "'hour': 0, 'minute': 5"
     cron_delete_old_users: "'hour': 0, 'minute': 10"
