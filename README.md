@@ -645,6 +645,87 @@ This is helpful for [customizing OpenWISP's theme](https://github.com/openwisp/o
 E.g., if you added a custom CSS file in `files/ow2_static/css/custom.css`, the
 file location to use in [OPENWISP_ADMIN_THEME_LINKS](https://github.com/openwisp/openwisp-utils#openwisp_admin_theme_links) setting will be `css/custom.css`.
 
+Deploying the upcoming release of OpenWISP
+==========================================
+
+The following steps will help you set up and install the new version of OpenWISP
+which is not released yet, but ships new features and fixes.
+
+Create a directory for organizing your playbook, roles and collections. In this example,
+`openwisp-dev` is used. Create `roles` and `collections` directories in `~/openwisp-dev`.
+
+```
+mkdir -p ~/openwisp-dev/roles
+mkdir -p ~/openwisp-dev/collections
+```
+
+Change directory to `~/openwisp-dev/` in terminal and create configuration
+and requirement files for Ansible.
+
+```
+cd ~/openwisp-dev/
+touch ansible.cfg
+touch requirements.yml
+```
+
+Setup `roles_path` and `collections_paths` variables in `ansible.cfg` as follows:
+
+```
+[defaults]
+roles_path=~/openwisp-dev/roles
+collections_paths=~/openwisp-dev/collections
+```
+
+Ensure your `requirements.yml` contains following content:
+
+```yml
+---
+roles:
+  - src: https://github.com/openwisp/ansible-openwisp2.git
+    version: master
+    name: openwisp.openwisp2-dev
+collections:
+  - name: community.general
+    version: ">=3.6.0"
+```
+
+Install requirements from the `requirements.yml` as follows
+
+```
+ansible-galaxy install -r requirements.yml
+```
+
+Now, create hosts file and playbook.yml:
+
+```
+touch hosts
+touch playbook.yml
+```
+
+Follow instructions in ["Create inventory file"](#create-inventory-file) section to
+configure `hosts` file.
+
+You can reference the example playbook below (tested on Debian 11 with ansible 2.10.9)
+for installing a fully-featured version of OpenWISP.
+
+```yml
+- hosts: openwisp2
+  become: "{{ become | default('yes') }}"
+  roles:
+    - openwisp.openwisp2-dev
+  vars:
+    openwisp2_network_topology: true
+    openwisp2_firmware_upgrader: true
+    openwisp2_radius: true
+    openwisp2_monitoring: true # monitoring is enabled by default
+```
+
+Read ["Role Variables"](#role-variables) section to learn about
+available configuration variables.
+
+Follow instructions in ["Run the playbook"](#run-the-playbook) section to
+run above playbook.
+
 Troubleshooting
 ===============
 
