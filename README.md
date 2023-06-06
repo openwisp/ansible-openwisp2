@@ -993,6 +993,9 @@ Below are listed all the variables you can customize (you may also want to take 
     # controller URL are enabled by default
     # but can be disabled in multi-VM installations if needed
     openwisp2_controller_urls: true
+    # The default retention policy that applies to the timeseries data
+    # https://github.com/openwisp/openwisp-monitoring#openwisp-monitoring-default-retention-policy
+    openwisp2_monitoring_default_retention_policy: "26280h0m0s" # 3 years
     # whether NGINX should be installed
     openwisp2_nginx_install: true
     # spdy protocol support (disabled by default)

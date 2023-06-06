@@ -486,6 +486,7 @@ TIMESERIES_DATABASE = {
     'HOST': '{{ openwisp2_timeseries_database.host }}',
     'PORT': '{{ openwisp2_timeseries_database.port }}',
 }
+OPENWISP_MONITORING_DEFAULT_RETENTION_POLICY = '{{ openwisp2_monitoring_default_retention_policy }}'
 {% endif %}
 
 {% for setting, value in openwisp2_extra_django_settings.items() %}
