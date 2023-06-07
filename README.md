@@ -130,6 +130,10 @@ collection installed
 
     ansible-galaxy collection install "community.general:>=3.6.0"
 
+Ensure that you have `ansible.posix` installed
+
+    ansible-galaxy collection install "ansible.posix"
+
 Choose a working directory
 --------------------------
 
