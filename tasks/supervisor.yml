@@ -1,4 +1,13 @@
 ---
+- name: Set uid to www-data for Debian/Ubuntu
+  set_fact:
+    openwisp2_uwsgi_uid: "www-data"
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Set uid to nginx for RHEL/CentOS
+  set_fact:
+    openwisp2_uwsgi_uid: "nginx"
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
 
 - name: Template for uwsgi.ini
   template:

@@ -75,6 +75,9 @@
 - name: Update-ca-certificates
   command: /usr/sbin/update-ca-certificates
 
+- name: Update-ca-trust
+  command: /bin/update-ca-trust
+
 - name: Restart freeradius
   service:
     name: freeradius

@@ -1,0 +1,16 @@
+
+module nginx-socket 1.0;
+
+require {
+        type usr_t;
+        type httpd_t;
+        type unconfined_service_t;
+        class file append;
+        class sock_file write;
+        class unix_stream_socket connectto;
+}
+
+#============= httpd_t ==============
+allow httpd_t unconfined_service_t:unix_stream_socket connectto;
+allow httpd_t usr_t:file append;
+allow httpd_t usr_t:sock_file write;

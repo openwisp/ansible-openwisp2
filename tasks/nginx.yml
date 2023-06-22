@@ -35,7 +35,7 @@
     -extensions v3_ca creates={{ openwisp2_ssl_cert }}
   notify: Restart nginx
 
-- name: Copy SSL cert to be added to trusted Cert (for freeradius)
+- name: Copy SSL cert to be added to trusted Cert (for freeradius) Debian/Ubuntu
   copy:
     src: "{{ openwisp2_ssl_cert }}"
     dest: /usr/local/share/ca-certificates/openwisp-ssl-server.crt
@@ -44,6 +44,25 @@
     group: "root"
     mode: "0644"
   notify: Update-ca-certificates
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Create a cert whitelist directory if it doesn't exist on RHEL/CentOS
+  ansible.builtin.file:
+    path: /etc/pki/ca-trust/source/whitelist/
+    state: directory
+    mode: '0755'
+  when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
+
+- name: Copy SSL cert to be added to trusted Cert (for freeradius) RHEL/CentOS
+  copy:
+    src: "{{ openwisp2_ssl_cert }}"
+    dest: /etc/pki/ca-trust/source/whitelist/openwisp-ssl-server.crt
+    remote_src: true
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  notify: Update-ca-trust
+  when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
 
 - name: Disable default nginx configuration
   file:
@@ -64,19 +83,29 @@
     mode: 0644
   notify: Restart nginx
 
-- name: Nginx site available
+- name: Nginx site available Debian/Ubuntu
   template:
     src: nginx/site-conf.j2
     dest: "/etc/nginx/sites-available/{{ inventory_hostname }}"
     mode: 0644
   notify: Restart nginx
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
-- name: Nginx site enabled
+- name: Nginx site enabled Debian/Ubuntu
   file:
     src: "/etc/nginx/sites-available/{{ inventory_hostname }}"
     dest: "/etc/nginx/sites-enabled/{{ inventory_hostname }}"
     state: link
   notify: Restart nginx
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Nginx site available RHEL/CentOS
+  template:
+    src: nginx/site-conf.j2
+    dest: "/etc/nginx/conf.d/{{ inventory_hostname }}.conf"
+    mode: 0644
+  notify: Restart nginx
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
 
 - name: Configure nginx log rotation
   template:

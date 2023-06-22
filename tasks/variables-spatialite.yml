@@ -8,3 +8,8 @@
     and ansible_distribution_version is version_compare('18.04', 'ge'))
     or (ansible_distribution == 'Debian' and
     ansible_distribution_version is version_compare('10', 'ge'))
+
+- name: Set spatialite_path (RHEL and CentOS)
+  set_fact:
+    openwisp2_spatialite_path: "mod_spatialite.so"
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
