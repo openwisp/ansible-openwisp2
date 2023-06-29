@@ -1,21 +1,33 @@
 ---
 
+# Systems deployed with older version of ansible-openwisp2 use RSA keys.
+# We keep using the old RSA key and don't change the SSH keys inadvertently.
+- name: Check if /root/.ssh/id_rsa exists
+  become: true
+  stat:
+    path: /root/.ssh/id_rsa
+  register: rsa_key_file
+
+- name: Set SSH key file name
+  set_fact:
+    ssh_file_name: "{{ 'id_rsa' if rsa_key_file.stat.exists else 'id_ed25519' }}"
+
 - name: Create default SSH key pair
   become: true
   user:
     name: root
     generate_ssh_key: true
-    ssh_key_bits: 4096
-    ssh_key_file: .ssh/id_rsa
+    ssh_key_type: ed25519
+    ssh_key_file: ".ssh/{{ ssh_file_name }}"
 
 - name: Get default private SSH key
   become: true
-  command: cat /root/.ssh/id_rsa
+  command: "cat /root/.ssh/{{ ssh_file_name }}"
   register: default_private_ssh_key
   changed_when: false
 
 - name: Get default public SSH key
   become: true
-  command: cat /root/.ssh/id_rsa.pub
+  command: " cat /root/.ssh/{{ ssh_file_name }}.pub"
   register: default_public_ssh_key
   changed_when: false
