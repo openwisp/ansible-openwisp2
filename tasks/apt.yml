@@ -44,7 +44,6 @@
   apt:
     name: redis-server
   notify:
-    - Reload systemd
     - Start redis
   when: openwisp2_redis_install
 
@@ -89,7 +88,6 @@
   delay: 10
   register: result
   until: result is success
-  notify: Reload systemd
 
 - name: Install postgresql client drivers
   when: openwisp2_database.engine == "django.contrib.gis.db.backends.postgis"
@@ -133,48 +131,6 @@
 - name: Ensure supervisor is started
   service: name=supervisor state=started
 
-- name: Should Install Python 3.7
-  block:
-    - name: Check installed python version
-      command: "{{ openwisp2_python }} --version"
-      register: openwisp2_installed_python
-      changed_when: false
-    - name: Check openwisp2 should install python 3.7
-      set_fact:
-        openwisp2_should_install_python_37: |
-          {{ ansible_python_version is version_compare('3.7', 'lt') }}
-
-- name: Install Python 3.7 and required packages from ppa:deadsnakes/ppa
-  block:
-    - name: Install software-properties-common
-      apt:
-        name:
-          - software-properties-common
-      ignore_errors: true
-      retries: 5
-      delay: 10
-      register: result
-      until: result is success
-    - name: Add deadsnakes PPA
-      apt_repository:
-        repo: ppa:deadsnakes/ppa
-        state: present
-    - name: Install Python 3.7
-      apt:
-        name:
-          - python3.7
-          - python3.7-dev
-          - python3.7-venv
-      ignore_errors: true
-      retries: 5
-      delay: 10
-      register: result
-      until: result is success
-    - name: Set python 3.7
-      set_fact:
-        openwisp2_python: python3.7
-  when: openwisp2_should_install_python_37
-
 - name: Install python3 packages
   apt:
     name:
@@ -185,7 +141,6 @@
   delay: 10
   register: result
   until: result is success
-  when: not openwisp2_should_install_python_37
 
 - name: Install ntp
   when: openwisp2_install_ntp

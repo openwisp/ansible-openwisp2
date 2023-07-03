@@ -28,14 +28,14 @@ galaxy_info:
         # (send patch if you want this to be supported!)
         # https://github.com/openwisp/ansible-openwisp2/issues/169#issuecomment-592983139
         # - stretch
-        - buster
+        # - buster
         - bullseye
     - name: Ubuntu
       versions:
         # (send patch if you want this to be supported!)
         # https://github.com/openwisp/ansible-openwisp2/issues/169#issuecomment-592983139
         # - xenial
-        - bionic
+        # - bionic
         - focal
         - jammy
   # we don't have the resources now to maintain these distros

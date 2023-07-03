@@ -48,17 +48,6 @@
   tags:
     - molecule-idempotence-notest
 
-- name: Add freeradius repository into Ubuntu bionic sources list
-  shell: |
-    echo "deb http://packages.networkradius.com/freeradius-3.0/ubuntu/bionic bionic main" | \
-    tee /etc/apt/sources.list.d/networkradius.list > /dev/null
-  become: true
-  when:
-    - ansible_distribution|string == 'Ubuntu'
-    - ansible_distribution_release|string == 'bionic'
-  tags:
-    - molecule-idempotence-notest
-
 - name: Add freeradius repository into Ubuntu xenial sources list and Network RADIUS PGP public key
   shell: |
     echo "deb http://packages.networkradius.com/freeradius-3.0/ubuntu/xenial xenial main" | \
@@ -80,17 +69,6 @@
   when:
     - ansible_distribution|string == 'Debian'
     - ansible_distribution_release|string == 'bullseye'
-  tags:
-    - molecule-idempotence-notest
-
-- name: Add freeradius repository into Debian buster sources list
-  shell: |
-    echo "deb http://packages.networkradius.com/freeradius-3.0/debian/buster buster main" | \
-    sudo tee /etc/apt/sources.list.d/networkradius.list > /dev/null
-  become: true
-  when:
-    - ansible_distribution|string == 'Debian'
-    - ansible_distribution_release|string == 'buster'
   tags:
     - molecule-idempotence-notest
 

@@ -10,7 +10,7 @@ ansible-openwisp2
 
 Ansible role that installs the OpenWISP Server Application.
 
-Tested on **Debian (Buster, Bullseye)**, **Ubuntu (18/20/22 LTS)**.
+Tested on **Debian (Bullseye)**, **Ubuntu (20/22 LTS)**.
 
 **NOTE**: it is highly suggested to use this procedure on clean virtual machines or linux containers.
 
@@ -291,8 +291,6 @@ If you haven't installed docker yet, you need to install it (example for linux d
 
     docker pull geerlingguy/docker-ubuntu2204-ansible:latest
     docker pull geerlingguy/docker-ubuntu2004-ansible:latest
-    docker pull geerlingguy/docker-ubuntu1804-ansible:latest
-    docker pull geerlingguy/docker-debian10-ansible:latest
     docker pull geerlingguy/docker-debian11-ansible:latest
 
 **Step 5**: Run molecule test
@@ -326,7 +324,7 @@ customisations of *OpenWISP*.
 ### Installing Debian 9 on VirtualBox
 
 Install [VirtualBox](https://virtualbox.org) and create a new Virtual Machine running
-Debian 10. A step-by-step guide is available
+Debian 11. A step-by-step guide is available
 [here](http://www.brianlinkletter.com/installing-debian-linux-in-a-virtualbox-virtual-machine/),
 however we need to change a few things to get ansible working.
 
@@ -936,7 +934,7 @@ Below are listed all the variables you can customize (you may also want to take 
     # SPATIALITE_LIBRARY_PATH django setting
     # The role will attempt determining the right mod-spatialite path automatically
     # But you can use this variable to customize the path or fix future arising issues
-    openwisp2_spatialite_path: null
+    openwisp2_spatialite_path: "mod_spatialite.so"
     # customize other django settings:
     openwisp2_language_code: en-gb
     openwisp2_time_zone: UTC
