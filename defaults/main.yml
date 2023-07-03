@@ -14,7 +14,7 @@ openwisp2_network_topology_version: "openwisp-network-topology @ https://github.
 openwisp2_firmware_upgrader_version: "openwisp-firmware-upgrader @ https://github.com/openwisp/openwisp-firmware-upgrader/tarball/master"
 openwisp2_monitoring_version: "openwisp-monitoring @ https://github.com/openwisp/openwisp-monitoring/tarball/master"
 openwisp2_radius_version: "openwisp-radius @ https://github.com/openwisp/openwisp-radius/tarball/master"
-openwisp2_django_version: "{{ 'django~=4.0.0' if ansible_distribution_release | string in ['focal', 'bullseye'] else 'django~=3.2.13' }}"
+openwisp2_django_version: "django~=4.2.0"
 openwisp2_extra_python_packages:
     - bpython
     - "drf-yasg==1.21.5"
