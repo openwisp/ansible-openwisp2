@@ -21,10 +21,8 @@ jobs:
       fail-fast: false
       matrix:
         distro:
-          - ubuntu1804
           - ubuntu2004
           - ubuntu2204
-          - debian10
           - debian11
 
     steps:

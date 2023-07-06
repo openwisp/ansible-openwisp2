@@ -52,7 +52,6 @@
     - molecule-idempotence-notest
 
 - name: Install channels-redis~=3.4.0
-  when: ansible_distribution_release not in ['buster', 'bionic']
   pip:
     name:
       - channels-redis~=3.4.0
@@ -65,23 +64,6 @@
   delay: 10
   register: result
   until: result is success
-
-- name: Install channels-redis~=2.4.0 for redis 4 compatibility
-  when: ansible_distribution_release in ['buster', 'bionic']
-  pip:
-    name:
-      - channels-redis~=2.4.0
-    state: latest
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-  environment:
-    SETUPTOOLS_USE_DISTUTILS: stdlib
-  retries: 1
-  delay: 10
-  register: result
-  until: result is success
-  tags:
-    - molecule-idempotence-notest
 
 - name: Install django-redis
   pip:
@@ -184,11 +166,6 @@
   pip:
     name: "{{ openwisp2_extra_python_packages }}"
     state: latest
-    # fixes bug #263, remove when support for Ubuntu 18.04 is dropped
-    extra_args: |
-      {% if ansible_distribution == 'Ubuntu' and ansible_distribution_version is version_compare('18.04', 'le') %}
-        --no-use-pep517
-      {% endif %}
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
   environment:

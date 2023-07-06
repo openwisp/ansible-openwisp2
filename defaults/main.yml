@@ -14,9 +14,10 @@ openwisp2_network_topology_version: "openwisp-network-topology @ https://github.
 openwisp2_firmware_upgrader_version: "openwisp-firmware-upgrader @ https://github.com/openwisp/openwisp-firmware-upgrader/tarball/master"
 openwisp2_monitoring_version: "openwisp-monitoring @ https://github.com/openwisp/openwisp-monitoring/tarball/master"
 openwisp2_radius_version: "openwisp-radius @ https://github.com/openwisp/openwisp-radius/tarball/master"
-openwisp2_django_version: "{{ 'django~=4.0.0' if ansible_distribution_release | string in ['focal', 'bullseye'] else 'django~=3.2.13' }}"
+openwisp2_django_version: "django~=4.2.0"
 openwisp2_extra_python_packages:
     - bpython
+    - "drf-yasg==1.21.5"
 openwisp2_extra_django_apps: []
 openwisp2_extra_django_settings: {}
 openwisp2_extra_django_settings_instructions: []
@@ -29,14 +30,14 @@ openwisp2_default_from_email: "openwisp2@{{ inventory_hostname }}"
 openwisp2_email_backend: "djcelery_email.backends.CeleryEmailBackend"
 openwisp2_email_timeout: 10
 openwisp2_database:
-    engine: "django.contrib.gis.db.backends.spatialite"
+    engine: "openwisp_utils.db.backends.spatialite"
     name: "{{ openwisp2_path }}/db.sqlite3"
     user: ""
     password: ""
     host: ""
     port: ""
     options: {}
-openwisp2_spatialite_path: null
+openwisp2_spatialite_path: "mod_spatialite.so"
 openwisp2_language_code: "en-gb"
 openwisp2_time_zone: "UTC"
 openwisp2_context: {}
@@ -173,6 +174,9 @@ freeradius_sites_enabled_dir: "{{ freeradius_dir }}/sites-enabled"
 freeradius_openwisp_site_template_src: freeradius/openwisp_site.j2
 freeradius_db_map:
     django.contrib.gis.db.backends.spatialite:
+        driver: rlm_sql_sqlite
+        dialect: sqlite
+    openwisp_utils.db.backends.spatialite:
         driver: rlm_sql_sqlite
         dialect: sqlite
     django.contrib.gis.db.backends.postgis:

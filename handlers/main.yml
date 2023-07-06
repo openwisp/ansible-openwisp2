@@ -1,10 +1,5 @@
 ---
 
-- name: Reload systemd
-  systemd:
-    daemon_reload: true
-  when: ansible_distribution_release in ['bionic'] and ansible_service_mgr == 'systemd'
-
 - name: Update supervisor configuration
   command: supervisorctl update all
   register: supervisord_update_all

@@ -25,27 +25,11 @@ galaxy_info:
   platforms:
     - name: Debian
       versions:
-        # (send patch if you want this to be supported!)
-        # https://github.com/openwisp/ansible-openwisp2/issues/169#issuecomment-592983139
-        # - stretch
-        - buster
         - bullseye
     - name: Ubuntu
       versions:
-        # (send patch if you want this to be supported!)
-        # https://github.com/openwisp/ansible-openwisp2/issues/169#issuecomment-592983139
-        # - xenial
-        - bionic
         - focal
         - jammy
-  # we don't have the resources now to maintain these distros
-  # - name: Fedora
-  #   versions:
-  #   - 27
-  #   - 28
-  # - name: EL
-  #   versions:
-  #   - 7
   galaxy_tags:
     - system
     - networking
