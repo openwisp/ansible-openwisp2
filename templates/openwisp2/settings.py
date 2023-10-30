@@ -142,6 +142,7 @@ MIDDLEWARE = [
     {% endif %}
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'openwisp_users.middleware.PasswordExpirationMiddleware',
     'pipeline.middleware.MinifyHTMLMiddleware'
 ]
 
@@ -235,6 +236,10 @@ CELERY_BROKER_TRANSPORT_OPTIONS = {
 }
 
 CELERY_BEAT_SCHEDULE = {
+    'password_expiry_email': {
+        'task': 'openwisp_users.tasks.password_expiration_email',
+        'schedule': crontab(hour=1, minute=0),
+    },
     'delete_old_notifications': {
         'task': 'openwisp_notifications.tasks.delete_old_notifications',
         'schedule': crontab(**{ {{ cron_delete_old_notifications }} }),
@@ -363,6 +368,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
     {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
+    {'NAME': 'openwisp_users.password_validation.PasswordReuseValidator'}
 ]
 
 # Internationalization
