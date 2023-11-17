@@ -142,7 +142,9 @@ MIDDLEWARE = [
     {% endif %}
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    {% if openwisp2_users_user_password_expiration or openwisp2_users_staff_user_password_expiration %}
     'openwisp_users.middleware.PasswordExpirationMiddleware',
+    {% endif %}
     'pipeline.middleware.MinifyHTMLMiddleware'
 ]
 
@@ -172,6 +174,12 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 
 # SMS settings
 OPENWISP_RADIUS_SMS_TOKEN_MAX_IP_DAILY = {{ openwisp2_radius_sms_token_max_ip_daily }}
+{% if openwisp2_radius_unverify_inactive_users %}
+OPENWISP_RADIUS_UNVERIFY_INACTIVE_USERS = {{ openwisp2_radius_unverify_inactive_users }}
+{% endif %}
+{% if openwisp2_radius_delete_inactive_users %}
+OPENWISP_RADIUS_DELETE_INACTIVE_USERS = {{ openwisp2_radius_delete_inactive_users }}
+{% endif %}
 SENDSMS_BACKEND = '{{ openwisp2_radius_sms_backend }}'
 
 # django-sesame configuration for magic sign-in links.
@@ -184,6 +192,13 @@ SESAME_MAX_AGE = {{ openwisp2_django_sesame_max_age }}
 
 ROOT_URLCONF = 'openwisp2.urls'
 OPENWISP_USERS_AUTH_API = {{ openwisp2_users_auth_api }}
+{% if openwisp2_users_user_password_expiration %}
+OPENWISP_USERS_USER_PASSWORD_EXPIRATION = {{ openwisp2_users_user_password_expiration }}
+{% endif %}
+{% if openwisp2_users_staff_user_password_expiration %}
+OPENWISP_USERS_STAFF_USER_PASSWORD_EXPIRATION = {{ openwisp2_users_staff_user_password_expiration }}
+{% endif %}
+
 
 CHANNEL_LAYERS = {
     'default': {
@@ -236,10 +251,12 @@ CELERY_BROKER_TRANSPORT_OPTIONS = {
 }
 
 CELERY_BEAT_SCHEDULE = {
+{% if openwisp2_users_user_password_expiration or openwisp2_users_staff_user_password_expiration %}
     'password_expiry_email': {
         'task': 'openwisp_users.tasks.password_expiration_email',
-        'schedule': crontab(hour=1, minute=0),
+        'schedule': crontab(**{ {{ cron_password_expiration_email }} }),
     },
+{% endif %}
     'delete_old_notifications': {
         'task': 'openwisp_notifications.tasks.delete_old_notifications',
         'schedule': crontab(**{ {{ cron_delete_old_notifications }} }),
@@ -284,6 +301,20 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'openwisp_radius.tasks.delete_old_radacct',
         'schedule': crontab(**{ {{ cron_delete_old_radacct }} }),
         'args': [{{ openwisp2_radius_delete_old_radacct }}],
+        'relative': True,
+    },
+{% endif %}
+{% if openwisp2_radius_unverify_inactive_users %}
+    'unverify_inactive_users': {
+        'task': 'openwisp_radius.tasks.unverify_inactive_users',
+        'schedule': crontab(**{ {{ cron_unverify_inactive_users }} }),
+        'relative': True,
+    },
+{% endif %}
+{% if openwisp2_radius_delete_inactive_users %}
+    'delete_inactive_users': {
+        'task': 'openwisp_radius.tasks.delete_inactive_users',
+        'schedule': crontab(**{ {{ cron_delete_inactive_users }} }),
         'relative': True,
     },
 {% endif %}

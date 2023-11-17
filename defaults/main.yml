@@ -157,12 +157,16 @@ openwisp2_daphne_websocket_timeout: 3600  # in seconds
 # internationalization
 openwisp2_internationalization: false
 openwisp2_users_auth_api: true
+openwisp2_users_user_password_expiration: 0
+openwisp2_users_staff_user_password_expiration: 0
 openwisp2_radius_sms_backend: "sendsms.backends.console.SmsBackend"
 openwisp2_radius_sms_token_max_ip_daily: 25
 openwisp2_radius_delete_old_users: 365
 openwisp2_radius_cleanup_stale_radacct: 1
 openwisp2_radius_delete_old_postauth: 365
 openwisp2_radius_delete_old_radacct: 365
+openwisp2_radius_unverify_inactive_users: 0
+openwisp2_radius_delete_inactive_users: 0
 openwisp2_radius_allowed_hosts: ["127.0.0.1"]
 openwisp2_freeradius_install: true
 freeradius_dir: /etc/freeradius
@@ -198,7 +202,10 @@ cron_deactivate_expired_users: "'hour': 0, 'minute': 5"
 cron_delete_old_users: "'hour': 0, 'minute': 10"
 cron_cleanup_stale_radacct: "'hour': 0, 'minute': 20"
 cron_delete_old_postauth: "'hour': 0, 'minute': 30"
+cron_password_expiration_email: "'hour': 1, 'minute': 0"
 cron_delete_old_radacct: "'hour': 1, 'minute': 30"
+cron_unverify_inactive_users: "'hour': 1, 'minute': 45"
+cron_delete_inactive_users: "'hour': 1, 'minute': 55"
 # Cross-Origin Resource Sharing (CORS) settings
 openwisp2_django_cors:
     enabled: false
