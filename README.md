@@ -1199,6 +1199,12 @@ Below are listed all the variables you can customize (you may also want to take 
     # to add multi-language support
     openwisp2_internationalization: true
     openwisp2_users_auth_api: true
+    # Allows setting OPENWISP_USERS_USER_PASSWORD_EXPIRATION setting.
+    # Read https://github.com/openwisp/openwisp-users#openwisp_users_user_password_expiration
+    openwisp2_users_user_password_expiration: 30
+      # Allows setting OPENWISP_USERS_STAFF_USER_PASSWORD_EXPIRATION setting.
+    # Read https://github.com/openwisp/openwisp-users#openwisp_users_staff_user_password_expiration
+    openwisp2_users_staff_user_password_expiration: 30
     # used for SMS verification, the default is a dummy SMS backend
     # which prints to standard output and hence does nothing
     # one of the available providers from django-sendsms can be
@@ -1214,6 +1220,12 @@ Below are listed all the variables you can customize (you may also want to take 
     # we highly suggest to set this number according
     # to the privacy regulation of your jurisdiction
     openwisp2_radius_delete_old_radacct: 365
+    # days after which inactive users will flagged as unverified
+    # Read https://openwisp-radius.readthedocs.io/en/latest/user/settings.html#openwisp-radius-unverify-inactive-users
+    openwisp2_radius_unverify_inactive_users: 540
+    # days after which inactive users will be deleted
+    # Read https://openwisp-radius.readthedocs.io/en/latest/user/settings.html#openwisp-radius-delete-inactive-users
+    openwisp2_radius_delete_inactive_users: 540
     openwisp2_radius_allowed_hosts: ["127.0.0.1"]
     # this role provides a default configuration of freeradius
     # if you manage freeradius on a different machine or you need different configurations
@@ -1242,6 +1254,9 @@ Below are listed all the variables you can customize (you may also want to take 
     cron_cleanup_stale_radacct: "'hour': 0, 'minute': 20"
     cron_delete_old_postauth: "'hour': 0, 'minute': 30"
     cron_delete_old_radacct: "'hour': 1, 'minute': 30"
+    cron_password_expiration_email: "'hour': 1, 'minute': 0"
+    cron_unverify_inactive_users: "'hour': 1, 'minute': 45"
+    cron_delete_inactive_users: "'hour': 1, 'minute': 55"
     # cross-origin resource sharing (CORS) settings
     # https://pypi.org/project/django-cors-headers/
     openwisp2_django_cors:
