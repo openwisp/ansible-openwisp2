@@ -212,3 +212,4 @@ openwisp2_django_cors:
     allowed_origins_list: []
     replace_https_referer: false
 openwisp2_extra_supervisor_restart: []
+openwisp2_clean_insights_measurement_consent: null

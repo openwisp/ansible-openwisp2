@@ -72,6 +72,9 @@ INSTALLED_APPS = [
     # openwisp2 admin theme
     # (must be loaded here)
     'openwisp_utils.admin_theme',
+    {% if openwisp2_clean_insights_measurement_consent %}
+    'openwisp_utils.measurements',
+    {% endif %}
     'admin_auto_filters',
     # admin
     'django.contrib.admin',
@@ -316,6 +319,12 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'openwisp_radius.tasks.delete_inactive_users',
         'schedule': crontab(**{ {{ cron_delete_inactive_users }} }),
         'relative': True,
+    },
+{% endif %}
+{% if openwisp2_clean_insights_measurement_consent %}
+    'send_clean_insights_measurements': {
+        'task': 'openwisp_utils.measurements.tasks.send_clean_insights_measurements',
+        'schedule': timedelta(days=7),
     },
 {% endif %}
 {% endif %}

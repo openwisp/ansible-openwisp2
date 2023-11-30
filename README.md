@@ -1073,6 +1073,10 @@ Below are listed all the variables you can customize (you may also want to take 
     openwisp2_extra_supervisor_restart:
         - name: my_custom_service
           when: my_custom_service_enabled
+    # Disable Clean Insights measurements collection.
+    # It is enabled by default. Read about it at
+    # https://github.com/openwisp/openwisp-utils#clean-insights-measurements
+    openwisp2_clean_insights_measurement_consent: false
     # enable sentry example
     openwisp2_sentry:
         dsn: "https://7d2e3cd61acc32eca1fb2a390f7b55e1:bf82aab5ddn4422688e34a486c7426e3@getsentry.com:443/12345"

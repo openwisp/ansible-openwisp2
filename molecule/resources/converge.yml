@@ -23,6 +23,18 @@
       file:
         path: /.dockerenv
         state: absent
+  # TODO: Remove before merging
+  tasks:
+    - name: Install openwisp-utils clean insights
+      pip:
+        name: "openwisp-utils @ https://github.com/openwisp/openwisp-utils/tarball/issues/360-clean-insights"
+        state: forcereinstall
+        virtualenv: "{{ virtualenv_path }}"
+        virtualenv_python: "{{ openwisp2_python }}"
+      environment:
+        SETUPTOOLS_USE_DISTUTILS: stdlib
+      notify: Reload application
+      tags: [extra_pip, molecule-idempotence-notest]
 
   roles:
     - role: openwisp.openwisp2

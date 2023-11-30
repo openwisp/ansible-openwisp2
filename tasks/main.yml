@@ -1,5 +1,35 @@
 ---
 
+
+- name: Show Clean Insights measurement collection disclaimer
+  debug:
+    msg: |
+      By continuing with the ongoing installation process,
+      you are giving your consent for the collection of the following
+      Clean Insights measurements:
+        - Installed OpenWISP Version
+        - Enabled OpenWISP modules: A list of the enabled OpenWISP modules
+          along with their respective versions
+        - OS details: Information on the operating system, including its version, kernel version, and platform
+
+      If you prefer not to participate, you can opt-out by configuring
+      "openwisp2_clean_insights_measurement_consent: false" in your playbook.
+      However, before making that decision, we encourage you to explore how this
+      information contributes to the enhancement of OpenWISP at the following link:
+      https://github.com/openwisp/openwisp-utils#clean-insights-measurements
+
+      Should you wish to support us through data collection but prefer to disable
+      this disclaimer, you can do so by setting
+      "openwisp2_clean_insights_measurement_consent: true" in your playbook.
+  when: "openwisp2_clean_insights_measurement_consent == None"
+  tags: [ci_consent]
+
+- name: Ensure user
+  pause:
+    seconds: 30
+  when: "openwisp2_clean_insights_measurement_consent == None"
+  tags: [ci_consent]
+
 - import_tasks: apt.yml
   tags: [openwisp2, apt]
 
