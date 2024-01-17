@@ -169,7 +169,7 @@ openwisp2_radius_unverify_inactive_users: 0
 openwisp2_radius_delete_inactive_users: 0
 openwisp2_radius_allowed_hosts: ["127.0.0.1"]
 openwisp2_freeradius_install: true
-freeradius_dir: /etc/freeradius
+freeradius_dir: /etc/freeradius/3.0
 freeradius_mods_available_dir: "{{ freeradius_dir }}/mods-available"
 freeradius_mods_enabled_dir: "{{ freeradius_dir }}/mods-enabled"
 freeradius_mods_config_dir: "{{ freeradius_dir }}/mods-config"
