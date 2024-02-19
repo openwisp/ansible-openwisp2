@@ -25,7 +25,7 @@
         state: absent
   # TODO: Remove before merging
   tasks:
-    - name: Install openwisp-utils clean insights
+    - name: Install openwisp-utils metric collection
       pip:
         name: "openwisp-utils @ https://github.com/openwisp/openwisp-utils/tarball/issues/360-clean-insights"
         state: forcereinstall

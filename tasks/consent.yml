@@ -1,0 +1,24 @@
+---
+
+- name: Show usage metric collection disclaimer
+  debug:
+    msg: |
+      By continuing with the ongoing installation process,
+      you are giving your consent for the collection of usage metrics
+      mentioned at https://openwisp.io/docs/user/usage-metric-collection.html
+
+      If you prefer not to participate, you can opt-out by configuring
+      "openwisp2_usage_metric_collection_consent: false" in your playbook.
+      However, before making that decision, we encourage you to explore how this
+      information contributes to the enhancement of OpenWISP at the following link:
+      https://openwisp.io/docs/user/usage-metric-collection.html
+
+      Should you wish to support us through data collection but prefer to disable
+      this disclaimer, you can do so by setting
+      "openwisp2_usage_metric_collection_consent: true" in your playbook.
+  when: "openwisp2_usage_metric_collection_consent == None"
+
+- name: Ensure user has enough time to read
+  pause:
+    seconds: 30
+  when: "openwisp2_usage_metric_collection_consent == None"
