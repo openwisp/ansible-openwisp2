@@ -1,6 +1,9 @@
 ---
 
 - import_tasks: apt.yml
+  tags: [openwisp2, ci_consent]
+
+- import_tasks: apt.yml
   tags: [openwisp2, apt]
 
 - import_tasks: ssh.yml
