@@ -567,3 +567,5 @@ CORS_REPLACE_HTTPS_REFERER = {{ openwisp2_django_cors.get('replace_https_referer
 {% endif %}
 CORS_ALLOWED_ORIGINS = {{ openwisp2_django_cors.get('allowed_origins_list', []) }}
 {% endif %}
+
+TEST_RUNNER = 'openwisp_utils.measurements.tests.runner.MockRequestPostRunner'
