@@ -13,7 +13,7 @@ Tested on **Debian (Bullseye)**, **Ubuntu (20/22 LTS)**.
 
 **NOTE**: it is highly suggested to use this procedure on clean virtual machines or linux containers.
 
-**Recommended ansible version**: 2.10.
+**Recommended ansible version**: 2.12.
 
 Demo
 ====
@@ -102,7 +102,7 @@ please read [Install OpenWISP2 for testing in a VirtualBox VM](#install-openwisp
 Install ansible
 ---------------
 
-Install ansible (recommended version 2.10) **on your local machine**
+Install ansible (recommended version 2.12) **on your local machine**
 (not the production server!) if you haven't done already.
 
 To **install ansible** we suggest you follow the official [ansible installation guide](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-ansible-in-a-virtual-environment-with-pip). It is recommended to install ansible through a virtual environment to avoid dependency issues.
@@ -703,7 +703,7 @@ touch playbook.yml
 Follow instructions in ["Create inventory file"](#create-inventory-file) section to
 configure `hosts` file.
 
-You can reference the example playbook below (tested on Debian 11 with ansible 2.10.9)
+You can reference the example playbook below (tested on Debian 11)
 for installing a fully-featured version of OpenWISP.
 
 ```yml
