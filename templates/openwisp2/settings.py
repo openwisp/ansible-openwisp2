@@ -322,7 +322,7 @@ CELERY_BEAT_SCHEDULE = {
 {% if openwisp2_usage_metric_collection_consent is not false %}
     'send_usage_metrics': {
         'task': 'openwisp_utils.measurements.tasks.send_usage_metrics',
-        'schedule': timedelta(days=7),
+        'schedule': timedelta(days=1),
     },
 {% endif %}
 }
