@@ -21,9 +21,9 @@ jobs:
       fail-fast: false
       matrix:
         distro:
-          # - ubuntu2004
+          - ubuntu2004
           - ubuntu2204
-          # - debian11
+          - debian11
 
     steps:
       - uses: actions/checkout@v2
