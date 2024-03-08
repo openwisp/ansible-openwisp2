@@ -1216,7 +1216,7 @@ Below are listed all the variables you can customize (you may also want to take 
     # favorite SMS API gateway
     openwisp2_radius_sms_backend: "sendsms.backends.console.SmsBackend"
     openwisp2_radius_sms_token_max_ip_daily: 25
-    openwisp2_radius_delete_old_users: 365
+    openwisp2_radius_delete_old_radiusbatch_users: 365
     openwisp2_radius_cleanup_stale_radacct: 1
     openwisp2_radius_delete_old_postauth: 365
     # days for which the radius accounting sessions (radacct) are retained,
@@ -1254,7 +1254,7 @@ Below are listed all the variables you can customize (you may also want to take 
     freeradius_openwisp_site_listen_ipaddr: "10.8.0.1"
     cron_delete_old_notifications: "'hour': 0, 'minute': 0"
     cron_deactivate_expired_users: "'hour': 0, 'minute': 5"
-    cron_delete_old_users: "'hour': 0, 'minute': 10"
+    cron_delete_old_radiusbatch_users: "'hour': 0, 'minute': 10"
     cron_cleanup_stale_radacct: "'hour': 0, 'minute': 20"
     cron_delete_old_postauth: "'hour': 0, 'minute': 30"
     cron_delete_old_radacct: "'hour': 1, 'minute': 30"
