@@ -275,6 +275,7 @@ To do that, proceed with the following steps:
 Clone repository by:
 
     git clone https://github.com/<your_fork>/ansible-openwisp2.git openwisp.openwisp2
+    cd openwisp.openwisp2
 
 **Step 2**: Install docker
 
@@ -284,7 +285,7 @@ If you haven't installed docker yet, you need to install it (example for linux d
 
 **Step 3**: Install molecule and dependences
 
-    pip install molecule[docker] yamllint ansible-lint docker
+    pip install molecule[docker] molecule-plugins yamllint ansible-lint docker
 
 **Step 4**: Download docker images
 
