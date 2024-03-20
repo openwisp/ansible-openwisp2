@@ -72,7 +72,7 @@ INSTALLED_APPS = [
     # openwisp2 admin theme
     # (must be loaded here)
     'openwisp_utils.admin_theme',
-    {% if openwisp2_usage_metric_collection_consent %}
+    {% if openwisp2_usage_metric_collection_consent is not false %}
     'openwisp_utils.measurements',
     {% endif %}
     'admin_auto_filters',
@@ -266,14 +266,12 @@ CELERY_BEAT_SCHEDULE = {
         'args': ({{ openwisp2_notifications_delete_old_notifications }},),
     },
 {% if openwisp2_monitoring %}
-
     'run_checks': {
         'task': 'openwisp_monitoring.check.tasks.run_checks',
         'schedule': timedelta(minutes=5),
     },
 {% endif %}
 {% if openwisp2_radius %}
-
     'deactivate_expired_users': {
         'task': 'openwisp_radius.tasks.deactivate_expired_users',
         'schedule': crontab(**{ {{ cron_deactivate_expired_users }} }),
@@ -298,35 +296,34 @@ CELERY_BEAT_SCHEDULE = {
         'args': [{{ openwisp2_radius_delete_old_postauth }}],
         'relative': True,
     },
-
-{% if openwisp2_radius_delete_old_radacct %}
-    'delete_old_radacct': {
-        'task': 'openwisp_radius.tasks.delete_old_radacct',
-        'schedule': crontab(**{ {{ cron_delete_old_radacct }} }),
-        'args': [{{ openwisp2_radius_delete_old_radacct }}],
-        'relative': True,
-    },
+    {% if openwisp2_radius_delete_old_radacct %}
+        'delete_old_radacct': {
+            'task': 'openwisp_radius.tasks.delete_old_radacct',
+            'schedule': crontab(**{ {{ cron_delete_old_radacct }} }),
+            'args': [{{ openwisp2_radius_delete_old_radacct }}],
+            'relative': True,
+        },
+    {% endif %}
+    {% if openwisp2_radius_unverify_inactive_users %}
+        'unverify_inactive_users': {
+            'task': 'openwisp_radius.tasks.unverify_inactive_users',
+            'schedule': crontab(**{ {{ cron_unverify_inactive_users }} }),
+            'relative': True,
+        },
+    {% endif %}
+    {% if openwisp2_radius_delete_inactive_users %}
+        'delete_inactive_users': {
+            'task': 'openwisp_radius.tasks.delete_inactive_users',
+            'schedule': crontab(**{ {{ cron_delete_inactive_users }} }),
+            'relative': True,
+        },
+    {% endif %}
 {% endif %}
-{% if openwisp2_radius_unverify_inactive_users %}
-    'unverify_inactive_users': {
-        'task': 'openwisp_radius.tasks.unverify_inactive_users',
-        'schedule': crontab(**{ {{ cron_unverify_inactive_users }} }),
-        'relative': True,
-    },
-{% endif %}
-{% if openwisp2_radius_delete_inactive_users %}
-    'delete_inactive_users': {
-        'task': 'openwisp_radius.tasks.delete_inactive_users',
-        'schedule': crontab(**{ {{ cron_delete_inactive_users }} }),
-        'relative': True,
-    },
-{% endif %}
-{% if openwisp2_usage_metric_collection_consent %}
+{% if openwisp2_usage_metric_collection_consent is not false %}
     'send_usage_metrics': {
         'task': 'openwisp_utils.measurements.tasks.send_usage_metrics',
-        'schedule': timedelta(days=7),
+        'schedule': timedelta(days=1),
     },
-{% endif %}
 {% endif %}
 }
 
@@ -567,3 +564,5 @@ CORS_REPLACE_HTTPS_REFERER = {{ openwisp2_django_cors.get('replace_https_referer
 {% endif %}
 CORS_ALLOWED_ORIGINS = {{ openwisp2_django_cors.get('allowed_origins_list', []) }}
 {% endif %}
+
+TEST_RUNNER = 'openwisp_utils.measurements.tests.runner.MockRequestPostRunner'

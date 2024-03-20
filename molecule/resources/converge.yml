@@ -11,6 +11,7 @@
     openwisp2_controller_subnet_division: true
     openwisp2_uwsgi_extra_conf: |
       single-interpreter=True
+    openwisp2_usage_metric_collection_consent: false
 
   pre_tasks:
     - name: Update apt cache
