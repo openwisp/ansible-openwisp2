@@ -13,7 +13,7 @@ Tested on **Debian (Bullseye)**, **Ubuntu (20/22 LTS)**.
 
 **NOTE**: it is highly suggested to use this procedure on clean virtual machines or linux containers.
 
-**Recommended ansible version**: 2.10.
+**Recommended ansible version**: 2.12.
 
 Demo
 ====
@@ -102,7 +102,7 @@ please read [Install OpenWISP2 for testing in a VirtualBox VM](#install-openwisp
 Install ansible
 ---------------
 
-Install ansible (recommended version 2.10) **on your local machine**
+Install ansible (recommended version 2.12) **on your local machine**
 (not the production server!) if you haven't done already.
 
 To **install ansible** we suggest you follow the official [ansible installation guide](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-ansible-in-a-virtual-environment-with-pip). It is recommended to install ansible through a virtual environment to avoid dependency issues.
@@ -275,6 +275,7 @@ To do that, proceed with the following steps:
 Clone repository by:
 
     git clone https://github.com/<your_fork>/ansible-openwisp2.git openwisp.openwisp2
+    cd openwisp.openwisp2
 
 **Step 2**: Install docker
 
@@ -284,7 +285,7 @@ If you haven't installed docker yet, you need to install it (example for linux d
 
 **Step 3**: Install molecule and dependences
 
-    pip install molecule[docker] yamllint ansible-lint docker
+    pip install molecule[docker] molecule-plugins yamllint ansible-lint docker
 
 **Step 4**: Download docker images
 
@@ -703,7 +704,7 @@ touch playbook.yml
 Follow instructions in ["Create inventory file"](#create-inventory-file) section to
 configure `hosts` file.
 
-You can reference the example playbook below (tested on Debian 11 with ansible 2.10.9)
+You can reference the example playbook below (tested on Debian 11)
 for installing a fully-featured version of OpenWISP.
 
 ```yml
@@ -1216,7 +1217,7 @@ Below are listed all the variables you can customize (you may also want to take 
     # favorite SMS API gateway
     openwisp2_radius_sms_backend: "sendsms.backends.console.SmsBackend"
     openwisp2_radius_sms_token_max_ip_daily: 25
-    openwisp2_radius_delete_old_users: 365
+    openwisp2_radius_delete_old_radiusbatch_users: 365
     openwisp2_radius_cleanup_stale_radacct: 1
     openwisp2_radius_delete_old_postauth: 365
     # days for which the radius accounting sessions (radacct) are retained,
@@ -1254,7 +1255,7 @@ Below are listed all the variables you can customize (you may also want to take 
     freeradius_openwisp_site_listen_ipaddr: "10.8.0.1"
     cron_delete_old_notifications: "'hour': 0, 'minute': 0"
     cron_deactivate_expired_users: "'hour': 0, 'minute': 5"
-    cron_delete_old_users: "'hour': 0, 'minute': 10"
+    cron_delete_old_radiusbatch_users: "'hour': 0, 'minute': 10"
     cron_cleanup_stale_radacct: "'hour': 0, 'minute': 20"
     cron_delete_old_postauth: "'hour': 0, 'minute': 30"
     cron_delete_old_radacct: "'hour': 1, 'minute': 30"
