@@ -84,6 +84,7 @@
 # set openwisp2_secret_key if not defined explicitly
 - import_tasks: django_secret_key.yml
   when: openwisp2_secret_key is not defined
+  tags: [django_settings]
 
 - name: Template settings.py
   notify: Reload application
@@ -92,6 +93,7 @@
     dest: "{{ openwisp2_path }}/openwisp2/settings.py"
     group: "{{ www_group }}"
     mode: 0640
+  tags: [django_settings]
 
 - name: Template routing.py
   notify: Reload application
