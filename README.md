@@ -1077,7 +1077,7 @@ Below are listed all the variables you can customize (you may also want to take 
     # Disable usage metric collection. It is enabled by default.
     # Read more about it at
     # https://openwisp.io/docs/user/usage-metric-collection.html
-    openwisp2_usage_metric_collection_consent: false
+    openwisp2_usage_metric_collection: false
     # enable sentry example
     openwisp2_sentry:
         dsn: "https://7d2e3cd61acc32eca1fb2a390f7b55e1:bf82aab5ddn4422688e34a486c7426e3@getsentry.com:443/12345"

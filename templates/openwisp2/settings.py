@@ -72,7 +72,7 @@ INSTALLED_APPS = [
     # openwisp2 admin theme
     # (must be loaded here)
     'openwisp_utils.admin_theme',
-    {% if openwisp2_usage_metric_collection_consent is not false %}
+    {% if openwisp2_usage_metric_collection is not false %}
     'openwisp_utils.measurements',
     {% endif %}
     'admin_auto_filters',
@@ -319,7 +319,7 @@ CELERY_BEAT_SCHEDULE = {
         },
     {% endif %}
 {% endif %}
-{% if openwisp2_usage_metric_collection_consent is not false %}
+{% if openwisp2_usage_metric_collection is not false %}
     'send_usage_metrics': {
         'task': 'openwisp_utils.measurements.tasks.send_usage_metrics',
         'schedule': timedelta(days=1),
