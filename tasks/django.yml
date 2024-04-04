@@ -146,6 +146,7 @@
     recurse: true
   tags:
     - molecule-idempotence-notest
+    - openwisp2_theme
 
 - name: Copy static files
   become: true
@@ -171,6 +172,7 @@
   changed_when: '"\n0 static files" not in collectstatic_output.out'
   tags:
     - molecule-idempotence-notest
+    - openwisp2_theme
 
 # needed to run compilemessages
 # some .mo files are created in virtualenv_path
