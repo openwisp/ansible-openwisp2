@@ -1232,6 +1232,10 @@ Below are listed all the variables you can customize (you may also want to take 
     # Read https://openwisp-radius.readthedocs.io/en/latest/user/settings.html#openwisp-radius-delete-inactive-users
     openwisp2_radius_delete_inactive_users: 540
     openwisp2_radius_allowed_hosts: ["127.0.0.1"]
+    # allow disabling celery beat tasks if needed
+    openwisp2_monitoring_periodic_tasks: true
+    openwisp2_radius_periodic_tasks: true
+    openwisp2_usage_metric_collection_periodic_tasks: true
     # this role provides a default configuration of freeradius
     # if you manage freeradius on a different machine or you need different configurations
     # you can disable this default behavior

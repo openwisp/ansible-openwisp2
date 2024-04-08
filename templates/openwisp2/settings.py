@@ -260,18 +260,20 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': crontab(**{ {{ cron_password_expiration_email }} }),
     },
 {% endif %}
+{% if openwisp2_notifications_delete_old_notifications %}
     'delete_old_notifications': {
         'task': 'openwisp_notifications.tasks.delete_old_notifications',
         'schedule': crontab(**{ {{ cron_delete_old_notifications }} }),
         'args': ({{ openwisp2_notifications_delete_old_notifications }},),
     },
-{% if openwisp2_monitoring %}
+{% endif %}
+{% if openwisp2_monitoring and openwisp2_monitoring_periodic_tasks %}
     'run_checks': {
         'task': 'openwisp_monitoring.check.tasks.run_checks',
         'schedule': timedelta(minutes=5),
     },
 {% endif %}
-{% if openwisp2_radius %}
+{% if openwisp2_radius and openwisp2_radius_periodic_tasks %}
     'deactivate_expired_users': {
         'task': 'openwisp_radius.tasks.deactivate_expired_users',
         'schedule': crontab(**{ {{ cron_deactivate_expired_users }} }),
@@ -319,7 +321,7 @@ CELERY_BEAT_SCHEDULE = {
         },
     {% endif %}
 {% endif %}
-{% if openwisp2_usage_metric_collection is not false %}
+{% if openwisp2_usage_metric_collection is not false and openwisp2_usage_metric_collection_periodic_tasks %}
     'send_usage_metrics': {
         'task': 'openwisp_utils.measurements.tasks.send_usage_metrics',
         'schedule': timedelta(days=1),
