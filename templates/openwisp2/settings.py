@@ -73,7 +73,7 @@ INSTALLED_APPS = [
     # (must be loaded here)
     'openwisp_utils.admin_theme',
     {% if openwisp2_usage_metric_collection is not false %}
-    'openwisp_utils.measurements',
+    'openwisp_utils.metric_collection',
     {% endif %}
     'admin_auto_filters',
     # admin
@@ -323,7 +323,7 @@ CELERY_BEAT_SCHEDULE = {
 {% endif %}
 {% if openwisp2_usage_metric_collection is not false and openwisp2_usage_metric_collection_periodic_tasks %}
     'send_usage_metrics': {
-        'task': 'openwisp_utils.measurements.tasks.send_usage_metrics',
+        'task': 'openwisp_utils.metric_collection.tasks.send_usage_metrics',
         'schedule': timedelta(days=1),
     },
 {% endif %}
@@ -567,4 +567,4 @@ CORS_REPLACE_HTTPS_REFERER = {{ openwisp2_django_cors.get('replace_https_referer
 CORS_ALLOWED_ORIGINS = {{ openwisp2_django_cors.get('allowed_origins_list', []) }}
 {% endif %}
 
-TEST_RUNNER = 'openwisp_utils.measurements.tests.runner.MockRequestPostRunner'
+TEST_RUNNER = 'openwisp_utils.metric_collection.tests.runner.MockRequestPostRunner'
