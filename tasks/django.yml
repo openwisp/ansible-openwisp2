@@ -56,6 +56,7 @@
     dest: "{{ openwisp2_path }}/openwisp2/__init__.py"
     group: "{{ www_group }}"
     mode: 0640
+  tags: [django_init]
 
 - name: Template urls.py
   notify: Reload application

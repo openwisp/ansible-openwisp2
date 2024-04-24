@@ -266,7 +266,6 @@
   until: result is success
   notify: Reload application
 
-
 - name: Install django
   pip:
     name: "{{ openwisp2_django_version }}"
