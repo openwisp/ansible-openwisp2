@@ -1,0 +1,84 @@
+server inner_tunnel-org_{{ org.name }} {
+    listen {
+        ipaddr = 127.0.0.1
+        port = {{ org.inner_tunnel_auth_port }}
+        type = auth
+    }
+
+    api_token_header = "Authorization: Bearer {{ org.uuid }} {{ org.radius_token }}"
+    authorize {
+        filter_username
+        update control { &REST-HTTP-Header += "${...api_token_header}" }
+        rest
+        eap-org_{{ org.name }} {
+            ok = return
+        }
+
+        chap
+        mschap
+        suffix
+
+        update control {
+            &Proxy-To-Realm := LOCAL
+        }
+
+        eap {
+            ok = return
+        }
+
+        -ldap
+
+        pap
+
+        expiration
+        logintime
+    }
+
+    authenticate {
+        Auth-Type PAP {
+            pap
+        }
+
+        Auth-Type CHAP {
+            chap
+        }
+
+        Auth-Type MS-CHAP {
+            mschap
+        }
+        eap
+    }
+
+    session {}
+
+    post-auth {
+        if (0) {
+            update reply {
+                User-Name !* ANY
+                Message-Authenticator !* ANY
+                EAP-Message !* ANY
+                Proxy-State !* ANY
+                MS-MPPE-Encryption-Types !* ANY
+                MS-MPPE-Encryption-Policy !* ANY
+                MS-MPPE-Send-Key !* ANY
+                MS-MPPE-Recv-Key !* ANY
+            }
+            update {
+                &outer.session-state: += &reply:
+            }
+        }
+
+        Post-Auth-Type REJECT {
+            attr_filter.access_reject
+            update outer.session-state {
+                &Module-Failure-Message := &request:Module-Failure-Message
+            }
+        }
+    }
+
+    pre-proxy {}
+    post-proxy {
+        eap-org_{{ org.name }}
+        eap
+    }
+}

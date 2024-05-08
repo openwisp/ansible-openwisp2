@@ -200,3 +200,14 @@
     owner: freerad
     group: freerad
   notify: Restart freeradius
+
+- debug:
+    msg: "{{ freeradius_eap_orgs }}"
+
+- name: Copy configuration for WPA Enterprise TTLS
+  include_tasks: tasks/freeradius_eap.yml
+  loop: "{{ freeradius_eap_orgs }}"
+  loop_control:
+    loop_var: org
+  when: freeradius_eap_orgs
+  tags: [freeradius_eap]

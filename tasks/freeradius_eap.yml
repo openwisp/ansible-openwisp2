@@ -1,0 +1,55 @@
+---
+
+- name: "Copy {{ org.name }} EAP openwisp_site"
+  template:
+    src: "{{ freeradius_eap_openwisp_site_template_src }}"
+    dest: "{{ freeradius_dir }}/sites-available/{{ org.name }}_eap_openwisp_site"
+    owner: freerad
+    group: freerad
+    mode: '0644'
+  notify: Restart freeradius
+  tags: [freeradius_eap]
+
+- name: "Create a symlink in sites-enabled for {{ org.name }} EAP openwisp_site"
+  ansible.builtin.file:
+    src: "{{ freeradius_dir }}/sites-available/{{ org.name }}_eap_openwisp_site"
+    dest: "{{ freeradius_dir }}/sites-enabled/{{ org.name }}_eap_openwisp_site"
+    state: link
+  notify: Restart freeradius
+  tags: [freeradius_eap]
+
+- name: "Copy {{ org.name }} eap_inner_tunnel"
+  template:
+    src: "{{ freeradius_eap_inner_tunnel_template_src }}"
+    dest: "{{ freeradius_dir }}/sites-available/{{ org.name }}_eap_inner_tunnel"
+    owner: freerad
+    group: freerad
+    mode: '0644'
+  notify: Restart freeradius
+  tags: [freeradius_eap]
+
+- name: "Create a symlink in sites-enabled for {{ org.name }} eap_inner_tunnel"
+  ansible.builtin.file:
+    src: "{{ freeradius_dir }}/sites-available/{{ org.name }}_eap_inner_tunnel"
+    dest: "{{ freeradius_dir }}/sites-enabled/{{ org.name }}_eap_inner_tunnel"
+    state: link
+  notify: Restart freeradius
+  tags: [freeradius_eap]
+
+- name: Copy {{ org.name }} custom EAP configuration in mods-available
+  template:
+    src: "{{ freeradius_eap_template_src }}"
+    dest: "{{ freeradius_dir }}/mods-available/eap-org_{{ org.name }}"
+    owner: freerad
+    group: freerad
+    mode: '0644'
+  notify: Restart freeradius
+  tags: [freeradius_eap]
+
+- name: Create a symlink in mods-enabled
+  ansible.builtin.file:
+    src: "{{ freeradius_dir }}/mods-available/eap-org_{{ org.name }}"
+    dest: "{{ freeradius_dir }}/mods-enabled/eap-org_{{ org.name }}"
+    state: link
+  notify: Restart freeradius
+  tags: [freeradius_eap]

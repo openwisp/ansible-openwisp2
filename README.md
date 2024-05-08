@@ -1255,6 +1255,36 @@ Below are listed all the variables you can customize (you may also want to take 
     # FreeRADIUS listen address for the openwisp_site.
     # Defaults to "*", i.e. listen on all interfaces.
     freeradius_openwisp_site_listen_ipaddr: "10.8.0.1"
+    # A list of dict that includes organization's name, UUID, RADIUS token, and
+    # ports for authentication, accounting, and inner tunnel. This list of dict
+    # is used to generate FreeRADIUS sites that support WPA Enterprise
+    # (EAP-TTLS-PAP) authentication.
+    # Defaults to an empty list.
+    freeradius_eap_orgs:
+        # The name should not contain spaces or special characters
+      - name: openwisp
+        # UUID of the organization can be retrieved from the OpenWISP admin
+        uuid: 00000000-0000-0000-0000-000000000000
+        # Radius token of the organization can be retrieved from the OpenWISP admin
+        radius_token: secret-radius-token
+        # Port used by the authentication service for this FreeRADIUS site
+        auth_port: 1832
+        # Port used by the accounting service for this FreeRADIUS site
+        acct_port: 1833
+        # Port used by the authentication service of inner tunnel for this FreeRADIUS site
+        inner_tunnel_auth_port: 18330
+    # Sets the source path of the template that contains freeradius site configuration
+    # for WPA Enterprise (EAP-TTLS-PAP) authentication.
+    # Defaults to "templates/freeradius/eap/openwisp_site.j2" shipped in the role.
+    freeradius_eap_openwisp_site_template_src: custom_eap_openwisp_site.j2
+    # Sets the source path of the template that contains freeradius inner tunnel
+    # configuration for WPA Enterprise (EAP-TTLS-PAP) authentication.
+    # Defaults to "templates/freeradius/eap/inner_tunnel.j2" shipped in the role.
+    freeradius_eap_inner_tunnel_template_src: custom_eap_inner_tunnel.j2
+    # Sets the source path of the template that contains freeradius EAP configuration
+    # for WPA Enterprise (EAP-TTLS-PAP) authentication.
+    # Defaults to "templates/freeradius/eap/eap.j2" shipped in the role.
+    freeradius_eap_template_src: custom_eap.j2
     cron_delete_old_notifications: "'hour': 0, 'minute': 0"
     cron_deactivate_expired_users: "'hour': 0, 'minute': 5"
     cron_delete_old_radiusbatch_users: "'hour': 0, 'minute': 10"

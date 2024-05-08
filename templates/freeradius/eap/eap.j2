@@ -1,0 +1,38 @@
+eap eap-org_{{ org.name }} {
+    default_eap_type = ttls
+    timer_expire = 60
+    ignore_unknown_eap_types = no
+    cisco_accounting_username_bug = no
+    max_sessions = ${max_requests}
+
+    tls-config tls-common {
+        # make sure to have a valid SSL certificate for production usage
+        private_key_password = whatever
+        private_key_file = ${certdir}/server.pem
+        certificate_file = ${certdir}/server.pem
+        ca_file = ${cadir}/ca.pem
+        dh_file = ${certdir}/dh
+        ca_path = ${cadir}
+        cipher_list = "DEFAULT"
+        cipher_server_preference = no
+        ecdh_curve = "prime256v1"
+
+        cache {
+            enable = no
+        }
+
+        ocsp {
+            enable = no
+            override_cert_url = yes
+            url = "http://127.0.0.1/ocsp/"
+        }
+    }
+
+    ttls {
+        tls = tls-common
+        default_eap_type = pap
+        copy_request_to_tunnel = yes
+        use_tunneled_reply = yes
+        virtual_server = "inner_tunnel-org_{{ org.name }}"
+    }
+}

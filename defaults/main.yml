@@ -197,6 +197,10 @@ freeradius_rest:
 freeradius_expire_attr_after_seconds: 86400
 freeradius_safe_characters: "+@abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_: /"
 freeradius_openwisp_site_listen_ipaddr: "*"
+freeradius_eap_orgs: []
+freeradius_eap_openwisp_site_template_src: freeradius/eap/openwisp_site.j2
+freeradius_eap_inner_tunnel_template_src: freeradius/eap/inner_tunnel.j2
+freeradius_eap_template_src: freeradius/eap/eap.j2
 cron_delete_old_notifications: "'hour': 0, 'minute': 0"
 cron_deactivate_expired_users: "'hour': 0, 'minute': 5"
 cron_delete_old_radiusbatch_users: "'hour': 0, 'minute': 10"
