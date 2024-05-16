@@ -8,8 +8,8 @@ eap eap-org_{{ org.name }} {
     tls-config tls-common {
         # make sure to have a valid SSL certificate for production usage
         private_key_password = whatever
-        private_key_file = ${certdir}/server.pem
-        certificate_file = ${certdir}/server.pem
+        private_key_file = {{ org.private_key | default('${certdir}/server.pem') }}
+        certificate_file = {{ org.cert | default('${certdir}/server.pem') }}
         ca_file = ${cadir}/ca.pem
         dh_file = ${certdir}/dh
         ca_path = ${cadir}
