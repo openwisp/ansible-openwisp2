@@ -562,6 +562,69 @@ When the playbook is done running, if you got no errors you can login at:
 look for the word "radius" in the
 [Role variables](#role-variables) section of this document.
 
+### Configuring FreeRADIUS for WPA Enterprise (EAP-TTLS-PAP)
+
+You can use OpenWISP RADIUS for setting up WPA Enterprise (EAP-TTLS-PAP)
+authentication. This allows to authenticate on WiFi networks using Django user
+credentials. Prior to proceeding, ensure you've reviewed the tutorial on
+[Setting Up WPA Enterprise (EAP-TTLS-PAP) authentication](https://openwisp.io/docs/tutorials/wpa-enterprise.html).
+This documentation section complements the tutorial and focuses solely on
+demonstrating the ansible role's capabilities to configure FreeRADIUS.
+
+**Note**: The ansible role supports OpenWISP's multi-tenancy by creating
+individual FreeRADIUS sites for each organization. You must include configuration
+details for **each organization** that will use WPA Enterprise.
+
+Here's an example playbook which enables OpenWISP RADIUS module,
+installs FreeRADIUS, and configures it for WPA Enterprise (EAP-TTLS-PAP):
+
+  ```yaml
+  - hosts: openwisp2
+    become: "{{ become | default('yes') }}"
+    roles:
+      - openwisp.openwisp2
+    vars:
+      openwisp2_radius: true
+      openwisp2_freeradius_install: true
+      # Define a list of dictionaries detailing each organization's
+      # name, UUID, RADIUS token, and ports for authentication,
+      # accounting, and the inner tunnel. These details will be used
+      # to create FreeRADIUS sites tailored for WPA Enterprise
+      # (EAP-TTLS-PAP) authentication per organization.
+      freeradius_eap_orgs:
+          # A reference name for the organization, used in FreeRADIUS configurations.
+          # Don't use spaces or special characters.
+        - name: openwisp
+          # UUID of the organization.
+          # You can retrieve this from the organization admin in the OpenWISP web interface.
+          uuid: 00000000-0000-0000-0000-000000000000
+          # Radius token of the organization.
+          # You can retrieve this from the organization admin in the OpenWISP web interface.
+          radius_token: secret-radius-token
+          # Port used by the authentication service for this FreeRADIUS site
+          auth_port: 1822
+          # Port used by the accounting service for this FreeRADIUS site
+          acct_port: 1823
+          # Port used by the authentication service of inner tunnel for this FreeRADIUS site
+          inner_tunnel_auth_port: 18230
+        # You can add as many organizations as you want
+        - name: demo
+          uuid: 00000000-0000-0000-0000-000000000001
+          radius_secret: demo-radius-token
+          auth_port: 1832
+          acct_port: 1833
+          inner_tunnel_auth_port: 18330
+  ```
+
+**Note**: In the example playbook above, custom ports 1822, 1823, and 18230
+are utilized for FreeRADIUS authentication, accounting, and inner tunnel
+authentication, respectively. These custom ports are specified because the
+Ansible role creates a common FreeRADIUS site for all organizations, which
+also supports captive portal functionality. This common site is configured
+to listen on the default FreeRADIUS ports 1812, 1813, and 18120. Therefore, when
+configuring WPA Enterprise authentication for each organization, unique
+ports must be provided to ensure proper isolation and functionality.
+
 Configuring CORS Headers
 ------------------------
 
