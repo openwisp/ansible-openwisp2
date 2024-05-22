@@ -39,6 +39,8 @@ jobs:
         run: |
           pip install molecule molecule-plugins[docker] yamllint ansible-lint docker
           pip install openwisp-utils[qa]
+          # https://github.com/ansible-community/molecule-plugins/issues/256
+          python -m pip install 'requests<2.32'
 
       - name: Install Ansible Galaxy dependencies
         run: ansible-galaxy collection install "community.general:>=3.6.0"
