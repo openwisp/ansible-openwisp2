@@ -63,6 +63,7 @@
     dest: "{{ openwisp2_path }}/nginx-conf/openwisp2/security.conf"
     mode: 0644
   notify: Restart nginx
+  tags: [nginx_security]
 
 - name: Nginx site available
   template:

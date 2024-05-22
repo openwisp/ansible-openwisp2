@@ -62,8 +62,8 @@ openwisp2_nginx_client_max_body_size: 20M
 openwisp2_nginx_csp: >
     "default-src http: https: data: blob: 'unsafe-inline';
     script-src 'unsafe-eval' https: 'unsafe-inline' 'self';
-    frame-ancestors 'self'; connect-src https://{{ inventory_hostname }} wss: 'self';
-    worker-src https://{{ inventory_hostname }} blob: 'self';" always;
+    frame-ancestors 'self'; connect-src https://{{ inventory_hostname }}{% for host in openwisp2_allowed_hosts %} https://{{ host }}{% endfor %} wss: 'self';
+    worker-src https://{{ inventory_hostname }}{% for host in openwisp2_allowed_hosts %} https://{{ host }}{% endfor %} blob: 'self';" always;
 openwisp2_uwsgi_gid: null
 openwisp2_admin_allowed_network: null
 openwisp2_install_ntp: true
