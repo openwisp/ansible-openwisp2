@@ -565,15 +565,16 @@ look for the word "radius" in the
 ### Configuring FreeRADIUS for WPA Enterprise (EAP-TTLS-PAP)
 
 You can use OpenWISP RADIUS for setting up WPA Enterprise (EAP-TTLS-PAP)
-authentication. This allows to authenticate on WiFi networks using Django user
-credentials. Prior to proceeding, ensure you've reviewed the tutorial on
-[Setting Up WPA Enterprise (EAP-TTLS-PAP) authentication](https://openwisp.io/docs/tutorials/wpa-enterprise.html).
+authentication. This allows to authenticate on WiFi networks using Django
+user credentials. Prior to proceeding, ensure you've reviewed the tutorial
+on [Setting Up WPA Enterprise (EAP-TTLS-PAP) authentication](https://openwisp.io/docs/tutorials/wpa-enterprise.html).
 This documentation section complements the tutorial and focuses solely on
 demonstrating the ansible role's capabilities to configure FreeRADIUS.
 
 **Note**: The ansible role supports OpenWISP's multi-tenancy by creating
-individual FreeRADIUS sites for each organization. You must include configuration
-details for **each organization** that will use WPA Enterprise.
+individual FreeRADIUS sites for each organization. You must include
+configuration details for **each organization** that will use WPA
+Enterprise.
 
 Here's an example playbook which enables OpenWISP RADIUS module,
 installs FreeRADIUS, and configures it for WPA Enterprise (EAP-TTLS-PAP):
@@ -592,24 +593,31 @@ installs FreeRADIUS, and configures it for WPA Enterprise (EAP-TTLS-PAP):
       # to create FreeRADIUS sites tailored for WPA Enterprise
       # (EAP-TTLS-PAP) authentication per organization.
       freeradius_eap_orgs:
-          # A reference name for the organization, used in FreeRADIUS configurations.
+          # A reference name for the organization,
+          # used in FreeRADIUS configurations.
           # Don't use spaces or special characters.
         - name: openwisp
           # UUID of the organization.
-          # You can retrieve this from the organization admin in the OpenWISP web interface.
+          # You can retrieve this from the organization admin
+          # in the OpenWISP web interface.
           uuid: 00000000-0000-0000-0000-000000000000
           # Radius token of the organization.
-          # You can retrieve this from the organization admin in the OpenWISP web interface.
+          # You can retrieve this from the organization admin
+          # in the OpenWISP web interface.
           radius_token: secret-radius-token
-          # Port used by the authentication service for this FreeRADIUS site
+          # Port used by the authentication service for
+          # this FreeRADIUS site
           auth_port: 1822
           # Port used by the accounting service for this FreeRADIUS site
           acct_port: 1823
-          # Port used by the authentication service of inner tunnel for this FreeRADIUS site
+          # Port used by the authentication service of inner tunnel
+          # for this FreeRADIUS site
           inner_tunnel_auth_port: 18230
-          # If you want to use a custom certificate for FreeRADIUS EAP module,
-          # you can specify the path to the certificate and private key as follows.
-          # Ensure that the certificate and private key can be read by the "freerad" user.
+          # If you want to use a custom certificate for FreeRADIUS
+          # EAP module, you can specify the path to the certificate and
+          # private key as follows.
+          # Ensure that the certificate and private key can be read by
+          # the "freerad" user.
           cert: /etc/freeradius/certs/cert.pem
           private_key: /etc/freeradius/certs/key.pem
         # You can add as many organizations as you want
@@ -629,20 +637,30 @@ are utilized for FreeRADIUS authentication, accounting, and inner tunnel
 authentication, respectively. These custom ports are specified because the
 Ansible role creates a common FreeRADIUS site for all organizations, which
 also supports captive portal functionality. This common site is configured
-to listen on the default FreeRADIUS ports 1812, 1813, and 18120. Therefore, when
-configuring WPA Enterprise authentication for each organization, unique
-ports must be provided to ensure proper isolation and functionality.
+to listen on the default FreeRADIUS ports 1812, 1813, and 18120. Therefore,
+when configuring WPA Enterprise authentication for each organization,
+unique ports must be provided to ensure proper isolation and functionality.
 
 #### Using Let's Encrypt Certificate for WPA Enterprise (EAP-TTLS-PAP)
 
-In this section, we demonstrate how to utilize Let's Encrypt certificates for WPA Enterprise (EAP-TTLS-PAP) authentication. Similar to the [Automatic SSL certificate](#automatic-ssl-certificate), we use [geerlingguy.certbot](https://galaxy.ansible.com/geerlingguy/certbot/) role to automatically install and renew a valid SSL certificate.
+In this section, we demonstrate how to utilize Let's Encrypt certificates
+for WPA Enterprise (EAP-TTLS-PAP) authentication. Similar to the
+[Automatic SSL certificate](#automatic-ssl-certificate), we use
+[geerlingguy.certbot](https://galaxy.ansible.com/geerlingguy/certbot/)
+role to automatically install and renew a valid SSL certificate.
 
 The following example playbook achieves the following goals:
 
-- Provision a separate Let's Encrypt certificate for the `freeradius.yourdomain.com` hostname. This certificate will be utilized by the FreeRADIUS site for WPA Enterprise authentication.
-- Create a renewal hook to set permissions on the generated certificate so the FreeRADIUS server can read it.
+- Provision a separate Let's Encrypt certificate for the
+  `freeradius.yourdomain.com` hostname. This certificate will be
+  utilized by the FreeRADIUS site for WPA Enterprise authentication.
+- Create a renewal hook to set permissions on the generated certificate
+  so the FreeRADIUS server can read it.
 
-**Note**: You can also use the same SSL certificate for both Nginx and FreeRADIUS, but it's crucial to understand the security implications. Please exercise caution and refer to the example playbook comments for guidance.
+**Note**: You can also use the same SSL certificate for both Nginx and
+FreeRADIUS, but it's crucial to understand the security implications.
+Please exercise caution and refer to the example playbook comments for
+guidance.
 
 ```yaml
   - hosts: openwisp2
