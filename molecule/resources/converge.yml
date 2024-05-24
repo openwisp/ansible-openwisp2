@@ -12,6 +12,13 @@
     openwisp2_uwsgi_extra_conf: |
       single-interpreter=True
     openwisp2_usage_metric_collection: false
+    freeradius_eap_orgs:
+      - name: openwisp
+        uuid: 00000000-0000-0000-0000-000000000000
+        radius_token: secret-radius-token
+        auth_port: 1822
+        acct_port: 1823
+        inner_tunnel_auth_port: 18230
 
   pre_tasks:
     - name: Update apt cache
@@ -19,6 +26,11 @@
         update_cache: true
         cache_valid_time: 600
       when: ansible_os_family == 'Debian'
+
+    - name: Install net-tools
+      apt:
+        name:
+        - net-tools
 
     - name: Remove the .dockerenv file
       file:
