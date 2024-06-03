@@ -39,7 +39,7 @@
 - name: Copy {{ org.name }} custom EAP configuration in mods-available
   template:
     src: "{{ freeradius_eap_template_src }}"
-    dest: "{{ freeradius_dir }}/mods-available/eap-org_{{ org.name }}"
+    dest: "{{ freeradius_dir }}/mods-available/{{ org.name }}_eap"
     owner: freerad
     group: freerad
     mode: '0644'
@@ -48,8 +48,8 @@
 
 - name: Create a symlink in mods-enabled
   ansible.builtin.file:
-    src: "{{ freeradius_dir }}/mods-available/eap-org_{{ org.name }}"
-    dest: "{{ freeradius_dir }}/mods-enabled/eap-org_{{ org.name }}"
+    src: "{{ freeradius_dir }}/mods-available/{{ org.name }}_eap"
+    dest: "{{ freeradius_dir }}/mods-enabled/{{ org.name }}_eap"
     state: link
   notify: Restart freeradius
   tags: [freeradius_eap]

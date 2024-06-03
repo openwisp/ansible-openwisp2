@@ -1,4 +1,4 @@
-server openwisp_site-org_{{ org.name }} {
+server {{ org.name }}_eap_openwisp_site {
     listen {
         type = auth
         ipaddr = {{ org.listen_ipaddr | default(freeradius_openwisp_site_listen_ipaddr) }}
@@ -19,7 +19,7 @@ server openwisp_site-org_{{ org.name }} {
 
     api_token_header = "Authorization: Bearer {{ org.uuid }} {{ org.radius_token }}"
     authorize {
-        eap-org_{{ org.name }} {
+        {{ org.name }}_eap {
           ok = return
         }
         update control { &REST-HTTP-Header += "${...api_token_header}" }
@@ -30,8 +30,8 @@ server openwisp_site-org_{{ org.name }} {
     }
 
     authenticate {
-        Auth-Type eap-org_{{ org.name }} {
-            eap-org_{{ org.name }}
+        Auth-Type {{ org.name }}_eap {
+            {{ org.name }}_eap
         }
         Auth-Type PAP {
             pap

@@ -1,4 +1,4 @@
-server inner_tunnel-org_{{ org.name }} {
+server {{ org.name }}_eap_inner_tunnel {
     listen {
         ipaddr = 127.0.0.1
         port = {{ org.inner_tunnel_auth_port }}
@@ -10,7 +10,7 @@ server inner_tunnel-org_{{ org.name }} {
         filter_username
         update control { &REST-HTTP-Header += "${...api_token_header}" }
         rest
-        eap-org_{{ org.name }} {
+        {{ org.name }}_eap {
             ok = return
         }
 
@@ -78,7 +78,7 @@ server inner_tunnel-org_{{ org.name }} {
 
     pre-proxy {}
     post-proxy {
-        eap-org_{{ org.name }}
+        {{ org.name }}_eap
         eap
     }
 }

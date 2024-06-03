@@ -614,12 +614,17 @@ installs FreeRADIUS, and configures it for WPA Enterprise (EAP-TTLS-PAP):
           # for this FreeRADIUS site
           inner_tunnel_auth_port: 18230
           # If you want to use a custom certificate for FreeRADIUS
-          # EAP module, you can specify the path to the certificate and
-          # private key as follows.
-          # Ensure that the certificate and private key can be read by
-          # the "freerad" user.
+          # EAP module, you can specify the path to the CA, server
+          # certificate, and private key, and DH key as follows.
+          # Ensure that these files can be read by the "freerad" user.
           cert: /etc/freeradius/certs/cert.pem
           private_key: /etc/freeradius/certs/key.pem
+          ca: /etc/freeradius/certs/ca.crt
+          dh: /etc/freeradius/certs/dh
+          tls_config_extra: |
+            private_key_password = whatever
+            ecdh_curve = "prime256v1"
+
         # You can add as many organizations as you want
         - name: demo
           uuid: 00000000-0000-0000-0000-000000000001
@@ -627,7 +632,7 @@ installs FreeRADIUS, and configures it for WPA Enterprise (EAP-TTLS-PAP):
           auth_port: 1832
           acct_port: 1833
           inner_tunnel_auth_port: 18330
-          # If you omit the "cert" and "private_key" keys,
+          # If you omit the certificate fields,
           # the FreeRADIUS site will use the default certificates
           # located in /etc/freeradius/certs.
 ```
@@ -1417,13 +1422,16 @@ Below are listed all the variables you can customize (you may also want to take 
     # Sets the source path of the template that contains freeradius site configuration.
     # Defaults to "templates/freeradius/openwisp_site.j2" shipped in the role.
     freeradius_openwisp_site_template_src: custom_freeradius_site.j2
+    # Whether to deploy the default openwisp_site for FreeRADIUS.
+    # Defaults to true.
+    freeradius_deploy_openwisp_site: false
     # FreeRADIUS listen address for the openwisp_site.
     # Defaults to "*", i.e. listen on all interfaces.
     freeradius_openwisp_site_listen_ipaddr: "10.8.0.1"
-    # A list of dict that includes organization's name, UUID, RADIUS token, and
-    # ports for authentication, accounting, and inner tunnel. This list of dict
-    # is used to generate FreeRADIUS sites that support WPA Enterprise
-    # (EAP-TTLS-PAP) authentication.
+    # A list of dict that includes organization's name, UUID, RADIUS token,
+    # TLS configuration, and ports for authentication, accounting, and inner tunnel.
+    # This list of dict is used to generate FreeRADIUS sites that support
+    # WPA Enterprise (EAP-TTLS-PAP) authentication.
     # Defaults to an empty list.
     freeradius_eap_orgs:
         # The name should not contain spaces or special characters
@@ -1438,6 +1446,19 @@ Below are listed all the variables you can customize (you may also want to take 
         acct_port: 1833
         # Port used by the authentication service of inner tunnel for this FreeRADIUS site
         inner_tunnel_auth_port: 18330
+        # CA certificate for the FreeRADIUS site
+        ca: /etc/freeradius/certs/ca.crt
+        # TLS certificate for the FreeRADIUS site
+        cert: /etc/freeradius/certs/cert.pem
+        # TLS private key for the FreeRADIUS site
+        private_key: /etc/freeradius/certs/key.pem
+        # Diffie-Hellman key for the FreeRADIUS site
+        dh: /etc/freeradius/certs/dh
+        # Extra instructions for the "tls-config" section of the EAP module
+        # for the FreeRADIUS site
+        tls_config_extra: |
+          private_key_password = whatever
+          ecdh_curve = "prime256v1"
     # Sets the source path of the template that contains freeradius site configuration
     # for WPA Enterprise (EAP-TTLS-PAP) authentication.
     # Defaults to "templates/freeradius/eap/openwisp_site.j2" shipped in the role.
