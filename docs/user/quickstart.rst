@@ -1,10 +1,10 @@
-Usage (tutorial)
-================
+Deploying OpenWISP Using Ansible
+================================
 
 .. note::
 
-    **NOTE**: it is highly suggested to use this procedure on clean
-    virtual machines or linux containers.
+    It is recommended to use this procedure on clean virtual machines or
+    linux containers.
 
 .. raw:: html
 
@@ -18,15 +18,15 @@ Usage (tutorial)
     </p>
 
 If you don't know how to use ansible, don't panic, this procedure will
-guide you towards a fully working basic openwisp2 installation.
+guide you towards a fully working basic OpenWISP installation.
 
 If you already know how to use ansible, you can skip this tutorial.
 
 First of all you need to understand two key concepts:
 
 - for **“production server”** we mean a server (**not a laptop or a
-  desktop computer!**) with public ipv4 / ipv6 which is used to host
-  openwisp2
+  desktop computer!**) with public IpV4 / IPv6 which is used to host
+  OpenWISP
 - for **“local machine”** we mean the host from which you launch ansible,
   eg: your own laptop
 
@@ -36,32 +36,31 @@ on the machine where you launch the deployment** and this machine must be
 able to SSH into the production server.
 
 Ansible will be run on your local machine and from there it will connect
-to the production server to install openwisp2.
+to the production server to install OpenWISP.
 
-**If you are trying to install OpenWISP2 on your laptop or desktop pc just
-for testing purposes**, please read :doc:`Install OpenWISP2 for testing in
+**If you are trying to install OpenWISP on your laptop or desktop pc just
+for testing purposes**, please read :doc:`Install OpenWISP for testing in
 a VirtualBox VM <./installing-on-vm>`.
 
-.. _install_ansible:
+.. _ansible_install:
 
-Install ansible
+Install Ansible
 ---------------
 
 Install ansible (recommended version 2.12) **on your local machine** (not
 the production server!) if you haven't done already.
 
-To **install ansible** we suggest you follow the official `ansible
-installation guide
+We suggest following the `ansible installation guide
 <https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-ansible-in-a-virtual-environment-with-pip>`__.
-It is recommended to install ansible through a virtual environment to
-avoid dependency issues.
+to install ansible. It is recommended to install ansible through a virtual
+environment to avoid dependency issues.
 
 Please ensure that you have the correct version of Jinja installed in your
 Python environment: ``pip install Jinja2>=2.11``
 
-.. _install_ansible_openwisp2:
+.. _ansible_install_role:
 
-Install this role
+Install This Role
 -----------------
 
 For the sake of simplicity, the easiest thing is to install this role **on
@@ -72,22 +71,26 @@ installing ansible), therefore run:
 
     ansible-galaxy install openwisp.openwisp2
 
-Ensure that you have the ```community.general``
-<https://github.com/ansible-collections/community.general>`__ and
-``ansible.posix`` collections installed and up to date:
+Ensure that you have the `community.general
+<https://docs.ansible.com/ansible/latest/collections/community/general/index.html>`_
+and `ansible.posix
+<https://docs.ansible.com/ansible/latest/collections/ansible/posix/index.html>`_
+collections installed and up to date:
 
 .. code-block:: shell
 
     ansible-galaxy collection install "community.general:>=3.6.0"
     ansible-galaxy collection install "ansible.posix"
 
-Choose a working directory
+.. _ansible_choose_working_directory:
+
+Choose a Working Directory
 --------------------------
 
 Choose a working directory **on your local machine** where to put the
-configuration of openwisp2.
+configuration of OpenWISP.
 
-This will be useful when you will need to upgrade openwisp2.
+This will be useful when you will need to upgrade OpenWISP.
 
 Eg:
 
@@ -96,7 +99,9 @@ Eg:
     mkdir ~/openwisp2-ansible-playbook
     cd ~/openwisp2-ansible-playbook
 
-Create inventory file
+.. _ansible_create_inventory_file:
+
+Create Inventory File
 ---------------------
 
 The inventory file is where group of servers are defined. In our simple
@@ -116,7 +121,9 @@ hostname - **DO NOT REPLACE ``openwisp2.mydomain.com`` WITH AN IP
 ADDRESS**, otherwise email sending through postfix will break, causing 500
 internal server errors on some operations.
 
-Create playbook file
+.. _ansible_create_playbook_file:
+
+Create Playbook File
 --------------------
 
 Create a new playbook file ``playbook.yml`` **on your local machine** with
@@ -141,10 +148,12 @@ server's hostname if you desire.
 Substitute ``openwisp2@openwisp2.mydomain.com`` with what you deem most
 appropriate as default sender for emails sent by OpenWISP 2.
 
-Run the playbook
+.. _ansible_run_playbook:
+
+Run the Playbook
 ----------------
 
-Now is time to **deploy openwisp2 to the production server**.
+Now is time to **deploy OpenWISP to the production server**.
 
 Run the playbook **from your local machine** with:
 
@@ -159,17 +168,18 @@ The ``-k`` argument will need the ``sshpass`` program.
 You can remove ``-k``, ``--become`` and ``-K`` if your public SSH key is
 installed on the server.
 
-**Tips**:
+.. tip::
 
-- If you have an error like ``Authentication or permission failure`` then
-  try to use *root* user ``ansible-playbook -i hosts playbook.yml -u root
-  -k``
-- If you have an error about adding the host's fingerprint to the
-  ``known_hosts`` file, you can simply connect to the host via SSH and
-  answer yes when prompted; then you can run ``ansible-playbook`` again.
+    - If you have an error like ``Authentication or permission failure``
+      then try to use *root* user ``ansible-playbook -i hosts playbook.yml
+      -u root -k``
+    - If you have an error about adding the host's fingerprint to the
+      ``known_hosts`` file, you can simply connect to the host via SSH and
+      answer yes when prompted; then you can run ``ansible-playbook``
+      again.
 
 When the playbook is done running, if you got no errors you can login at
-`https://openwisp2.mydomain.com/admin` with the following credentials:
+https://openwisp2.mydomain.com/admin with the following credentials:
 
 .. code-block:: text
 
@@ -188,8 +198,8 @@ Now proceed with the following steps:
 3. edit the information of the default organization
 4. in the default organization you just updated, note down the
    automatically generated *shared secret* option, you will need it to use
-   the `auto-registration feature of openwisp-config
-   <https://github.com/openwisp/openwisp-config#automatic-registration>`__
+   the :doc:`auto-registration feature of openwisp-config
+   </openwrt-config-agent/user/automatic-registration>`
 5. this Ansible role creates a default template to update
    ``authorized_keys`` on networking devices using the default access
    credentials. The role will either use an existing SSH key pair or
@@ -199,11 +209,13 @@ Now you are ready to start configuring your network! **If you need help**
 you can ask questions on one of the official `OpenWISP Support Channels
 <http://openwisp.org/support.html>`__.
 
-Upgrading openwisp2
-===================
+Upgrading OpeNWISP
+------------------
 
-**It's highly recommended to back up your current instance before
-upgrading**.
+.. important::
+
+    It is strongly recommended to back up your current instance before
+    upgrading.
 
 Update this ansible-role via ``ansible-galaxy``:
 
@@ -221,8 +233,8 @@ You may also run the playbook automatically periodically or when a new
 release of OpenWISP2, for example, by setting up a continuous integration
 system.
 
-Deploying the upcoming release of OpenWISP
-==========================================
+Deploying the Upcoming Release of OpenWISP
+------------------------------------------
 
 The following steps will help you set up and install the new version of
 OpenWISP which is not released yet, but ships new features and fixes.
@@ -256,7 +268,7 @@ Setup ``roles_path`` and ``collections_paths`` variables in
 
 Ensure your ``requirements.yml`` contains following content:
 
-.. code-block:: yml
+.. code-block:: yaml
 
     ---
     roles:
@@ -280,13 +292,13 @@ Now, create hosts file and playbook.yml:
     touch hosts
     touch playbook.yml
 
-Follow instructions in `“Create inventory file”
-<#create-inventory-file>`__ section to configure ``hosts`` file.
+Follow instructions in :ref:`ansible_create_inventory_file` section to
+configure ``hosts`` file.
 
 You can reference the example playbook below (tested on Debian 11) for
 installing a fully-featured version of OpenWISP.
 
-.. code-block:: yml
+.. code-block:: yaml
 
     - hosts: openwisp2
       become: "{{ become | default('yes') }}"
@@ -298,8 +310,8 @@ installing a fully-featured version of OpenWISP.
         openwisp2_radius: true
         openwisp2_monitoring: true # monitoring is enabled by default
 
-Read `“Role Variables” <#role-variables>`__ section to learn about
-available configuration variables.
+Read :doc:`role-variables` section to learn about available configuration
+variables.
 
-Follow instructions in `“Run the playbook” <#run-the-playbook>`__ section
-to run above playbook.
+Follow instructions in :ref:`ansible_run_playbook` section to run above
+playbook.

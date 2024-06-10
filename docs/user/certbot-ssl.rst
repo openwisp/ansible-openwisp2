@@ -1,12 +1,12 @@
-Automatic SSL certificate
-=========================
+Using Let's Encrypt SSL Certificate
+===================================
 
 This section explains how to **automatically install and renew a valid SSL
-certificate** signed by `letsencrypt <https://letsencrypt.org/>`__.
+certificate** signed by `Let's Encrypt <https://letsencrypt.org/>`__.
 
 The first thing you have to do is to setup a valid domain for your
-openwisp2 instance, this means your inventory file (hosts) should look
-like the following:
+OpenWISP instance, this means your inventory file (hosts) should look like
+the following:
 
 .. code-block:: text
 

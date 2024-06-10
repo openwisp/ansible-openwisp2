@@ -1,13 +1,13 @@
-Install OpenWISP2 for testing in a VirtualBox VM
-================================================
+Install OpenWISP for Testing in a VirtualBox VM
+===============================================
 
-If you want to try out **OpenWISP 2** in your own development environment,
-the safest way is to use a VirtualBox Virtual Machine (from here on VM).
+If you want to try out OpenWISP in your own development environment, the
+safest way is to use a VirtualBox Virtual Machine (from here on VM).
 
 Using Vagrant
 -------------
 
-**Since August 2018 there's a new fast and easy way to install OpenWISP 2
+**Since August 2018 there's a new fast and easy way to install OpenWISP
 for testing purposes** leveraging `Vagrant <https://www.vagrantup.com>`__,
 a popular open source tool for building and maintaining portable virtual
 software development environments.
@@ -19,7 +19,7 @@ perform the automatic installation.
 
 Alternatively, you can read on to learn how to install *VirtualBox* and
 run *ansible-openwisp2* manually, this is useful if you need to test
-advanced customisations of *OpenWISP*.
+advanced customizations of *OpenWISP*.
 
 Installing Debian 11 on VirtualBox
 ----------------------------------
@@ -29,7 +29,7 @@ Machine running Debian 11. A step-by-step guide is available `here
 <http://www.brianlinkletter.com/installing-debian-linux-in-a-virtualbox-virtual-machine/>`__,
 however we need to change a few things to get ansible working.
 
-VM configuration
+VM Configuration
 ----------------
 
 Proceed with the installation as shown in the guide linked above, and come
@@ -51,8 +51,12 @@ assign an IP address to the VM.
 - Click the + icon to create a new adapter
 - Set the IPv4 address to ``192.168.56.1`` and the IPv4 Network Mask to
   ``255.255.255.0``. You may need to select ``Configure Adapter Manually``
-  to do this. The IPv6 settings can be ignored |Screenshot of the
-  Host-only network configuration screen|
+  to do this. The IPv6 settings can be ignored
+
+  .. image:: https://raw.githubusercontent.com/openwisp/ansible-openwisp2/master/docs/host-only-network.png
+      :target: https://raw.githubusercontent.com/openwisp/ansible-openwisp2/master/docs/host-only-network.png
+      :alt: Screenshot of the Host-only network configuration screen
+
 - Shut off your VM
 - In your VM settings, in the Network section, click Adapter 2 and Enable
   this Adapter
@@ -87,12 +91,13 @@ Make sure you can access your VM via ssh:
 
 Proceed with these steps in your **local machine**, not the VM.
 
-**Step 1**: `Install ansible <#install-ansible>`__
+**Step 1**: :ref:`Install ansible <ansible_install>`
 
-**Step 2**: `Install the OpenWISP2 role for Ansible
-<#install-this-role>`__
+**Step 2**: :ref:`Install the OpenWISP2 role for Ansible
+<ansible_install_role>`
 
-**Step 3**: `Set up a working directory <#choose-a-working-directory>`__
+**Step 3**: :ref:`Set up a working directory
+<ansible_choose_working_directory>`
 
 **Step 4**: Create the ``hosts`` file
 
@@ -125,7 +130,7 @@ named ``playbook.yml`` which contains the following:
     ansible-playbook -i hosts playbook.yml -b -k -K --become-method=su
 
 When the playbook ran successfully, you can log in at
-`https://192.168.56.2/admin` with the following credentials:
+https://192.168.56.2/admin with the following credentials:
 
 .. code-block:: text
 

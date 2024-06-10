@@ -1,16 +1,15 @@
-Enabling the Network Topology module
+Enabling the Network Topology Module
 ====================================
 
-To enable the `Network Topology module
-<https://openwisp.io/docs/user/network-topology.html>`__ you need to set
-``openwisp2_network_topology`` to ``true`` in your ``playbook.yml`` file.
-Here's a short summary of how to do this:
+To enable the :doc:`Network Topology module <network-topology/index>` you
+need to set ``openwisp2_network_topology`` to ``true`` in your
+``playbook.yml`` file. Here's a short summary of how to do this:
 
-**Step 1**: `Install ansible <#install-ansible>`__
+**Step 1**: :ref:`Install ansible <ansible_install>`
 
-**Step 2**: `Install this role <#install-this-role>`__
+**Step 2**: :ref:`Install this role <ansible_install_role>`
 
-**Step 3**: `Create inventory file <#create-inventory-file>`__
+**Step 3**: :ref:`Create inventory file <ansible_create_inventory_file>`
 
 **Step 4**: Create a playbook file with following contents:
 
@@ -23,12 +22,12 @@ Here's a short summary of how to do this:
       vars:
         openwisp2_network_topology: true
 
-**Step 5**: `Run the playbook <#run-the-playbook>`__
+**Step 5**: :ref:`Run the playbook <ansible_run_playbook>`
 
-When the playbook is done running, if you got no errors you can login at:
+When the playbook is done running, if you got no errors you can login at
+https://openwisp2.mydomain.com/admin with the following credentials:
 
-.. code-block::
+.. code-block:: text
 
-    https://openwisp2.mydomain.com/admin
     username: admin
     password: admin
