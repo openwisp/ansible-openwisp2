@@ -5,7 +5,8 @@ The following specifications will run a new, *empty* instance of OpenWISP.
 Please ensure you account for the amount of disk space your use case will
 require, e.g. allocate enough space for users to upload floor plan images.
 
-Hardware requirements (Recommended) ———————————–
+Hardware Requirements (Recommended)
+-----------------------------------
 
 - 2 CPUs
 - 2 GB Memory
@@ -17,8 +18,8 @@ more memory and CPU. You will need to increase the amount of celery
 workers as the number of devices you manage grows.
 
 For more information about how to increase concurrency, look for the
-variables which end with ``_concurrency`` or ``_autoscale`` in the `Role
-Variables <#role-variables>`__ section.
+variables which end with ``_concurrency`` or ``_autoscale`` in the
+:doc:`role-variables` section.
 
 Software
 --------
@@ -28,14 +29,18 @@ is sufficient; no pre-configuration required. The Ansible Playbook will
 install and configure all dependencies and leave you with a running
 OpenWISP installation.
 
-Tips: Ensure the hostname of your target machine matches what is in your
-Ansible configuration file. Also, please ensure that Ansible can access
-your target machine by SSH, be it either with a key or password. For more
-information see the `Ansible Getting Started Documentation
-<https://docs.ansible.com/ansible/latest/user_guide/intro_getting_started.html>`__.
+.. important::
+
+    Ensure the hostname of your target machine matches what is in your
+    Ansible configuration file. Also, please ensure that Ansible can
+    access your target machine by SSH, be it either with a key or
+    password. For more information see the `Ansible Getting Started
+    Documentation
+    <https://docs.ansible.com/ansible/latest/user_guide/intro_getting_started.html>`__.
 
 Supported Operating Systems
 ---------------------------
 
-See the section “OS Platforms” on the `ansible-galaxy page of
-ansible-openwisp2 <https://galaxy.ansible.com/openwisp/openwisp2>`__.
+- Debian 11
+- Ubuntu 22 LTS
+- Ubuntu 20 LTS

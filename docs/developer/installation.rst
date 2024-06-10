@@ -1,10 +1,10 @@
-Install ansible-openwisp2 for development
-=========================================
+Developer Installation instructions
+===================================
 
-.. note::
+.. include:: ../partials/developer-docs.rst
 
-    If you need to modify the logic of this ansible role and you need to
-    test your changes here we explain how to do it.
+Installing for Development
+--------------------------
 
 First of all, create the directory where you want to place the
 repositories of the ansible roles and create directory roles.
@@ -33,15 +33,14 @@ Now, go to the parent directory & create hosts file and playbook.yml:
 From here on you can follow the instructions available at the following
 sections:
 
-- `Create inventory file <#create-inventory-file>`__
-- `Create playbook file <#create-playbook-file>`__
-- `Run the playbook <#run-the-playbook>`__
-
-**Note:** Please remember to `install ansible <#install-ansible>`__.
+- :ref:`ansible_install`
+- :ref:`ansible_create_inventory_file`
+- :ref:`ansible_create_playbook_file`
+- :ref:`ansible_run_playbook`
 
 All done!
 
-How to run tests
+How to Run Tests
 ----------------
 
 If you want to contribute to ``ansible-openwisp2`` you should run tests in
@@ -54,7 +53,7 @@ To do that, proceed with the following steps:
 
 Clone repository by:
 
-.. code-block::
+.. code-block:: shell
 
     git clone https://github.com/<your_fork>/ansible-openwisp2.git openwisp.openwisp2
     cd openwisp.openwisp2
@@ -64,19 +63,19 @@ Clone repository by:
 If you haven't installed docker yet, you need to install it (example for
 linux debian/ubuntu systems):
 
-.. code-block::
+.. code-block:: shell
 
-    sudo apt-get install docker.io
+    sudo apt install docker.io
 
-**Step 3**: Install molecule and dependences
+**Step 3**: Install molecule and dependencies
 
-.. code-block::
+.. code-block:: shell
 
     pip install molecule[docker] molecule-plugins yamllint ansible-lint docker
 
 **Step 4**: Download docker images
 
-.. code-block::
+.. code-block:: shell
 
     docker pull geerlingguy/docker-ubuntu2204-ansible:latest
     docker pull geerlingguy/docker-ubuntu2004-ansible:latest
@@ -84,7 +83,7 @@ linux debian/ubuntu systems):
 
 **Step 5**: Run molecule test
 
-.. code-block::
+.. code-block:: shell
 
     molecule test -s local
 

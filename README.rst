@@ -10,14 +10,22 @@ ansible-openwisp2
     :alt: Galaxy
 
 .. image:: https://img.shields.io/gitter/room/nwjs/nw.js.svg
-   :target: https://gitter.im/openwisp/general
-   :alt: Chat
+    :target: https://gitter.im/openwisp/general
+    :alt: Chat
 
 Ansible role that installs the OpenWISP Server Application.
 
 Tested on **Debian (Bullseye)**, **Ubuntu (20/22 LTS)**.
 
 **Recommended ansible version**: 2.12.
+
+Documentation
+-------------
+
+- `Developer documentation
+  <https://openwisp.io/docs/__new__/dev/ansible-openwisp2/developer/>`_
+- `User documentation
+  <https://openwisp.io/docs/__new__/dev/ansible-openwisp2/>`_
 
 Support
 -------

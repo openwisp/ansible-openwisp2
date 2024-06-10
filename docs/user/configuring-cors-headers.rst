@@ -9,11 +9,11 @@ allows users to configure the CORS headers with the help of
 <https://github.com/adamchainz/django-cors-headers>`__ package. Here's a
 short summary of how to do this:
 
-**Step 1**: `Install ansible <#install-ansible>`__
+**Step 1**: :ref:`Install ansible <ansible_install>`
 
-**Step 2**: `Install this role <#install-this-role>`__
+**Step 2**: :ref:`Install this role <ansible_install_role>`
 
-**Step 3**: `Create inventory file <#create-inventory-file>`__
+**Step 3**: :ref:`Create inventory file <ansible_create_inventory_file>`
 
 **Step 4**: Create a playbook file with following contents:
 
@@ -33,16 +33,16 @@ short summary of how to do this:
 
 **Note:** to learn about the supported fields of the
 ``openwisp2_django_cors`` variable, look for the word
-“openwisp2_django_cors” in the `Role variables <#role-variables>`__
-section of this document.
+“openwisp2_django_cors” in the :doc:`role-variables` section of this
+document.
 
-**Step 5**: `Run the playbook <#run-the-playbook>`__
+**Step 5**: :ref:`Run the playbook <ansible_run_playbook>`
 
-When the playbook is done running, if you got no errors you can login at:
+When the playbook is done running, if you got no errors you can login at
+https://openwisp2.mydomain.com/admin, with the following credentials:
 
-.. code-block::
+.. code-block:: text
 
-    https://openwisp2.mydomain.com/admin
     username: admin
     password: admin
 

@@ -1,4 +1,4 @@
-Role variables
+Role Variables
 ==============
 
 This role has many variables values that can be changed to best suit your

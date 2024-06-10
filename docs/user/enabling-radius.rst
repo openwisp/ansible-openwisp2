@@ -1,16 +1,15 @@
-Enabling the RADIUS module
+Enabling the RADIUS Module
 ==========================
 
-To enable the `RADIUS module
-<https://openwisp.io/docs/user/radius.html>`__ you need to set
+To enable the :doc:`RADIUS module </user/radius>` you need to set
 ``openwisp2_radius`` to ``true`` in your ``playbook.yml`` file. Here's a
 short summary of how to do this:
 
-**Step 1**: `Install ansible <#install-ansible>`__
+**Step 1**: :ref:`Install ansible <ansible_install>`
 
-**Step 2**: `Install this role <#install-this-role>`__
+**Step 2**: :ref:`Install this role <ansible_install_role>`
 
-**Step 3**: `Create inventory file <#create-inventory-file>`__
+**Step 3**: :ref:`Create inventory file <ansible_create_inventory_file>`
 
 **Step 4**: Create a playbook file with following contents:
 
@@ -27,14 +26,16 @@ short summary of how to do this:
         # API endpoints.
         openwisp2_radius_urls: true
 
-**Note:** ``openwisp2_freeradius_install`` option provides a basic
-configuration of freeradius for openwisp, it sets up the `radius user
-token mechanism
-<https://openwisp-radius.readthedocs.io/en/latest/user/api.html#radius-user-token-recommended>`__
-if you want to use another mechanism or manage your freeradius separately,
-please disable this option by setting it to ``false``.
+.. note::
 
-**Step 5**: `Run the playbook <#run-the-playbook>`__
+    ``openwisp2_freeradius_install`` option provides a basic configuration
+    of freeradius for OpenIWSP, it sets up the `radius user token
+    mechanism
+    <https://openwisp-radius.readthedocs.io/en/latest/user/api.html#radius-user-token-recommended>`__
+    if you want to use another mechanism or manage your freeradius
+    separately, please disable this option by setting it to ``false``.
+
+**Step 5**: :ref:`Run the playbook <ansible_run_playbook>`
 
 When the playbook is done running, if you got no errors you can login at:
 
@@ -45,5 +46,5 @@ When the playbook is done running, if you got no errors you can login at:
     password: admin
 
 **Note:** for more information regarding radius configuration options,
-look for the word “radius” in the `Role variables <#role-variables>`__
-section of this document.
+look for the word “radius” in the :doc:`role-variables` section of this
+document.
