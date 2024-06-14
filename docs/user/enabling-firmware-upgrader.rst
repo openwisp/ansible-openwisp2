@@ -37,7 +37,7 @@ https://openwisp2.mydomain.com/admin with the following credentials:
     password: admin
 
 You can configure :doc:`openwisp-firmware-upgrader specific settings
-<firmware-upgrader/user/settings>` using the
+</firmware-upgrader/user/settings>` using the
 ``openwisp2_extra_django_settings`` or
 ``openwisp2_extra_django_settings_instructions``.
 

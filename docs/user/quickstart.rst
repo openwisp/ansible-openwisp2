@@ -9,12 +9,13 @@ Deploying OpenWISP Using Ansible
 .. raw:: html
 
     <p>
-        <iframe width="560"
-                height="315"
-                src="https://www.youtube.com/watch?v=v_DUeFUGG8Q"
-                frameborder="0"
-                allowfullscreen>
-        </iframe>
+        <iframe width="560" height="315"
+            src="https://www.youtube.com/embed/v_DUeFUGG8Q?si=Hk_M_CBRxkK179sG"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+        ></iframe>
     </p>
 
 If you don't know how to use ansible, don't panic, this procedure will

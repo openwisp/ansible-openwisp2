@@ -1,7 +1,7 @@
 Enabling the Network Topology Module
 ====================================
 
-To enable the :doc:`Network Topology module <network-topology/index>` you
+To enable the :doc:`Network Topology module </network-topology/index>` you
 need to set ``openwisp2_network_topology`` to ``true`` in your
 ``playbook.yml`` file. Here's a short summary of how to do this:
 
