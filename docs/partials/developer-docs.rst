@@ -9,4 +9,4 @@
     to use OpenWISP, please refer to:
 
     - :doc:`General OpenWISP Quickstart </user/quickstart>`
-    - :doc:`Ansible OpenWISP2 User Docs </ansible-openwisp2/index>`
+    - :doc:`Ansible OpenWISP2 User Docs </ansible/index>`
