@@ -9,7 +9,7 @@ ansible-openwisp2
 
 Ansible role that installs the OpenWISP Server Application.
 
-Tested on **Debian (Bullseye)**, **Ubuntu (20/22 LTS)**.
+Tested on **Debian (Bookworm/Bullseye)**, **Ubuntu (24/22/20 LTS)**.
 
 **NOTE**: it is highly suggested to use this procedure on clean virtual machines or linux containers.
 
@@ -290,8 +290,10 @@ If you haven't installed docker yet, you need to install it (example for linux d
 
 **Step 4**: Download docker images
 
+    docker pull geerlingguy/docker-ubuntu2404-ansible:latest
     docker pull geerlingguy/docker-ubuntu2204-ansible:latest
     docker pull geerlingguy/docker-ubuntu2004-ansible:latest
+    docker pull geerlingguy/docker-debian12-ansible:latest
     docker pull geerlingguy/docker-debian11-ansible:latest
 
 **Step 5**: Run molecule test
