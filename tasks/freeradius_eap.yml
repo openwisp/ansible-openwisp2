@@ -1,9 +1,19 @@
 ---
 
+
+
 - name: Generate default DH key and certificates
-  command:
-    cmd: make destroycerts dh all
-    chdir: /etc/freeradius/certs
+  block:
+    - name: "Check if {{ freeradius_dir }}/certs/dh exists"
+      ansible.builtin.stat:
+        path: "{{ freeradius_dir }}/certs/dh"
+      register: cert_dh_exists
+    - name: Generate DH key and certificates
+      command:
+        cmd: make destroycerts dh all
+        chdir: "{{ freeradius_dir }}/certs"
+      when: not cert_dh_exists.stat.exists
+  notify: Restart freeradius
   tags: [freeradius_eap]
 
 - name: "Copy {{ org.name }} EAP openwisp_site"
