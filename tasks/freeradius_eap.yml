@@ -1,5 +1,11 @@
 ---
 
+- name: Generate default DH key and certificates
+  command:
+    cmd: make destroycerts dh all
+    chdir: /etc/freeradius/certs
+  tags: [freeradius_eap]
+
 - name: "Copy {{ org.name }} EAP openwisp_site"
   template:
     src: "{{ freeradius_eap_openwisp_site_template_src }}"
