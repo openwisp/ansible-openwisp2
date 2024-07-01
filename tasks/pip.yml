@@ -10,8 +10,6 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-  environment:
-    SETUPTOOLS_USE_DISTUTILS: stdlib
   retries: 5
   delay: 10
   register: result
@@ -24,8 +22,6 @@
     state: absent
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-  environment:
-    SETUPTOOLS_USE_DISTUTILS: stdlib
   retries: 2
   delay: 5
   register: result
@@ -41,7 +37,6 @@
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
   environment:
-    SETUPTOOLS_USE_DISTUTILS: stdlib
     LC_CTYPE: "en_US.UTF-8"
   notify: Reload application
   retries: 5
@@ -58,8 +53,6 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-  environment:
-    SETUPTOOLS_USE_DISTUTILS: stdlib
   retries: 1
   delay: 10
   register: result
@@ -71,8 +64,6 @@
     state: present
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-  environment:
-    SETUPTOOLS_USE_DISTUTILS: stdlib
   notify: Reload application
   retries: 5
   delay: 10
@@ -86,8 +77,6 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-  environment:
-    SETUPTOOLS_USE_DISTUTILS: stdlib
   notify: Reload application
   retries: 5
   delay: 10
@@ -103,8 +92,6 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-  environment:
-    SETUPTOOLS_USE_DISTUTILS: stdlib
   notify: Reload application
   retries: 5
   delay: 10
@@ -120,8 +107,6 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-  environment:
-    SETUPTOOLS_USE_DISTUTILS: stdlib
   notify: Reload application
   retries: 5
   delay: 10
@@ -137,8 +122,6 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-  environment:
-    SETUPTOOLS_USE_DISTUTILS: stdlib
   notify: Reload application
   retries: 5
   delay: 10
@@ -154,8 +137,6 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-  environment:
-    SETUPTOOLS_USE_DISTUTILS: stdlib
   retries: 5
   delay: 10
   register: result
@@ -168,8 +149,6 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-  environment:
-    SETUPTOOLS_USE_DISTUTILS: stdlib
   retries: 5
   delay: 10
   register: result
@@ -184,8 +163,6 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-  environment:
-    SETUPTOOLS_USE_DISTUTILS: stdlib
   retries: 5
   delay: 10
   register: result
@@ -198,8 +175,6 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-  environment:
-    SETUPTOOLS_USE_DISTUTILS: stdlib
   retries: 5
   delay: 10
   register: result
@@ -213,8 +188,6 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-  environment:
-    SETUPTOOLS_USE_DISTUTILS: stdlib
   retries: 5
   delay: 10
   register: result
@@ -228,8 +201,6 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-  environment:
-    SETUPTOOLS_USE_DISTUTILS: stdlib
   retries: 5
   delay: 10
   register: result
@@ -243,8 +214,6 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-  environment:
-    SETUPTOOLS_USE_DISTUTILS: stdlib
   retries: 5
   delay: 10
   register: result
@@ -257,8 +226,6 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-  environment:
-    SETUPTOOLS_USE_DISTUTILS: stdlib
   when: openwisp2_email_backend == "djcelery_email.backends.CeleryEmailBackend"
   retries: 5
   delay: 10
@@ -272,8 +239,6 @@
     state: present
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-  environment:
-    SETUPTOOLS_USE_DISTUTILS: stdlib
   retries: 5
   delay: 10
   register: result
