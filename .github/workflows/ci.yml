@@ -1,6 +1,6 @@
 ---
 
-name: Ansible OpenWISP2 CI Build
+name: Ansible-OpenWISP2 CI Build
 
 on:             # yamllint disable-line rule:truthy
   push:
@@ -15,7 +15,7 @@ on:             # yamllint disable-line rule:truthy
 jobs:
   build:
     name: Build ${{ matrix.distro }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
 
     strategy:
       fail-fast: false
