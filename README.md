@@ -13,7 +13,7 @@ Tested on **Debian (Bookworm/Bullseye)**, **Ubuntu (24/22/20 LTS)**.
 
 **NOTE**: it is highly suggested to use this procedure on clean virtual machines or linux containers.
 
-**Recommended ansible version**: 2.12.
+**Recommended minimum ansible core version**: 2.13.
 
 Demo
 ====
@@ -102,7 +102,7 @@ please read [Install OpenWISP2 for testing in a VirtualBox VM](#install-openwisp
 Install ansible
 ---------------
 
-Install ansible (recommended version 2.12) **on your local machine**
+Install ansible (minimum recommended version 2.13) **on your local machine**
 (not the production server!) if you haven't done already.
 
 To **install ansible** we suggest you follow the official [ansible installation guide](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-ansible-in-a-virtual-environment-with-pip). It is recommended to install ansible through a virtual environment to avoid dependency issues.
