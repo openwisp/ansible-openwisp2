@@ -186,6 +186,7 @@
     mode: 0640
     owner: freerad
     group: freerad
+  when: freeradius_deploy_openwisp_site
   notify: Restart freeradius
 
 - name: Inner tunnel
@@ -195,4 +196,13 @@
     mode: 0640
     owner: freerad
     group: freerad
+  when: freeradius_deploy_openwisp_site
   notify: Restart freeradius
+
+- name: Copy configuration for WPA Enterprise TTLS
+  include_tasks: tasks/freeradius_eap.yml
+  loop: "{{ freeradius_eap_orgs }}"
+  loop_control:
+    loop_var: org
+  when: freeradius_eap_orgs
+  tags: [freeradius_eap]

@@ -176,6 +176,7 @@ freeradius_mods_config_dir: "{{ freeradius_dir }}/mods-config"
 freeradius_sites_available_dir: "{{ freeradius_dir }}/sites-available"
 freeradius_sites_enabled_dir: "{{ freeradius_dir }}/sites-enabled"
 freeradius_openwisp_site_template_src: freeradius/openwisp_site.j2
+freeradius_deploy_openwisp_site: true
 freeradius_db_map:
     django.contrib.gis.db.backends.spatialite:
         driver: rlm_sql_sqlite
@@ -197,6 +198,10 @@ freeradius_rest:
 freeradius_expire_attr_after_seconds: 86400
 freeradius_safe_characters: "+@abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_: /"
 freeradius_openwisp_site_listen_ipaddr: "*"
+freeradius_eap_orgs: []
+freeradius_eap_openwisp_site_template_src: freeradius/eap/openwisp_site.j2
+freeradius_eap_inner_tunnel_template_src: freeradius/eap/inner_tunnel.j2
+freeradius_eap_template_src: freeradius/eap/eap.j2
 cron_delete_old_notifications: "'hour': 0, 'minute': 0"
 cron_deactivate_expired_users: "'hour': 0, 'minute': 5"
 cron_delete_old_radiusbatch_users: "'hour': 0, 'minute': 10"

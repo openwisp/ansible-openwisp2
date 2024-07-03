@@ -1,0 +1,79 @@
+server {{ org.name }}_eap_openwisp_site {
+    listen {
+        type = auth
+        ipaddr = {{ org.listen_ipaddr | default(freeradius_openwisp_site_listen_ipaddr) }}
+        port = {{ org.auth_port }}
+        limit {
+            max_connections = 16
+            lifetime = 0
+            idle_timeout = 30
+        }
+    }
+
+    listen {
+        ipaddr = {{ org.listen_ipaddr | default(freeradius_openwisp_site_listen_ipaddr) }}
+        port = {{ org.acct_port }}
+        type = acct
+        limit {}
+    }
+
+    api_token_header = "Authorization: Bearer {{ org.uuid }} {{ org.radius_token }}"
+    authorize {
+        {{ org.name }}_eap {
+          ok = return
+        }
+        update control { &REST-HTTP-Header += "${...api_token_header}" }
+        filter_username
+        rest
+        expiration
+        logintime
+    }
+
+    authenticate {
+        Auth-Type {{ org.name }}_eap {
+            {{ org.name }}_eap
+        }
+        Auth-Type PAP {
+            pap
+        }
+
+        Auth-Type CHAP {
+            chap
+        }
+
+        Auth-Type MS-CHAP {
+            mschap
+        }
+
+        Auth-Type EAP {
+            eap
+        }
+    }
+
+    preacct {
+        preprocess
+        acct_unique
+        suffix
+        files
+    }
+
+    accounting {
+        update control { &REST-HTTP-Header += "${...api_token_header}" }
+        rest
+    }
+
+    session {}
+
+    post-auth {
+        update control { &REST-HTTP-Header += "${...api_token_header}" }
+        rest
+
+        Post-Auth-Type REJECT {
+        update control { &REST-HTTP-Header += "${....api_token_header}" }
+            rest
+        }
+    }
+
+    pre-proxy {}
+    post-proxy {}
+}
