@@ -15,9 +15,9 @@ ansible-openwisp2
 
 Ansible role that installs the OpenWISP Server Application.
 
-Tested on **Debian (Bullseye)**, **Ubuntu (20/22 LTS)**.
+Tested on **Debian (Bookworm/Bullseye)**, **Ubuntu (24/22/20 LTS)**.
 
-**Recommended ansible version**: 2.12.
+**Recommended minimum ansible core version**: 2.13.
 
 Documentation
 -------------

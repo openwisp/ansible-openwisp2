@@ -3,7 +3,9 @@ Ansible OpenWISP
 
 Ansible role that installs the OpenWISP Server Application.
 
-**Recommended ansible version**: ``2.12``
+**Recommended minimum ansible core version**: 2.13.
+
+Tested on **Debian (Bookworm/Bullseye)**, **Ubuntu (24/22/20 LTS)**.
 
 .. toctree::
     :caption: User Docs

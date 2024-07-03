@@ -48,7 +48,7 @@ a VirtualBox VM <./installing-on-vm>`.
 Install Ansible
 ---------------
 
-Install ansible (recommended version 2.12) **on your local machine** (not
+Install ansible (minimum recommended version 2.13) **on your local machine** (not
 the production server!) if you haven't done already.
 
 We suggest following the `ansible installation guide
