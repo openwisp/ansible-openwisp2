@@ -1,7 +1,5 @@
 ---
 
-
-
 - name: Generate default DH key and certificates
   block:
     - name: "Check if {{ freeradius_dir }}/certs/dh exists"
