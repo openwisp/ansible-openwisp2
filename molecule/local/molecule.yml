@@ -11,6 +11,14 @@ lint: |
   yamllint . || true
   ansible-lint || true
 platforms:
+  - name: "openwisp2-ubuntu2404"
+    image: "geerlingguy/docker-ubuntu2404-ansible:latest"
+    command: ${MOLECULE_DOCKER_COMMAND:-""}
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    cgroupns_mode: host
+    privileged: true
+    pre_build_image: true
   - name: "openwisp2-ubuntu2204"
     image: "geerlingguy/docker-ubuntu2204-ansible:latest"
     command: ${MOLECULE_DOCKER_COMMAND:-""}
@@ -29,6 +37,14 @@ platforms:
     pre_build_image: true
   - name: "openwisp2-debian11"
     image: "geerlingguy/docker-debian11-ansible:latest"
+    command: ${MOLECULE_DOCKER_COMMAND:-""}
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    cgroupns_mode: host
+    privileged: true
+    pre_build_image: true
+  - name: "openwisp2-debian12"
+    image: "geerlingguy/docker-debian12-ansible:latest"
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw

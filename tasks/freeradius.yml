@@ -18,28 +18,38 @@
       register: openwisp2_installed_freeradius_version
     - name: Add FreeRADIUS 3.0.x repository to sources list
       shell: >
-        echo "deb http://packages.networkradius.com/freeradius-3.0/ubuntu/focal focal main" |
+        echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc] http://packages.networkradius.com/freeradius-3.0/ubuntu/focal focal main" |
           tee /etc/apt/sources.list.d/networkradius.list > /dev/null
       when: openwisp2_installed_freeradius_version.stdout == '3.0'
     - name: Add FreeRADIUS 3.2.x repository to sources list
       shell: >
-        echo "deb http://packages.networkradius.com/freeradius-3.2/ubuntu/jammy jammy main" |
+        echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc] http://packages.networkradius.com/freeradius-3.2/ubuntu/jammy jammy main" |
           tee /etc/apt/sources.list.d/networkradius.list > /dev/null
       when: openwisp2_installed_freeradius_version.stdout != '3.0'
     - name: Update freeradius_dir variable
       set_fact:
         freeradius_dir: '/etc/freeradius/3.0'
       when: openwisp2_installed_freeradius_version.stdout == '3.0'
-
   when:
     - ansible_distribution|string == 'Ubuntu'
     - ansible_distribution_release|string == 'jammy'
   tags:
     - molecule-idempotence-notest
 
+- name: Add freeradius repository into Ubuntu noble sources list
+  shell: |
+    echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc] http://packages.networkradius.com/freeradius-3.2/ubuntu/noble noble main" | \
+    tee /etc/apt/sources.list.d/networkradius.list > /dev/null
+  become: true
+  when:
+    - ansible_distribution|string == 'Ubuntu'
+    - ansible_distribution_release|string == 'noble'
+  tags:
+    - molecule-idempotence-notest
+
 - name: Add freeradius repository into Ubuntu focal sources list
   shell: |
-    echo "deb http://packages.networkradius.com/freeradius-3.0/ubuntu/focal focal main" | \
+    echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc] http://packages.networkradius.com/freeradius-3.0/ubuntu/focal focal main" | \
     tee /etc/apt/sources.list.d/networkradius.list > /dev/null
   become: true
   when:
@@ -48,23 +58,21 @@
   tags:
     - molecule-idempotence-notest
 
-- name: Add freeradius repository into Ubuntu xenial sources list and Network RADIUS PGP public key
+- name: Add freeradius repository into Debian bookworm sources list
   shell: |
-    echo "deb http://packages.networkradius.com/freeradius-3.0/ubuntu/xenial xenial main" | \
-    tee /etc/apt/sources.list.d/networkradius.list > /dev/null
-    curl -s 'https://packages.networkradius.com/pgp/packages%40networkradius.com' | \
-    sudo apt-key add -
+    echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc] http://packages.networkradius.com/freeradius-3.2/debian/bookworm bookworm main" | \
+    sudo tee /etc/apt/sources.list.d/networkradius.list > /dev/null
   become: true
   when:
-    - ansible_distribution|string == 'Ubuntu'
-    - ansible_distribution_release|string == 'xenial'
+    - ansible_distribution|string == 'Debian'
+    - ansible_distribution_release|string == 'bookworm'
   tags:
     - molecule-idempotence-notest
 
 - name: Add freeradius repository into Debian bullseye sources list
   shell: |
-    echo "deb http://packages.networkradius.com/freeradius-3.0/debian/bullseye bullseye main" | \
-    sudo tee /etc/apt/sources.list.d/networkradius.list > /dev/null
+    echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc] http://packages.networkradius.com/freeradius-3.0/debian/bullseye bullseye main" | \
+    tee /etc/apt/sources.list.d/networkradius.list > /dev/null
   become: true
   when:
     - ansible_distribution|string == 'Debian'
@@ -72,25 +80,13 @@
   tags:
     - molecule-idempotence-notest
 
-- name: Add freeradius repository into Debian stretch sources list
-  shell: |
-    echo "deb http://packages.networkradius.com/freeradius-3.0/debian/stretch stretch main" | \
-    sudo tee /etc/apt/sources.list.d/networkradius.list > /dev/null
-  become: true
-  when:
-    - ansible_distribution|string == 'Debian'
-    - ansible_distribution_release|string == 'stretch'
-  tags:
-    - molecule-idempotence-notest
-
 - name: Add Network RADIUS PGP public key
   become: true
   shell: |
     curl -s 'https://packages.networkradius.com/pgp/packages%40networkradius.com' | \
-    tee /etc/apt/trusted.gpg.d/packages.networkradius.com.asc > /dev/null
+      sudo tee /etc/apt/trusted.gpg.d/packages.networkradius.com.asc > /dev/null
   when:
     - ansible_distribution|string == 'Ubuntu' or ansible_distribution|string == 'Debian'
-    - ansible_distribution_release|string != 'xenial'
   tags:
     - molecule-idempotence-notest
 

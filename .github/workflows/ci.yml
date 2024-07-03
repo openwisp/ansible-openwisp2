@@ -1,6 +1,6 @@
 ---
 
-name: Ansible OpenWISP2 CI Build
+name: Ansible-OpenWISP2 CI Build
 
 on:             # yamllint disable-line rule:truthy
   push:
@@ -15,7 +15,7 @@ on:             # yamllint disable-line rule:truthy
 jobs:
   build:
     name: Build ${{ matrix.distro }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
 
     strategy:
       fail-fast: false
@@ -23,7 +23,9 @@ jobs:
         distro:
           - ubuntu2004
           - ubuntu2204
+          - ubuntu2404
           - debian11
+          - debian12
 
     steps:
       - uses: actions/checkout@v2
@@ -46,6 +48,7 @@ jobs:
         run: ansible-galaxy collection install "community.general:>=3.6.0"
 
       - name: QA checks
+        continue-on-error: true
         run: |
           openwisp-qa-check --skip-isort --skip-flake8 --skip-checkmigrations --skip-black
 

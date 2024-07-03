@@ -127,6 +127,7 @@
     app_path: "{{ openwisp2_path }}"
     command: migrate
     virtualenv: "{{ virtualenv_path }}"
+  tags: [django_settings]
 
 - name: Set permissions to sqlite db
   when: openwisp2_database.engine == "django.db.backends.sqlite3"
