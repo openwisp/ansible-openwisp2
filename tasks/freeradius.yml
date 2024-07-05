@@ -81,14 +81,15 @@
     - molecule-idempotence-notest
 
 - name: Add Network RADIUS PGP public key
-  become: true
-  shell: |
-    curl -s 'https://packages.networkradius.com/pgp/packages%40networkradius.com' | \
-      sudo tee /etc/apt/trusted.gpg.d/packages.networkradius.com.asc > /dev/null
-  when:
-    - ansible_distribution|string == 'Ubuntu' or ansible_distribution|string == 'Debian'
-  tags:
-    - molecule-idempotence-notest
+  get_url:
+    url: https://packages.networkradius.com/pgp/packages%40networkradius.com
+    dest: /etc/apt/trusted.gpg.d/packages.networkradius.com.asc
+    checksum: sha256:652bc3a84297eb133f40af2e51bed897b0c5c22ec6a3ef76a2a14f97f90c9b7d
+  ignore_errors: true
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
 
 - name: Update and upgrade apt packages
   apt:
