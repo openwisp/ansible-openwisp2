@@ -1,6 +1,9 @@
 Ansible OpenWISP
 ================
 
+**Source code**: `github.com/openwisp/ansible-openwisp2
+<https://github.com/openwisp/ansible-openwisp2>`_.
+
 Ansible role that installs the OpenWISP Server Application.
 
 **Recommended minimum ansible core version**: 2.13.
