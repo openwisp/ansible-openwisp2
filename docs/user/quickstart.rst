@@ -3,8 +3,8 @@ Deploying OpenWISP Using Ansible
 
 .. note::
 
-    It is recommended to use this procedure on clean virtual machines or
-    linux containers.
+    If you want to use the latest features of OpenWISP, refer to the
+    :ref:`ansible_deploying_development_version` section.
 
 .. raw:: html
 
@@ -39,17 +39,22 @@ able to SSH into the production server.
 Ansible will be run on your local machine and from there it will connect
 to the production server to install OpenWISP.
 
-**If you are trying to install OpenWISP on your laptop or desktop pc just
-for testing purposes**, please read :doc:`Install OpenWISP for testing in
-a VirtualBox VM <./installing-on-vm>`.
+.. note::
+
+    It is recommended to use this procedure on clean virtual machines or
+    linux containers.
+
+    If you are trying to install OpenWISP on your laptop or desktop pc
+    just for testing purposes, please read :doc:`Install OpenWISP for
+    testing in a VirtualBox VM <./installing-on-vm>`.
 
 .. _ansible_install:
 
 Install Ansible
 ---------------
 
-Install ansible (minimum recommended version 2.13) **on your local machine** (not
-the production server!) if you haven't done already.
+Install ansible (minimum recommended version 2.13) **on your local
+machine** (not the production server!) if you haven't done already.
 
 We suggest following the `ansible installation guide
 <https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-ansible-in-a-virtual-environment-with-pip>`__.
@@ -234,11 +239,14 @@ You may also run the playbook automatically periodically or when a new
 release of OpenWISP2, for example, by setting up a continuous integration
 system.
 
-Deploying the Upcoming Release of OpenWISP
-------------------------------------------
+.. _ansible_deploying_development_version:
 
-The following steps will help you set up and install the new version of
-OpenWISP which is not released yet, but ships new features and fixes.
+Deploying the Development Version of OpenWISP
+---------------------------------------------
+
+The following steps will help you set up and install the development
+version of OpenWISP which is not released yet, but ships new features and
+improvements.
 
 Create a directory for organizing your playbook, roles and collections. In
 this example, ``openwisp-dev`` is used. Create ``roles`` and

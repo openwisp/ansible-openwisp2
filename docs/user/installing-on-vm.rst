@@ -35,8 +35,8 @@ VM Configuration
 Proceed with the installation as shown in the guide linked above, and come
 back here when you see this screen:
 
-.. figure:: https://raw.githubusercontent.com/openwisp/ansible-openwisp2/master/docs/debian-software-selection.png
-    :target: https://raw.githubusercontent.com/openwisp/ansible-openwisp2/master/docs/debian-software-selection.png
+.. figure:: https://raw.githubusercontent.com/openwisp/ansible-openwisp2/master/docs/images/debian-software-selection.png
+    :target: https://raw.githubusercontent.com/openwisp/ansible-openwisp2/master/docs/images/debian-software-selection.png
     :alt: Screenshot of the Software Selection screen
 
 We're only running this as a server, so you can uncheck ``Debian desktop
@@ -53,8 +53,8 @@ assign an IP address to the VM.
   ``255.255.255.0``. You may need to select ``Configure Adapter Manually``
   to do this. The IPv6 settings can be ignored
 
-  .. image:: https://raw.githubusercontent.com/openwisp/ansible-openwisp2/master/docs/host-only-network.png
-      :target: https://raw.githubusercontent.com/openwisp/ansible-openwisp2/master/docs/host-only-network.png
+  .. image:: https://raw.githubusercontent.com/openwisp/ansible-openwisp2/master/docs/images/host-only-network.png
+      :target: https://raw.githubusercontent.com/openwisp/ansible-openwisp2/master/docs/images/host-only-network.png
       :alt: Screenshot of the Host-only network configuration screen
 
 - Shut off your VM

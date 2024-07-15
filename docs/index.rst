@@ -18,6 +18,7 @@ Tested on **Debian (Bookworm/Bullseye)**, **Ubuntu (24/22/20 LTS)**.
     ./user/quickstart.rst
     ./user/certbot-ssl.rst
     ./user/enabling-modules.rst
+    ./user/deploying-wpa-eap-ttls-pap.rst
     ./user/deploying-custom-static-content.rst
     ./user/configuring-cors-headers.rst
     ./user/installing-on-vm.rst
