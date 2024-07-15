@@ -23,9 +23,9 @@ Documentation
 -------------
 
 - `Developer documentation
-  <https://openwisp.io/docs/__new__/dev/ansible-openwisp2/developer/>`_
+  <https://openwisp.io/docs/dev/ansible-openwisp2/developer/>`_
 - `User documentation
-  <https://openwisp.io/docs/__new__/dev/ansible-openwisp2/>`_
+  <https://openwisp.io/docs/dev/ansible-openwisp2/>`_
 
 Support
 -------
