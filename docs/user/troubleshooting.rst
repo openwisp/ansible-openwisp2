@@ -17,11 +17,11 @@ command:
 
     sudo supervisorctl status
 
-More info at `Running supervisorctl
-<http://supervisord.org/running.html#running-supervisorctl>`__
+For more info about Supervisord, refer to `Running supervisorctl
+<http://supervisord.org/running.html#running-supervisorctl>`__.
 
-**nginx** is in front of **uWSGI**. You can control it with the following
-command
+The **nginx** web server sits in front of the **uWSGI** application server.
+You can control nginx with the following commands:
 
 .. code-block:: shell
 
@@ -43,7 +43,7 @@ Location                  Description
 All processes are running as ``www-data`` user.
 
 If you need to copy or edit files, you can switch to ``www-data`` user
-with the commands
+with the following commands:
 
 .. code-block:: shell
 

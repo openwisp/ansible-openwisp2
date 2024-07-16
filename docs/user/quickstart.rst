@@ -1,10 +1,17 @@
 Deploying OpenWISP Using Ansible
 ================================
 
+.. contents:: **Table of Contents**:
+   :depth: 3
+   :local:
+
+Introduction & Prerequisites
+----------------------------
+
 .. note::
 
-    If you want to use the latest features of OpenWISP, refer to the
-    :ref:`ansible_deploying_development_version` section.
+    If you want to use the latest features of OpenWISP, refer to
+    :ref:`ansible_deploying_development_version`.
 
 .. raw:: html
 
@@ -185,7 +192,7 @@ installed on the server.
       again.
 
 When the playbook is done running, if you got no errors you can login at
-https://openwisp2.mydomain.com/admin with the following credentials:
+``https://openwisp2.mydomain.com/admin`` with the following credentials:
 
 .. code-block:: text
 

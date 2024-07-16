@@ -3,6 +3,10 @@ Developer Installation instructions
 
 .. include:: ../partials/developer-docs.rst
 
+.. contents:: **Table of Contents**:
+    :depth: 2
+    :local:
+
 Installing for Development
 --------------------------
 
@@ -90,5 +94,7 @@ linux debian/ubuntu systems):
 If you don't get any error message it means that the tests ran
 successfully without errors.
 
-**ProTip:** Use ``molecule test --destroy=never`` to speed up subsequent
-test runs.
+.. important::
+
+    **Pro Tip:** Use ``molecule test --destroy=never`` to speed up subsequent
+    test runs.

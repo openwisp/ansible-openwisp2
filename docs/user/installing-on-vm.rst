@@ -4,6 +4,10 @@ Install OpenWISP for Testing in a VirtualBox VM
 If you want to try out OpenWISP in your own development environment, the
 safest way is to use a VirtualBox Virtual Machine (from here on VM).
 
+.. contents:: **Table of Contents**:
+    :depth: 2
+    :local:
+
 Using Vagrant
 -------------
 
@@ -35,8 +39,8 @@ VM Configuration
 Proceed with the installation as shown in the guide linked above, and come
 back here when you see this screen:
 
-.. figure:: https://raw.githubusercontent.com/openwisp/ansible-openwisp2/master/docs/images/debian-software-selection.png
-    :target: https://raw.githubusercontent.com/openwisp/ansible-openwisp2/master/docs/images/debian-software-selection.png
+.. figure:: ../images/debian-software-selection.png
+    :target: ../../_images/debian-software-selection.png
     :alt: Screenshot of the Software Selection screen
 
 We're only running this as a server, so you can uncheck ``Debian desktop
@@ -53,8 +57,8 @@ assign an IP address to the VM.
   ``255.255.255.0``. You may need to select ``Configure Adapter Manually``
   to do this. The IPv6 settings can be ignored
 
-  .. image:: https://raw.githubusercontent.com/openwisp/ansible-openwisp2/master/docs/images/host-only-network.png
-      :target: https://raw.githubusercontent.com/openwisp/ansible-openwisp2/master/docs/images/host-only-network.png
+  .. image:: ../images/host-only-network.png
+      :target: ../../_images/host-only-network.png
       :alt: Screenshot of the Host-only network configuration screen
 
 - Shut off your VM
@@ -87,7 +91,8 @@ Make sure you can access your VM via ssh:
 
     ssh 192.168.56.2
 
-#### Back to your local machine
+Back to your local machine
+--------------------------
 
 Proceed with these steps in your **local machine**, not the VM.
 
@@ -130,7 +135,7 @@ named ``playbook.yml`` which contains the following:
     ansible-playbook -i hosts playbook.yml -b -k -K --become-method=su
 
 When the playbook ran successfully, you can log in at
-https://192.168.56.2/admin with the following credentials:
+``https://192.168.56.2/admin`` with the following credentials:
 
 .. code-block:: text
 
