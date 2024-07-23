@@ -2,8 +2,8 @@ Deploying OpenWISP Using Ansible
 ================================
 
 .. contents:: **Table of Contents**:
-   :depth: 3
-   :local:
+    :depth: 3
+    :local:
 
 Introduction & Prerequisites
 ----------------------------

@@ -2,8 +2,8 @@ Enabling OpenWISP Modules
 =========================
 
 .. contents:: **Table of Contents**:
-   :depth: 3
-   :local:
+    :depth: 3
+    :local:
 
 Enabling the Monitoring Module
 ------------------------------

@@ -96,5 +96,5 @@ successfully without errors.
 
 .. important::
 
-    **Pro Tip:** Use ``molecule test --destroy=never`` to speed up subsequent
-    test runs.
+    **Pro Tip:** Use ``molecule test --destroy=never`` to speed up
+    subsequent test runs.

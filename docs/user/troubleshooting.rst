@@ -20,8 +20,8 @@ command:
 For more info about Supervisord, refer to `Running supervisorctl
 <http://supervisord.org/running.html#running-supervisorctl>`__.
 
-The **nginx** web server sits in front of the **uWSGI** application server.
-You can control nginx with the following commands:
+The **nginx** web server sits in front of the **uWSGI** application
+server. You can control nginx with the following commands:
 
 .. code-block:: shell
 
