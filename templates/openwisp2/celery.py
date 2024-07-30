@@ -10,8 +10,10 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks()
 
 {% if openwisp2_django_celery_logging %}
-from celery.signals import setup_logging
 from logging.config import dictConfig
+
+from celery.signals import setup_logging
+
 
 @setup_logging.connect
 def config_loggers(*args, **kwargs):

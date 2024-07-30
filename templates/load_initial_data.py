@@ -7,7 +7,9 @@
   template to use the same
 """
 import os
+
 import django
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'openwisp2.settings')
 django.setup()
 
@@ -22,13 +24,12 @@ User = get_user_model()
 changed = False
 
 if User.objects.filter(is_superuser=True).count() < 1:
-    admin = User.objects.create_superuser(username='admin',
-                                          password='admin',
-                                          email='')
+    admin = User.objects.create_superuser(username='admin', password='admin', email='')
     print('superuser created')
 
 if 'django.contrib.sites' in settings.INSTALLED_APPS:
     from django.contrib.sites.models import Site
+
     site = Site.objects.first()
     if site and 'example.com' in [site.name, site.domain]:
         site.name = '{{ inventory_hostname }}'
