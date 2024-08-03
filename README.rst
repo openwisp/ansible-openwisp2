@@ -23,8 +23,8 @@ Documentation
 -------------
 
 - `Developer documentation
-  <https://openwisp.io/docs/dev/ansible-openwisp2/developer/>`_
-- `User documentation <https://openwisp.io/docs/dev/ansible-openwisp2/>`_
+  <https://openwisp.io/docs/dev/ansible/developer/installation.html>`_
+- `User documentation <https://openwisp.io/docs/dev/ansible/>`_
 
 Support
 -------
