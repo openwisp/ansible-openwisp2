@@ -22,9 +22,9 @@ Tested on **Debian (Bookworm/Bullseye)**, **Ubuntu (24/22/20 LTS)**.
 Documentation
 -------------
 
+- `Usage documentation <https://openwisp.io/docs/dev/ansible/>`_
 - `Developer documentation
   <https://openwisp.io/docs/dev/ansible/developer/installation.html>`_
-- `User documentation <https://openwisp.io/docs/dev/ansible/>`_
 
 Support
 -------
