@@ -1,7 +1,8 @@
 import os
 import sys
-from celery.schedules import crontab
 from datetime import timedelta
+
+from celery.schedules import crontab
 
 TESTING = 'test' in sys.argv
 

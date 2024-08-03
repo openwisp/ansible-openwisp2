@@ -1,0 +1,2 @@
+[tool.docstrfmt]
+extend_exclude = ["templates/**/*.py"]
