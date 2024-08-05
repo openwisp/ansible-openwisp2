@@ -13,18 +13,6 @@ Introduction & Prerequisites
     If you want to use the latest features of OpenWISP, refer to
     :ref:`ansible_deploying_development_version`.
 
-.. raw:: html
-
-    <p>
-        <iframe width="560" height="315"
-            src="https://www.youtube.com/embed/v_DUeFUGG8Q?si=Hk_M_CBRxkK179sG"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerpolicy="strict-origin-when-cross-origin"
-            allowfullscreen
-        ></iframe>
-    </p>
-
 If you don't know how to use ansible, don't panic, this procedure will
 guide you towards a fully working basic OpenWISP installation.
 
@@ -222,7 +210,7 @@ Now you are ready to start configuring your network! **If you need help**
 you can ask questions on one of the official `OpenWISP Support Channels
 <http://openwisp.org/support.html>`__.
 
-Upgrading OpeNWISP
+Upgrading OpenWISP
 ------------------
 
 .. important::
