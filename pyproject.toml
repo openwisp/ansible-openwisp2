@@ -1,2 +1,2 @@
 [tool.docstrfmt]
-extend_exclude = ["templates/**/*.py"]
+extend_exclude = ["**/*.py"]
