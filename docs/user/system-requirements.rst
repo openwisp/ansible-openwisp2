@@ -24,10 +24,10 @@ variables which end with ``_concurrency`` or ``_autoscale`` in the
 Software
 --------
 
-Generally a fresh installation of one of the supported operating systems
-is sufficient; no pre-configuration required. The Ansible Playbook will
-install and configure all dependencies and leave you with a running
-OpenWISP installation.
+A fresh installation of one of the supported operating systems is
+generally sufficient, with no preconfiguration required. The Ansible
+Playbook will handle the installation and configuration of all
+dependencies, providing you with a fully operational OpenWISP setup.
 
 .. important::
 

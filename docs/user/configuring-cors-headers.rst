@@ -33,7 +33,7 @@ short summary of how to do this:
 
 **Note:** to learn about the supported fields of the
 ``openwisp2_django_cors`` variable, look for the word
-“openwisp2_django_cors” in the :doc:`role-variables` section of this
+*"openwisp2_django_cors"* in the :doc:`role-variables` section of this
 document.
 
 **Step 5**: :ref:`Run the playbook <ansible_run_playbook>`

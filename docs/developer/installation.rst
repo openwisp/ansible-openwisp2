@@ -26,7 +26,7 @@ Clone ``ansible-openwisp2`` and ``Stouts.postfix`` as follows:
     git clone https://github.com/Stouts/Stouts.postfix
     git clone https://github.com/openwisp/ansible-ow-influxdb openwisp.influxdb
 
-Now, go to the parent directory & create hosts file and playbook.yml:
+Now, go to the parent directory & create hosts file and ``playbook.yml``:
 
 .. code-block:: bash
 

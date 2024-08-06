@@ -114,10 +114,10 @@ take a look at `the default values of these variables
         # extra URL settings for django
         openwisp2_extra_urls:
           - "path(r'', include('my_custom_app.urls'))"
-        # allows to specify imports that are used in the websocket routes, eg:
+        # allows to specify imports that are used in the websocket routes, e.g.:
         openwisp2_websocket_extra_imports:
           - from my_custom_app.websockets.routing import get_routes as get_custom_app_routes
-        # allows to specify extra websocket routes, eg:
+        # allows to specify extra websocket routes, e.g.:
         openwisp2_websocket_extra_routes:
           # Callable that returns a list of routes
           - get_custom_app_routes()

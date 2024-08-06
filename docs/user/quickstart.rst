@@ -24,7 +24,7 @@ First of all you need to understand two key concepts:
   desktop computer!**) with public IpV4 / IPv6 which is used to host
   OpenWISP
 - for **“local machine”** we mean the host from which you launch ansible,
-  eg: your own laptop
+  e.g.: your own laptop
 
 Ansible is a configuration management tool that works by entering
 production servers via SSH, **so you need to install it and configure it
@@ -39,7 +39,7 @@ to the production server to install OpenWISP.
     It is recommended to use this procedure on clean virtual machines or
     linux containers.
 
-    If you are trying to install OpenWISP on your laptop or desktop pc
+    If you are trying to install OpenWISP on your laptop or desktop PC
     just for testing purposes, please read :doc:`Install OpenWISP for
     testing in a VirtualBox VM <./installing-on-vm>`.
 
@@ -93,7 +93,7 @@ configuration of OpenWISP.
 
 This will be useful when you will need to upgrade OpenWISP.
 
-Eg:
+E.g.:
 
 .. code-block:: shell
 
@@ -118,9 +118,9 @@ the following contents:
     openwisp2.mydomain.com
 
 Substitute ``openwisp2.mydomain.com`` with your **production server**'s
-hostname - **DO NOT REPLACE ``openwisp2.mydomain.com`` WITH AN IP
-ADDRESS**, otherwise email sending through postfix will break, causing 500
-internal server errors on some operations.
+hostname - **DO NOT REPLACE openwisp2.mydomain.com WITH AN IP ADDRESS**,
+otherwise email sending through postfix will break, causing 500 internal
+server errors on some operations.
 
 .. _ansible_create_playbook_file:
 
@@ -141,7 +141,8 @@ the following contents:
 
 The line ``become: "{{ become | default('yes') }}"`` means ansible will
 use the ``sudo`` program to run each command. You may remove this line if
-you don't need it (eg: if you are ``root`` user on the production server).
+you don't need it (e.g.: if you are ``root`` user on the production
+server).
 
 You may replace ``openwisp2`` on the ``hosts`` field with your production
 server's hostname if you desire.
@@ -289,7 +290,7 @@ Install requirements from the ``requirements.yml`` as follows
 
     ansible-galaxy install -r requirements.yml
 
-Now, create hosts file and playbook.yml:
+Now, create hosts file and ``playbook.yml``:
 
 .. code-block::
 

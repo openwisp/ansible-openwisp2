@@ -80,10 +80,10 @@ assign an IP address to the VM.
           broadcast 192.168.56.255
 
   Replace ``enp0s8`` with the network interface not present in the file
-  but is shown when running ``ls /sys/class/net``
+  but is shown when running ``ls /sys/class/net``.
 
-- Save the file with CtrlO then Enter, and exit with CtrlX
-- Restart the machine by running ``reboot``
+- Save the file with *CTRL+O* then Enter, and exit with *CTRL+X*.
+- Restart the machine by running ``reboot``.
 
 Make sure you can access your VM via ssh:
 
