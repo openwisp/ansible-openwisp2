@@ -145,6 +145,7 @@ MIDDLEWARE = [
     'sesame.middleware.AuthenticationMiddleware',
     {% endif %}
     'django.contrib.messages.middleware.MessageMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     {% if openwisp2_users_user_password_expiration or openwisp2_users_staff_user_password_expiration %}
     'openwisp_users.middleware.PasswordExpirationMiddleware',
