@@ -115,7 +115,7 @@ https://openwisp2.mydomain.com/admin with the following credentials:
 Enabling the RADIUS Module
 --------------------------
 
-To enable the :doc:`RADIUS module </user/radius>` you need to set
+To enable the :doc:`RADIUS module </radius/index>` you need to set
 ``openwisp2_radius`` to ``true`` in your ``playbook.yml`` file. Here's a
 short summary of how to do this:
 
