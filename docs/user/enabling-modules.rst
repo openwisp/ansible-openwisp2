@@ -143,11 +143,10 @@ short summary of how to do this:
 .. note::
 
     ``openwisp2_freeradius_install`` option provides a basic configuration
-    of freeradius for OpenIWSP, it sets up the `radius user token
-    mechanism
-    <https://openwisp-radius.readthedocs.io/en/latest/user/api.html#radius-user-token-recommended>`__
-    if you want to use another mechanism or manage your freeradius
-    separately, please disable this option by setting it to ``false``.
+    of freeradius for OpenIWSP, it sets up the :ref:`radius user token
+    mechanism <radius_user_token>` if you want to use another mechanism or
+    manage your freeradius separately, please disable this option by
+    setting it to ``false``.
 
 **Step 5**: :ref:`Run the playbook <ansible_run_playbook>`
 

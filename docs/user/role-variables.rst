@@ -357,10 +357,10 @@ take a look at `the default values of these variables
         # to the privacy regulation of your jurisdiction
         openwisp2_radius_delete_old_radacct: 365
         # days after which inactive users will flagged as unverified
-        # Read https://openwisp-radius.readthedocs.io/en/latest/user/settings.html#openwisp-radius-unverify-inactive-users
+        # Read https://openwisp.io/docs/dev/radius/user/settings.html#openwisp-radius-unverify-inactive-users
         openwisp2_radius_unverify_inactive_users: 540
         # days after which inactive users will be deleted
-        # Read https://openwisp-radius.readthedocs.io/en/latest/user/settings.html#openwisp-radius-delete-inactive-users
+        # Read Read https://openwisp.io/docs/dev/radius/user/settings.html#openwisp-radius-delete-inactive-users
         openwisp2_radius_delete_inactive_users: 540
         openwisp2_radius_allowed_hosts: ["127.0.0.1"]
         # allow disabling celery beat tasks if needed
@@ -462,8 +462,10 @@ take a look at `the default values of these variables
           # By default, it is set to false.
           replace_https_referer: true
 
-**Note**: The default values for settings provided to control the number
-of process and threads of uWSGI and Daphne are set conservatively. It is
-expected from user to update these settings to suit scale of their
-project. The same thing applies for concurrency and autoscale settings for
-celery workers.
+.. note::
+
+    The default settings for controlling the number of processes and
+    threads in uWSGI and Daphne are set conservatively. Users are
+    encouraged to adjust these settings to match the scale of their
+    project. The same applies to the concurrency and auto-scaling settings
+    for Celery workers.

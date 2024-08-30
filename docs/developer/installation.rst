@@ -94,7 +94,7 @@ linux debian/ubuntu systems):
 If you don't get any error message it means that the tests ran
 successfully without errors.
 
-.. important::
+.. tip::
 
-    **Pro Tip:** Use ``molecule test --destroy=never`` to speed up
-    subsequent test runs.
+    Use ``molecule test --destroy=never`` to speed up subsequent test
+    runs.
