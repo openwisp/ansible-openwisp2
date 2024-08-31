@@ -51,7 +51,7 @@ take a look at `the default values of these variables
         openwisp2_email_backend: "djcelery_email.backends.CeleryEmailBackend"
         # Email timeout in seconds used by Django for blocking operations
         # like connection attempts. For more info read the Django documentation,
-        # https://docs.djangoproject.com/en/3.2/ref/settings/#email-timeout.
+        # https://docs.djangoproject.com/en/4.2/ref/settings/#email-timeout.
         # Defaults to 10 seconds.
         openwisp2_email_timeout: 5
         # edit database settings only if you are not using sqlite
