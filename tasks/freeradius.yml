@@ -84,7 +84,7 @@
   get_url:
     url: https://packages.networkradius.com/pgp/packages%40networkradius.com
     dest: /etc/apt/trusted.gpg.d/packages.networkradius.com.asc
-    checksum: sha256:652bc3a84297eb133f40af2e51bed897b0c5c22ec6a3ef76a2a14f97f90c9b7d
+    checksum: sha256:f9327befd8efb3fddd710ed8b4ed50d394cc57a598ca8c3ccc2dc3234a4d774a
   ignore_errors: true
   retries: 5
   delay: 10
