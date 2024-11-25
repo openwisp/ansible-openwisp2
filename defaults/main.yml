@@ -161,7 +161,7 @@ openwisp2_users_user_password_expiration: 0
 openwisp2_users_staff_user_password_expiration: 0
 openwisp2_radius_sms_backend: "sendsms.backends.console.SmsBackend"
 openwisp2_radius_sms_token_max_ip_daily: 25
-openwisp2_radius_delete_old_radiusbatch_users: 12
+openwisp2_radius_delete_old_radiusbatch_users: 365
 openwisp2_radius_cleanup_stale_radacct: 1
 openwisp2_radius_delete_old_postauth: 365
 openwisp2_radius_delete_old_radacct: 365
