@@ -45,7 +45,7 @@
     state: absent
 
 # NOTE: Related to https://github.com/openwisp/openwisp-monitoring/pull/368
-# TODO: Remove this when openwisp-monitoring 1.1.0 is released
+# TODO: Remove this when openwisp-monitoring 1.2.0 is released
 - name: Migrate timeseries database
   become: true
   become_user: "{{ www_user }}"
