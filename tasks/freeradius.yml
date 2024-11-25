@@ -91,9 +91,8 @@
   register: result
   until: result is success
 
-- name: Update and upgrade apt packages
+- name: Update apt packages
   apt:
-    upgrade: true
     update_cache: true
 
 - name: Freeradius system packages
