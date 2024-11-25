@@ -1,5 +1,60 @@
 # Change log
 
+## Version 24.11.0 [2024-11-26]
+
+### Features
+
+- Added support for Django CORS
+- Allowed deploying [WPA Enterprise 2 EAP-TTLS-PAP](https://openwisp.io/docs/dev/ansible/user/deploying-wpa-eap-ttls-pap.html)
+- Added a task to add `inventory_hostname` to `/etc/hosts`
+- Added websocket routes for network topology
+- Added `openwisp2_websocket_extra_routes` variable to configure websocket
+  routes
+- Added `openwisp2_daphne_install` variable to allow disabling Daphne
+- Added `freeradius_openwisp_site_listen_ipaddr` variable to configure
+  FreeRADIUS listen address
+- Added `openwisp2_monitoring_default_retention_policy` variable to configure
+  the default retention policy for monitoring metrics
+- Added `openwisp2_uwsgi_extra_conf` variable to configure extra uWSGI
+  parameters
+- Added `openwisp2_email_timeout` variable to set the [default email
+  timeout](https://docs.djangoproject.com/en/4.2/ref/settings/#email-timeout)
+- Added variables `openwisp2_users_user_password_expiration` and
+  `openwisp2_users_staff_user_password_expiration` to configure password
+  expiration settings
+- Added the `openwisp2_celerybeat` variable to allow disabling the CeleryBeat
+  worker
+- Introduced a consent mechanism for the [collection of usage
+  metrics](https://openwisp.io/docs/dev/utils/user/metric-collection.html)
+
+### Changes
+
+- Upgraded to OpenWISP Users 1.1.x (see [change log](https://github.com/openwisp/openwisp-users/releases/tag/1.1.0))
+- Upgraded to OpenWISP Controller 1.1.x (see [change log](https://github.com/openwisp/openwisp-controller/releases/tag/1.1.0))
+- Upgraded to OpenWISP Monitoring 1.1.x (see [change log](https://github.com/openwisp/openwisp-monitoring/releases/tag/1.1.0))
+- Upgraded to OpenWISP Network Topology 1.1.x (see [change log](https://github.com/openwisp/openwisp-network-topology/releases/tag/1.1.0))
+- Upgraded to OpenWISP Firmware Upgrader 1.1.x (see [change log](https://github.com/openwisp/openwisp-firmware-upgrader/releases/tag/1.1.0))
+- Upgraded to FreeRADIUS 3.2
+- **Backward incompatible change**:
+  `openwisp2_radius_delete_old_radiusbatch_users` variable now expects days
+  instead of months
+- Increased the *prefetch multiplier* for `network` and `monitoring` Celery
+  workers to `10`
+- Updated URLs to support cloud backends for private storage
+- Removed the SQL module from the default FreeRADIUS site
+- Changed the default value of the `openwisp2_radius_cleanup_stale_radacct`
+  variable to `1`
+- Added support for Debian 12
+- Added support for Ubuntu 24.04
+- Dropped support for Debian 10
+- Dropped support for Ubuntu 18.04
+- Dropped support for Python 3.7
+
+### Bugfixes
+
+- Implemented efficient reloading of supervisor services
+- Included `allowed_hostnames` in the NGINX Content-Security-Policy.
+
 ## Version 22.05.3 [2023-02-21]
 
 - Updated source for Stouts.postfix role dependency
