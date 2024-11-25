@@ -285,7 +285,7 @@ CELERY_BEAT_SCHEDULE = {
     'delete_old_radiusbatch_users': {
         'task': 'openwisp_radius.tasks.delete_old_radiusbatch_users',
         'schedule': crontab(**{ {{ cron_delete_old_radiusbatch_users }} }),
-        'args': [{{ openwisp2_radius_delete_old_radiusbatch_users }}],
+        'kwargs': {'older_than_days': {{ openwisp2_radius_delete_old_radiusbatch_users }}},
         'relative': True,
     },
     'cleanup_stale_radacct': {
