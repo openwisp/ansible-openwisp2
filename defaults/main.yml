@@ -215,7 +215,6 @@ cron_delete_inactive_users: "'hour': 1, 'minute': 55"
 openwisp2_django_cors:
     enabled: false
     allowed_origins_list: []
-    replace_https_referer: false
 openwisp2_extra_supervisor_restart: []
 openwisp2_usage_metric_collection: null
 # allow disabling celery beat tasks if needed

@@ -455,12 +455,6 @@ take a look at `the default values of these variables
           # HTTP requests. Read https://github.com/adamchainz/django-cors-headers#cors_allowed_origins-sequencestr
           # for detail. By default, it is set to an empty list.
           allowed_origins_list: ["https://log.openwisp.org"]
-          # Configures "CORS_REPLACE_HTTPS_REFERER" setting of the django-cors-headers
-          # package. Read https://github.com/adamchainz/django-cors-headers#cors_replace_https_referer-bool
-          # for detail. Setting this to "true" will also configure the
-          # Django middleware setting to add "CorsPostCsrfMiddleware".
-          # By default, it is set to false.
-          replace_https_referer: true
 
 .. note::
 
