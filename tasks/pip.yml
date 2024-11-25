@@ -133,7 +133,7 @@
 - name: Install django-cors-headers
   when: openwisp2_django_cors.get('enabled')
   pip:
-    name: django-cors-headers
+    name: "django-cors-headers~=4.4.0"
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"

@@ -65,7 +65,6 @@ setting of ``django-cors-headers`` as shown in the following example:
           allowed_origins_list:
             - https://frontend.openwisp.org
             - https://logs.openwisp.org
-          replace_https_referer: true
         # Configuring additional settings for django-cors-headers
         openwisp2_extra_django_settings_instructions:
           - |
