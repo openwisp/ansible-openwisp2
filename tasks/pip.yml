@@ -46,10 +46,10 @@
   tags:
     - molecule-idempotence-notest
 
-- name: Install channels-redis~=3.4.0
+- name: Install channels_redis~=4.2.0
   pip:
     name:
-      - channels-redis~=3.4.0
+      - channels_redis~=4.2.0
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
@@ -60,7 +60,7 @@
 
 - name: Install django-redis
   pip:
-    name: "django-redis>=4.9.0"
+    name: "django-redis~=5.4.0"
     state: present
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
@@ -159,7 +159,7 @@
 - name: Install static minification dependencies
   pip:
     name:
-      - django-pipeline~=2.0.0
+      - django-pipeline~=3.1.0
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
