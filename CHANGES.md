@@ -1,5 +1,11 @@
 # Change log
 
+## Version 24.11.1 [2024-11-27]
+
+### Bugfixes
+
+- Updated ``__openwisp_version__`` to ``24.11.1``.
+
 ## Version 24.11.0 [2024-11-26]
 
 ### Features
