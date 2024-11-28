@@ -1,5 +1,2 @@
-# pip.yml
-# Specifies project dependencies and references requirements.txt
-
 dependencies:
   - "-r ../requirements.txt"

@@ -9,9 +9,9 @@ psycopg2
 raven
 service_identity
 uwsgi
-django~=4.0  # Replace with {{ openwisp2_django_version }}
-openwisp2_controller  # Install the latest version by default
-openwisp2_network_topology  # Install the latest version by default
-openwisp2_firmware_upgrader  # Install the latest version by default
-openwisp2_monitoring  # Install the latest version by default
-openwisp2_radius  # Install the latest version by default
+django~=4.0
+openwisp2_controller
+openwisp2_network_topology
+openwisp2_firmware_upgrader
+openwisp2_monitoring
+openwisp2_radius
