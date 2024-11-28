@@ -12,8 +12,8 @@ Tested on **Debian (Bookworm/Bullseye)**, **Ubuntu (24/22/20 LTS)**.
 
 ## Documentation
 
-- [Usage documentation](https://openwisp.io/docs/dev/ansible/)
-- [Developer documentation](https://openwisp.io/docs/dev/ansible/developer/installation.html)
+- [Usage documentation](https://openwisp.io/docs/stable/ansible/)
+- [Developer documentation](https://openwisp.io/docs/stable/ansible/developer/installation.html)
 
 ## Support
 

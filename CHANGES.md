@@ -11,7 +11,7 @@
 ### Features
 
 - Added support for Django CORS
-- Allowed deploying [WPA Enterprise 2 EAP-TTLS-PAP](https://openwisp.io/docs/dev/ansible/user/deploying-wpa-eap-ttls-pap.html)
+- Allowed deploying [WPA Enterprise 2 EAP-TTLS-PAP](https://openwisp.io/docs/stable/ansible/user/deploying-wpa-eap-ttls-pap.html)
 - Added a task to add `inventory_hostname` to `/etc/hosts`
 - Added websocket routes for network topology
 - Added `openwisp2_websocket_extra_routes` variable to configure websocket
@@ -31,7 +31,7 @@
 - Added the `openwisp2_celerybeat` variable to allow disabling the CeleryBeat
   worker
 - Introduced a consent mechanism for the [collection of usage
-  metrics](https://openwisp.io/docs/dev/utils/user/metric-collection.html)
+  metrics](https://openwisp.io/docs/stable/utils/user/metric-collection.html)
 
 ### Changes
 

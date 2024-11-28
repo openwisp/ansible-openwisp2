@@ -357,10 +357,10 @@ take a look at `the default values of these variables
         # to the privacy regulation of your jurisdiction
         openwisp2_radius_delete_old_radacct: 365
         # days after which inactive users will flagged as unverified
-        # Read https://openwisp.io/docs/dev/radius/user/settings.html#openwisp-radius-unverify-inactive-users
+        # Read https://openwisp.io/docs/stable/radius/user/settings.html#openwisp-radius-unverify-inactive-users
         openwisp2_radius_unverify_inactive_users: 540
         # days after which inactive users will be deleted
-        # Read Read https://openwisp.io/docs/dev/radius/user/settings.html#openwisp-radius-delete-inactive-users
+        # Read Read https://openwisp.io/docs/stable/radius/user/settings.html#openwisp-radius-delete-inactive-users
         openwisp2_radius_delete_inactive_users: 540
         openwisp2_radius_allowed_hosts: ["127.0.0.1"]
         # allow disabling celery beat tasks if needed
