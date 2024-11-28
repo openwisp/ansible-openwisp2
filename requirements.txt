@@ -1,0 +1,17 @@
+attrs
+channels_redis~=4.2.0
+django-celery-email
+django-cors-headers~=4.4.0
+django-pipeline~=3.1.0
+django-redis~=5.4.0
+MySQL-python
+psycopg2
+raven
+service_identity
+uwsgi
+django~=4.0  # Replace with {{ openwisp2_django_version }}
+openwisp2_controller  # Install the latest version by default
+openwisp2_network_topology  # Install the latest version by default
+openwisp2_firmware_upgrader  # Install the latest version by default
+openwisp2_monitoring  # Install the latest version by default
+openwisp2_radius  # Install the latest version by default

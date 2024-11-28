@@ -1,0 +1,9 @@
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    directory: "./tasks"  # Path where requirements.txt is located; adjust if it's in a subdirectory
+    schedule:
+      interval: "daily"  # Change this to "weekly" or "monthly" if needed
+    open-pull-requests-limit: 5  # Optional: limit the number of open PRs from Dependabot
+    commit-message:
+      prefix: "fix"  # Prefix for commit messages created by Dependabot
