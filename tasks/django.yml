@@ -48,6 +48,16 @@
     dest: "{{ openwisp2_path }}/openwisp2/celery.py"
     group: "{{ www_group }}"
     mode: 0640
+  tags: [django_init]
+
+- name: Template version.py
+  notify: Reload application
+  template:
+    src: openwisp2/version.py
+    dest: "{{ openwisp2_path }}/openwisp2/version.py"
+    group: "{{ www_group }}"
+    mode: 0640
+  tags: [django_init]
 
 - name: Template __init__.py
   notify: Reload application
