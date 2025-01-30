@@ -6,36 +6,27 @@
       - pip
       - setuptools
       - wheel
-      - attrs
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
-
-- name: Remove jsonfield2
-  pip:
-    name:
-      - jsonfield2
-    state: absent
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-  retries: 2
+  retries: 3
   delay: 5
   register: result
   until: result is success
-  notify: Reload application
 
-- name: Install openwisp2 controller and its dependencies
+- name: Install Python dependencies from requirements.txt
   pip:
-    name:
-      - "{{ openwisp2_controller_version }}"
-      - service_identity
-    state: latest
+    requirements: "{{ role_path }}/files/requirements.txt"
+    state: present
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
+    extra_args: >-
+      {% if openwisp2_controller_version is defined %}--constraint <(echo "openwisp-controller=={{ openwisp2_controller_version }}"){% endif %}
+      {% if openwisp2_network_topology_version is defined %}--constraint <(echo "openwisp-network-topology=={{ openwisp2_network_topology_version }}"){% endif %}
+      {% if openwisp2_firmware_upgrader_version is defined %}--constraint <(echo "openwisp-firmware-upgrader=={{ openwisp2_firmware_upgrader_version }}"){% endif %}
+      {% if openwisp2_monitoring_version is defined %}--constraint <(echo "openwisp-monitoring=={{ openwisp2_monitoring_version }}"){% endif %}
+      {% if openwisp2_radius_version is defined %}--constraint <(echo "openwisp-radius=={{ openwisp2_radius_version }}"){% endif %}
+      {% if openwisp2_django_version is defined %}--constraint <(echo "django=={{ openwisp2_django_version }}"){% endif %}
   environment:
     LC_CTYPE: "en_US.UTF-8"
   notify: Reload application
@@ -43,206 +34,17 @@
   delay: 10
   register: result
   until: result is success
-  tags:
-    - molecule-idempotence-notest
-
-- name: Install channels_redis~=4.2.0
-  pip:
-    name:
-      - channels_redis~=4.2.0
-    state: latest
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-  retries: 1
-  delay: 10
-  register: result
-  until: result is success
-
-- name: Install django-redis
-  pip:
-    name: "django-redis~=5.4.0"
-    state: present
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-  notify: Reload application
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
-
-- name: Install openwisp2 network topology and its dependencies
-  when: openwisp2_network_topology
-  pip:
-    name: "{{ openwisp2_network_topology_version }}"
-    state: latest
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-  notify: Reload application
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
-  tags:
-    - molecule-idempotence-notest
-
-- name: Install openwisp firmware upgrader and its dependencies
-  when: openwisp2_firmware_upgrader
-  pip:
-    name: "{{ openwisp2_firmware_upgrader_version }}"
-    state: latest
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-  notify: Reload application
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
-  tags:
-    - molecule-idempotence-notest
-
-- name: Install openwisp monitoring and its dependencies
-  when: openwisp2_monitoring
-  pip:
-    name: "{{ openwisp2_monitoring_version }}"
-    state: latest
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-  notify: Reload application
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
-  tags:
-    - molecule-idempotence-notest
-
-- name: Install openwisp2_radius and its dependencies
-  when: openwisp2_radius
-  pip:
-    name: "{{ openwisp2_radius_version }}"
-    state: latest
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-  notify: Reload application
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
-  tags:
-    - molecule-idempotence-notest
-
-- name: Install django-cors-headers
-  when: openwisp2_django_cors.get('enabled')
-  pip:
-    name: "django-cors-headers~=4.4.0"
-    state: latest
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
-  notify: Reload application
 
 - name: Install extra python packages
   pip:
     name: "{{ openwisp2_extra_python_packages }}"
-    state: latest
+    state: present
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-  retries: 5
-  delay: 10
+  when: openwisp2_extra_python_packages | length > 0
+  retries: 3
+  delay: 5
   register: result
   until: result is success
   notify: Reload application
   tags: [extra_pip]
-
-- name: Install static minification dependencies
-  pip:
-    name:
-      - django-pipeline~=3.1.0
-    state: latest
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
-  notify: Reload application
-
-- name: Install uwsgi
-  pip:
-    name: uwsgi
-    state: latest
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
-  notify: Reload application
-
-- name: Install psycopg2
-  when: openwisp2_database.engine in ["django.db.backends.postgresql", "django.contrib.gis.db.backends.postgis"]
-  pip:
-    name: psycopg2
-    state: latest
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
-  notify: Reload application
-
-- name: Install MySQL-python
-  when: openwisp2_database.engine in ["django.db.backends.mysql", "django.contrib.gis.db.backends.mysql"]
-  pip:
-    name: MySQL-python
-    state: latest
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
-  notify: Reload application
-
-- name: Install raven (sentry client)
-  when: openwisp2_sentry.get('dsn')
-  pip:
-    name: raven
-    state: latest
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
-  notify: Reload application
-
-- name: Install django-celery-email
-  pip:
-    name: django-celery-email
-    state: latest
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-  when: openwisp2_email_backend == "djcelery_email.backends.CeleryEmailBackend"
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
-  notify: Reload application
-
-- name: Install django
-  pip:
-    name: "{{ openwisp2_django_version }}"
-    state: present
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
-  notify: Reload application
-  tags:
-    - molecule-idempotence-notest
