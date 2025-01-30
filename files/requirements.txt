@@ -1,0 +1,27 @@
+# Core Django and related packages
+django-redis~=5.4.0
+django-pipeline~=3.1.0
+channels_redis~=4.2.0
+django-cors-headers~=4.4.0
+
+# WSGI server
+uwsgi
+
+# Optional dependencies
+service_identity
+attrs
+
+# Database adapters
+psycopg2
+MySQL-python
+
+# Integration dependencies
+raven  # For Sentry integration
+django-celery-email  # For Celery email backend
+
+# OpenWISP packages
+openwisp-controller
+openwisp-network-topology  # Optional
+openwisp-firmware-upgrader  # Optional
+openwisp-monitoring  # Optional
+openwisp-radius  # Optional
