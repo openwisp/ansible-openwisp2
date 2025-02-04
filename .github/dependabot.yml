@@ -9,5 +9,12 @@ updates:
       - "dependencies"
       - "python"
     commit-message:
-      prefix: "deps"
+      prefix: "[deps] "
       include: "scope"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "[ci] "
