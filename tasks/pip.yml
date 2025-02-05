@@ -1,5 +1,3 @@
----
-
 - name: Update pip & related tools
   pip:
     name:
@@ -20,13 +18,6 @@
     state: present
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-    extra_args: >-
-      {% if openwisp2_controller_version is defined %}--constraint <(echo "openwisp-controller=={{ openwisp2_controller_version }}"){% endif %}
-      {% if openwisp2_network_topology_version is defined %}--constraint <(echo "openwisp-network-topology=={{ openwisp2_network_topology_version }}"){% endif %}
-      {% if openwisp2_firmware_upgrader_version is defined %}--constraint <(echo "openwisp-firmware-upgrader=={{ openwisp2_firmware_upgrader_version }}"){% endif %}
-      {% if openwisp2_monitoring_version is defined %}--constraint <(echo "openwisp-monitoring=={{ openwisp2_monitoring_version }}"){% endif %}
-      {% if openwisp2_radius_version is defined %}--constraint <(echo "openwisp-radius=={{ openwisp2_radius_version }}"){% endif %}
-      {% if openwisp2_django_version is defined %}--constraint <(echo "django=={{ openwisp2_django_version }}"){% endif %}
   environment:
     LC_CTYPE: "en_US.UTF-8"
   notify: Reload application
