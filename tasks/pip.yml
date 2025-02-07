@@ -1,3 +1,4 @@
+---
 - name: Update pip & related tools
   pip:
     name:
@@ -11,6 +12,16 @@
   delay: 5
   register: result
   until: result is success
+
+- name: Verify requirements.txt exists
+  stat:
+    path: "{{ role_path }}/files/requirements.txt"
+  register: req_file
+
+- name: Debug requirements file path
+  debug:
+    msg: "Looking for requirements file at {{ role_path }}/files/requirements.txt"
+  when: req_file.stat is defined
 
 - name: Install Python dependencies from requirements.txt
   pip:
@@ -26,6 +37,82 @@
   register: result
   until: result is success
 
+- name: Install openwisp2 controller
+  pip:
+    name: "{{ openwisp2_controller_version }}"
+    state: present
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+  environment:
+    LC_CTYPE: "en_US.UTF-8"
+  notify: Reload application
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
+  tags:
+    - molecule-idempotence-notest
+
+- name: Install openwisp2 network topology
+  when: openwisp2_network_topology
+  pip:
+    name: "{{ openwisp2_network_topology_version }}"
+    state: present
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+  notify: Reload application
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
+  tags:
+    - molecule-idempotence-notest
+
+- name: Install openwisp firmware upgrader
+  when: openwisp2_firmware_upgrader
+  pip:
+    name: "{{ openwisp2_firmware_upgrader_version }}"
+    state: present
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+  notify: Reload application
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
+  tags:
+    - molecule-idempotence-notest
+
+- name: Install openwisp monitoring
+  when: openwisp2_monitoring
+  pip:
+    name: "{{ openwisp2_monitoring_version }}"
+    state: present
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+  notify: Reload application
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
+  tags:
+    - molecule-idempotence-notest
+
+- name: Install openwisp2_radius
+  when: openwisp2_radius
+  pip:
+    name: "{{ openwisp2_radius_version }}"
+    state: present
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+  notify: Reload application
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
+  tags:
+    - molecule-idempotence-notest
+
 - name: Install extra python packages
   pip:
     name: "{{ openwisp2_extra_python_packages }}"
@@ -39,3 +126,17 @@
   until: result is success
   notify: Reload application
   tags: [extra_pip]
+
+- name: Install django
+  pip:
+    name: "{{ openwisp2_django_version }}"
+    state: present
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
+  notify: Reload application
+  tags:
+    - molecule-idempotence-notest
