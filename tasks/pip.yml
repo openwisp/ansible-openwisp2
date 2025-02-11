@@ -26,7 +26,7 @@
 - name: Install Python dependencies from requirements.txt
   pip:
     requirements: "{{ role_path }}/files/requirements.txt"
-    state: present
+    state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
   environment:
@@ -40,7 +40,7 @@
 - name: Install openwisp2 controller
   pip:
     name: "{{ openwisp2_controller_version }}"
-    state: present
+    state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
   environment:
@@ -57,7 +57,7 @@
   when: openwisp2_network_topology
   pip:
     name: "{{ openwisp2_network_topology_version }}"
-    state: present
+    state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
   notify: Reload application
@@ -72,7 +72,7 @@
   when: openwisp2_firmware_upgrader
   pip:
     name: "{{ openwisp2_firmware_upgrader_version }}"
-    state: present
+    state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
   notify: Reload application
@@ -87,7 +87,7 @@
   when: openwisp2_monitoring
   pip:
     name: "{{ openwisp2_monitoring_version }}"
-    state: present
+    state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
   notify: Reload application
@@ -102,7 +102,7 @@
   when: openwisp2_radius
   pip:
     name: "{{ openwisp2_radius_version }}"
-    state: present
+    state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
   notify: Reload application
@@ -116,7 +116,7 @@
 - name: Install extra python packages
   pip:
     name: "{{ openwisp2_extra_python_packages }}"
-    state: present
+    state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
   when: openwisp2_extra_python_packages | length > 0
@@ -130,7 +130,7 @@
 - name: Install django
   pip:
     name: "{{ openwisp2_django_version }}"
-    state: present
+    state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
   retries: 5
