@@ -1,4 +1,5 @@
 ---
+
 - name: Update pip & related tools
   pip:
     name:
@@ -140,3 +141,46 @@
   notify: Reload application
   tags:
     - molecule-idempotence-notest
+
+- name: Install psycopg2
+  when: openwisp2_database.engine in ["django.db.backends.postgresql", "django.contrib.gis.db.backends.postgis"]
+  pip:
+    name: psycopg2-binary
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+  retries: 3
+  delay: 5
+  register: result
+  until: result is success
+  notify: Reload application
+
+- name: Install MySQL-python for Python 2
+  when: 
+    - openwisp2_database.engine in ["django.db.backends.mysql", "django.contrib.gis.db.backends.mysql"]
+    - openwisp2_python is version('3.0', '<')
+  pip:
+    name: MySQL-python
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+  retries: 3
+  delay: 5
+  register: result
+  until: result is success
+  notify: Reload application
+
+- name: Install mysqlclient for Python 3
+  when:
+    - openwisp2_database.engine in ["django.db.backends.mysql", "django.contrib.gis.db.backends.mysql"]
+    - openwisp2_python is version('3.0', '>=')
+  pip:
+    name: mysqlclient
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+  retries: 3
+  delay: 5
+  register: result
+  until: result is success
+  notify: Reload application
