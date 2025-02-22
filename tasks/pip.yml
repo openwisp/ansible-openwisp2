@@ -184,3 +184,29 @@
   register: result
   until: result is success
   notify: Reload application
+
+- name: Install raven
+  when: openwisp2_sentry.get('dsn')
+  pip:
+    name: raven
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+  notify: Reload application
+  retries: 3
+  delay: 5
+  register: result
+  until: result is success
+
+- name: Install django-celery-email
+  when: openwisp2_email_backend == "djcelery_email.backends.CeleryEmailBackend"
+  pip:
+    name: django-celery-email
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+  notify: Reload application
+  retries: 3
+  delay: 5
+  register: result
+  until: result is success
