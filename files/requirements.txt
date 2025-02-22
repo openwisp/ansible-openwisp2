@@ -8,7 +8,6 @@ django-pipeline~=3.1.0
 django-cors-headers~=4.4.0
 channels_redis~=4.2.0
 
-
 # WSGI server
 uwsgi
 
