@@ -40,6 +40,7 @@
 - Upgraded to OpenWISP Monitoring 1.1.x (see [change log](https://github.com/openwisp/openwisp-monitoring/releases/tag/1.1.0))
 - Upgraded to OpenWISP Network Topology 1.1.x (see [change log](https://github.com/openwisp/openwisp-network-topology/releases/tag/1.1.0))
 - Upgraded to OpenWISP Firmware Upgrader 1.1.x (see [change log](https://github.com/openwisp/openwisp-firmware-upgrader/releases/tag/1.1.0))
+- Upgraded to OpenWISP RADIUS 1.1.x (see [change log](https://github.com/openwisp/openwisp-radius/releases/tag/1.1.0))
 - Upgraded to FreeRADIUS 3.2
 - **Backward incompatible change**:
   `openwisp2_radius_delete_old_radiusbatch_users` variable now expects days
