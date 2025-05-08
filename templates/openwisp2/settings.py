@@ -419,7 +419,6 @@ LANGUAGE_CODE = '{{ openwisp2_language_code }}'
 TIME_ZONE = '{{ openwisp2_time_zone }}'
 {% if openwisp2_internationalization %}
 USE_I18N = True
-USE_L10N = True
 {% endif %}
 USE_TZ = True
 
@@ -527,7 +526,11 @@ LOGGING = {
 # HTML minification with django pipeline
 PIPELINE = {'PIPELINE_ENABLED': True}
 # static files minification and invalidation with django-compress-staticfiles
-STATICFILES_STORAGE = 'openwisp_utils.storage.CompressStaticFilesStorage'
+STORAGES = {
+    'staticfiles': {
+        'BACKEND': 'openwisp_utils.storage.CompressStaticFilesStorage',
+    },
+}
 # GZIP compression is handled by nginx
 BROTLI_STATIC_COMPRESSION = False
 GZIP_STATIC_COMPRESSION = False

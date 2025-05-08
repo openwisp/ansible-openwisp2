@@ -30,5 +30,12 @@ provisioner:
     defaults:
       stdout_callback: yaml
       bin_ansible_callbacks: true
+  inventory:
+    host_vars:
+      openwisp2-debian11:
+        openwisp2_django_version: "django~=4.2.0"
+      openwisp2-ubuntu2004:
+        openwisp2_django_version: "django~=4.2.0"
+
 verifier:
   name: ansible
