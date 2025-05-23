@@ -45,4 +45,3 @@ Supported Operating Systems
 - Debian 11
 - Ubuntu 24 LTS
 - Ubuntu 22 LTS
-- Ubuntu 20 LTS

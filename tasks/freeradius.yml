@@ -18,7 +18,7 @@
       register: openwisp2_installed_freeradius_version
     - name: Add FreeRADIUS 3.0.x repository to sources list
       shell: >
-        echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc] http://packages.networkradius.com/freeradius-3.0/ubuntu/focal focal main" |
+        echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc] http://packages.networkradius.com/freeradius-3.0/ubuntu/jammy focal main" |
           tee /etc/apt/sources.list.d/networkradius.list > /dev/null
       when: openwisp2_installed_freeradius_version.stdout == '3.0'
     - name: Add FreeRADIUS 3.2.x repository to sources list
@@ -44,17 +44,6 @@
   when:
     - ansible_distribution|string == 'Ubuntu'
     - ansible_distribution_release|string == 'noble'
-  tags:
-    - molecule-idempotence-notest
-
-- name: Add freeradius repository into Ubuntu focal sources list
-  shell: |
-    echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc] http://packages.networkradius.com/freeradius-3.0/ubuntu/focal focal main" | \
-    tee /etc/apt/sources.list.d/networkradius.list > /dev/null
-  become: true
-  when:
-    - ansible_distribution|string == 'Ubuntu'
-    - ansible_distribution_release|string == 'focal'
   tags:
     - molecule-idempotence-notest
 
