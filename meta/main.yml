@@ -25,10 +25,11 @@ galaxy_info:
   platforms:
     - name: Debian
       versions:
+        - bookworm
         - bullseye
     - name: Ubuntu
       versions:
-        - focal
+        - noble
         - jammy
   galaxy_tags:
     - system
