@@ -6,33 +6,41 @@
       - pip
       - setuptools
       - wheel
-      - attrs
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
+  retries: 3
+  delay: 5
+  register: result
+  until: result is success
+
+- name: Verify requirements.txt exists
+  stat:
+    path: "{{ role_path }}/files/requirements.txt"
+  register: req_file
+
+- name: Debug requirements file path
+  debug:
+    msg: "Looking for requirements file at {{ role_path }}/files/requirements.txt"
+  when: req_file.stat is defined
+
+- name: Install Python dependencies from requirements.txt
+  pip:
+    requirements: "{{ role_path }}/files/requirements.txt"
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+  environment:
+    LC_CTYPE: "en_US.UTF-8"
+  notify: Reload application
   retries: 5
   delay: 10
   register: result
   until: result is success
 
-- name: Remove jsonfield2
+- name: Install openwisp2 controller
   pip:
-    name:
-      - jsonfield2
-    state: absent
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-  retries: 2
-  delay: 5
-  register: result
-  until: result is success
-  notify: Reload application
-
-- name: Install openwisp2 controller and its dependencies
-  pip:
-    name:
-      - "{{ openwisp2_controller_version }}"
-      - service_identity
+    name: "{{ openwisp2_controller_version }}"
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
@@ -46,31 +54,7 @@
   tags:
     - molecule-idempotence-notest
 
-- name: Install channels_redis~=4.2.0
-  pip:
-    name:
-      - channels_redis~=4.2.0
-    state: latest
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-  retries: 1
-  delay: 10
-  register: result
-  until: result is success
-
-- name: Install django-redis
-  pip:
-    name: "django-redis~=5.4.0"
-    state: present
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-  notify: Reload application
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
-
-- name: Install openwisp2 network topology and its dependencies
+- name: Install openwisp2 network topology
   when: openwisp2_network_topology
   pip:
     name: "{{ openwisp2_network_topology_version }}"
@@ -85,7 +69,7 @@
   tags:
     - molecule-idempotence-notest
 
-- name: Install openwisp firmware upgrader and its dependencies
+- name: Install openwisp firmware upgrader
   when: openwisp2_firmware_upgrader
   pip:
     name: "{{ openwisp2_firmware_upgrader_version }}"
@@ -100,7 +84,7 @@
   tags:
     - molecule-idempotence-notest
 
-- name: Install openwisp monitoring and its dependencies
+- name: Install openwisp monitoring
   when: openwisp2_monitoring
   pip:
     name: "{{ openwisp2_monitoring_version }}"
@@ -115,7 +99,7 @@
   tags:
     - molecule-idempotence-notest
 
-- name: Install openwisp2_radius and its dependencies
+- name: Install openwisp2_radius
   when: openwisp2_radius
   pip:
     name: "{{ openwisp2_radius_version }}"
@@ -130,113 +114,24 @@
   tags:
     - molecule-idempotence-notest
 
-- name: Install django-cors-headers
-  when: openwisp2_django_cors.get('enabled')
-  pip:
-    name: "django-cors-headers~=4.4.0"
-    state: latest
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
-  notify: Reload application
-
 - name: Install extra python packages
   pip:
     name: "{{ openwisp2_extra_python_packages }}"
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
-  retries: 5
-  delay: 10
+  when: openwisp2_extra_python_packages | length > 0
+  retries: 3
+  delay: 5
   register: result
   until: result is success
   notify: Reload application
   tags: [extra_pip]
 
-- name: Install static minification dependencies
-  pip:
-    name:
-      - django-pipeline~=3.1.0
-    state: latest
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
-  notify: Reload application
-
-- name: Install uwsgi
-  pip:
-    name: uwsgi
-    state: latest
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
-  notify: Reload application
-
-- name: Install psycopg2
-  when: openwisp2_database.engine in ["django.db.backends.postgresql", "django.contrib.gis.db.backends.postgis"]
-  pip:
-    name: psycopg2
-    state: latest
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
-  notify: Reload application
-
-- name: Install MySQL-python
-  when: openwisp2_database.engine in ["django.db.backends.mysql", "django.contrib.gis.db.backends.mysql"]
-  pip:
-    name: MySQL-python
-    state: latest
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
-  notify: Reload application
-
-- name: Install raven (sentry client)
-  when: openwisp2_sentry.get('dsn')
-  pip:
-    name: raven
-    state: latest
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
-  notify: Reload application
-
-- name: Install django-celery-email
-  pip:
-    name: django-celery-email
-    state: latest
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-  when: openwisp2_email_backend == "djcelery_email.backends.CeleryEmailBackend"
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
-  notify: Reload application
-
 - name: Install django
   pip:
     name: "{{ openwisp2_django_version }}"
-    state: present
+    state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
   retries: 5
@@ -246,3 +141,72 @@
   notify: Reload application
   tags:
     - molecule-idempotence-notest
+
+- name: Install psycopg2
+  when: openwisp2_database.engine in ["django.db.backends.postgresql", "django.contrib.gis.db.backends.postgis"]
+  pip:
+    name: psycopg2-binary
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+  retries: 3
+  delay: 5
+  register: result
+  until: result is success
+  notify: Reload application
+
+- name: Install MySQL-python for Python 2
+  when: 
+    - openwisp2_database.engine in ["django.db.backends.mysql", "django.contrib.gis.db.backends.mysql"]
+    - openwisp2_python is version('3.0', '<')
+  pip:
+    name: MySQL-python
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+  retries: 3
+  delay: 5
+  register: result
+  until: result is success
+  notify: Reload application
+
+- name: Install mysqlclient for Python 3
+  when:
+    - openwisp2_database.engine in ["django.db.backends.mysql", "django.contrib.gis.db.backends.mysql"]
+    - openwisp2_python is version('3.0', '>=')
+  pip:
+    name: mysqlclient
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+  retries: 3
+  delay: 5
+  register: result
+  until: result is success
+  notify: Reload application
+
+- name: Install raven
+  when: openwisp2_sentry.get('dsn')
+  pip:
+    name: raven
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+  notify: Reload application
+  retries: 3
+  delay: 5
+  register: result
+  until: result is success
+
+- name: Install django-celery-email
+  when: openwisp2_email_backend == "djcelery_email.backends.CeleryEmailBackend"
+  pip:
+    name: django-celery-email
+    state: latest
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+  notify: Reload application
+  retries: 3
+  delay: 5
+  register: result
+  until: result is success
