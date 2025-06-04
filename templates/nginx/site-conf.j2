@@ -65,7 +65,9 @@ server {
     {% if openwisp2_admin_allowed_network %}
     location /admin/ {
         try_files {{ openwisp2_path }}/public_html/maintenance.html $uri @uwsgi;
-        allow {{ openwisp2_admin_allowed_network }};
+        {% for network in openwisp2_admin_allowed_network %}
+        allow {{ network }};
+        {% endfor %}
         deny all;
     }
     {% endif %}
