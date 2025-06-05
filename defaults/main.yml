@@ -64,6 +64,7 @@ openwisp2_nginx_csp: >
     worker-src https://{{ inventory_hostname }}{% for host in openwisp2_allowed_hosts %} https://{{ host }}{% endfor %} blob: 'self';" always;
 openwisp2_uwsgi_gid: null
 openwisp2_admin_allowed_network: null
+openwisp2_admin_allowed_networks: []
 openwisp2_install_ntp: true
 openwisp2_sentry:
     dsn: false
