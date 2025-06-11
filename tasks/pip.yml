@@ -15,19 +15,6 @@
   register: result
   until: result is success
 
-- name: Remove jsonfield2
-  pip:
-    name:
-      - jsonfield2
-    state: absent
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-  retries: 2
-  delay: 5
-  register: result
-  until: result is success
-  notify: Reload application
-
 - name: Install openwisp2 controller and its dependencies
   pip:
     name:
