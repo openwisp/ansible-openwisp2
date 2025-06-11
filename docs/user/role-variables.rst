@@ -367,6 +367,8 @@ take a look at `the default values of these variables
         openwisp2_monitoring_periodic_tasks: true
         openwisp2_radius_periodic_tasks: true
         openwisp2_usage_metric_collection_periodic_tasks: true
+        # point {{ inventory_name }} to localhost in /etc/hosts
+        openwisp2_inventory_hostname_localhost: true
         # this role provides a default configuration of freeradius
         # if you manage freeradius on a different machine or you need different configurations
         # you can disable this default behavior

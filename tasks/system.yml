@@ -6,8 +6,10 @@
     regexp: "^127.0.0.1"
     line: "127.0.0.1  localhost {{ inventory_hostname }}"
     state: present
+  when: openwisp2_inventory_hostname_localhost
   tags:
     # Docker does not allow updating /etc/hosts file at
     # container level, hence this task would fail with molecule.
     # https://github.com/ansible-community/molecule/issues/959
     - molecule-notest
+    - etchost
