@@ -194,10 +194,11 @@ take a look at `the default values of these variables
         openwisp2_daphne_processes: 2
         # maximum time to allow a websocket to be connected (in seconds)
         openwisp2_daphne_websocket_timeout: 1800
-        # the following setting controls which ip address range
-        # is allowed to access the openwisp2 admin web interface
+        # the following setting controls which ip address ranges
+        # are allowed to access the openwisp2 admin web interface
         # (by default any IP is allowed)
-        openwisp2_admin_allowed_network: null
+        openwisp2_admin_allowed_networks:
+            - "192.168.1.0/24"
         # install ntp client (enabled by default)
         openwisp2_install_ntp: true
         # if you have any custom supervisor service, you can

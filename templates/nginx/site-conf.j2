@@ -62,10 +62,15 @@ server {
         proxy_set_header X-Forwarded-Host $server_name;
     }
 
-    {% if openwisp2_admin_allowed_network %}
+    {% if openwisp2_admin_allowed_network or openwisp2_admin_allowed_networks %}
     location /admin/ {
         try_files {{ openwisp2_path }}/public_html/maintenance.html $uri @uwsgi;
+        {% if openwisp2_admin_allowed_network %}
         allow {{ openwisp2_admin_allowed_network }};
+        {% endif %}
+        {% for network in openwisp2_admin_allowed_networks %}
+        allow {{ network }};
+        {% endfor %}
         deny all;
     }
     {% endif %}
