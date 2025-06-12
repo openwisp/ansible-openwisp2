@@ -312,6 +312,12 @@ take a look at `the default values of these variables
         openwisp2_celery_task_acks_late: true
         # maximum number of retries by celery before giving up when broker is unreachable
         openwisp2_celery_broker_max_tries: 10
+        # allows changing the concurrency execution pool used by celery
+        # defaults to null, celery uses "prefork" mode by default
+        openwisp2_celery_pool: null
+        openwisp2_celery_monitoring_pool: null
+        openwisp2_celery_network_pool: null
+        openwisp2_celery_firmware_upgrader_pool: null
         # whether to activate the django logging configuration in celery
         # if set to true, will log all the celery events in the same log stream used by django
         # which will cause log lines to be written to "{{ openwisp2_path }}/log/openwisp2.log"
