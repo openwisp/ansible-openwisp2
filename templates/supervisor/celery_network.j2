@@ -1,8 +1,7 @@
 [program:celery_network]
 user={{ www_user }}
 directory={{ openwisp2_path }}
-command={{ openwisp2_path }}/env/bin/celery -A openwisp2 worker -l info --queues network -O {{ openwisp2_celery_network_optimization }}{% if openwisp2_celery_network_concurrency %} --concurrency={{ openwisp2_celery_network_concurrency }}{% elif openwisp2_celery_network_autoscale %} --autoscale {{ openwisp2_celery_network_autoscale }}{% endif %}{% if openwisp2_celery_network_prefetch_multiplier %} --prefetch-multiplier {{ openwisp2_celery_network_prefetch_multiplier }}{% endif %} -n network@%%h{% if openwisp2_celery_network_pool %} --pool={{ openwisp2_celery_network_pool }}{% endif %}
-
+command={{ openwisp2_path }}/env/bin/celery -A openwisp2 worker -l info --queues network -O {{ openwisp2_celery_network_optimization }}{% if openwisp2_celery_network_concurrency %} --concurrency={{ openwisp2_celery_network_concurrency }}{% elif openwisp2_celery_network_autoscale %} --autoscale {{ openwisp2_celery_network_autoscale }}{% endif %}{% if openwisp2_celery_network_prefetch_multiplier %} --prefetch-multiplier {{ openwisp2_celery_network_prefetch_multiplier }}{% endif %}{% if openwisp2_celery_network_pool %} --pool={{ openwisp2_celery_network_pool }}{% endif %} -n network@%%h
 autostart=true
 autorestart=true
 stopsignal=INT
