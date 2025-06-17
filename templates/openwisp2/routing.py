@@ -23,14 +23,14 @@ routes.extend(network_topology_routes)
 {% endif %}
 
 {% for extra_routes in openwisp2_websocket_extra_routes %}
-routes.extend({{ extra_routes }})
+routes.extend({{extra_routes}})
 {% endfor %}
 
 application = ProtocolTypeRouter(
     {
-        'websocket': AllowedHostsOriginValidator(
+        "websocket": AllowedHostsOriginValidator(
             AuthMiddlewareStack(URLRouter(routes))
         ),
-        'http': get_asgi_application(),
+        "http": get_asgi_application(),
     }
 )

@@ -12,35 +12,35 @@ from openwisp_firmware_upgrader.private_storage.urls import \
 
 {% endif %}
 
-redirect_view = RedirectView.as_view(url=reverse_lazy('admin:index'))
+redirect_view = RedirectView.as_view(url=reverse_lazy("admin:index"))
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-{% if openwisp2_controller_urls %}
-    path('', include('openwisp_controller.urls')),
-{% endif %}
-    path('api/v1/', include('openwisp_utils.api.urls')),
-    path('api/v1/', include('openwisp_users.api.urls')),
-{% if openwisp2_network_topology %}
-    path('', include('openwisp_network_topology.urls')),
-{% endif %}
-{% if openwisp2_firmware_upgrader %}
-    path('', include('openwisp_firmware_upgrader.urls')),
+    path("admin/", admin.site.urls),
+    {% if openwisp2_controller_urls %}
+    path("", include("openwisp_controller.urls")),
+    {% endif %}
+    path("api/v1/", include("openwisp_utils.api.urls")),
+    path("api/v1/", include("openwisp_users.api.urls")),
+    {% if openwisp2_network_topology %}
+    path("", include("openwisp_network_topology.urls")),
+    {% endif %}
+    {% if openwisp2_firmware_upgrader %}
+    path("", include("openwisp_firmware_upgrader.urls")),
     path(
-        '',
-        include((fw_private_storage_urls, 'firmware'), namespace='firmware'),
+        "",
+        include((fw_private_storage_urls, "firmware"), namespace="firmware"),
     ),
-{% endif %}
-{% if openwisp2_monitoring %}
-    path('', include('openwisp_monitoring.urls')),
-{% endif %}
-{% if openwisp2_radius and openwisp2_radius_urls %}
-    path('', include('openwisp_radius.urls')),
-{% endif %}
-{% for extra_url in openwisp2_extra_urls %}
-    {{ extra_url }},
-{% endfor %}
-    path('', redirect_view, name='index'),
+    {% endif %}
+    {% if openwisp2_monitoring %}
+    path("", include("openwisp_monitoring.urls")),
+    {% endif %}
+    {% if openwisp2_radius and openwisp2_radius_urls %}
+    path("", include("openwisp_radius.urls")),
+    {% endif %}
+    {% for extra_url in openwisp2_extra_urls %}
+    {{extra_url}},
+    {% endfor %}
+    path("", redirect_view, name="index"),
 ]
 
 urlpatterns += staticfiles_urlpatterns()
