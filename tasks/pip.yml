@@ -33,22 +33,14 @@
   tags:
     - molecule-idempotence-notest
 
-- name: Install channels_redis~=4.2.0
-  pip:
-    name:
-      - channels_redis~=4.2.0
-    state: latest
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-  retries: 1
-  delay: 10
-  register: result
-  until: result is success
+- name: Copy requirements.txt
+  copy:
+    src: requirements.txt
+    dest: "{{ openwisp2_path }}/requirements.txt"
 
-- name: Install django-redis
+- name: Install python requirements
   pip:
-    name: "django-redis~=5.4.0"
-    state: present
+    requirements: "{{ openwisp2_path }}/requirements.txt"
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
   notify: Reload application
@@ -142,31 +134,6 @@
   until: result is success
   notify: Reload application
   tags: [extra_pip]
-
-- name: Install static minification dependencies
-  pip:
-    name:
-      - django-pipeline~=3.1.0
-    state: latest
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
-  notify: Reload application
-
-- name: Install uwsgi
-  pip:
-    name: uwsgi
-    state: latest
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
-  notify: Reload application
 
 - name: Install psycopg2
   when: openwisp2_database.engine in ["django.db.backends.postgresql", "django.contrib.gis.db.backends.postgis"]
