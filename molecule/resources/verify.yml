@@ -32,7 +32,6 @@
             openwisp_controller.config.tests.test_admin.TestAdmin.test_device_contains_default_templates_js \
             openwisp_controller.config.tests.test_admin.TestAdmin.test_template_not_contains_default_templates_js \
             openwisp_controller.config.tests.test_admin.TestAdmin.test_vpn_not_contains_default_templates_js \
-            openwisp_controller.config.tests.test_selenium.TestDeviceAdmin.test_multiple_organization_templates \
             openwisp_controller.config.tests.test_notifications \
             openwisp_controller.subnet_division.tests.test_models \
             openwisp_notifications.tests.test_admin.TestAdmin
