@@ -19,7 +19,7 @@
             openwisp_controller.config.tests.test_admin.TestAdmin.test_vpn_preview_button \
             openwisp_controller.config.tests.test_admin.TestAdmin.test_device_queryset \
             openwisp_controller.config.tests.test_admin.TestAdmin.test_device_organization_fk_autocomplete_view \
-            openwisp_controller.config.tests.test_admin.TestAdmin.test_device_templates_m2m_queryset \
+            openwisp_controller.config.tests.test_admin.TestAdmin.test_multiple_organization_templates \
             openwisp_controller.config.tests.test_admin.TestAdmin.test_template_queryset \
             openwisp_controller.config.tests.test_admin.TestAdmin.test_template_organization_fk_autocomplete_view \
             openwisp_controller.config.tests.test_admin.TestAdmin.test_template_vpn_fk_autocomplete_view \
