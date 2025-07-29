@@ -1,4 +1,4 @@
-Developer Installation instructions
+Developer Installation Instructions
 ===================================
 
 .. include:: ../partials/developer-docs.rst
@@ -75,7 +75,8 @@ linux debian/ubuntu systems):
 
 .. code-block:: shell
 
-    pip install molecule[docker] molecule-plugins yamllint ansible-lint docker
+    # from the root of the repository
+    pip install -r requirements-test.txt
 
 **Step 4**: Download docker images
 
