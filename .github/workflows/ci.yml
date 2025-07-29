@@ -39,14 +39,12 @@ jobs:
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
-          python-version: "3.x"
+          python-version: "3.12"
 
       - name: Install python dependencies
         run: |
-          pip install molecule molecule-plugins[docker] yamllint ansible-lint docker
-          pip install openwisp-utils[qa]
-          # https://github.com/ansible-community/molecule-plugins/issues/256
-          python -m pip install 'requests<2.32'
+          pip install -U pip wheel setuptools
+          pip install -r requirements-test.txt
 
       - name: Install Ansible Galaxy dependencies
         run: ansible-galaxy collection install "community.general:>=3.6.0"
