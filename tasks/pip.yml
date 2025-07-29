@@ -33,22 +33,14 @@
   tags:
     - molecule-idempotence-notest
 
-- name: Install channels_redis~=4.2.0
-  pip:
-    name:
-      - channels_redis~=4.2.0
-    state: latest
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-  retries: 1
-  delay: 10
-  register: result
-  until: result is success
+- name: Copy requirements.txt
+  copy:
+    src: requirements.txt
+    dest: "{{ openwisp2_path }}/requirements.txt"
 
-- name: Install django-redis
+- name: Install python requirements
   pip:
-    name: "django-redis~=5.4.0"
-    state: present
+    requirements: "{{ openwisp2_path }}/requirements.txt"
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
   notify: Reload application
@@ -117,13 +109,18 @@
   tags:
     - molecule-idempotence-notest
 
-- name: Install django-cors-headers
+- name: Copy requirements-cors-headers.txt
+  copy:
+    src: requirements-cors-headers.txt
+    dest: "{{ openwisp2_path }}/requirements-cors-headers.txt"
   when: openwisp2_django_cors.get('enabled')
+
+- name: Install django-core-headers requirements
   pip:
-    name: "django-cors-headers~=4.4.0"
-    state: latest
+    requirements: "{{ openwisp2_path }}/requirements-cors-headers.txt"
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
+  when: openwisp2_django_cors.get('enabled')
   retries: 5
   delay: 10
   register: result
@@ -143,51 +140,36 @@
   notify: Reload application
   tags: [extra_pip]
 
-- name: Install static minification dependencies
-  pip:
-    name:
-      - django-pipeline~=3.1.0
-    state: latest
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
-  notify: Reload application
-
-- name: Install uwsgi
-  pip:
-    name: uwsgi
-    state: latest
-    virtualenv: "{{ virtualenv_path }}"
-    virtualenv_python: "{{ openwisp2_python }}"
-  retries: 5
-  delay: 10
-  register: result
-  until: result is success
-  notify: Reload application
-
-- name: Install psycopg2
+- name: Copy requirements-postgresql.txt
+  copy:
+    src: requirements-postgresql.txt
+    dest: "{{ openwisp2_path }}/requirements-postgresql.txt"
   when: openwisp2_database.engine in ["django.db.backends.postgresql", "django.contrib.gis.db.backends.postgis"]
+
+- name: Install PostgreSQL driver requirements
   pip:
-    name: psycopg2
-    state: latest
+    requirements: "{{ openwisp2_path }}/requirements-postgresql.txt"
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
+  when: openwisp2_database.engine in ["django.db.backends.postgresql", "django.contrib.gis.db.backends.postgis"]
   retries: 5
   delay: 10
   register: result
   until: result is success
   notify: Reload application
 
-- name: Install MySQL-python
+- name: Copy requirements-mysql.txt
+  copy:
+    src: requirements-mysql.txt
+    dest: "{{ openwisp2_path }}/requirements-mysql.txt"
   when: openwisp2_database.engine in ["django.db.backends.mysql", "django.contrib.gis.db.backends.mysql"]
+
+- name: Install MYSQL driver requirements
   pip:
-    name: MySQL-python
-    state: latest
+    requirements: "{{ openwisp2_path }}/requirements-mysql.txt"
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
+  when: openwisp2_database.engine in ["django.db.backends.mysql", "django.contrib.gis.db.backends.mysql"]
   retries: 5
   delay: 10
   register: result
@@ -207,18 +189,23 @@
   until: result is success
   notify: Reload application
 
-- name: Install django-celery-email
+- name: Copy requirements-celery-email.txt
+  copy:
+    src: requirements-celery-email.txt
+    dest: "{{ openwisp2_path }}/requirements-celery-email.txt"
+  when: openwisp2_email_backend == "djcelery_email.backends.CeleryEmailBackend"
+
+- name: Install celery-email requirements
   pip:
-    name: django-celery-email
-    state: latest
+    requirements: "{{ openwisp2_path }}/requirements-celery-email.txt"
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
   when: openwisp2_email_backend == "djcelery_email.backends.CeleryEmailBackend"
+  notify: Reload application
   retries: 5
   delay: 10
   register: result
   until: result is success
-  notify: Reload application
 
 - name: Install django
   pip:
