@@ -1,4 +1,7 @@
 #!/bin/bash
 set -e
 
-openwisp-qa-check --skip-isort --skip-flake8 --skip-checkmigrations --skip-black
+openwisp-qa-check --skip-isort \
+  --skip-flake8 \
+  --skip-black \
+  --skip-checkmigrations
