@@ -34,7 +34,8 @@ openwisp2_database:
     password: ""
     host: ""
     port: ""
-    options: {}
+    options:
+        timeout: 10
 openwisp2_spatialite_path: "mod_spatialite.so"
 openwisp2_language_code: "en-gb"
 openwisp2_time_zone: "UTC"
