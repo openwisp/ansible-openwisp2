@@ -15,7 +15,6 @@
   apt:
     name:
       - sudo
-      - software-properties-common
       - build-essential
       - supervisor
       - openssl
@@ -106,7 +105,7 @@
       - libcairo2
       - libpango-1.0-0
       - libpangocairo-1.0-0
-      - libgdk-pixbuf2.0-0
+      - "{{ openwisp2_libgdk_pixbuf_pkg }}"
       - shared-mime-info
   tags: [openwisp2, radius]
 
@@ -145,7 +144,7 @@
 
 - name: Install ntp
   when: openwisp2_install_ntp
-  apt: name=ntp
+  apt: "name={{ openwisp2_ntp_pkg }}"
   retries: 5
   delay: 10
   register: result

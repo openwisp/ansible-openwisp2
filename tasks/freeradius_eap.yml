@@ -1,5 +1,14 @@
 ---
 
+- name: Generate default certificates for the WPA Enterprise TTLS
+  become_user: freerad
+  command: "make server dh"
+  args:
+    chdir: "{{ freeradius_dir }}/certs"
+    creates: "{{ freeradius_dir }}/certs/server.pem"
+  when: org.cert is not defined
+  tags: [freeradius_eap]
+
 - name: Generate default DH key and certificates
   block:
     - name: "Check if {{ freeradius_dir }}/certs/dh exists"

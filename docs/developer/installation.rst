@@ -84,6 +84,7 @@ linux debian/ubuntu systems):
 
     docker pull geerlingguy/docker-ubuntu2404-ansible:latest
     docker pull geerlingguy/docker-ubuntu2204-ansible:latest
+    docker pull geerlingguy/docker-debian13-ansible:latest
     docker pull geerlingguy/docker-debian12-ansible:latest
     docker pull geerlingguy/docker-debian11-ansible:latest
 
