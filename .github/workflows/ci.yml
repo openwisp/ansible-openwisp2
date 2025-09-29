@@ -25,6 +25,7 @@ jobs:
           - ubuntu2404
           - debian11
           - debian12
+          - debian13
 
     steps:
       - uses: actions/checkout@v5

@@ -1,5 +1,14 @@
 ---
 
+- name: Include variables for Debian 13
+  include_vars:
+    dir: "{{ role_path }}/vars"
+    files_matching: "^debian-13.yml$"
+  when:
+    - ansible_distribution|string == 'Debian'
+    - ansible_distribution_release|string == 'trixie'
+  tags: [always]
+
 - import_tasks: apt.yml
   tags: [openwisp2, apt]
 
