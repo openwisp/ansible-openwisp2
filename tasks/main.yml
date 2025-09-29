@@ -9,9 +9,6 @@
     - ansible_distribution_release|string == 'trixie'
   tags: [always]
 
-- import_tasks: consent.yml
-  tags: [openwisp2, usage_collection]
-
 - import_tasks: apt.yml
   tags: [openwisp2, apt]
 
