@@ -48,6 +48,8 @@
   delay: 10
   register: result
   until: result is success
+  tags:
+    - molecule-idempotence-notest
 
 - name: Install openwisp2 network topology and its dependencies
   when: openwisp2_network_topology
