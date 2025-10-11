@@ -15,3 +15,7 @@ openwisp2_default_supervisor_restart:
     when: "{{ openwisp2_firmware_upgrader and openwisp2_celery_firmware_upgrader }}"
   - name: celery_monitoring
     when: "{{ openwisp2_monitoring and openwisp2_celery_monitoring }}"
+
+# Default package names
+openwisp2_libgdk_pixbuf_pkg: libgdk-pixbuf2.0-0
+openwisp2_ntp_pkg: ntp

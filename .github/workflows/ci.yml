@@ -25,6 +25,7 @@ jobs:
           - ubuntu2404
           - debian11
           - debian12
+          - debian13
 
     steps:
       - uses: actions/checkout@v5
@@ -32,7 +33,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.12"
 

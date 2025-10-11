@@ -6,7 +6,7 @@ rest {
         uri = "${..connect_uri}/authorize/"
         method = 'post'
         body = 'json'
-        data = '{"username": "%{User-Name}", "password": "%{User-Password}"}'
+        data = '{"username": "%{User-Name}", "password": "%{User-Password}", "called_station_id": "%{Called-Station-ID}", "calling_station_id": "%{Calling-Station-ID}"}'
         tls = ${..tls}
     }
 
