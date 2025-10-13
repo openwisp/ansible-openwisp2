@@ -1,4 +1,4 @@
-channels_redis~=4.3.0
-django-redis~=6.0.0
-django-pipeline~=4.1.0
-uwsgi~=2.0.30
+channels_redis>=4.3.0,<4.4.0
+django-redis>=6.0.0,<6.1.0
+django-pipeline>=4.1.0,<4.2.0
+uwsgi>=2.0.30,<2.1.0
