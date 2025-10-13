@@ -197,6 +197,14 @@
     dest: "{{ openwisp2_path }}/requirements-celery-email.txt"
   when: openwisp2_email_backend == "djcelery_email.backends.CeleryEmailBackend"
 
+- name: Remove django-celery-email (unmaintained)
+  pip:
+    name: "django-celery-email"
+    state: absent
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ openwisp2_python }}"
+  when: openwisp2_email_backend == "djcelery_email.backends.CeleryEmailBackend"
+
 - name: Install celery-email requirements
   pip:
     requirements: "{{ openwisp2_path }}/requirements-celery-email.txt"
@@ -208,6 +216,8 @@
   delay: 10
   register: result
   until: result is success
+  tags:
+    - molecule-idempotence-notest
 
 - name: Install django
   pip:
