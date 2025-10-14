@@ -12,6 +12,8 @@
     openwisp2_uwsgi_extra_conf: |
       single-interpreter=True
     openwisp2_usage_metric_collection: false
+    openwisp2_extra_django_settings:
+      ACCOUNT_RATE_LIMITS: false
     freeradius_eap_orgs:
       - name: openwisp
         uuid: 00000000-0000-0000-0000-000000000000
