@@ -16,10 +16,19 @@ routes.extend(get_controller_routes())
 {% endif %}
 
 {% if openwisp2_network_topology %}
-from openwisp_network_topology.routing import \
+from openwisp_network_topology.routing import (
     websocket_urlpatterns as network_topology_routes
+)
 
 routes.extend(network_topology_routes)
+{% endif %}
+
+{% if openwisp2_radius %}
+from openwisp_radius.routing import (
+    websocket_urlpatterns as radius_routes
+)
+
+routes.extend(radius_routes)
 {% endif %}
 
 {% for extra_routes in openwisp2_websocket_extra_routes %}
