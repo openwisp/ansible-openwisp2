@@ -156,6 +156,7 @@ openwisp2_uwsgi_extra_conf: |
   disable-logging=True
   auto-procname=True
 openwisp2_daphne_install: true
+openwisp2_daphne_socket: "unix://{{ openwisp2_path }}/daphne0.sock"
 openwisp2_daphne_processes: 1
 openwisp2_daphne_websocket_timeout: 3600  # in seconds
 # internationalization

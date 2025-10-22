@@ -1,5 +1,8 @@
 upstream channels-backend {
-    server unix://{{ openwisp2_path }}/daphne0.sock fail_timeout=0;
+    {% set override_failtimeout = (openwisp2_nginx_daphne_server | length == 1) %}
+    {% for server in openwisp2_nginx_daphne_server %}
+    server {{ server }}{% if override_failtimeout %} fail_timeout=0{% endif %};
+    {% endfor %}
 }
 
 upstream openwisp-server {
