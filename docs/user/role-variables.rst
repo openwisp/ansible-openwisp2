@@ -194,6 +194,9 @@ take a look at `the default values of these variables
         openwisp2_daphne_processes: 2
         # maximum time to allow a websocket to be connected (in seconds)
         openwisp2_daphne_websocket_timeout: 1800
+        # socket on which daphne should listen. Defaults to UNIX socket
+        # "unix://{{ openwisp2_path }}/daphne0.sock"
+        openwisp2_daphne_socket: tcp://127.0.0.1:8001
         # the following setting controls which ip address ranges
         # are allowed to access the openwisp2 admin web interface
         # (by default any IP is allowed)
