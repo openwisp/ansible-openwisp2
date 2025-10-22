@@ -50,22 +50,6 @@ openwisp2_ssl_state: "California"
 openwisp2_ssl_locality: "San Francisco"
 openwisp2_ssl_organization: "IT dep."
 openwisp2_ssl_common_name: "{{ inventory_hostname }}"
-openwisp2_http_allowed_ip: false
-openwisp2_nginx_install: true
-openwisp2_nginx_openwisp_server:
-    - "unix://{{ openwisp2_path }}/uwsgi.sock"
-openwisp2_nginx_spdy: false
-openwisp2_nginx_http2: false
-openwisp2_nginx_ipv6: false
-openwisp2_nginx_client_max_body_size: 20M
-openwisp2_nginx_csp: >
-    "default-src http: https: data: blob: 'unsafe-inline';
-    script-src 'unsafe-eval' https: 'unsafe-inline' 'self';
-    frame-ancestors 'self'; connect-src https://{{ inventory_hostname }}{% for host in openwisp2_allowed_hosts %} https://{{ host }}{% endfor %} wss: 'self';
-    worker-src https://{{ inventory_hostname }}{% for host in openwisp2_allowed_hosts %} https://{{ host }}{% endfor %} blob: 'self';" always;
-openwisp2_uwsgi_gid: null
-openwisp2_admin_allowed_network: null
-openwisp2_admin_allowed_networks: []
 openwisp2_install_ntp: true
 openwisp2_sentry:
     dsn: false
@@ -83,21 +67,6 @@ openwisp2_topology_save_snapshot_frequency:
     hour: "23"
     minute: "30"
 openwisp2_django_sesame_max_age: 1800  # 30 minutes
-openwisp2_nginx_ssl_config:
-    gzip: "on"
-    gzip_comp_level: "6"
-    gzip_proxied: "any"
-    gzip_min_length: "1000"
-    gzip_types:
-        - "text/plain"
-        - "image/svg+xml"
-        - "application/json"
-        - "application/javascript"
-        - "text/xml"
-        - "text/css"
-        - "application/xml"
-        - "application/x-font-ttf"
-        - "font/opentype"
 openwisp2_redis_install: true
 openwisp2_redis_host: localhost
 openwisp2_redis_port: 6379
@@ -111,8 +80,6 @@ openwisp2_timeseries_database:
     host: "localhost"
     port: 8086
 openwisp2_monitoring_default_retention_policy: "26280h0m0s"  # 3 years
-openwisp2_nginx_access_log: "{{ openwisp2_path }}/log/nginx.access.log"
-openwisp2_nginx_error_log: "{{ openwisp2_path }}/log/nginx.error.log error"
 openwisp2_celerybeat: true
 # keep backward compatibility with old variable openwisp2_eventlet_concurrency
 openwisp2_celery_concurrency: "{{ openwisp2_eventlet_concurrency | default(1) }}"
@@ -145,6 +112,7 @@ openwisp2_celery_firmware_upgrader_pool: null
 openwisp2_django_celery_logging: false
 openwisp2_postfix_install: true
 postfix_smtpd_relay_restrictions_override: "permit_sasl_authenticated, permit_mynetworks, check_relay_domains, reject_unauth_destination, reject"
+openwisp2_uwsgi_gid: null
 openwisp2_uwsgi_processes: 1
 openwisp2_uwsgi_threads: 1
 openwisp2_uwsgi_listen: 100
@@ -159,6 +127,41 @@ openwisp2_daphne_install: true
 openwisp2_daphne_socket: "unix://{{ openwisp2_path }}/daphne0.sock"
 openwisp2_daphne_processes: 1
 openwisp2_daphne_websocket_timeout: 3600  # in seconds
+# nginx configuration
+openwisp2_http_allowed_ip: false
+openwisp2_admin_allowed_network: null
+openwisp2_admin_allowed_networks: []
+openwisp2_nginx_install: true
+openwisp2_nginx_openwisp_server:
+    - "unix://{{ openwisp2_uwsgi_socket }}"
+openwisp2_nginx_daphne_server:
+    - "{{ openwisp2_daphne_socket }}"
+openwisp2_nginx_spdy: false
+openwisp2_nginx_http2: false
+openwisp2_nginx_ipv6: false
+openwisp2_nginx_client_max_body_size: 20M
+openwisp2_nginx_csp: >
+    "default-src http: https: data: blob: 'unsafe-inline';
+    script-src 'unsafe-eval' https: 'unsafe-inline' 'self';
+    frame-ancestors 'self'; connect-src https://{{ inventory_hostname }}{% for host in openwisp2_allowed_hosts %} https://{{ host }}{% endfor %} wss: 'self';
+    worker-src https://{{ inventory_hostname }}{% for host in openwisp2_allowed_hosts %} https://{{ host }}{% endfor %} blob: 'self';" always;
+openwisp2_nginx_ssl_config:
+    gzip: "on"
+    gzip_comp_level: "6"
+    gzip_proxied: "any"
+    gzip_min_length: "1000"
+    gzip_types:
+        - "text/plain"
+        - "image/svg+xml"
+        - "application/json"
+        - "application/javascript"
+        - "text/xml"
+        - "text/css"
+        - "application/xml"
+        - "application/x-font-ttf"
+        - "font/opentype"
+openwisp2_nginx_access_log: "{{ openwisp2_path }}/log/nginx.access.log"
+openwisp2_nginx_error_log: "{{ openwisp2_path }}/log/nginx.error.log error"
 # internationalization
 openwisp2_internationalization: false
 openwisp2_users_auth_api: true
