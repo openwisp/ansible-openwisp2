@@ -1,5 +1,44 @@
 # Change log
 
+## Version 25.10.0 [2025-10-24]
+
+### Features
+
+- Made Daphne socket configurable.
+- Added Calling-Station-ID and Called-Station-ID attributes to the FreeRADIUS REST configuration [#548](https://github.com/openwisp/ansible-openwisp2/issues/548).
+- Added option to change the Celery execution pool.
+- Added support for restricting admin access to multiple subnets [#481](https://github.com/openwisp/ansible-openwisp2/issues/481) [#518](https://github.com/openwisp/ansible-openwisp2/issues/518).
+- Introduced new variable `openwisp2_inventory_hostname_localhost`.
+
+### Changes
+
+- Added default sqlite timeout (10 seconds).
+
+#### Dependencies
+
+- Upgraded to OpenWISP Users 1.2.x (see [change log](https://github.com/openwisp/openwisp-users/releases/tag/1.2.0))
+- Upgraded to OpenWISP Controller 1.2.x (see [change log](https://github.com/openwisp/openwisp-controller/releases/tag/1.2.0))
+- Upgraded to OpenWISP Monitoring 1.2.x (see [change log](https://github.com/openwisp/openwisp-monitoring/releases/tag/1.2.0))
+- Upgraded to OpenWISP Network Topology 1.2.x (see [change log](https://github.com/openwisp/openwisp-network-topology/releases/tag/1.2.0))
+- Upgraded to OpenWISP Firmware Upgrader 1.2.x (see [change log](https://github.com/openwisp/openwisp-firmware-upgrader/releases/tag/1.2.0))
+- Upgraded to OpenWISP RADIUS 1.2.x (see [change
+  log](https://github.com/openwisp/openwisp-radius/releases/tag/1.2.0))
+- Bumped `django-cors-headers>=4.9.0,<4.10.0`
+- Bumped `ansible-core>=2.15,<2.19`.
+- Bumped `channels_redis>=4.3.0,<4.4.0`.
+- Bumped `django-redis>=6.0.0,<6.1.0`.
+- Bumped `django-pipeline>=4.1.0,<4.2.0`.
+- Bumped `uwsgi>=2.0.30,<2.1.0`.
+- Switched from `django-celery-email` to `django-celery-email-reboot` [#477](https://github.com/openwisp/ansible-openwisp2/issues/477).
+- Added support for Debian 13.
+- Dropped support for Ubuntu 20.04.
+
+### Bugfixes
+
+- Fixed `Restart freeradius` handler to properly restart the FreeRADIUS service instead of only ensuring it is running.
+- Ensured Django templates from OpenWISP extensions take precedence over those from other apps.
+- Moved OpenWISP version to a separate file to prevent circular imports.
+
 ## Version 24.11.1 [2024-11-27]
 
 ### Bugfixes
