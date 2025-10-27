@@ -16,13 +16,17 @@
 
 #### Dependencies
 
-- Upgraded to OpenWISP Users 1.2.x (see [change log](https://github.com/openwisp/openwisp-users/releases/tag/1.2.0))
-- Upgraded to OpenWISP Controller 1.2.x (see [change log](https://github.com/openwisp/openwisp-controller/releases/tag/1.2.0))
-- Upgraded to OpenWISP Monitoring 1.2.x (see [change log](https://github.com/openwisp/openwisp-monitoring/releases/tag/1.2.0))
-- Upgraded to OpenWISP Network Topology 1.2.x (see [change log](https://github.com/openwisp/openwisp-network-topology/releases/tag/1.2.0))
-- Upgraded to OpenWISP Firmware Upgrader 1.2.x (see [change log](https://github.com/openwisp/openwisp-firmware-upgrader/releases/tag/1.2.0))
+- Upgraded to OpenWISP Users 1.2.x (see [change log](https://github.com/openwisp/openwisp-users/releases/tag/1.2.0)).
+- Upgraded to OpenWISP Controller 1.2.x (see [change log](https://github.com/openwisp/openwisp-controller/releases/tag/1.2.0)).
+- Upgraded to OpenWISP Monitoring 1.2.x (see [change log](https://github.com/openwisp/openwisp-monitoring/releases/tag/1.2.0)).
+- Upgraded to OpenWISP Network Topology 1.2.x (see [change log](https://github.com/openwisp/openwisp-network-topology/releases/tag/1.2.0)).
+- Upgraded to OpenWISP Firmware Upgrader 1.2.x (see [change log](https://github.com/openwisp/.openwisp-firmware-upgrader/releases/tag/1.2.0)).
 - Upgraded to OpenWISP RADIUS 1.2.x (see [change
-  log](https://github.com/openwisp/openwisp-radius/releases/tag/1.2.0))
+  log](https://github.com/openwisp/openwisp-radius/releases/tag/1.2.0)).
+- Upgraded to OpenWISP Notifications 1.2.x (see [change
+  log](https://github.com/openwisp/openwisp-notifications/releases/tag/1.2.0)).
+- Upgraded to Netjsonconfig 1.2.x (see [change
+  log](https://github.com/openwisp/netjsonconfig/releases/tag/1.2.0)).
 - Bumped `django-cors-headers>=4.9.0,<4.10.0`
 - Bumped `ansible-core>=2.15,<2.19`.
 - Bumped `channels_redis>=4.3.0,<4.4.0`.
