@@ -38,8 +38,8 @@ if "django.contrib.sites" in settings.INSTALLED_APPS:
         print("default site updated")
 
 # Get SSH key pair
-ssh_private_key = os.environ.get("PRIVATE_KEY")
-ssh_pub_key = os.environ.get("PUBLIC_KEY")
+ssh_private_key = os.environ.get("PRIVATE_KEY", "")
+ssh_pub_key = os.environ.get("PUBLIC_KEY", "")
 
 # Create a default credentials object
 if ssh_private_key and Credentials.objects.count() == 0:
