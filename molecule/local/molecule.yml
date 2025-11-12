@@ -4,6 +4,7 @@ dependency:
   name: galaxy
   options:
     role-file: molecule/resources/requirements.yml
+    requirements-file: molecule/resources/collections.yml
 driver:
   name: docker
 lint: |
@@ -60,7 +61,7 @@ provisioner:
     verify: ../resources/verify.yml
   config_options:
     defaults:
-      stdout_callback: yaml
+      result_format: yaml
       bin_ansible_callbacks: true
 verifier:
   name: ansible
