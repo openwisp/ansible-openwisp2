@@ -20,6 +20,9 @@ from swapper import load_model
 
 Credentials = load_model("connection", "Credentials")
 Template = load_model("config", "Template")
+Ca = load_model("pki", "Ca")
+Vpn = load_model("config", "Vpn")
+
 User = get_user_model()
 changed = False
 
@@ -81,3 +84,35 @@ else:
                 config_file["contents"] += "\n" + ssh_pub_key
                 template_obj.save()
                 print(f"changed {template_obj.name} to add default SSH credential")
+
+
+# Create Ca
+if len(Ca.objects.all()) == 0:
+    ca_instance = Ca.objects.create(
+        name="{{ inventory_hostname }} CA",
+    )
+    print("created {{ inventory_hostname }} Certificate Authority")
+else:
+    # If Ca already exists, get the first one
+    ca_instance = Ca.objects.first()
+
+# Create Vpn
+if len(Vpn.objects.all()) == 0:
+    Vpn.objects.create(
+        name="{{ inventory_hostname }} Vpn",
+        host="{{ inventory_hostname }}",
+        backend="openwisp_controller.vpn_backends.OpenVpn",
+        ca=ca_instance,
+        config={
+            "openvpn": [{
+                "server": "10.42.0.0 255.255.255.0",
+                "name": "{{ inventory_hostname }}-vpn",
+                "mode": "server",
+                "dev_type": "tun",
+                "dev": "tun0",
+                'proto': 'udp',
+                'tls_server': True,
+            }]
+        }
+    )
+    print("created Default Vpn Server")
