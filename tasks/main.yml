@@ -40,5 +40,8 @@
 - import_tasks: cron.yml
   tags: [openwisp2, cron]
 
+- import_tasks: openvpn.yml
+  tags: [openwisp2, openvpn]
+
 - import_tasks: complete.yml
   tags: [openwisp2]

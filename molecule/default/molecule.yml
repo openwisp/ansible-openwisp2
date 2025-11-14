@@ -28,7 +28,7 @@ provisioner:
     verify: ../resources/verify.yml
   config_options:
     defaults:
-      stdout_callback: yaml
+      result_format: yaml
       bin_ansible_callbacks: true
   inventory:
     host_vars:

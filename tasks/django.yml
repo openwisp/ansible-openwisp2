@@ -228,3 +228,9 @@
     or "changed" in load_initial_data_result.stdout
   args:
     chdir: "{{ openwisp2_path }}"
+
+- name: Get openwisp2_vpn_id and openwisp2_vpn_name
+  set_fact:
+    openwisp2_vpn_id: "{{ load_initial_data_result.stdout | regex_search('openwisp2_vpn_id\\s+=\\s+([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})','\\1') | first }}"
+    openwisp2_vpn_name: "{{ load_initial_data_result.stdout | regex_search('openwisp2_vpn_name\\s+=\\s+(.*)','\\1') | first }}"
+  when: '"created" in load_initial_data_result.stdout and openwisp2_openvpn_setup'

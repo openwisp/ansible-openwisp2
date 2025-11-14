@@ -1,0 +1,72 @@
+---
+# Making sure bare necessary services are running
+- name: Update supervisor configuration
+  command: supervisorctl update openwisp2
+  register: supervisord_update_openwisp2
+  when: openwisp2_openvpn_setup and openwisp2_vpn_id is defined
+
+- name: Restart openwisp2 uwsgi server
+  command: "supervisorctl restart openwisp2"
+  when: openwisp2_openvpn_setup and openwisp2_vpn_id is defined
+
+- name: Ensure nginx is started
+  service:
+    name: nginx
+    state: started
+  when: openwisp2_nginx_install
+
+- name: Install OpenVPN if needed
+  apt:
+    name:
+      - openvpn
+    state: present
+    update_cache: true
+  when: openwisp2_openvpn_setup and openwisp2_vpn_id is defined
+  # Note: openwisp2_vpn_id will be defined only in the ansible run that creates it.
+
+- name: Configure logrotate for OpenVPN
+  template:
+    src: logrotate.d/openvpn.j2
+    dest: /etc/logrotate.d/openvpn
+    mode: '0644'
+  when: openwisp2_openvpn_setup and openwisp2_vpn_id is defined
+
+- name: Retrieve Access Token with default credentials
+  ansible.builtin.uri:
+    url: "https://{{ inventory_hostname }}/api/v1/users/token/"
+    method: POST
+    status_code: 200
+    headers:
+      Content-Type: application/json
+    body_format: json
+    body:
+      username: "admin"
+      password: "admin"
+    validate_certs: false
+    follow_redirects: all
+  when: openwisp2_openvpn_setup and openwisp2_vpn_id is defined
+  register: login_task_default_result
+
+- name: Retrieve OpenVPN Server configuration
+  ansible.builtin.get_url:
+    url: "https://{{ inventory_hostname }}/api/v1/controller/vpn/{{ openwisp2_vpn_id }}/configuration/"
+    dest: "/etc/openvpn/{{ openwisp2_vpn_name }}-config.tar.gz"
+    validate_certs: false
+    headers:
+      Content-Type: application/json
+      Authorization: Bearer {{ login_task_default_result.json.token }}
+  when: openwisp2_openvpn_setup and openwisp2_vpn_id is defined and openwisp2_vpn_name is defined
+
+- name: Unarchive OpenVPN Server configuration
+  unarchive:
+    src: "/etc/openvpn/{{ openwisp2_vpn_name }}-config.tar.gz"
+    dest: /etc/openvpn/server/
+    remote_src: yes
+  when: openwisp2_openvpn_setup and openwisp2_vpn_id is defined and openwisp2_vpn_name is defined
+
+- name: Enable and start OpenVPN service
+  systemd:
+    name: "openvpn-server@{{ openwisp2_vpn_name }}"
+    enabled: true
+    state: started
+  when: openwisp2_openvpn_setup and openwisp2_vpn_name is defined
