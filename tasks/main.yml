@@ -40,5 +40,24 @@
 - import_tasks: cron.yml
   tags: [openwisp2, cron]
 
+# Making sure bare necessary services are running
+- name: Update supervisor configuration
+  command: supervisorctl update openwisp2
+  register: supervisord_update_openwisp2
+  when: openwisp2_openvpn_setup
+
+- name: Restart openwisp2 uwsgi server
+  command: "supervisorctl restart openwisp2"
+  when: openwisp2_openvpn_setup
+
+- name: Ensure nginx is started
+  service:
+    name: nginx
+    state: started
+  when: openwisp2_nginx_install
+
+- import_tasks: openvpn.yml
+  tags: [openwisp2, openvpn]
+
 - import_tasks: complete.yml
   tags: [openwisp2]

@@ -98,8 +98,8 @@ else:
 
 # Create Vpn
 if len(Vpn.objects.all()) == 0:
-    Vpn.objects.create(
-        name="{{ inventory_hostname }} Vpn",
+    vpn_instance = Vpn.objects.create(
+        name="{{ inventory_hostname }}-vpn",
         host="{{ inventory_hostname }}",
         backend="openwisp_controller.vpn_backends.OpenVpn",
         ca=ca_instance,
@@ -108,11 +108,94 @@ if len(Vpn.objects.all()) == 0:
                 "server": "10.42.0.0 255.255.255.0",
                 "name": "{{ inventory_hostname }}-vpn",
                 "mode": "server",
+                'proto': 'udp',
+                "port": 1194,
                 "dev_type": "tun",
                 "dev": "tun0",
-                'proto': 'udp',
-                'tls_server': True,
-            }]
+                "local": "",
+                "comp_lzo": "adaptive",
+                "auth": "SHA1",
+                "data_ciphers": [
+                    {
+                        "cipher": "AES-256-GCM",
+                        "optional": False
+                    },
+                    {
+                        "cipher": "AES-128-GCM",
+                        "optional": False
+                    }
+                ],
+                "data_ciphers_fallback": "AES-256-GCM",
+                "cipher": "AES-256-GCM",
+                "engine": "",
+                "ca": "ca.pem",
+                "cert": "cert.pem",
+                "key": "key.pem",
+                "pkcs12": "",
+                "tls_auth": "",
+                "ns_cert_type": "",
+                "mtu_disc": "no",
+                "mtu_test": False,
+                "fragment": 0,
+                "mssfix": 1450,
+                "keepalive": "",
+                "persist_tun": False,
+                "persist_key": False,
+                "tun_ipv6": False,
+                "up": "",
+                "up_delay": 0,
+                "down": "",
+                "script_security": 1,
+                "user": "",
+                "group": "",
+                "mute": 0,
+                "status": "",
+                "status_version": 1,
+                "mute_replay_warnings": False,
+                "secret": "",
+                "reneg_sec": 3600,
+                "tls_timeout": 2,
+                "tls_cipher": "",
+                "remote_cert_tls": "",
+                "float": False,
+                "auth_nocache": False,
+                "fast_io": False,
+                "log": "",
+                "verb": 1,
+                "topology": "subnet",
+                "tls_server": True,
+                "dh": "dh.pem",
+                "crl_verify": "",
+                "duplicate_cn": False,
+                "client_to_client": False,
+                "client_cert_not_required": False,
+                "username_as_common_name": False,
+                "auth_user_pass_verify": ""
+            }],
+            "files": [
+                {
+                    "path": "ca.pem",
+                    "mode": "0644",
+                    "contents": "{{ '{{ ca }}' }}"
+                },
+                {
+                    "path": "cert.pem",
+                    "mode": "0644",
+                    "contents": "{{ '{{ cert }}' }}"
+                },
+                {
+                    "path": "key.pem",
+                    "mode": "0644",
+                    "contents": "{{ '{{ key }}' }}"
+                },
+                {
+                    "path": "dh.pem",
+                    "mode": "0644",
+                    "contents": "{{ '{{ dh }}' }}"
+                }
+            ]
         }
     )
-    print("created Default Vpn Server")
+    print(f"created {{ inventory_hostname }} Vpn Server")
+    print(f"openwisp2_vpn_name = {vpn_instance.name}")
+    print(f"openwisp2_vpn_id   = {vpn_instance.id}")
