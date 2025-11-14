@@ -1,4 +1,20 @@
 ---
+# Making sure bare necessary services are running
+- name: Update supervisor configuration
+  command: supervisorctl update openwisp2
+  register: supervisord_update_openwisp2
+  when: openwisp2_openvpn_setup and openwisp2_vpn_id is defined
+
+- name: Restart openwisp2 uwsgi server
+  command: "supervisorctl restart openwisp2"
+  when: openwisp2_openvpn_setup and openwisp2_vpn_id is defined
+
+- name: Ensure nginx is started
+  service:
+    name: nginx
+    state: started
+  when: openwisp2_nginx_install
+
 - name: Install OpenVPN if needed
   apt:
     name:
