@@ -1,16 +1,6 @@
 #!/usr/bin/env python
-"""Pseudo-random django secret key generator"""
-from __future__ import print_function
+# This script will generate a random 50-character string suitable for use as a SECRET_KEY.
+import secrets
 
-import random
-
-chars = (
-    "abcdefghijklmnopqrstuvwxyz"
-    "ABCDEFGHIJKLMNOPQRSTUVXYZ"
-    "0123456789"
-    "#()^[]-_*%&=+/"
-)
-
-SECRET_KEY = "".join([random.SystemRandom().choice(chars) for i in range(50)])
-
-print(SECRET_KEY)
+charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*(-_=+)'
+print(''.join(secrets.choice(charset) for _ in range(50)))
