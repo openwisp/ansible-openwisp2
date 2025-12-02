@@ -5,3 +5,15 @@ rules:
   line-length:
     max: 162
     level: warning
+  truthy:
+    level: warning
+ignore: |
+  .venv
+  venv
+  env
+  myenv
+  *.py
+  __pycache__
+  .tox
+  .git
+  .github

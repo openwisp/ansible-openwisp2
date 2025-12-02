@@ -41,6 +41,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install python dependencies
+        id: deps
         run: |
           pip install -U pip wheel setuptools
           pip install -r requirements-test.txt
@@ -54,6 +55,7 @@ jobs:
           ./run-qa-checks
 
       - name: Tests
+        if: ${{ !cancelled() && steps.deps.conclusion == 'success' }}
         run: |
           mkdir -p ~/.ansible/roles
           ln -s $GITHUB_WORKSPACE ~/.ansible/roles/openwisp.openwisp2
