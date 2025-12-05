@@ -214,8 +214,8 @@ TEMPLATES = [
                     "django.template.loaders.cached.Loader",
                     [
                         "django.template.loaders.filesystem.Loader",
-                        "openwisp_utils.loaders.DependencyLoader",
                         "django.template.loaders.app_directories.Loader",
+                        "openwisp_utils.loaders.DependencyLoader",
                     ],
                 ),
             ],
