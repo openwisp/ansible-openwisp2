@@ -67,7 +67,7 @@ FreeRADIUS, and configures it for WPA Enterprise (EAP-TTLS-PAP):
           # You can add as many organizations as you want
           - name: demo
             uuid: 00000000-0000-0000-0000-000000000001
-            radius_secret: demo-radius-token
+            radius_token: demo-radius-token
             auth_port: 1832
             acct_port: 1833
             inner_tunnel_auth_port: 18330
@@ -140,7 +140,7 @@ The following example playbook achieves the following goals:
         freeradius_eap_orgs:
           - name: demo
             uuid: 00000000-0000-0000-0000-000000000001
-            radius_secret: demo-radius-token
+            radius_token: demo-radius-token
             auth_port: 1832
             acct_port: 1833
             inner_tunnel_auth_port: 18330
