@@ -195,5 +195,5 @@
   loop: "{{ freeradius_eap_orgs }}"
   loop_control:
     loop_var: org
-  when: freeradius_eap_orgs
+  when: freeradius_eap_orgs | length > 0
   tags: [freeradius_eap]
