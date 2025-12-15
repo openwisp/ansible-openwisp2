@@ -7,10 +7,14 @@ on:             # yamllint disable-line rule:truthy
     branches:
       - master
       - dev
+      - "25.10"
+      - "24.11"
   pull_request:
     branches:
       - master
       - dev
+      - "25.10"
+      - "24.11"
 
 jobs:
   build:
