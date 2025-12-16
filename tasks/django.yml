@@ -160,6 +160,13 @@
     - molecule-idempotence-notest
     - openwisp2_theme
 
+- name: Check if ow2_static exists
+  stat:
+    path: "{{ role_path }}/files/ow2_static"
+  register: ow2_static_dir
+  tags:
+    - openwisp2_theme
+
 - name: Copy static files
   become: true
   copy:
@@ -168,7 +175,7 @@
     owner: "{{ www_user }}"
     group: "{{ www_group }}"
     mode: 0640
-  failed_when: false
+  when: ow2_static_dir.stat.exists
   tags:
     - openwisp2_theme
 
