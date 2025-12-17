@@ -1,5 +1,4 @@
 ---
-
 - name: Update pip & related tools
   pip:
     name:

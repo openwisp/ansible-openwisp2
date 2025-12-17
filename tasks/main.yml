@@ -1,5 +1,4 @@
 ---
-
 - name: Include variables for Debian 13
   include_vars:
     dir: "{{ role_path }}/vars"

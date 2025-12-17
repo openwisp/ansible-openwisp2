@@ -1,5 +1,4 @@
 ---
-
 - name: Verify
   hosts: all
   become: true
@@ -62,6 +61,6 @@
 
     - name: Check if FreeRADIUS is listening on WPA Enterprise site ports
       shell: "netstat -tuln | grep -Eq '1822|1823|18230'"
-      register: freeradius_eap_ports  # Register the output and return code
+      register: freeradius_eap_ports # Register the output and return code
       failed_when: freeradius_eap_ports.rc
       changed_when: false

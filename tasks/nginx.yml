@@ -9,19 +9,19 @@
   file:
     path: "{{ openwisp2_path }}/public_html"
     state: directory
-    mode: 0775
+    mode: "0775"
 
 - name: Create "{{ openwisp2_path }}/nginx-conf/openwisp2"
   file:
     path: "{{ openwisp2_path }}/nginx-conf/openwisp2"
     state: directory
-    mode: 0770
+    mode: "0770"
 
 - name: Create "{{ openwisp2_path }}/ssl"
   file:
     path: "{{ openwisp2_path }}/ssl"
     state: directory
-    mode: 0770
+    mode: "0770"
 
 - name: Create SSL cert if not exists yet
   command: >
@@ -54,14 +54,14 @@
   template:
     src: nginx/ssl-conf.j2
     dest: "{{ openwisp2_path }}/nginx-conf/openwisp2/ssl.conf"
-    mode: 0644
+    mode: "0644"
   notify: Restart nginx
 
 - name: Nginx security configuration
   template:
     src: nginx/security-conf.j2
     dest: "{{ openwisp2_path }}/nginx-conf/openwisp2/security.conf"
-    mode: 0644
+    mode: "0644"
   notify: Restart nginx
   tags: [nginx_security]
 
@@ -69,7 +69,7 @@
   template:
     src: nginx/site-conf.j2
     dest: "/etc/nginx/sites-available/{{ inventory_hostname }}"
-    mode: 0644
+    mode: "0644"
   notify: Restart nginx
 
 - name: Nginx site enabled
@@ -83,12 +83,12 @@
   template:
     src: logrotate.d/openwisp-nginx.j2
     dest: /etc/logrotate.d/openwisp-nginx
-    mode: 0644
+    mode: "0644"
 
 - name: Disable nginx server tokens
   replace:
     path: /etc/nginx/nginx.conf
-    regexp: '#(\s+)server_tokens off'
-    replace: 'server_tokens off'
+    regexp: "#(\\s+)server_tokens off"
+    replace: "server_tokens off"
     backup: true
   notify: Restart nginx
