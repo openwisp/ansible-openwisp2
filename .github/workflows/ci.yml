@@ -46,6 +46,10 @@ jobs:
           pip install -U pip wheel setuptools
           pip install -r requirements-test.txt
 
+      - name: Downgrade ansible on Ubuntu 20.04 LTS
+        if: matrix.distro == 'ubuntu2004'
+        run: pip install "ansible-core<2.19"
+
       - name: Install Ansible Galaxy dependencies
         run: ansible-galaxy collection install "community.general:>=3.6.0"
 
