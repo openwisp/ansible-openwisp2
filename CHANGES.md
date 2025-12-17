@@ -1,5 +1,19 @@
 # Change log
 
+## Version 25.10.1 [2025-12-17]
+
+### Changes
+
+#### Dependencies
+
+- Bumped `ansible-core<2.21`
+
+### Bugfixes
+
+- Copy static files only if `ow2_static` directory is present [#569](https://github.com/openwisp/ansible-openwisp2/issues/569)
+- Stricter `freeradius_eap_orgs` conditional [#576](https://github.com/openwisp/ansible-openwisp2/issues/576)
+- Limit `django-celery-email-reboot` to `4.1.x`
+
 ## Version 25.10.0 [2025-10-24]
 
 ### Features
