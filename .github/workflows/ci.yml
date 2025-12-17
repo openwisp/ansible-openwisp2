@@ -50,7 +50,6 @@ jobs:
         run: ansible-galaxy collection install "community.general:>=3.6.0"
 
       - name: QA checks
-        continue-on-error: true
         run: |
           ./run-qa-checks
 
