@@ -1,5 +1,4 @@
 ---
-
 - name: Update APT package cache
   apt:
     update_cache: true
@@ -56,8 +55,8 @@
   when: openwisp2_redis_install
   lineinfile:
     path: /etc/redis/redis.conf
-    regexp: '^bind 127\.0\.0\.1 ::1'
-    line: 'bind 127.0.0.1'
+    regexp: "^bind 127\\.0\\.0\\.1 ::1"
+    line: "bind 127.0.0.1"
     backrefs: true
   ignore_errors: true
 

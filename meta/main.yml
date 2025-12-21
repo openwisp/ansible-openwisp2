@@ -26,11 +26,11 @@ galaxy_info:
     - name: Debian
       versions:
         - bookworm
-        - bullseye
+        - trixie
     - name: Ubuntu
       versions:
-        - noble
         - jammy
+        - noble
   galaxy_tags:
     - system
     - networking

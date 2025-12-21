@@ -86,7 +86,6 @@ linux debian/ubuntu systems):
     docker pull geerlingguy/docker-ubuntu2204-ansible:latest
     docker pull geerlingguy/docker-debian13-ansible:latest
     docker pull geerlingguy/docker-debian12-ansible:latest
-    docker pull geerlingguy/docker-debian11-ansible:latest
 
 **Step 5**: Run molecule test
 
@@ -101,3 +100,22 @@ successfully without errors.
 
     Use ``molecule test --destroy=never`` to speed up subsequent test
     runs.
+
+How to Run QA checks
+--------------------
+
+.. code-block:: shell
+
+    # from the root of the repository
+    pip install -r requirements-test.txt
+    ./run-qa-checks
+
+If errors are reported, try auto-fixing them by using the following
+command:
+
+.. code-block:: shell
+
+    ansible-lint --fix
+
+If the issues persist, manual intervention will be required to resolve
+them.

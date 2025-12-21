@@ -8,6 +8,12 @@
   # FreeRADIUS 3.0.x is installed on the VM, then the role will continue
   # using FreeRADIUS 3.0.x. On new installations, FreeRADIUS 3.2.x
   # will be used.
+  when:
+    - ansible_distribution|string == 'Ubuntu'
+    - ansible_distribution_release|string == 'jammy'
+  tags:
+    - molecule-idempotence-notest
+
   block:
     - name: Check installed FreeRADIUS version
       shell: >
@@ -18,24 +24,20 @@
       register: openwisp2_installed_freeradius_version
     - name: Add FreeRADIUS 3.0.x repository to sources list
       shell: >
-        echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc] http://packages.networkradius.com/freeradius-3.0/ubuntu/jammy focal main" |
+        echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc] http://packages.networkradius.com/freeradius-3.0/ubuntu/jammy focal main"
+        |
           tee /etc/apt/sources.list.d/networkradius.list > /dev/null
       when: openwisp2_installed_freeradius_version.stdout == '3.0'
     - name: Add FreeRADIUS 3.2.x repository to sources list
       shell: >
-        echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc] http://packages.networkradius.com/freeradius-3.2/ubuntu/jammy jammy main" |
+        echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc] http://packages.networkradius.com/freeradius-3.2/ubuntu/jammy jammy main"
+        |
           tee /etc/apt/sources.list.d/networkradius.list > /dev/null
       when: openwisp2_installed_freeradius_version.stdout != '3.0'
     - name: Update freeradius_dir variable
       set_fact:
-        freeradius_dir: '/etc/freeradius/3.0'
+        freeradius_dir: "/etc/freeradius/3.0"
       when: openwisp2_installed_freeradius_version.stdout == '3.0'
-  when:
-    - ansible_distribution|string == 'Ubuntu'
-    - ansible_distribution_release|string == 'jammy'
-  tags:
-    - molecule-idempotence-notest
-
 - name: Add freeradius repository into Ubuntu noble sources list
   shell: |
     echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc] http://packages.networkradius.com/freeradius-3.2/ubuntu/noble noble main" | \
@@ -109,7 +111,7 @@
   template:
     src: freeradius/sql.j2
     dest: "{{ freeradius_mods_available_dir }}/sql"
-    mode: 0640
+    mode: "0640"
     owner: freerad
     group: freerad
   notify: Restart freeradius
@@ -119,7 +121,7 @@
     src: "{{ freeradius_mods_available_dir }}/sql"
     dest: "{{ freeradius_mods_enabled_dir }}/sql"
     state: link
-    mode: 0640
+    mode: "0640"
     owner: freerad
     group: freerad
 
@@ -147,7 +149,7 @@
   template:
     src: freeradius/rest.j2
     dest: "{{ freeradius_mods_available_dir }}/rest"
-    mode: 0640
+    mode: "0640"
     owner: freerad
     group: freerad
   notify: Restart freeradius
@@ -157,7 +159,7 @@
     src: "{{ freeradius_mods_available_dir }}/rest"
     dest: "{{ freeradius_mods_enabled_dir }}/rest"
     state: link
-    mode: 0640
+    mode: "0640"
     owner: freerad
     group: freerad
 
@@ -174,7 +176,7 @@
   template:
     src: "{{ freeradius_openwisp_site_template_src }}"
     dest: "{{ freeradius_sites_enabled_dir }}/openwisp_site"
-    mode: 0640
+    mode: "0640"
     owner: freerad
     group: freerad
   when: freeradius_deploy_openwisp_site
@@ -184,7 +186,7 @@
   template:
     src: freeradius/inner_tunnel.j2
     dest: "{{ freeradius_sites_enabled_dir }}/inner-tunnel"
-    mode: 0640
+    mode: "0640"
     owner: freerad
     group: freerad
   when: freeradius_deploy_openwisp_site
@@ -195,5 +197,5 @@
   loop: "{{ freeradius_eap_orgs }}"
   loop_control:
     loop_var: org
-  when: freeradius_eap_orgs
+  when: freeradius_eap_orgs | length > 0
   tags: [freeradius_eap]
