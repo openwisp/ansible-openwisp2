@@ -7,10 +7,14 @@ on:             # yamllint disable-line rule:truthy
     branches:
       - master
       - dev
+      - "25.10"
+      - "24.11"
   pull_request:
     branches:
       - master
       - dev
+      - "25.10"
+      - "24.11"
 
 jobs:
   build:
@@ -23,12 +27,11 @@ jobs:
         distro:
           - ubuntu2204
           - ubuntu2404
-          - debian11
           - debian12
           - debian13
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
