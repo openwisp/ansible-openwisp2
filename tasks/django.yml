@@ -1,24 +1,25 @@
 ---
+
 - name: Create {{ openwisp2_path }}
   file:
     path: "{{ openwisp2_path }}"
     state: directory
     group: "{{ www_group }}"
-    mode: "0770"
+    mode: 0770
 
 - name: Create "{{ openwisp2_path }}/openwisp2"
   file:
     path: "{{ openwisp2_path }}/openwisp2"
     state: directory
     group: "{{ www_group }}"
-    mode: "0770"
+    mode: 0770
 
 - name: Create "{{ openwisp2_path }}/log"
   file:
     path: "{{ openwisp2_path }}/log"
     state: directory
     group: "{{ www_group }}"
-    mode: "0770"
+    mode: 0770
     recurse: true
   tags:
     - molecule-idempotence-notest
@@ -28,7 +29,7 @@
     path: "{{ openwisp2_path }}/static_custom"
     state: directory
     group: "{{ www_group }}"
-    mode: "0770"
+    mode: 0770
   tags:
     - openwisp2_theme
 
@@ -38,7 +39,7 @@
     src: manage.py
     dest: "{{ openwisp2_path }}/manage.py"
     group: "{{ www_group }}"
-    mode: "0754"
+    mode: 0754
 
 - name: Template celery.py
   notify: Reload application
@@ -46,7 +47,7 @@
     src: openwisp2/celery.py
     dest: "{{ openwisp2_path }}/openwisp2/celery.py"
     group: "{{ www_group }}"
-    mode: "0640"
+    mode: 0640
   tags: [django_init]
 
 - name: Template version.py
@@ -55,7 +56,7 @@
     src: openwisp2/version.py
     dest: "{{ openwisp2_path }}/openwisp2/version.py"
     group: "{{ www_group }}"
-    mode: "0640"
+    mode: 0640
   tags: [django_init]
 
 - name: Template __init__.py
@@ -64,7 +65,7 @@
     src: openwisp2/__init__.py
     dest: "{{ openwisp2_path }}/openwisp2/__init__.py"
     group: "{{ www_group }}"
-    mode: "0640"
+    mode: 0640
   tags: [django_init]
 
 - name: Template urls.py
@@ -73,7 +74,7 @@
     src: openwisp2/urls.py
     dest: "{{ openwisp2_path }}/openwisp2/urls.py"
     group: "{{ www_group }}"
-    mode: "0640"
+    mode: 0640
 
 - name: Template wsgi.py
   notify: Reload application
@@ -81,7 +82,7 @@
     src: openwisp2/wsgi.py
     dest: "{{ openwisp2_path }}/openwisp2/wsgi.py"
     group: "{{ www_group }}"
-    mode: "0640"
+    mode: 0640
 
 - name: Template asgi.py
   notify: Reload application
@@ -89,7 +90,7 @@
     src: openwisp2/asgi.py
     dest: "{{ openwisp2_path }}/openwisp2/asgi.py"
     group: "{{ www_group }}"
-    mode: "0640"
+    mode: 0640
 
 # set openwisp2_secret_key if not defined explicitly
 - import_tasks: django_secret_key.yml
@@ -102,7 +103,7 @@
     src: openwisp2/settings.py
     dest: "{{ openwisp2_path }}/openwisp2/settings.py"
     group: "{{ www_group }}"
-    mode: "0640"
+    mode: 0640
   tags: [django_settings]
 
 - name: Template routing.py
@@ -111,7 +112,7 @@
     src: openwisp2/routing.py
     dest: "{{ openwisp2_path }}/openwisp2/routing.py"
     group: "{{ www_group }}"
-    mode: "0640"
+    mode: 0640
 
 - name: Start redis for migration
   when: openwisp2_redis_install
@@ -123,7 +124,7 @@
   become: true
   become_user: "{{ www_user }}"
   when: openwisp2_geocoding_check
-  community.general.django_manage:
+  django_manage:
     app_path: "{{ openwisp2_path }}"
     command: "check --deploy --tag geocoding"
     virtualenv: "{{ virtualenv_path }}"
@@ -132,7 +133,7 @@
   notify: Reload application
   become: true
   become_user: "{{ www_user }}"
-  community.general.django_manage:
+  django_manage:
     app_path: "{{ openwisp2_path }}"
     command: migrate
     virtualenv: "{{ virtualenv_path }}"
@@ -144,7 +145,7 @@
     path: "{{ openwisp2_database.name }}"
     state: file
     group: "{{ www_group }}"
-    mode: "0770"
+    mode: 0770
 
 - name: Set permissions to "{{ openwisp2_path }}/static"
   file:
@@ -159,6 +160,13 @@
     - molecule-idempotence-notest
     - openwisp2_theme
 
+- name: Check if ow2_static exists
+  stat:
+    path: "{{ role_path }}/files/ow2_static"
+  register: ow2_static_dir
+  tags:
+    - openwisp2_theme
+
 - name: Copy static files
   become: true
   copy:
@@ -166,8 +174,8 @@
     dest: "{{ openwisp2_path }}/static_custom"
     owner: "{{ www_user }}"
     group: "{{ www_group }}"
-    mode: "0640"
-  failed_when: false
+    mode: 0640
+  when: ow2_static_dir.stat.exists
   tags:
     - openwisp2_theme
 
@@ -175,7 +183,7 @@
   notify: Reload application
   become: true
   become_user: "{{ www_user }}"
-  community.general.django_manage:
+  django_manage:
     app_path: "{{ openwisp2_path }}"
     command: "collectstatic --noinput"
     virtualenv: "{{ virtualenv_path }}"
@@ -205,7 +213,7 @@
   become: true
   become_user: "{{ www_user }}"
   when: openwisp2_internationalization
-  community.general.django_manage:
+  django_manage:
     app_path: "{{ openwisp2_path }}"
     command: "compilemessages"
     virtualenv: "{{ virtualenv_path }}"
@@ -214,7 +222,7 @@
   template:
     src: load_initial_data.py
     dest: "{{ openwisp2_path }}/load_initial_data.py"
-    mode: "0754"
+    mode: 0754
 
 - name: Load initial data
   environment:
