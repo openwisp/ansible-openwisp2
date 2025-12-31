@@ -31,6 +31,11 @@ take a look at `the default values of these variables
         openwisp2_monitoring_version: "openwisp-monitoring~=1.0.0"
         openwisp2_radius_version: "openwisp-radius~=1.0.0"
         openwisp2_django_version: "django~=3.2.13"
+        # Extra arguments passed to pip when reinstalling Python packages with --force-reinstall 
+        # By default, packages are upgraded on each playbook run.
+        # Can be overridden, for example:
+        # openwisp2_pip_extra_args: "--upgrade --force-reinstall"
+        openwisp2_pip_extra_args: "--upgrade"
         # Setting this to true will enable subnet division feature of
         # openwisp-controller. Refer openwisp-controller documentation
         # for more information. https://github.com/openwisp/openwisp-controller#subnet-division-app
