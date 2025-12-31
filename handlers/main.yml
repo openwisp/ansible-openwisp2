@@ -1,5 +1,4 @@
 ---
-
 - name: Update supervisor configuration
   command: supervisorctl update all
   register: supervisord_update_all
@@ -49,7 +48,7 @@
 - name: Migrate timeseries database
   become: true
   become_user: "{{ www_user }}"
-  django_manage:
+  community.general.django_manage:
     app_path: "{{ openwisp2_path }}"
     command: migrate_timeseries
     virtualenv: "{{ virtualenv_path }}"

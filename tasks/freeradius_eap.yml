@@ -1,5 +1,4 @@
 ---
-
 - name: Generate default certificates for the WPA Enterprise TTLS
   become_user: freerad
   command: "make server dh"
@@ -10,6 +9,8 @@
   tags: [freeradius_eap]
 
 - name: Generate default DH key and certificates
+  notify: Restart freeradius
+  tags: [freeradius_eap]
   block:
     - name: "Check if {{ freeradius_dir }}/certs/dh exists"
       ansible.builtin.stat:
@@ -20,8 +21,6 @@
         cmd: make destroycerts dh all
         chdir: "{{ freeradius_dir }}/certs"
       when: not cert_dh_exists.stat.exists
-  notify: Restart freeradius
-  tags: [freeradius_eap]
 
 - name: "Copy {{ org.name }} EAP openwisp_site"
   template:
@@ -29,7 +28,7 @@
     dest: "{{ freeradius_dir }}/sites-available/{{ org.name }}_eap_openwisp_site"
     owner: freerad
     group: freerad
-    mode: '0644'
+    mode: "0644"
   notify: Restart freeradius
   tags: [freeradius_eap]
 
@@ -47,7 +46,7 @@
     dest: "{{ freeradius_dir }}/sites-available/{{ org.name }}_eap_inner_tunnel"
     owner: freerad
     group: freerad
-    mode: '0644'
+    mode: "0644"
   notify: Restart freeradius
   tags: [freeradius_eap]
 
@@ -65,7 +64,7 @@
     dest: "{{ freeradius_dir }}/mods-available/{{ org.name }}_eap"
     owner: freerad
     group: freerad
-    mode: '0644'
+    mode: "0644"
   notify: Restart freeradius
   tags: [freeradius_eap]
 

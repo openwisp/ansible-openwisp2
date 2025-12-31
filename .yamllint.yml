@@ -1,7 +1,36 @@
 ---
-
 extends: default
+
 rules:
   line-length:
     max: 162
     level: warning
+
+  truthy:
+    level: warning
+
+  empty-values:
+    forbid-in-block-mappings: true
+
+  comments:
+    min-spaces-from-content: 1
+
+  comments-indentation: false
+
+  braces:
+    max-spaces-inside: 1
+
+  octal-values:
+    forbid-implicit-octal: true
+    forbid-explicit-octal: true
+
+ignore: |
+  .venv
+  venv
+  env
+  myenv
+  *.py
+  __pycache__
+  .tox
+  .git
+  .github

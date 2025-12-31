@@ -1,5 +1,4 @@
 ---
-
 - name: Change superuser password hint
   when: '"created" in load_initial_data_result.stdout'
   debug:

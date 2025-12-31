@@ -1,5 +1,4 @@
 ---
-
 # Systems deployed with older version of ansible-openwisp2 use RSA keys.
 # We keep using the old RSA key and don't change the SSH keys inadvertently.
 - name: Check if /root/.ssh/id_rsa exists

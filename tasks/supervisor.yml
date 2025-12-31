@@ -1,24 +1,23 @@
 ---
-
 - name: Template for uwsgi.ini
   template:
     src: uwsgi.ini.j2
     dest: "{{ openwisp2_path }}/uwsgi.ini"
-    mode: 0644
+    mode: "0644"
   notify: Update supervisor configuration
 
 - name: Template for supervisor uwsgi
   template:
     src: supervisor/openwisp2.j2
     dest: "{{ supervisor_path | format('openwisp2') }}"
-    mode: 0644
+    mode: "0644"
   notify: Update supervisor configuration
 
 - name: Template for supervisor daphne
   template:
     src: supervisor/daphne.j2
     dest: "{{ supervisor_path | format('daphne') }}"
-    mode: 0644
+    mode: "0644"
   when: openwisp2_daphne_install
   notify: Update supervisor configuration
 
@@ -26,7 +25,7 @@
   template:
     src: supervisor/celery.j2
     dest: "{{ supervisor_path | format('celery') }}"
-    mode: 0644
+    mode: "0644"
   notify: Update supervisor configuration
   tags: [celery_conf]
 
@@ -34,7 +33,7 @@
   template:
     src: supervisor/celery_network.j2
     dest: "{{ supervisor_path | format('celery_network') }}"
-    mode: 0644
+    mode: "0644"
   when: openwisp2_celery_network
   notify: Update supervisor configuration
   tags: [celery_conf]
@@ -43,7 +42,7 @@
   template:
     src: supervisor/celery_firmware_upgrader.j2
     dest: "{{ supervisor_path | format('celery_firmware_upgrader') }}"
-    mode: 0644
+    mode: "0644"
   when: openwisp2_firmware_upgrader and openwisp2_celery_firmware_upgrader
   notify: Update supervisor configuration
   tags: [celery_conf]
@@ -52,7 +51,7 @@
   template:
     src: supervisor/celery_monitoring.j2
     dest: "{{ supervisor_path | format('celery_monitoring') }}"
-    mode: 0644
+    mode: "0644"
   when: openwisp2_monitoring and openwisp2_celery_monitoring
   notify: Update supervisor configuration
   tags: [celery_conf]
@@ -61,7 +60,7 @@
   template:
     src: supervisor/celerybeat.j2
     dest: "{{ supervisor_path | format('celerybeat') }}"
-    mode: 0644
+    mode: "0644"
   when: openwisp2_celerybeat
   notify: Update supervisor configuration
   tags: [celery_conf]

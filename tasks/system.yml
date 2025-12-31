@@ -1,5 +1,4 @@
 ---
-
 - name: Add inventory_hostname in /etc/hosts
   lineinfile:
     path: /etc/hosts
