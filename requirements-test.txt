@@ -4,4 +4,4 @@ ansible-core>=2.15,<2.21
 yamllint
 ansible-lint
 docker
-openwisp-utils[qa]~=1.2.1
+openwisp-utils[qa]~=1.2.2
