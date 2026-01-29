@@ -1,5 +1,13 @@
 # Change log
 
+## Version 25.10.2 [2026-01-28]
+
+# Bugfixes
+
+- Temporarily pinned drf-yasg to 1.21.11 as a workaround to`#593
+  <https://github.com/openwisp/ansible-openwisp2/issues/593>`_
+- Fixed duplicated conflicting Referrer-Policy header
+
 ## Version 25.10.1 [2025-12-17]
 
 ### Changes
