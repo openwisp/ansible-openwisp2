@@ -6,6 +6,7 @@
 - Adds a default access credential and updates or creates default
   template to use the same
 """
+
 import os
 
 import django
