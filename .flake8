@@ -1,0 +1,11 @@
+[flake8]
+exclude =
+    .venv
+    .venv/*
+    **/.venv/*
+    venv
+    venv/*
+    **/venv/*
+    .git
+    __pycache__
+    templates/**
