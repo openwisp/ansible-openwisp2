@@ -1,2 +1,11 @@
 [tool.docstrfmt]
 extend_exclude = ["**/*.py"]
+
+[tool.flake8]
+exclude = [
+  ".venv",
+  "venv",
+  "__pycache__",
+  ".git",
+]
+ 
