@@ -1,4 +1,21 @@
+
 ---
+- name: Set FreeRADIUS base directory (default)
+  set_fact:
+    freeradius_dir: >-
+      {{
+        '/etc/freeradius/3.0'
+        if ansible_facts['distribution'] == 'Debian'
+        else '/etc/freeradius'
+      }}
+
+- name: Set FreeRADIUS derived directories
+  set_fact:
+    freeradius_mods_available_dir: "{{ freeradius_dir }}/mods-available"
+    freeradius_mods_enabled_dir: "{{ freeradius_dir }}/mods-enabled"
+    freeradius_mods_config_dir: "{{ freeradius_dir }}/mods-config"
+    freeradius_sites_enabled_dir: "{{ freeradius_dir }}/sites-enabled"
+
 - name: Add freeradius repository into Ubuntu jammy sources list
   # NOTE: The older version of openwisp.openwisp2 used to install
   # FreeRADIUS 3.0.x on Ubuntu 22.04. After the release of
@@ -24,20 +41,29 @@
       register: openwisp2_installed_freeradius_version
     - name: Add FreeRADIUS 3.0.x repository to sources list
       shell: >
-        echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc] http://packages.networkradius.com/freeradius-3.0/ubuntu/jammy focal main"
-        |
-          tee /etc/apt/sources.list.d/networkradius.list > /dev/null
+        echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc] \
+        http://packages.networkradius.com/freeradius-3.0/ubuntu/jammy focal main" \
+        | tee /etc/apt/sources.list.d/networkradius.list > /dev/null
+      become: true
       when: openwisp2_installed_freeradius_version.stdout == '3.0'
     - name: Add FreeRADIUS 3.2.x repository to sources list
       shell: >
-        echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc] http://packages.networkradius.com/freeradius-3.2/ubuntu/jammy jammy main"
-        |
-          tee /etc/apt/sources.list.d/networkradius.list > /dev/null
+        echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc]
+        http://packages.networkradius.com/freeradius-3.2/ubuntu/jammy jammy main"
+        | tee /etc/apt/sources.list.d/networkradius.list > /dev/null
+      become: true
       when: openwisp2_installed_freeradius_version.stdout != '3.0'
-    - name: Update freeradius_dir variable
-      set_fact:
-        freeradius_dir: "/etc/freeradius/3.0"
-      when: openwisp2_installed_freeradius_version.stdout == '3.0'
+- name: Update FreeRADIUS directory structure for 3.0.x
+  set_fact:
+    freeradius_dir: "/etc/freeradius/3.0"
+    freeradius_mods_available_dir: "/etc/freeradius/3.0/mods-available"
+    freeradius_mods_enabled_dir: "/etc/freeradius/3.0/mods-enabled"
+    freeradius_mods_config_dir: "/etc/freeradius/3.0/mods-config"
+    freeradius_sites_enabled_dir: "/etc/freeradius/3.0/sites-enabled"
+  when:
+    - ansible_facts['distribution'] == 'Ubuntu'
+    - ansible_facts['distribution_release'] == 'jammy'
+    - openwisp2_installed_freeradius_version.stdout == '3.0'
 - name: Add freeradius repository into Ubuntu noble sources list
   shell: |
     echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc] http://packages.networkradius.com/freeradius-3.2/ubuntu/noble noble main" | \
@@ -48,11 +74,10 @@
     - ansible_distribution_release|string == 'noble'
   tags:
     - molecule-idempotence-notest
-
 - name: Add freeradius repository into Debian bookworm sources list
   shell: |
-    echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc] http://packages.networkradius.com/freeradius-3.2/debian/bookworm bookworm main" | \
-    sudo tee /etc/apt/sources.list.d/networkradius.list > /dev/null
+    echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc] http://packages.networkradius.com/freeradius-3.2/debian/bookworm bookworm main" \
+    | tee /etc/apt/sources.list.d/networkradius.list > /dev/null
   become: true
   when:
     - ansible_distribution|string == 'Debian'
@@ -106,6 +131,20 @@
     name: freeradius-mysql
     state: latest
   notify: Restart freeradius
+
+- name: Ensure FreeRADIUS configuration directories exist
+  become: true
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: freerad
+    group: freerad
+    mode: "0755"
+  loop:
+    - "{{ freeradius_mods_available_dir }}"
+    - "{{ freeradius_mods_enabled_dir }}"
+    - "{{ freeradius_mods_config_dir }}"
+    - "{{ freeradius_sites_enabled_dir }}"
 
 - name: SQL configuration
   template:
@@ -199,3 +238,244 @@
     loop_var: org
   when: freeradius_eap_orgs | length > 0
   tags: [freeradius_eap]
+=======
+---
+- name: Set FreeRADIUS base directory (default)
+  set_fact:
+    freeradius_dir: >-
+      {{
+        '/etc/freeradius/3.0'
+        if ansible_facts['distribution'] == 'Debian'
+        else '/etc/freeradius'
+      }}
+
+- name: Set FreeRADIUS derived directories
+  set_fact:
+    freeradius_mods_available_dir: "{{ freeradius_dir }}/mods-available"
+    freeradius_mods_enabled_dir: "{{ freeradius_dir }}/mods-enabled"
+    freeradius_mods_config_dir: "{{ freeradius_dir }}/mods-config"
+    freeradius_sites_enabled_dir: "{{ freeradius_dir }}/sites-enabled"
+
+- name: Add freeradius repository into Ubuntu jammy sources list
+  # NOTE: The older version of openwisp.openwisp2 used to install
+  # FreeRADIUS 3.0.x on Ubuntu 22.04. After the release of
+  # Ubuntu 22.04.1, FreeRADIUS 3.0.x can no longer be installed.
+  # This block contains tasks that configures FreeRADIUS server
+  # on Ubuntu 22.04 in a backward compatible manner, i.e. if
+  # FreeRADIUS 3.0.x is installed on the VM, then the role will continue
+  # using FreeRADIUS 3.0.x. On new installations, FreeRADIUS 3.2.x
+  # will be used.
+  when:
+    - ansible_distribution|string == 'Ubuntu'
+    - ansible_distribution_release|string == 'jammy'
+  tags:
+    - molecule-idempotence-notest
+
+  block:
+    - name: Check installed FreeRADIUS version
+      shell: >
+        which freeradius > /dev/null &&
+          freeradius -v | sed -n 2p | awk {'print $3'} |
+          awk -F '.' {'printf("%1s.%s", $1, $2)'}
+      ignore_errors: true
+      register: openwisp2_installed_freeradius_version
+    - name: Add FreeRADIUS 3.0.x repository to sources list
+      shell: >
+        echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc] \
+        http://packages.networkradius.com/freeradius-3.0/ubuntu/jammy focal main" \
+        | tee /etc/apt/sources.list.d/networkradius.list > /dev/null
+      become: true
+      when: openwisp2_installed_freeradius_version.stdout == '3.0'
+    - name: Add FreeRADIUS 3.2.x repository to sources list
+      shell: >
+        echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc]
+        http://packages.networkradius.com/freeradius-3.2/ubuntu/jammy jammy main"
+        | tee /etc/apt/sources.list.d/networkradius.list > /dev/null
+      become: true
+      when: openwisp2_installed_freeradius_version.stdout != '3.0'
+- name: Update FreeRADIUS directory structure for 3.0.x
+  set_fact:
+    freeradius_dir: "/etc/freeradius/3.0"
+    freeradius_mods_available_dir: "/etc/freeradius/3.0/mods-available"
+    freeradius_mods_enabled_dir: "/etc/freeradius/3.0/mods-enabled"
+    freeradius_mods_config_dir: "/etc/freeradius/3.0/mods-config"
+    freeradius_sites_enabled_dir: "/etc/freeradius/3.0/sites-enabled"
+  when:
+    - ansible_facts['distribution'] == 'Ubuntu'
+    - ansible_facts['distribution_release'] == 'jammy'
+    - openwisp2_installed_freeradius_version.stdout == '3.0'
+- name: Add freeradius repository into Ubuntu noble sources list
+  shell: |
+    echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc] http://packages.networkradius.com/freeradius-3.2/ubuntu/noble noble main" | \
+    tee /etc/apt/sources.list.d/networkradius.list > /dev/null
+  become: true
+  when:
+    - ansible_distribution|string == 'Ubuntu'
+    - ansible_distribution_release|string == 'noble'
+  tags:
+    - molecule-idempotence-notest
+- name: Add freeradius repository into Debian bookworm sources list
+  shell: |
+    echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc] http://packages.networkradius.com/freeradius-3.2/debian/bookworm bookworm main" \
+    | tee /etc/apt/sources.list.d/networkradius.list > /dev/null
+  become: true
+  when:
+    - ansible_distribution|string == 'Debian'
+    - ansible_distribution_release|string == 'bookworm'
+  tags:
+    - molecule-idempotence-notest
+
+- name: Add freeradius repository into Debian bullseye sources list
+  shell: |
+    echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc] http://packages.networkradius.com/freeradius-3.0/debian/bullseye bullseye main" | \
+    tee /etc/apt/sources.list.d/networkradius.list > /dev/null
+  become: true
+  when:
+    - ansible_distribution|string == 'Debian'
+    - ansible_distribution_release|string == 'bullseye'
+  tags:
+    - molecule-idempotence-notest
+
+- name: Add Network RADIUS PGP public key
+  get_url:
+    url: https://packages.networkradius.com/pgp/packages%40networkradius.com
+    dest: /etc/apt/trusted.gpg.d/packages.networkradius.com.asc
+    checksum: sha256:f9327befd8efb3fddd710ed8b4ed50d394cc57a598ca8c3ccc2dc3234a4d774a
+  ignore_errors: true
+  retries: 5
+  delay: 10
+  register: result
+  until: result is success
+
+- name: Update apt packages
+  apt:
+    update_cache: true
+
+- name: Freeradius system packages
+  apt:
+    name:
+      - freeradius-rest
+    state: latest
+  notify: Restart freeradius
+
+- name: Freeradius postgres packages
+  when: freeradius_sql.dialect == "postgresql"
+  apt:
+    name: freeradius-postgresql
+    state: latest
+  notify: Restart freeradius
+
+- name: Freeradius mysql packages
+  when: freeradius_sql.dialect == "mysql"
+  apt:
+    name: freeradius-mysql
+    state: latest
+  notify: Restart freeradius
+
+- name: Ensure FreeRADIUS configuration directories exist
+  become: true
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: freerad
+    group: freerad
+    mode: "0755"
+  loop:
+    - "{{ freeradius_mods_available_dir }}"
+    - "{{ freeradius_mods_enabled_dir }}"
+    - "{{ freeradius_mods_config_dir }}"
+    - "{{ freeradius_sites_enabled_dir }}"
+
+- name: SQL configuration
+  template:
+    src: freeradius/sql.j2
+    dest: "{{ freeradius_mods_available_dir }}/sql"
+    mode: "0640"
+    owner: freerad
+    group: freerad
+  notify: Restart freeradius
+
+- name: Enable SQL module
+  file:
+    src: "{{ freeradius_mods_available_dir }}/sql"
+    dest: "{{ freeradius_mods_enabled_dir }}/sql"
+    state: link
+    mode: "0640"
+    owner: freerad
+    group: freerad
+
+- name: Add plus sign to safe characters
+  lineinfile:
+    path: "{{ freeradius_mods_config_dir }}/sql/main/{{ freeradius_sql.dialect }}/queries.conf"
+    regexp: "^(.*)safe_characters =(.*)$"
+    line: 'safe_characters = "{{ freeradius_safe_characters }}"'
+    state: present
+  notify: Restart freeradius
+
+- name: Adding user 'freerad' to www-data group for database access
+  when: freeradius_sql.dialect == "sqlite"
+  user:
+    name: freerad
+    groups: www-data
+    append: true
+
+- name: Add Attributes to freeradius dictionary
+  lineinfile:
+    path: "{{ freeradius_dir }}/dictionary"
+    line: "ATTRIBUTE      Expire-After         {{ freeradius_expire_attr_after_seconds }}    integer"
+
+- name: REST configuration
+  template:
+    src: freeradius/rest.j2
+    dest: "{{ freeradius_mods_available_dir }}/rest"
+    mode: "0640"
+    owner: freerad
+    group: freerad
+  notify: Restart freeradius
+
+- name: Enable REST module
+  file:
+    src: "{{ freeradius_mods_available_dir }}/rest"
+    dest: "{{ freeradius_mods_enabled_dir }}/rest"
+    state: link
+    mode: "0640"
+    owner: freerad
+    group: freerad
+
+- name: Remove default site
+  # Leave empty to ensure upgrades to freeradius
+  # will not overwrite it
+  copy:
+    content: "# Empty, Generated by Ansible OpenWISP\n\n"
+    dest: "{{ item }}"
+  with_items:
+    - "{{ freeradius_sites_enabled_dir }}/default"
+
+- name: Site configuration
+  template:
+    src: "{{ freeradius_openwisp_site_template_src }}"
+    dest: "{{ freeradius_sites_enabled_dir }}/openwisp_site"
+    mode: "0640"
+    owner: freerad
+    group: freerad
+  when: freeradius_deploy_openwisp_site
+  notify: Restart freeradius
+
+- name: Inner tunnel
+  template:
+    src: freeradius/inner_tunnel.j2
+    dest: "{{ freeradius_sites_enabled_dir }}/inner-tunnel"
+    mode: "0640"
+    owner: freerad
+    group: freerad
+  when: freeradius_deploy_openwisp_site
+  notify: Restart freeradius
+
+- name: Copy configuration for WPA Enterprise TTLS
+  include_tasks: tasks/freeradius_eap.yml
+  loop: "{{ freeradius_eap_orgs }}"
+  loop_control:
+    loop_var: org
+  when: freeradius_eap_orgs | length > 0
+  tags: [freeradius_eap]
+
