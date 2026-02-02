@@ -1,5 +1,4 @@
 ---
-
 - name: Install topology update cron
   when: openwisp2_network_topology
   become: true

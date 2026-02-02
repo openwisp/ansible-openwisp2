@@ -5,3 +5,7 @@ openwisp-qa-check --skip-isort \
   --skip-flake8 \
   --skip-black \
   --skip-checkmigrations
+
+# Run Ansible linting
+yamllint --strict --config-file .yamllint.yml .
+ansible-lint

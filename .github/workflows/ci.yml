@@ -2,7 +2,7 @@
 
 name: Ansible-OpenWISP2 CI Build
 
-on:             # yamllint disable-line rule:truthy
+on: # yamllint disable-line rule:truthy
   push:
     branches:
       - master
@@ -41,6 +41,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install python dependencies
+        id: deps
         run: |
           pip install -U pip wheel setuptools
           pip install -r requirements-test.txt
@@ -49,19 +50,19 @@ jobs:
         run: ansible-galaxy collection install "community.general:>=3.6.0"
 
       - name: QA checks
-        continue-on-error: true
         run: |
           ./run-qa-checks
 
       - name: Tests
+        if: ${{ !cancelled() && steps.deps.conclusion == 'success' }}
         run: |
           mkdir -p ~/.ansible/roles
           ln -s $GITHUB_WORKSPACE ~/.ansible/roles/openwisp.openwisp2
           molecule test
         env:
           ROLE_NAME: openwisp2
-          PY_COLORS: '1'
-          ANSIBLE_FORCE_COLOR: '1'
+          PY_COLORS: "1"
+          ANSIBLE_FORCE_COLOR: "1"
           MOLECULE_DISTRO: ${{ matrix.distro }}
           ANSIBLE_ROLES_PATH: /home/runner/.cache/molecule/ansible-openwisp2/default/roles:/home/runner/.ansible/roles:/usr/share/ansible/roles:/etc/ansible/roles
 

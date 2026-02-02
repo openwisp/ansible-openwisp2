@@ -100,3 +100,22 @@ successfully without errors.
 
     Use ``molecule test --destroy=never`` to speed up subsequent test
     runs.
+
+How to Run QA checks
+--------------------
+
+.. code-block:: shell
+
+    # from the root of the repository
+    pip install -r requirements-test.txt
+    ./run-qa-checks
+
+If errors are reported, try auto-fixing them by using the following
+command:
+
+.. code-block:: shell
+
+    ansible-lint --fix
+
+If the issues persist, manual intervention will be required to resolve
+them.
