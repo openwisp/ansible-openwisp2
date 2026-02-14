@@ -162,6 +162,8 @@ take a look at `the default values of these variables
                 - "application/xml"
                 - "application/x-font-ttf"
                 - "font/opentype"
+            gzip_static: "on"
+            brotli_static: "on"
         # nginx error log configuration
         openwisp2_nginx_access_log: "{{ openwisp2_path }}/log/nginx.access.log"
         openwisp2_nginx_error_log: "{{ openwisp2_path }}/log/nginx.error.log error"

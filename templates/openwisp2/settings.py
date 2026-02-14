@@ -527,9 +527,6 @@ STORAGES = {
         "BACKEND": "openwisp_utils.storage.CompressStaticFilesStorage",
     },
 }
-# GZIP compression is handled by nginx
-BROTLI_STATIC_COMPRESSION = False
-GZIP_STATIC_COMPRESSION = False
 
 {% if openwisp2_sentry.get("dsn") %}
 RAVEN_CONFIG = {{ openwisp2_sentry | to_nice_json }}
