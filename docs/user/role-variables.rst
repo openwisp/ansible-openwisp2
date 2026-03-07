@@ -162,10 +162,16 @@ take a look at `the default values of these variables
                 - "application/xml"
                 - "application/x-font-ttf"
                 - "font/opentype"
-        # Enable precompressed gzip files serving (requires nginx with gzip_static module)
-        openwisp2_nginx_gzip_static: false
-        # Enable precompressed brotli files serving (requires nginx with ngx_brotli module)
-        openwisp2_nginx_brotli_static: false
+        # Precompressed gzip files serving control
+        # - 'auto' (default): automatically enabled when nginx gzip_static module is detected
+        # - true: enable only when nginx gzip_static module is available
+        # - false: explicitly disable even when module is available
+        openwisp2_nginx_gzip_static: auto
+        # Precompressed brotli files serving control
+        # - 'auto' (default): automatically enabled when nginx ngx_brotli module is detected  
+        # - true: enable only when nginx ngx_brotli module is available
+        # - false: explicitly disable even when module is available
+        openwisp2_nginx_brotli_static: auto
         # nginx error log configuration
         openwisp2_nginx_access_log: "{{ openwisp2_path }}/log/nginx.access.log"
         openwisp2_nginx_error_log: "{{ openwisp2_path }}/log/nginx.error.log error"

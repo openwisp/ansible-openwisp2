@@ -160,11 +160,9 @@ openwisp2_nginx_ssl_config:
         - "application/xml"
         - "application/x-font-ttf"
         - "font/opentype"
-# Precompressed gzip files serving - automatically enabled when nginx gzip_static/brotli_static module is available
-# The system detects module availability and enables the feature automatically
-# These variables are kept for backwards compatibility but no longer control the behavior
-openwisp2_nginx_gzip_static: false
-openwisp2_nginx_brotli_static: false
+# Precompressed files serving: 'auto' (default), true, or false
+openwisp2_nginx_gzip_static: auto
+openwisp2_nginx_brotli_static: auto
 openwisp2_nginx_access_log: "{{ openwisp2_path }}/log/nginx.access.log"
 openwisp2_nginx_error_log: "{{ openwisp2_path }}/log/nginx.error.log error"
 # internationalization

@@ -74,7 +74,7 @@
           register: nginx_gzip_module_check
           changed_when: false
 
-        - name: Check if nginx brotli module is available  
+        - name: Check if nginx brotli module is available
           shell: "nginx -V 2>&1 | grep -q 'brotli' && echo 'available' || echo 'not_available'"
           register: nginx_brotli_module_check
           changed_when: false
