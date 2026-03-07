@@ -54,20 +54,19 @@
 
 - name: Set nginx module availability facts
   set_fact:
-    nginx_gzip_static_available: >
-      {{
-        openwisp2_nginx_install and
-        (gzip_static_check.stdout | default('not_available')) == 'available' and
-        (openwisp2_nginx_gzip_static == true or
-         (openwisp2_nginx_gzip_static == 'auto' or openwisp2_nginx_gzip_static | default('auto') == 'auto'))
-      }}
-    nginx_brotli_static_available: >
-      {{
-        openwisp2_nginx_install and
-        (brotli_check.stdout | default('not_available')) == 'available' and
-        (openwisp2_nginx_brotli_static == true or
-         (openwisp2_nginx_brotli_static == 'auto' or openwisp2_nginx_brotli_static | default('auto') == 'auto'))
-      }}
+    nginx_gzip_static_available: >-
+      {{ (gzip_static_check.stdout | default('not_available')) == 'available' and
+         (openwisp2_nginx_gzip_static == true or openwisp2_nginx_gzip_static == 'auto') }}
+    nginx_brotli_static_available: >-
+      {{ (brotli_check.stdout | default('not_available')) == 'available' and
+         (openwisp2_nginx_brotli_static == true or openwisp2_nginx_brotli_static == 'auto') }}
+  when: openwisp2_nginx_install
+
+- name: Set nginx module availability facts (nginx not installed)
+  set_fact:
+    nginx_gzip_static_available: false
+    nginx_brotli_static_available: false
+  when: not openwisp2_nginx_install
 
 - name: Install redis
   apt:

@@ -168,7 +168,7 @@ take a look at `the default values of these variables
         # - false: explicitly disable even when module is available
         openwisp2_nginx_gzip_static: auto
         # Precompressed brotli files serving control
-        # - 'auto' (default): automatically enabled when nginx ngx_brotli module is detected  
+        # - 'auto' (default): automatically enabled when nginx ngx_brotli module is detected
         # - true: enable only when nginx ngx_brotli module is available
         # - false: explicitly disable even when module is available
         openwisp2_nginx_brotli_static: auto
