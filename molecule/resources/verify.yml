@@ -41,7 +41,7 @@
       command: systemctl status redis-server
       changed_when: false
 
-    - name: Chcke if redis is running
+    - name: Check if redis is running
       command: systemctl status redis
       changed_when: false
 
@@ -65,3 +65,15 @@
       register: freeradius_eap_ports  # Register the output and return code
       failed_when: freeradius_eap_ports.rc | int != 0
       changed_when: false
+
+    - name: Test nginx compression configuration
+      block:
+        # Test that enabled features appear in nginx config
+        - name: Check nginx config contains gzip_static and brotli_static directives
+          shell: "grep 'gzip_static on;' /etc/nginx/sites-enabled/openwisp2 && grep 'brotli_static on;' /etc/nginx/sites-enabled/openwisp2"
+          changed_when: false
+
+        # Test nginx configuration syntax is valid
+        - name: Test nginx configuration syntax
+          shell: "nginx -t"
+          changed_when: false

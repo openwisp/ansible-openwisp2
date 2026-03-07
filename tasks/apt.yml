@@ -40,6 +40,18 @@
     name: nginx
   when: openwisp2_nginx_install
 
+- name: Install nginx gzip static module
+  apt:
+    name: libnginx-mod-http-gzip-static
+  when: openwisp2_nginx_install and openwisp2_nginx_gzip_static
+  ignore_errors: true  # May not be available on all distributions
+
+- name: Install nginx brotli module
+  apt:
+    name: libnginx-mod-brotli
+  when: openwisp2_nginx_install and openwisp2_nginx_brotli_static
+  ignore_errors: true  # May not be available on all distributions
+
 - name: Install redis
   apt:
     name: redis-server
