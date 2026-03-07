@@ -40,6 +40,34 @@
     name: nginx
   when: openwisp2_nginx_install
 
+- name: Check if nginx gzip_static module is available
+  shell: "nginx -V 2>&1 | grep -q 'http_gzip_static_module' && echo 'available' || echo 'not_available'"
+  register: gzip_static_check
+  when: openwisp2_nginx_install
+  changed_when: false
+
+- name: Check if nginx brotli module is available
+  shell: "nginx -V 2>&1 | grep -q 'brotli' && echo 'available' || echo 'not_available'"
+  register: brotli_check
+  when: openwisp2_nginx_install
+  changed_when: false
+
+- name: Set nginx module availability facts
+  set_fact:
+    nginx_gzip_static_available: >-
+      {{ (gzip_static_check.stdout | default('not_available')) == 'available' and
+         (openwisp2_nginx_gzip_static == true or openwisp2_nginx_gzip_static == 'auto') }}
+    nginx_brotli_static_available: >-
+      {{ (brotli_check.stdout | default('not_available')) == 'available' and
+         (openwisp2_nginx_brotli_static == true or openwisp2_nginx_brotli_static == 'auto') }}
+  when: openwisp2_nginx_install
+
+- name: Set nginx module availability facts (nginx not installed)
+  set_fact:
+    nginx_gzip_static_available: false
+    nginx_brotli_static_available: false
+  when: not openwisp2_nginx_install
+
 - name: Install redis
   apt:
     name: redis-server
