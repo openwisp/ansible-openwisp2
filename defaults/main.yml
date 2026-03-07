@@ -161,7 +161,7 @@ openwisp2_nginx_ssl_config:
         - "application/x-font-ttf"
         - "font/opentype"
 # Enable precompressed gzip files serving (requires nginx with gzip_static module)
-# Note: The role will attempt to install libnginx-mod-http-gzip-static when enabled
+# Note: The directive is only added if the module is already compiled into nginx
 # If the module is not available, nginx will fail with "unknown directive" error
 openwisp2_nginx_gzip_static: false
 # Enable precompressed brotli files serving (requires nginx with ngx_brotli module)
