@@ -38,10 +38,10 @@ server {
             {{ key }} {{ value }};
         {%- endif %}
     {% endfor %}
-    {% if openwisp2_nginx_gzip_static %}
+    {% if nginx_gzip_static_available | default(false) %}
     gzip_static on;
     {% endif %}
-    {% if openwisp2_nginx_brotli_static %}
+    {% if nginx_brotli_static_available | default(false) %}
     brotli_static on;
     {% endif %}
 
