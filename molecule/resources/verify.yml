@@ -81,14 +81,14 @@
 
         # Assert gzip_static directive is present when module is available
         - name: Assert gzip_static directive is present (when module available)
-          shell: "grep 'gzip_static on;' /etc/nginx/sites-enabled/openwisp2"
+          shell: "grep 'gzip_static on;' /etc/nginx/sites-enabled/{{ inventory_hostname }}"
           register: gzip_static_check
           changed_when: false
           when: nginx_gzip_module_check.stdout == 'available'
 
         # Assert brotli_static directive is present when module is available
         - name: Assert brotli_static directive is present (when module available)
-          shell: "grep 'brotli_static on;' /etc/nginx/sites-enabled/openwisp2" 
+          shell: "grep 'brotli_static on;' /etc/nginx/sites-enabled/{{ inventory_hostname }}" 
           register: brotli_static_check
           changed_when: false
           when: nginx_brotli_module_check.stdout == 'available'

@@ -13,7 +13,7 @@
       single-interpreter=True
     openwisp2_usage_metric_collection: false
     # Test nginx static compression modules
-    openwisp2_nginx_gzip_static: true 
+    openwisp2_nginx_gzip_static: true
     openwisp2_nginx_brotli_static: true
     openwisp2_extra_django_settings:
       ACCOUNT_RATE_LIMITS: false
