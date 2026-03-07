@@ -165,7 +165,7 @@ openwisp2_nginx_ssl_config:
 # If the module is not available, nginx will fail with "unknown directive" error
 openwisp2_nginx_gzip_static: false
 # Enable precompressed brotli files serving (requires nginx with ngx_brotli module)
-# Note: The role will attempt to install libnginx-mod-brotli when enabled
+# Note: The directive is only added if the module is already compiled into nginx
 # If the module is not available, nginx will fail with "unknown directive" error
 openwisp2_nginx_brotli_static: false
 openwisp2_nginx_access_log: "{{ openwisp2_path }}/log/nginx.access.log"
