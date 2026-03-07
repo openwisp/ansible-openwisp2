@@ -68,22 +68,38 @@
 
     - name: Test nginx compression configuration
       block:
-        # Check if modules were successfully installed and directives are present
-        - name: Check if gzip_static directive is present (only when module available)
-          shell: "grep 'gzip_static on;' /etc/nginx/sites-enabled/openwisp2 || echo 'DIRECTIVE_NOT_FOUND'"
+        # Check if modules are available in nginx build
+        - name: Check if nginx gzip_static module is available
+          shell: "nginx -V 2>&1 | grep -q 'http_gzip_static_module' && echo 'available' || echo 'not_available'"
+          register: nginx_gzip_module_check
+          changed_when: false
+
+        - name: Check if nginx brotli module is available  
+          shell: "nginx -V 2>&1 | grep -q 'brotli' && echo 'available' || echo 'not_available'"
+          register: nginx_brotli_module_check
+          changed_when: false
+
+        # Assert gzip_static directive is present when module is available
+        - name: Assert gzip_static directive is present (when module available)
+          shell: "grep 'gzip_static on;' /etc/nginx/sites-enabled/openwisp2"
           register: gzip_static_check
           changed_when: false
+          when: nginx_gzip_module_check.stdout == 'available'
 
-        - name: Check if brotli_static directive is present (only when module available) 
-          shell: "grep 'brotli_static on;' /etc/nginx/sites-enabled/openwisp2 || echo 'DIRECTIVE_NOT_FOUND'"
+        # Assert brotli_static directive is present when module is available
+        - name: Assert brotli_static directive is present (when module available)
+          shell: "grep 'brotli_static on;' /etc/nginx/sites-enabled/openwisp2" 
           register: brotli_static_check
           changed_when: false
+          when: nginx_brotli_module_check.stdout == 'available'
 
-        - name: Log nginx compression module status
+        # Log when modules are not available
+        - name: Log module availability status
           debug:
             msg:
-              - "Gzip static directive: {{ 'ENABLED' if 'gzip_static on;' in gzip_static_check.stdout else 'NOT ENABLED (module unavailable)' }}"
-              - "Brotli static directive: {{ 'ENABLED' if 'brotli_static on;' in brotli_static_check.stdout else 'NOT ENABLED (module unavailable)' }}"
+              - "Gzip static module: {{ nginx_gzip_module_check.stdout }}"
+              - "Brotli module: {{ nginx_brotli_module_check.stdout }}"
+              - "Expected: Both features enabled in converge.yml, directives present only when modules available"
 
         # Test nginx configuration syntax is valid
         - name: Test nginx configuration syntax

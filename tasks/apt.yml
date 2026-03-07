@@ -46,7 +46,7 @@
   when: openwisp2_nginx_install
   changed_when: false
 
-- name: Check if nginx brotli module is available  
+- name: Check if nginx brotli module is available
   shell: "nginx -V 2>&1 | grep -q 'brotli' && echo 'available' || echo 'not_available'"
   register: brotli_check
   when: openwisp2_nginx_install
@@ -54,9 +54,8 @@
 
 - name: Set nginx module availability facts
   set_fact:
-    nginx_gzip_static_available: "{{ openwisp2_nginx_gzip_static and gzip_static_check.stdout == 'available' }}"
-    nginx_brotli_static_available: "{{ openwisp2_nginx_brotli_static and brotli_check.stdout == 'available' }}"
-  when: openwisp2_nginx_install
+    nginx_gzip_static_available: "{{ openwisp2_nginx_install and openwisp2_nginx_gzip_static and (gzip_static_check.stdout | default('not_available')) == 'available' }}"
+    nginx_brotli_static_available: "{{ openwisp2_nginx_install and openwisp2_nginx_brotli_static and (brotli_check.stdout | default('not_available')) == 'available' }}"
 
 - name: Install redis
   apt:
