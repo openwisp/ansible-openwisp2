@@ -568,3 +568,4 @@ CORS_ALLOWED_ORIGINS = {{ openwisp2_django_cors.get("allowed_origins_list", []) 
 {% endif %}
 
 TEST_RUNNER = "openwisp_utils.metric_collection.tests.runner.MockRequestPostRunner"
+SECURE_REFERRER_POLICY = "strict-origin"

@@ -43,20 +43,22 @@ the following example:
         certbot_auto_renew_minute: "20"
         certbot_auto_renew_hour: "5"
         certbot_create_if_missing: true
-        certbot_auto_renew_user: "<privileged-users-to-renew-certs>"
+        # you may change this if needed
+        certbot_auto_renew_user: "{{ ansible_user | default(lookup('env', 'USER')) }}"
         certbot_certs:
-          - email: "<paste-your-email>"
+          # set your email address here
+          - email: "<paste-your-email-address-here>"
             domains:
               - "{{ inventory_hostname }}"
       pre_tasks:
         - name: Update APT package cache
           apt:
             update_cache: true
-            changed_when: false
-            retries: 5
-            delay: 10
-            register: result
-            until: result is success
+          changed_when: false
+          retries: 5
+          delay: 10
+          register: result
+          until: result is success
 
 Read the `documentation of geerlingguy.certbot
 <https://github.com/geerlingguy/ansible-role-certbot#readme>`__ to learn
