@@ -234,3 +234,5 @@ openwisp2_radius_periodic_tasks: true
 openwisp2_usage_metric_collection_periodic_tasks: true
 # point {{ inventory_name }} to localhost in /etc/hosts
 openwisp2_inventory_hostname_localhost: true
+# variable for default deps upgrade 
+openwisp2_pip_extra_args: "--upgrade"
