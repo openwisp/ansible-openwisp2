@@ -1,7 +1,15 @@
 #!/bin/bash
+
 set -e
 
+echo "Running yamllint..."
+yamllint .
+
+echo "Running ansible-lint..."
+ansible-lint .
+
+echo "Running OpenWISP QA checks..."
 openwisp-qa-check --skip-isort \
-  --skip-flake8 \
-  --skip-black \
-  --skip-checkmigrations
+                  --skip-flake8 \
+                  --skip-black \
+                  --skip-checkmigrations

@@ -8,8 +8,7 @@ driver:
   name: docker
 lint: |
   set -e
-  yamllint .
-  ansible-lint .
+  ../../run-qa-checks
 platforms:
   - name: "${ROLE_NAME:-instance}-${MOLECULE_DISTRO}"
     image: "geerlingguy/docker-${MOLECULE_DISTRO}-ansible:${tag:-latest}"
