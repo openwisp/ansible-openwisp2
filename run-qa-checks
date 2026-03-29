@@ -2,6 +2,9 @@
 
 set -e
 
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+cd "$SCRIPT_DIR"
+
 echo "Running yamllint..."
 yamllint .
 
@@ -13,4 +16,3 @@ openwisp-qa-check --skip-isort \
                   --skip-flake8 \
                   --skip-black \
                   --skip-checkmigrations
-                  
