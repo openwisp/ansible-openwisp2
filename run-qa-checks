@@ -13,3 +13,4 @@ openwisp-qa-check --skip-isort \
                   --skip-flake8 \
                   --skip-black \
                   --skip-checkmigrations
+                  
