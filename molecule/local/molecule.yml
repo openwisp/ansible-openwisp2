@@ -4,12 +4,15 @@ dependency:
   name: galaxy
   options:
     role-file: molecule/resources/requirements.yml
+
 driver:
   name: docker
+
 lint: |
   set -e
-  yamllint . || true
-  ansible-lint || true
+  yamllint .
+  ansible-lint
+
 platforms:
   - name: "openwisp2-ubuntu2404"
     image: "geerlingguy/docker-ubuntu2404-ansible:latest"
@@ -19,6 +22,7 @@ platforms:
     cgroupns_mode: host
     privileged: true
     pre_build_image: true
+
   - name: "openwisp2-ubuntu2204"
     image: "geerlingguy/docker-ubuntu2204-ansible:latest"
     command: ${MOLECULE_DOCKER_COMMAND:-""}
@@ -27,6 +31,7 @@ platforms:
     cgroupns_mode: host
     privileged: true
     pre_build_image: true
+
   - name: "openwisp2-debian12"
     image: "geerlingguy/docker-debian12-ansible:latest"
     command: ${MOLECULE_DOCKER_COMMAND:-""}
@@ -35,6 +40,7 @@ platforms:
     cgroupns_mode: host
     privileged: true
     pre_build_image: true
+
   - name: "openwisp2-debian13"
     image: "geerlingguy/docker-debian13-ansible:latest"
     command: ${MOLECULE_DOCKER_COMMAND:-""}
@@ -43,6 +49,7 @@ platforms:
     cgroupns_mode: host
     privileged: true
     pre_build_image: true
+
 provisioner:
   name: ansible
   env:
@@ -56,5 +63,6 @@ provisioner:
       bin_ansible_callbacks: true
     default:
       result_format: yaml
+
 verifier:
   name: ansible
