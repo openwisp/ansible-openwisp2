@@ -1,6 +1,7 @@
+---
 name: CI Failure Bot
 
-on:
+on:  # yamllint disable-line rule:truthy
   workflow_run:
     workflows: ["Ansible-OpenWISP2 CI Build"]
     types:
@@ -37,7 +38,7 @@ jobs:
             pr_author=$(gh pr view "$pr_number" --repo "$REPO" --json author --jq '.author.login // empty' 2>/dev/null || echo "")
             if [ -z "$pr_author" ] || [ "$pr_author" = "null" ]; then
               echo "::warning::Could not fetch PR author for PR #$pr_number"
-            fi 
+            fi
             echo "number=$pr_number" >> "$GITHUB_OUTPUT"
             echo "author=$pr_author" >> "$GITHUB_OUTPUT"
           }
@@ -56,7 +57,9 @@ jobs:
              exit 0
           fi
           echo "API lookup failed/empty. Scanning open PRs for matching head SHA..."
-          PR_NUMBER=$(gh pr list --repo "$REPO" --state open --limit 100 --json number,headRefOid --jq ".[] | select(.headRefOid == \"$HEAD_SHA\") | .number" | head -n 1)
+          PR_NUMBER=$(gh pr list --repo "$REPO" --state open --limit 100 \
+            --json number,headRefOid \
+            --jq ".[] | select(.headRefOid == \"$HEAD_SHA\") | .number" | head -n 1)
           if [ -n "$PR_NUMBER" ]; then
              echo "Found PR #$PR_NUMBER by scanning open PRs."
              emit_pr "$PR_NUMBER"

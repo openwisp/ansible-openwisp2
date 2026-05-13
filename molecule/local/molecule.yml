@@ -8,8 +8,7 @@ driver:
   name: docker
 lint: |
   set -e
-  yamllint . || true
-  ansible-lint || true
+  ../../run-qa-checks
 platforms:
   - name: "openwisp2-ubuntu2404"
     image: "geerlingguy/docker-ubuntu2404-ansible:latest"
