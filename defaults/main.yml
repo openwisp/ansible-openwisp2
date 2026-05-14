@@ -17,6 +17,9 @@ openwisp2_radius_version: "openwisp-radius @ https://github.com/openwisp/openwis
 openwisp2_django_version: "django~=5.2.0"
 openwisp2_extra_python_packages:
   - bpython
+  # TODO: Remove before merging
+  - "openwisp-radius[openvpn_status] @ https://github.com/openwisp/openwisp-radius/tarball/issues/706-user-expiration"
+  - "openwisp-users @ https://github.com/openwisp/openwisp-users/tarball/issues/499-user-expiration"
 openwisp2_extra_django_apps: []
 openwisp2_extra_django_settings: {}
 openwisp2_extra_django_settings_instructions: []
@@ -212,7 +215,8 @@ freeradius_eap_openwisp_site_template_src: freeradius/eap/openwisp_site.j2
 freeradius_eap_inner_tunnel_template_src: freeradius/eap/inner_tunnel.j2
 freeradius_eap_template_src: freeradius/eap/eap.j2
 cron_delete_old_notifications: "'hour': 0, 'minute': 0"
-cron_deactivate_expired_users: "'hour': 0, 'minute': 5"
+cron_expiration_reminder_email: "'hour': 0, 'minute': 3"
+cron_deactivate_expired_users: "'hour': 0, 'minute': 1"
 cron_delete_old_radiusbatch_users: "'hour': 0, 'minute': 10"
 cron_cleanup_stale_radacct: "'hour': 0, 'minute': 20"
 cron_delete_old_postauth: "'hour': 0, 'minute': 30"

@@ -447,7 +447,8 @@ take a look at `the default values of these variables
         # Defaults to "templates/freeradius/eap/eap.j2" shipped in the role.
         freeradius_eap_template_src: custom_eap.j2
         cron_delete_old_notifications: "'hour': 0, 'minute': 0"
-        cron_deactivate_expired_users: "'hour': 0, 'minute': 5"
+        cron_expiration_reminder_email: "'hour': 0, 'minute': 3"
+        cron_deactivate_expired_users: "'hour': 0, 'minute': 1"
         cron_delete_old_radiusbatch_users: "'hour': 0, 'minute': 10"
         cron_cleanup_stale_radacct: "'hour': 0, 'minute': 20"
         cron_delete_old_postauth: "'hour': 0, 'minute': 30"
