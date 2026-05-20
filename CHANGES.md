@@ -1,5 +1,9 @@
 # Change log
 
+## Version 26.06.0 [Unreleased]
+
+Work in progress.
+
 ## Version 25.10.2 [2026-01-28]
 
 # Bugfixes
