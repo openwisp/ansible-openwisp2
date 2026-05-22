@@ -16,6 +16,8 @@ django.setup()
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import IntegrityError
+from django.db.models import TextField
+from django.db.models.functions import Cast
 from swapper import load_model
 
 Credentials = load_model("connection", "Credentials")
@@ -52,8 +54,13 @@ if ssh_private_key and Credentials.objects.count() == 0:
     print("Credentials object created")
 
 # Update or create default template to add default credentials
-queryset = Template.objects.filter(
-    default=True, config__contains="/etc/dropbear/authorized_keys"
+queryset = (
+    Template.objects.annotate(
+        # Cast config to text because JSONField __contains lookup is not
+        # supported on all database backends (e.g. SQLite).
+        config_text=Cast("config", output_field=TextField())
+    )
+    .filter(config_text__icontains="/etc/dropbear/authorized_keys")
 )
 if ssh_pub_key and queryset.count() == 0:
     Template.objects.create(
