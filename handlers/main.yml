@@ -1,11 +1,11 @@
 ---
-
 - name: Update supervisor configuration
-  command: supervisorctl update all
+  ansible.builtin.command: supervisorctl update all
   register: supervisord_update_all
+  changed_when: true
 
 - name: Reload application
-  debug:
+  ansible.builtin.debug:
     msg: "Restarting application services"
   changed_when: true
   notify:
@@ -16,31 +16,28 @@
     - Migrate timeseries database
 
 - name: Reload uwsgi
-  command: "{{ virtualenv_path }}/bin/uwsgi --reload {{ openwisp2_path }}/uwsgi.pid"
-  # Skips reloading uwsgi if it's supervisor configuration has changed.
-  # Otherwise, the process will be restarted twice.
+  ansible.builtin.command: "{{ virtualenv_path }}/bin/uwsgi --reload {{ openwisp2_path }}/uwsgi.pid"
   when: not (supervisord_update_all is defined and "openwisp2:" in supervisord_update_all.stdout)
+  changed_when: true
 
 # Daphne does not support graceful reloading.
 # Read https://github.com/django/daphne/issues/177
 - name: Restart daphne
-  command: "supervisorctl restart daphne:asgi0"
-  # Skips restarting daphne if it's supervisor configuration has changed.
-  # Otherwise, the process will be restarted twice.
+  ansible.builtin.command: "supervisorctl restart daphne:asgi0"
   when: not (supervisord_update_all is defined and "daphne:" in supervisord_update_all.stdout)
+  changed_when: true
 
 - name: Restart other supervisor managed services
-  command: "supervisorctl restart {{ item.name }}"
-  # Skips restarting service if it's supervisor configuration has changed.
-  # Otherwise, the process will be restarted twice.
+  ansible.builtin.command: "supervisorctl restart {{ item.name }}"
   when: "item.when and not (supervisord_update_all is defined and item.name ~ ':' in supervisord_update_all.stdout)"
+  changed_when: true
   loop: "{{ openwisp2_default_supervisor_restart + openwisp2_extra_supervisor_restart }}"
   loop_control:
     loop_var: item
 
 # Clean up the schedule file because it may become corrupted after updates
 - name: Remove celerybeat schedule
-  file:
+  ansible.builtin.file:
     path: "{{ openwisp2_path }}/celerybeat-schedule.db"
     state: absent
 
@@ -49,28 +46,29 @@
 - name: Migrate timeseries database
   become: true
   become_user: "{{ www_user }}"
-  django_manage:
+  community.general.django_manage:
     app_path: "{{ openwisp2_path }}"
     command: migrate_timeseries
     virtualenv: "{{ virtualenv_path }}"
   when: openwisp2_monitoring
 
 - name: Restart nginx
-  service:
+  ansible.builtin.service:
     name: nginx
     state: restarted
   when: openwisp2_nginx_install
 
 - name: Start redis
   when: openwisp2_redis_install
-  service:
+  ansible.builtin.service:
     name: redis
     state: started
 
 - name: Update-ca-certificates
-  command: /usr/sbin/update-ca-certificates
+  ansible.builtin.command: /usr/sbin/update-ca-certificates
+  changed_when: true
 
 - name: Restart freeradius
-  service:
+  ansible.builtin.service:
     name: freeradius
     state: restarted

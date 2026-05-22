@@ -1,9 +1,8 @@
 ---
-
 - name: Install topology update cron
   when: openwisp2_network_topology
   become: true
-  cron:
+  ansible.builtin.cron:
     name: "Update toplogies"
     day: "{{ openwisp2_topology_update_frequency.day }}"
     hour: "{{ openwisp2_topology_update_frequency.hour }}"
@@ -13,7 +12,7 @@
 - name: Install topology snapshot save cron
   when: openwisp2_network_topology
   become: true
-  cron:
+  ansible.builtin.cron:
     name: "Save snapshots of topologies"
     day: "{{ openwisp2_topology_save_snapshot_frequency.day }}"
     hour: "{{ openwisp2_topology_save_snapshot_frequency.hour }}"
@@ -22,7 +21,7 @@
 
 - name: Install clearsessions cronjob
   become: true
-  cron:
+  ansible.builtin.cron:
     name: "clearsessions cronjob"
     day: "*"
     hour: "04"

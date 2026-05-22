@@ -35,7 +35,7 @@
     - name: Install net-tools
       apt:
         name:
-        - net-tools
+          - net-tools
 
     - name: Remove the .dockerenv file
       file:

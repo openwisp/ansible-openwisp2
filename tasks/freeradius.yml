@@ -8,72 +8,90 @@
   # FreeRADIUS 3.0.x is installed on the VM, then the role will continue
   # using FreeRADIUS 3.0.x. On new installations, FreeRADIUS 3.2.x
   # will be used.
-  block:
-    - name: Check installed FreeRADIUS version
-      shell: >
-        which freeradius > /dev/null &&
-          freeradius -v | sed -n 2p | awk {'print $3'} |
-          awk -F '.' {'printf("%1s.%s", $1, $2)'}
-      ignore_errors: true
-      register: openwisp2_installed_freeradius_version
-    - name: Add FreeRADIUS 3.0.x repository to sources list
-      shell: >
-        echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc] http://packages.networkradius.com/freeradius-3.0/ubuntu/jammy focal main" |
-          tee /etc/apt/sources.list.d/networkradius.list > /dev/null
-      when: openwisp2_installed_freeradius_version.stdout == '3.0'
-    - name: Add FreeRADIUS 3.2.x repository to sources list
-      shell: >
-        echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc] http://packages.networkradius.com/freeradius-3.2/ubuntu/jammy jammy main" |
-          tee /etc/apt/sources.list.d/networkradius.list > /dev/null
-      when: openwisp2_installed_freeradius_version.stdout != '3.0'
-    - name: Update freeradius_dir variable
-      set_fact:
-        freeradius_dir: '/etc/freeradius/3.0'
-      when: openwisp2_installed_freeradius_version.stdout == '3.0'
   when:
     - ansible_distribution|string == 'Ubuntu'
     - ansible_distribution_release|string == 'jammy'
   tags:
     - molecule-idempotence-notest
 
+  block:
+    - name: Check installed FreeRADIUS version
+      ansible.builtin.shell: |
+        set -o pipefail
+        freeradius -v | sed -n 2p | awk '{print $3}' | awk -F '.' '{printf("%1s.%s", $1, $2)}'
+      args:
+        executable: /bin/bash
+      failed_when: false
+      changed_when: false
+      register: openwisp2_installed_freeradius_version
+    - name: Add FreeRADIUS 3.0.x repository to sources list
+      ansible.builtin.copy:
+        content: >
+          deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc]
+          http://packages.networkradius.com/freeradius-3.0/ubuntu/jammy focal main
+        dest: /etc/apt/sources.list.d/networkradius.list
+        mode: "0644"
+      when: openwisp2_installed_freeradius_version.stdout == '3.0'
+    - name: Add FreeRADIUS 3.2.x repository to sources list
+      ansible.builtin.copy:
+        content: >
+          deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc]
+          http://packages.networkradius.com/freeradius-3.2/ubuntu/jammy jammy main
+        dest: /etc/apt/sources.list.d/networkradius.list
+        mode: "0644"
+      when: openwisp2_installed_freeradius_version.stdout != '3.0'
+    - name: Update freeradius_dir variable
+      ansible.builtin.set_fact:
+        freeradius_dir: "/etc/freeradius/3.0"
+      when: openwisp2_installed_freeradius_version.stdout == '3.0'
 - name: Add freeradius repository into Ubuntu noble sources list
-  shell: |
-    echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc] http://packages.networkradius.com/freeradius-3.2/ubuntu/noble noble main" | \
-    tee /etc/apt/sources.list.d/networkradius.list > /dev/null
   become: true
   when:
     - ansible_distribution|string == 'Ubuntu'
     - ansible_distribution_release|string == 'noble'
   tags:
     - molecule-idempotence-notest
+  ansible.builtin.copy:
+    content: >
+      deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc]
+      http://packages.networkradius.com/freeradius-3.2/ubuntu/noble noble main
+    dest: /etc/apt/sources.list.d/networkradius.list
+    mode: "0644"
 
 - name: Add freeradius repository into Debian bookworm sources list
-  shell: |
-    echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc] http://packages.networkradius.com/freeradius-3.2/debian/bookworm bookworm main" | \
-    sudo tee /etc/apt/sources.list.d/networkradius.list > /dev/null
   become: true
   when:
     - ansible_distribution|string == 'Debian'
     - ansible_distribution_release|string == 'bookworm'
   tags:
     - molecule-idempotence-notest
+  ansible.builtin.copy:
+    content: >
+      deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc]
+      http://packages.networkradius.com/freeradius-3.2/debian/bookworm bookworm main
+    dest: /etc/apt/sources.list.d/networkradius.list
+    mode: "0644"
 
 - name: Add freeradius repository into Debian bullseye sources list
-  shell: |
-    echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc] http://packages.networkradius.com/freeradius-3.0/debian/bullseye bullseye main" | \
-    tee /etc/apt/sources.list.d/networkradius.list > /dev/null
   become: true
   when:
     - ansible_distribution|string == 'Debian'
     - ansible_distribution_release|string == 'bullseye'
   tags:
     - molecule-idempotence-notest
+  ansible.builtin.copy:
+    content: >
+      deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc]
+      http://packages.networkradius.com/freeradius-3.0/debian/bullseye bullseye main
+    dest: /etc/apt/sources.list.d/networkradius.list
+    mode: "0644"
 
 - name: Add Network RADIUS PGP public key
-  get_url:
+  ansible.builtin.get_url:
     url: https://packages.networkradius.com/pgp/packages%40networkradius.com
     dest: /etc/apt/trusted.gpg.d/packages.networkradius.com.asc
     checksum: sha256:f9327befd8efb3fddd710ed8b4ed50d394cc57a598ca8c3ccc2dc3234a4d774a
+    mode: "0644"
   ignore_errors: true
   retries: 5
   delay: 10
@@ -81,11 +99,11 @@
   until: result is success
 
 - name: Update apt packages
-  apt:
+  ansible.builtin.apt:
     update_cache: true
 
 - name: Freeradius system packages
-  apt:
+  ansible.builtin.apt:
     name:
       - freeradius-rest
     state: latest
@@ -93,38 +111,38 @@
 
 - name: Freeradius postgres packages
   when: freeradius_sql.dialect == "postgresql"
-  apt:
+  ansible.builtin.apt:
     name: freeradius-postgresql
     state: latest
   notify: Restart freeradius
 
 - name: Freeradius mysql packages
   when: freeradius_sql.dialect == "mysql"
-  apt:
+  ansible.builtin.apt:
     name: freeradius-mysql
     state: latest
   notify: Restart freeradius
 
 - name: SQL configuration
-  template:
+  ansible.builtin.template:
     src: freeradius/sql.j2
     dest: "{{ freeradius_mods_available_dir }}/sql"
-    mode: 0640
+    mode: "0640"
     owner: freerad
     group: freerad
   notify: Restart freeradius
 
 - name: Enable SQL module
-  file:
+  ansible.builtin.file:
     src: "{{ freeradius_mods_available_dir }}/sql"
     dest: "{{ freeradius_mods_enabled_dir }}/sql"
     state: link
-    mode: 0640
+    mode: "0640"
     owner: freerad
     group: freerad
 
 - name: Add plus sign to safe characters
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: "{{ freeradius_mods_config_dir }}/sql/main/{{ freeradius_sql.dialect }}/queries.conf"
     regexp: "^(.*)safe_characters =(.*)$"
     line: 'safe_characters = "{{ freeradius_safe_characters }}"'
@@ -133,65 +151,67 @@
 
 - name: Adding user 'freerad' to www-data group for database access
   when: freeradius_sql.dialect == "sqlite"
-  user:
+  ansible.builtin.user:
     name: freerad
     groups: www-data
     append: true
 
 - name: Add Attributes to freeradius dictionary
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: "{{ freeradius_dir }}/dictionary"
-    line: "ATTRIBUTE      Expire-After         {{ freeradius_expire_attr_after_seconds }}    integer"
+    line: >-
+      ATTRIBUTE      Expire-After         {{ freeradius_expire_attr_after_seconds }}    integer
 
 - name: REST configuration
-  template:
+  ansible.builtin.template:
     src: freeradius/rest.j2
     dest: "{{ freeradius_mods_available_dir }}/rest"
-    mode: 0640
+    mode: "0640"
     owner: freerad
     group: freerad
   notify: Restart freeradius
 
 - name: Enable REST module
-  file:
+  ansible.builtin.file:
     src: "{{ freeradius_mods_available_dir }}/rest"
     dest: "{{ freeradius_mods_enabled_dir }}/rest"
     state: link
-    mode: 0640
+    mode: "0640"
     owner: freerad
     group: freerad
 
 - name: Remove default site
   # Leave empty to ensure upgrades to freeradius
   # will not overwrite it
-  copy:
+  ansible.builtin.copy:
     content: "# Empty, Generated by Ansible OpenWISP\n\n"
     dest: "{{ item }}"
+    mode: "0644"
   with_items:
     - "{{ freeradius_sites_enabled_dir }}/default"
 
 - name: Site configuration
-  template:
+  ansible.builtin.template:
     src: "{{ freeradius_openwisp_site_template_src }}"
     dest: "{{ freeradius_sites_enabled_dir }}/openwisp_site"
-    mode: 0640
+    mode: "0640"
     owner: freerad
     group: freerad
   when: freeradius_deploy_openwisp_site
   notify: Restart freeradius
 
 - name: Inner tunnel
-  template:
+  ansible.builtin.template:
     src: freeradius/inner_tunnel.j2
     dest: "{{ freeradius_sites_enabled_dir }}/inner-tunnel"
-    mode: 0640
+    mode: "0640"
     owner: freerad
     group: freerad
   when: freeradius_deploy_openwisp_site
   notify: Restart freeradius
 
 - name: Copy configuration for WPA Enterprise TTLS
-  include_tasks: tasks/freeradius_eap.yml
+  ansible.builtin.include_tasks: tasks/freeradius_eap.yml
   loop: "{{ freeradius_eap_orgs }}"
   loop_control:
     loop_var: org

@@ -1,7 +1,6 @@
 ---
-
 - name: Include variables for Debian 13
-  include_vars:
+  ansible.builtin.include_vars:
     dir: "{{ role_path }}/vars"
     files_matching: "^debian-13.yml$"
   when:
@@ -9,36 +8,45 @@
     - ansible_distribution_release|string == 'trixie'
   tags: [always]
 
-- import_tasks: apt.yml
+- name: Import APT tasks
+  ansible.builtin.import_tasks: apt.yml
   tags: [openwisp2, apt]
 
-- import_tasks: ssh.yml
+- name: Import SSH tasks
+  ansible.builtin.import_tasks: ssh.yml
   tags: [openwisp2, ssh]
 
 - name: Import system tasks
-  import_tasks: system.yml
+  ansible.builtin.import_tasks: system.yml
   tags: [openwisp2, system]
 
-- import_tasks: pip.yml
+- name: Import pip tasks
+  ansible.builtin.import_tasks: pip.yml
   tags: [openwisp2, pip]
 
 # comprises django_secret_key.yml
-- import_tasks: django.yml
+- name: Import Django tasks
+  ansible.builtin.import_tasks: django.yml
   tags: [openwisp2, django]
 
-- import_tasks: freeradius.yml
+- name: Import FreeRADIUS tasks
+  ansible.builtin.import_tasks: freeradius.yml
   when: openwisp2_radius and openwisp2_freeradius_install
   tags: [openwisp2, freeradius]
 
-- import_tasks: supervisor.yml
+- name: Import supervisor tasks
+  ansible.builtin.import_tasks: supervisor.yml
   tags: [openwisp2, supervisor]
 
-- import_tasks: nginx.yml
+- name: Import nginx tasks
+  ansible.builtin.import_tasks: nginx.yml
   when: openwisp2_nginx_install
   tags: [openwisp2, nginx]
 
-- import_tasks: cron.yml
+- name: Import cron tasks
+  ansible.builtin.import_tasks: cron.yml
   tags: [openwisp2, cron]
 
-- import_tasks: complete.yml
+- name: Import complete tasks
+  ansible.builtin.import_tasks: complete.yml
   tags: [openwisp2]
