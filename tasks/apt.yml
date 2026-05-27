@@ -1,7 +1,6 @@
 ---
-
 - name: Update APT package cache
-  apt:
+  ansible.builtin.apt:
     update_cache: true
   changed_when: false
   retries: 5
@@ -12,7 +11,7 @@
     - molecule-idempotence-notest
 
 - name: Install system packages
-  apt:
+  ansible.builtin.apt:
     name:
       - sudo
       - build-essential
@@ -36,12 +35,12 @@
   until: result is success
 
 - name: Install nginx
-  apt:
+  ansible.builtin.apt:
     name: nginx
   when: openwisp2_nginx_install
 
 - name: Install redis
-  apt:
+  ansible.builtin.apt:
     name: redis-server
   notify:
     - Start redis
@@ -54,21 +53,21 @@
 - name: Set redis to listen on ipv4
   notify: Start redis
   when: openwisp2_redis_install
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/redis/redis.conf
-    regexp: '^bind 127\.0\.0\.1 ::1'
-    line: 'bind 127.0.0.1'
+    regexp: "^bind 127\\.0\\.0\\.1 ::1"
+    line: "bind 127.0.0.1"
     backrefs: true
-  ignore_errors: true
+  failed_when: false
 
 - name: Start redis
   when: openwisp2_redis_install
-  service:
+  ansible.builtin.service:
     name: redis
     state: started
 
 - name: Install geographic libraries
-  apt:
+  ansible.builtin.apt:
     name:
       - gdal-bin
       - libproj-dev
@@ -80,7 +79,7 @@
 
 - name: Install spatialite
   when: '"spatialite" in openwisp2_database.engine'
-  apt:
+  ansible.builtin.apt:
     name:
       - sqlite3
       - libspatialite-dev
@@ -91,7 +90,7 @@
 
 - name: Install postgresql client drivers
   when: openwisp2_database.engine == "django.contrib.gis.db.backends.postgis"
-  apt:
+  ansible.builtin.apt:
     name: libpq-dev
   retries: 5
   delay: 10
@@ -100,7 +99,7 @@
 
 - name: Install cairo
   when: openwisp2_radius
-  apt:
+  ansible.builtin.apt:
     name:
       - libcairo2
       - libpango-1.0-0
@@ -111,7 +110,8 @@
 
 - name: Install mod-spatialite (may fail on older linux distros)
   when: '"spatialite" in openwisp2_database.engine'
-  apt: name=libsqlite3-mod-spatialite
+  ansible.builtin.apt:
+    name: libsqlite3-mod-spatialite
   ignore_errors: true
   retries: 5
   delay: 10
@@ -120,7 +120,8 @@
 
 # fixes issue described in https://docs.ansible.com/ansible/become.html#becoming-an-unprivileged-user
 - name: Install acl if acting as non-root user
-  apt: name=acl
+  ansible.builtin.apt:
+    name: acl
   when: ansible_user is not defined or ansible_user != 'root'
   retries: 5
   delay: 10
@@ -129,10 +130,12 @@
   ignore_errors: true
 
 - name: Ensure supervisor is started
-  service: name=supervisor state=started
+  ansible.builtin.service:
+    name: supervisor
+    state: started
 
 - name: Install python3 packages
-  apt:
+  ansible.builtin.apt:
     name:
       - python3-pip
       - python3-dev
@@ -144,14 +147,15 @@
 
 - name: Install ntp
   when: openwisp2_install_ntp
-  apt: "name={{ openwisp2_ntp_pkg }}"
+  ansible.builtin.apt:
+    name: "{{ openwisp2_ntp_pkg }}"
   retries: 5
   delay: 10
   register: result
   until: result is success
 
 - name: Install gettext
-  apt:
+  ansible.builtin.apt:
     name: gettext
   when: openwisp2_internationalization
   retries: 5
@@ -161,7 +165,7 @@
 
 - name: Install fping
   when: openwisp2_monitoring
-  apt:
+  ansible.builtin.apt:
     name:
       - fping
   retries: 5

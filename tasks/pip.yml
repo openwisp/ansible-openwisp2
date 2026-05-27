@@ -1,7 +1,6 @@
 ---
-
 - name: Update pip & related tools
-  pip:
+  ansible.builtin.pip:
     name:
       - pip
       - setuptools
@@ -16,7 +15,7 @@
   until: result is success
 
 - name: Install openwisp2 controller and its dependencies
-  pip:
+  ansible.builtin.pip:
     name:
       - "{{ openwisp2_controller_version }}"
       - service_identity
@@ -34,12 +33,13 @@
     - molecule-idempotence-notest
 
 - name: Copy requirements.txt
-  copy:
+  ansible.builtin.copy:
     src: requirements.txt
     dest: "{{ openwisp2_path }}/requirements.txt"
+    mode: "0644"
 
 - name: Install python requirements
-  pip:
+  ansible.builtin.pip:
     requirements: "{{ openwisp2_path }}/requirements.txt"
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
@@ -54,7 +54,7 @@
 
 - name: Install openwisp2 network topology and its dependencies
   when: openwisp2_network_topology
-  pip:
+  ansible.builtin.pip:
     name: "{{ openwisp2_network_topology_version }}"
     state: latest
     virtualenv: "{{ virtualenv_path }}"
@@ -69,7 +69,7 @@
 
 - name: Install openwisp firmware upgrader and its dependencies
   when: openwisp2_firmware_upgrader
-  pip:
+  ansible.builtin.pip:
     name: "{{ openwisp2_firmware_upgrader_version }}"
     state: latest
     virtualenv: "{{ virtualenv_path }}"
@@ -84,7 +84,7 @@
 
 - name: Install openwisp monitoring and its dependencies
   when: openwisp2_monitoring
-  pip:
+  ansible.builtin.pip:
     name: "{{ openwisp2_monitoring_version }}"
     state: latest
     virtualenv: "{{ virtualenv_path }}"
@@ -99,7 +99,7 @@
 
 - name: Install openwisp2_radius and its dependencies
   when: openwisp2_radius
-  pip:
+  ansible.builtin.pip:
     name: "{{ openwisp2_radius_version }}"
     state: latest
     virtualenv: "{{ virtualenv_path }}"
@@ -113,13 +113,14 @@
     - molecule-idempotence-notest
 
 - name: Copy requirements-cors-headers.txt
-  copy:
+  ansible.builtin.copy:
     src: requirements-cors-headers.txt
     dest: "{{ openwisp2_path }}/requirements-cors-headers.txt"
+    mode: "0644"
   when: openwisp2_django_cors.get('enabled')
 
 - name: Install django-core-headers requirements
-  pip:
+  ansible.builtin.pip:
     requirements: "{{ openwisp2_path }}/requirements-cors-headers.txt"
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
@@ -132,7 +133,7 @@
   notify: Reload application
 
 - name: Install extra python packages
-  pip:
+  ansible.builtin.pip:
     name: "{{ openwisp2_extra_python_packages }}"
     state: latest
     virtualenv: "{{ virtualenv_path }}"
@@ -145,13 +146,14 @@
   tags: [extra_pip]
 
 - name: Copy requirements-postgresql.txt
-  copy:
+  ansible.builtin.copy:
     src: requirements-postgresql.txt
     dest: "{{ openwisp2_path }}/requirements-postgresql.txt"
+    mode: "0644"
   when: openwisp2_database.engine in ["django.db.backends.postgresql", "django.contrib.gis.db.backends.postgis"]
 
 - name: Install PostgreSQL driver requirements
-  pip:
+  ansible.builtin.pip:
     requirements: "{{ openwisp2_path }}/requirements-postgresql.txt"
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
@@ -164,13 +166,14 @@
   notify: Reload application
 
 - name: Copy requirements-mysql.txt
-  copy:
+  ansible.builtin.copy:
     src: requirements-mysql.txt
     dest: "{{ openwisp2_path }}/requirements-mysql.txt"
+    mode: "0644"
   when: openwisp2_database.engine in ["django.db.backends.mysql", "django.contrib.gis.db.backends.mysql"]
 
 - name: Install MYSQL driver requirements
-  pip:
+  ansible.builtin.pip:
     requirements: "{{ openwisp2_path }}/requirements-mysql.txt"
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
@@ -184,7 +187,7 @@
 
 - name: Install raven (sentry client)
   when: openwisp2_sentry.get('dsn')
-  pip:
+  ansible.builtin.pip:
     name: raven
     state: latest
     virtualenv: "{{ virtualenv_path }}"
@@ -196,13 +199,14 @@
   notify: Reload application
 
 - name: Copy requirements-celery-email.txt
-  copy:
+  ansible.builtin.copy:
     src: requirements-celery-email.txt
     dest: "{{ openwisp2_path }}/requirements-celery-email.txt"
+    mode: "0644"
   when: openwisp2_email_backend == "djcelery_email.backends.CeleryEmailBackend"
 
 - name: Remove django-celery-email (unmaintained)
-  pip:
+  ansible.builtin.pip:
     name: "django-celery-email"
     state: absent
     virtualenv: "{{ virtualenv_path }}"
@@ -210,7 +214,7 @@
   when: openwisp2_email_backend == "djcelery_email.backends.CeleryEmailBackend"
 
 - name: Install celery-email requirements
-  pip:
+  ansible.builtin.pip:
     requirements: "{{ openwisp2_path }}/requirements-celery-email.txt"
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
@@ -225,7 +229,7 @@
     - molecule-idempotence-notest
 
 - name: Install django
-  pip:
+  ansible.builtin.pip:
     name: "{{ openwisp2_django_version }}"
     state: present
     virtualenv: "{{ virtualenv_path }}"

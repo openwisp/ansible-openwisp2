@@ -1,42 +1,44 @@
 ---
 - name: Set nginx max upload size
   # Required to allow uploading firmware images
-  set_fact:
+  ansible.builtin.set_fact:
     openwisp2_nginx_client_max_body_size: "{{ openwisp2_firmware_upgrader_max_file_size }}"
   when: openwisp2_firmware_upgrader
 
-- name: Create "{{ openwisp2_path }}/public_html"
-  file:
+- name: Create public_html directory
+  ansible.builtin.file:
     path: "{{ openwisp2_path }}/public_html"
     state: directory
-    mode: 0775
+    mode: "0775"
 
-- name: Create "{{ openwisp2_path }}/nginx-conf/openwisp2"
-  file:
+- name: Create nginx openwisp2 configuration directory
+  ansible.builtin.file:
     path: "{{ openwisp2_path }}/nginx-conf/openwisp2"
     state: directory
-    mode: 0770
+    mode: "0770"
 
-- name: Create "{{ openwisp2_path }}/ssl"
-  file:
+- name: Create SSL directory
+  ansible.builtin.file:
     path: "{{ openwisp2_path }}/ssl"
     state: directory
-    mode: 0770
+    mode: "0770"
 
 - name: Create SSL cert if not exists yet
-  command: >
-    openssl req -new -nodes -x509 \
-    -subj "/C={{ openwisp2_ssl_country }}/ST={{ openwisp2_ssl_state }} \
-           /L={{ openwisp2_ssl_locality }}/O={{ openwisp2_ssl_organization }} \
-           /CN={{ openwisp2_ssl_common_name }}" \
-    -days 3650 \
-    -keyout {{ openwisp2_ssl_key }} \
-    -out {{ openwisp2_ssl_cert }} \
-    -extensions v3_ca creates={{ openwisp2_ssl_cert }}
+  ansible.builtin.command:
+    cmd: >
+      openssl req -new -nodes -x509
+      -subj "/C={{ openwisp2_ssl_country }}/ST={{ openwisp2_ssl_state }}
+             /L={{ openwisp2_ssl_locality }}/O={{ openwisp2_ssl_organization }}
+             /CN={{ openwisp2_ssl_common_name }}"
+      -days 3650
+      -keyout {{ openwisp2_ssl_key }}
+      -out {{ openwisp2_ssl_cert }}
+      -extensions v3_ca
+    creates: "{{ openwisp2_ssl_cert }}"
   notify: Restart nginx
 
 - name: Copy SSL cert to be added to trusted Cert (for freeradius)
-  copy:
+  ansible.builtin.copy:
     src: "{{ openwisp2_ssl_cert }}"
     dest: /usr/local/share/ca-certificates/openwisp-ssl-server.crt
     remote_src: true
@@ -46,49 +48,49 @@
   notify: Update-ca-certificates
 
 - name: Disable default nginx configuration
-  file:
+  ansible.builtin.file:
     path: "/etc/nginx/sites-enabled/default"
     state: absent
 
 - name: Nginx SSL configuration
-  template:
+  ansible.builtin.template:
     src: nginx/ssl-conf.j2
     dest: "{{ openwisp2_path }}/nginx-conf/openwisp2/ssl.conf"
-    mode: 0644
+    mode: "0644"
   notify: Restart nginx
 
 - name: Nginx security configuration
-  template:
+  ansible.builtin.template:
     src: nginx/security-conf.j2
     dest: "{{ openwisp2_path }}/nginx-conf/openwisp2/security.conf"
-    mode: 0644
+    mode: "0644"
   notify: Restart nginx
   tags: [nginx_security]
 
 - name: Nginx site available
-  template:
+  ansible.builtin.template:
     src: nginx/site-conf.j2
     dest: "/etc/nginx/sites-available/{{ inventory_hostname }}"
-    mode: 0644
+    mode: "0644"
   notify: Restart nginx
 
 - name: Nginx site enabled
-  file:
+  ansible.builtin.file:
     src: "/etc/nginx/sites-available/{{ inventory_hostname }}"
     dest: "/etc/nginx/sites-enabled/{{ inventory_hostname }}"
     state: link
   notify: Restart nginx
 
 - name: Configure nginx log rotation
-  template:
+  ansible.builtin.template:
     src: logrotate.d/openwisp-nginx.j2
     dest: /etc/logrotate.d/openwisp-nginx
-    mode: 0644
+    mode: "0644"
 
 - name: Disable nginx server tokens
-  replace:
+  ansible.builtin.replace:
     path: /etc/nginx/nginx.conf
-    regexp: '#(\s+)server_tokens off'
-    replace: 'server_tokens off'
+    regexp: "#(\\s+)server_tokens off"
+    replace: "server_tokens off"
     backup: true
   notify: Restart nginx

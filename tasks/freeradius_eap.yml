@@ -1,8 +1,8 @@
 ---
-
 - name: Generate default certificates for the WPA Enterprise TTLS
+  become: true
   become_user: freerad
-  command: "make server dh"
+  ansible.builtin.command: "make server dh"
   args:
     chdir: "{{ freeradius_dir }}/certs"
     creates: "{{ freeradius_dir }}/certs/server.pem"
@@ -10,30 +10,31 @@
   tags: [freeradius_eap]
 
 - name: Generate default DH key and certificates
+  notify: Restart freeradius
+  tags: [freeradius_eap]
   block:
-    - name: "Check if {{ freeradius_dir }}/certs/dh exists"
+    - name: Check if FreeRADIUS DH file exists
       ansible.builtin.stat:
         path: "{{ freeradius_dir }}/certs/dh"
       register: cert_dh_exists
     - name: Generate DH key and certificates
-      command:
+      ansible.builtin.command:
         cmd: make destroycerts dh all
         chdir: "{{ freeradius_dir }}/certs"
+        creates: "{{ freeradius_dir }}/certs/dh"
       when: not cert_dh_exists.stat.exists
-  notify: Restart freeradius
-  tags: [freeradius_eap]
 
-- name: "Copy {{ org.name }} EAP openwisp_site"
-  template:
+- name: Copy EAP openwisp_site for {{ org.name }}
+  ansible.builtin.template:
     src: "{{ freeradius_eap_openwisp_site_template_src }}"
     dest: "{{ freeradius_dir }}/sites-available/{{ org.name }}_eap_openwisp_site"
     owner: freerad
     group: freerad
-    mode: '0644'
+    mode: "0644"
   notify: Restart freeradius
   tags: [freeradius_eap]
 
-- name: "Create a symlink in sites-enabled for {{ org.name }} EAP openwisp_site"
+- name: Create EAP openwisp_site symlink for {{ org.name }}
   ansible.builtin.file:
     src: "{{ freeradius_dir }}/sites-available/{{ org.name }}_eap_openwisp_site"
     dest: "{{ freeradius_dir }}/sites-enabled/{{ org.name }}_eap_openwisp_site"
@@ -41,17 +42,17 @@
   notify: Restart freeradius
   tags: [freeradius_eap]
 
-- name: "Copy {{ org.name }} eap_inner_tunnel"
-  template:
+- name: Copy eap_inner_tunnel for {{ org.name }}
+  ansible.builtin.template:
     src: "{{ freeradius_eap_inner_tunnel_template_src }}"
     dest: "{{ freeradius_dir }}/sites-available/{{ org.name }}_eap_inner_tunnel"
     owner: freerad
     group: freerad
-    mode: '0644'
+    mode: "0644"
   notify: Restart freeradius
   tags: [freeradius_eap]
 
-- name: "Create a symlink in sites-enabled for {{ org.name }} eap_inner_tunnel"
+- name: Create eap_inner_tunnel symlink for {{ org.name }}
   ansible.builtin.file:
     src: "{{ freeradius_dir }}/sites-available/{{ org.name }}_eap_inner_tunnel"
     dest: "{{ freeradius_dir }}/sites-enabled/{{ org.name }}_eap_inner_tunnel"
@@ -59,13 +60,13 @@
   notify: Restart freeradius
   tags: [freeradius_eap]
 
-- name: Copy {{ org.name }} custom EAP configuration in mods-available
-  template:
+- name: Copy custom EAP configuration in mods-available for {{ org.name }}
+  ansible.builtin.template:
     src: "{{ freeradius_eap_template_src }}"
     dest: "{{ freeradius_dir }}/mods-available/{{ org.name }}_eap"
     owner: freerad
     group: freerad
-    mode: '0644'
+    mode: "0644"
   notify: Restart freeradius
   tags: [freeradius_eap]
 
