@@ -17,9 +17,6 @@ openwisp2_radius_version: "openwisp-radius @ https://github.com/openwisp/openwis
 openwisp2_django_version: "django~=5.2.0"
 openwisp2_extra_python_packages:
   - bpython
-  # TODO: Remove before merging
-  - "openwisp-radius[openvpn_status] @ https://github.com/openwisp/openwisp-radius/tarball/issues/706-user-expiration"
-  - "openwisp-users @ https://github.com/openwisp/openwisp-users/tarball/issues/499-user-expiration"
 openwisp2_extra_django_apps: []
 openwisp2_extra_django_settings: {}
 openwisp2_extra_django_settings_instructions: []
