@@ -245,6 +245,7 @@ else:
 CELERY_BROKER_TRANSPORT_OPTIONS = {
     "max_retries": {{ openwisp2_celery_broker_max_tries }},
 }
+
 CELERY_BEAT_SCHEDULE = {
 {% if openwisp2_users_user_password_expiration or openwisp2_users_staff_user_password_expiration %}
     "password_expiry_email": {
@@ -418,6 +419,7 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = "{{ openwisp2_language_code }}"
 TIME_ZONE = "{{ openwisp2_time_zone }}"
 CELERY_TIMEZONE = TIME_ZONE
+
 {% if openwisp2_internationalization %}
 USE_I18N = True
 {% endif %}
