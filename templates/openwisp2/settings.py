@@ -256,7 +256,6 @@ CELERY_BEAT_SCHEDULE = {
     "deactivate_expired_users": {
         "task": "openwisp_users.tasks.deactivate_expired_users",
         "schedule": crontab(**{ {{ cron_deactivate_expired_users }} }),
-        "args": None,
     },
     "expiration_reminder_email": {
         "task": "openwisp_users.tasks.expiration_reminder_email",
