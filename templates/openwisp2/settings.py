@@ -253,6 +253,14 @@ CELERY_BEAT_SCHEDULE = {
         "schedule": crontab(**{ {{ cron_password_expiration_email }} }),
     },
 {% endif %}
+    "deactivate_expired_users": {
+        "task": "openwisp_users.tasks.deactivate_expired_users",
+        "schedule": crontab(**{ {{ cron_deactivate_expired_users }} }),
+    },
+    "expiration_reminder_email": {
+        "task": "openwisp_users.tasks.expiration_reminder_email",
+        "schedule": crontab(**{ {{ cron_expiration_reminder_email }} }),
+    },
 {% if openwisp2_notifications_delete_old_notifications %}
     "delete_old_notifications": {
         "task": "openwisp_notifications.tasks.delete_old_notifications",
@@ -267,12 +275,6 @@ CELERY_BEAT_SCHEDULE = {
     },
 {% endif %}
 {% if openwisp2_radius and openwisp2_radius_periodic_tasks %}
-    "deactivate_expired_users": {
-        "task": "openwisp_radius.tasks.deactivate_expired_users",
-        "schedule": crontab(**{ {{ cron_deactivate_expired_users }} }),
-        "args": None,
-        "relative": True,
-    },
     "delete_old_radiusbatch_users": {
         "task": "openwisp_radius.tasks.delete_old_radiusbatch_users",
         "schedule": crontab(**{ {{ cron_delete_old_radiusbatch_users }} }),
@@ -415,6 +417,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "{{ openwisp2_language_code }}"
 TIME_ZONE = "{{ openwisp2_time_zone }}"
+CELERY_TIMEZONE = TIME_ZONE
+
 {% if openwisp2_internationalization %}
 USE_I18N = True
 {% endif %}
