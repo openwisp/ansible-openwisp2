@@ -15,6 +15,7 @@ on:             # yamllint disable-line rule:truthy
       - dev
       - "25.10"
       - "24.11"
+      - gsoc26-persistent-scheduled-upgrades
 
 jobs:
   build:
