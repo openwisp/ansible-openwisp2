@@ -1,6 +1,6 @@
 molecule
 molecule-plugins[docker]
-ansible-core>=2.20.5,<2.21
+ansible-core>=2.21.0,<2.22
 yamllint
 ansible-lint
 docker
