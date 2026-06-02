@@ -274,6 +274,16 @@ CELERY_BEAT_SCHEDULE = {
         "schedule": timedelta(minutes=5),
     },
 {% endif %}
+{% if openwisp2_firmware_upgrader and openwisp2_firmware_upgrader_periodic_tasks %}
+    "check_pending_upgrades": {
+        "task": "openwisp_firmware_upgrader.tasks.check_pending_upgrades",
+        "schedule": timedelta(minutes={{ openwisp2_firmware_upgrader_check_pending_period_minutes }}),
+    },
+    "send_pending_upgrade_reminders": {
+        "task": "openwisp_firmware_upgrader.tasks.send_pending_upgrade_reminders",
+        "schedule": timedelta(days={{ openwisp2_firmware_upgrader_reminder_scan_period_days }}),
+    },
+{% endif %}
 {% if openwisp2_radius and openwisp2_radius_periodic_tasks %}
     "delete_old_radiusbatch_users": {
         "task": "openwisp_radius.tasks.delete_old_radiusbatch_users",
