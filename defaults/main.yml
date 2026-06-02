@@ -97,6 +97,8 @@ openwisp2_celery_firmware_upgrader_concurrency: 1
 openwisp2_celery_firmware_upgrader_autoscale:
 openwisp2_celery_firmware_upgrader_prefetch_multiplier: 1
 openwisp2_celery_firmware_upgrader_optimization: fair
+openwisp2_firmware_upgrader_check_pending_period_minutes: 10
+openwisp2_firmware_upgrader_reminder_scan_period_days: 7
 openwisp2_celery_monitoring: true
 openwisp2_celery_monitoring_concurrency: 2
 openwisp2_celery_monitoring_autoscale:
@@ -234,5 +236,6 @@ openwisp2_usage_metric_collection: true
 openwisp2_monitoring_periodic_tasks: true
 openwisp2_radius_periodic_tasks: true
 openwisp2_usage_metric_collection_periodic_tasks: true
+openwisp2_firmware_upgrader_periodic_tasks: true
 # point {{ inventory_name }} to localhost in /etc/hosts
 openwisp2_inventory_hostname_localhost: true
