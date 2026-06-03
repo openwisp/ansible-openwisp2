@@ -135,6 +135,10 @@
           changed_when: false
 
         # Assert directives are absent when static compression variables are disabled
+        - name: Load role defaults for nginx static compression disabled test
+          ansible.builtin.include_vars:
+            file: "{{ playbook_dir }}/../../defaults/main.yml"
+
         - name: Set nginx static compression facts with variables disabled
           ansible.builtin.set_fact:
             nginx_gzip_static_available: false
