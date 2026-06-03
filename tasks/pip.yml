@@ -22,6 +22,7 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
+    extra_args: "{{ openwisp2_pip_extra_args }}"
   environment:
     LC_CTYPE: "en_US.UTF-8"
   notify: Reload application
@@ -59,6 +60,7 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
+    extra_args: "{{ openwisp2_pip_extra_args }}"
   notify: Reload application
   retries: 5
   delay: 10
@@ -74,6 +76,7 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
+    extra_args: "{{ openwisp2_pip_extra_args }}"
   notify: Reload application
   retries: 5
   delay: 10
@@ -89,6 +92,7 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
+    extra_args: "{{ openwisp2_pip_extra_args }}"
   notify: Reload application
   retries: 5
   delay: 10
@@ -104,6 +108,7 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
+    extra_args: "{{ openwisp2_pip_extra_args }}"
   notify: Reload application
   retries: 5
   delay: 10
