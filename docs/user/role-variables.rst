@@ -164,13 +164,16 @@ take a look at `the default values of these variables
                 - "font/opentype"
         # Precompressed gzip files serving control
         # - 'auto' (default): automatically enabled when nginx gzip_static module is detected
-        # - true: enable only when nginx gzip_static module is available
+        # - true: require nginx gzip_static module and fail if it is unavailable
         # - false: explicitly disable even when module is available
         openwisp2_nginx_gzip_static: auto
         # Precompressed brotli files serving control
         # - 'auto' (default): automatically enabled when nginx ngx_brotli module is detected
-        # - true: enable only when nginx ngx_brotli module is available
+        # - true: require nginx ngx_brotli module and fail if it is unavailable
         # - false: explicitly disable even when module is available
+        # Note: brotli is not shipped with stock nginx. On Debian/Ubuntu,
+        # install libnginx-mod-http-brotli-filter and
+        # libnginx-mod-http-brotli-static, otherwise 'auto' does nothing.
         openwisp2_nginx_brotli_static: auto
         # nginx error log configuration
         openwisp2_nginx_access_log: "{{ openwisp2_path }}/log/nginx.access.log"

@@ -39,33 +39,55 @@
     name: nginx
   when: openwisp2_nginx_install
 
-- name: Check if nginx gzip_static module is available
-  shell: "nginx -V 2>&1 | grep -q 'http_gzip_static_module' && echo 'available' || echo 'not_available'"
-  register: gzip_static_check
+- name: Get nginx build configuration
+  ansible.builtin.command: nginx -V
+  register: nginx_build_config
   when: openwisp2_nginx_install
   changed_when: false
 
-- name: Check if nginx brotli module is available
-  shell: "nginx -V 2>&1 | grep -q 'brotli' && echo 'available' || echo 'not_available'"
-  register: brotli_check
+- name: Get nginx loaded configuration
+  ansible.builtin.command: nginx -T
+  register: nginx_loaded_config
   when: openwisp2_nginx_install
   changed_when: false
 
 - name: Set nginx module availability facts
-  set_fact:
-    nginx_gzip_static_available: >-
-      {{ (gzip_static_check.stdout | default('not_available')) == 'available' and
-         (openwisp2_nginx_gzip_static == true or openwisp2_nginx_gzip_static == 'auto') }}
-    nginx_brotli_static_available: >-
-      {{ (brotli_check.stdout | default('not_available')) == 'available' and
-         (openwisp2_nginx_brotli_static == true or openwisp2_nginx_brotli_static == 'auto') }}
-  when: openwisp2_nginx_install
+  ansible.builtin.set_fact:
+    nginx_gzip_static_module_available: >-
+      {{ openwisp2_nginx_install and
+         ('http_gzip_static_module' in (nginx_build_config.stderr | default(''))) }}
+    nginx_brotli_static_module_available: >-
+      {{ openwisp2_nginx_install and
+         ('brotli_static_module' in (
+           (nginx_build_config.stderr | default('')) ~
+           (nginx_loaded_config.stdout | default('')) ~
+           (nginx_loaded_config.stderr | default(''))
+         )) }}
 
-- name: Set nginx module availability facts (nginx not installed)
-  set_fact:
-    nginx_gzip_static_available: false
-    nginx_brotli_static_available: false
-  when: not openwisp2_nginx_install
+- name: Fail when gzip_static is required but unavailable
+  ansible.builtin.fail:
+    msg: "openwisp2_nginx_gzip_static is true but nginx gzip_static module is not available."
+  when:
+    - openwisp2_nginx_install
+    - (openwisp2_nginx_gzip_static | string | lower) == 'true'
+    - not nginx_gzip_static_module_available
+
+- name: Fail when brotli_static is required but unavailable
+  ansible.builtin.fail:
+    msg: "openwisp2_nginx_brotli_static is true but nginx brotli_static module is not available."
+  when:
+    - openwisp2_nginx_install
+    - (openwisp2_nginx_brotli_static | string | lower) == 'true'
+    - not nginx_brotli_static_module_available
+
+- name: Set nginx static compression availability facts
+  ansible.builtin.set_fact:
+    nginx_gzip_static_available: >-
+      {{ nginx_gzip_static_module_available and
+         ((openwisp2_nginx_gzip_static | string | lower) in ['true', 'auto']) }}
+    nginx_brotli_static_available: >-
+      {{ nginx_brotli_static_module_available and
+         ((openwisp2_nginx_brotli_static | string | lower) in ['true', 'auto']) }}
 
 - name: Install redis
   ansible.builtin.apt:
