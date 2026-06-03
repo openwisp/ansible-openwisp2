@@ -135,21 +135,10 @@
           changed_when: false
 
         # Assert directives are absent when static compression variables are disabled
-        - name: Load role defaults for nginx static compression disabled test
-          ansible.builtin.include_vars:
-            file: "{{ playbook_dir }}/../../defaults/main.yml"
-
         - name: Set nginx static compression facts with variables disabled
           ansible.builtin.set_fact:
-            nginx_gzip_static_available: >-
-              {{ nginx_gzip_static_module_available and
-                 ((openwisp2_nginx_gzip_static | string | lower) in ['true', 'auto']) }}
-            nginx_brotli_static_available: >-
-              {{ nginx_brotli_static_module_available and
-                 ((openwisp2_nginx_brotli_static | string | lower) in ['true', 'auto']) }}
-          vars:
-            openwisp2_nginx_gzip_static: false
-            openwisp2_nginx_brotli_static: false
+            nginx_gzip_static_available: false
+            nginx_brotli_static_available: false
 
         - name: Render nginx site configuration with static compression disabled
           ansible.builtin.template:
