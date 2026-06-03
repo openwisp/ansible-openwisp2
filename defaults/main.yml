@@ -236,3 +236,6 @@ openwisp2_radius_periodic_tasks: true
 openwisp2_usage_metric_collection_periodic_tasks: true
 # point {{ inventory_name }} to localhost in /etc/hosts
 openwisp2_inventory_hostname_localhost: true
+# openwisp2_pip_extra_args controls extra pip arguments used when installing or
+# reinstalling OpenWISP Python packages and dependencies.
+openwisp2_pip_extra_args: "--upgrade"

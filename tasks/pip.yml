@@ -22,6 +22,7 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
+    extra_args: "{{ openwisp2_pip_extra_args }}"
   environment:
     LC_CTYPE: "en_US.UTF-8"
   notify: Reload application
@@ -43,6 +44,7 @@
     requirements: "{{ openwisp2_path }}/requirements.txt"
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
+    extra_args: "{{ openwisp2_pip_extra_args }}"
   notify: Reload application
   retries: 5
   delay: 10
@@ -58,6 +60,7 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
+    extra_args: "{{ openwisp2_pip_extra_args }}"
   notify: Reload application
   retries: 5
   delay: 10
@@ -73,6 +76,7 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
+    extra_args: "{{ openwisp2_pip_extra_args }}"
   notify: Reload application
   retries: 5
   delay: 10
@@ -88,6 +92,7 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
+    extra_args: "{{ openwisp2_pip_extra_args }}"
   notify: Reload application
   retries: 5
   delay: 10
@@ -103,6 +108,7 @@
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
+    extra_args: "{{ openwisp2_pip_extra_args }}"
   notify: Reload application
   retries: 5
   delay: 10
@@ -123,6 +129,7 @@
     requirements: "{{ openwisp2_path }}/requirements-cors-headers.txt"
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
+    extra_args: "{{ openwisp2_pip_extra_args }}"
   when: openwisp2_django_cors.get('enabled')
   retries: 5
   delay: 10
@@ -155,6 +162,7 @@
     requirements: "{{ openwisp2_path }}/requirements-postgresql.txt"
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
+    extra_args: "{{ openwisp2_pip_extra_args }}"
   when: openwisp2_database.engine in ["django.db.backends.postgresql", "django.contrib.gis.db.backends.postgis"]
   retries: 5
   delay: 10
@@ -174,6 +182,7 @@
     requirements: "{{ openwisp2_path }}/requirements-mysql.txt"
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
+    extra_args: "{{ openwisp2_pip_extra_args }}"
   when: openwisp2_database.engine in ["django.db.backends.mysql", "django.contrib.gis.db.backends.mysql"]
   retries: 5
   delay: 10
@@ -214,6 +223,7 @@
     requirements: "{{ openwisp2_path }}/requirements-celery-email.txt"
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"
+    extra_args: "{{ openwisp2_pip_extra_args }}"
   when: openwisp2_email_backend == "djcelery_email.backends.CeleryEmailBackend"
   notify: Reload application
   retries: 5
