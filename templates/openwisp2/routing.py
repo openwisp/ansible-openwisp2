@@ -31,6 +31,12 @@ from openwisp_radius.routing import (
 routes.extend(radius_routes)
 {% endif %}
 
+{% if openwisp2_firmware_upgrader %}
+from openwisp_firmware_upgrader.routing import get_routes as get_upgrader_routes
+
+routes.extend(get_upgrader_routes())
+{% endif %}
+
 {% for extra_routes in openwisp2_websocket_extra_routes %}
 routes.extend({{extra_routes}})
 {% endfor %}
