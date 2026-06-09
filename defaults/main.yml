@@ -71,7 +71,8 @@ openwisp2_django_sesame_max_age: 1800 # 30 minutes
 openwisp2_redis_install: true
 openwisp2_redis_host: localhost
 openwisp2_redis_port: 6379
-openwisp2_redis_cache_url: "redis://{{ openwisp2_redis_host }}:{{ openwisp2_redis_port }}/1"
+openwisp2_redis_cache_url: "redis://{{ openwisp2_redis_host }}:{{ openwisp2_redis_port }}/0"
+openwisp2_redis_sessions_url: "redis://{{ openwisp2_redis_host }}:{{ openwisp2_redis_port }}/1"
 openwisp2_influxdb_install: true
 openwisp2_timeseries_database:
   backend: "openwisp_monitoring.db.backends.influxdb"
@@ -103,7 +104,7 @@ openwisp2_celery_monitoring_autoscale:
 openwisp2_celery_monitoring_prefetch_multiplier: 10
 openwisp2_celery_monitoring_optimization: fair
 openwisp2_celery_task_routes_defaults: true
-openwisp2_celery_broker_url: redis://{{ openwisp2_redis_host }}:{{ openwisp2_redis_port }}/3
+openwisp2_celery_broker_url: redis://{{ openwisp2_redis_host }}:{{ openwisp2_redis_port }}/2
 openwisp2_celery_task_acks_late: true
 openwisp2_celery_broker_max_tries: 10
 openwisp2_celery_pool:

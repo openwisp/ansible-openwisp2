@@ -197,7 +197,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("{{ openwisp2_redis_host }}", {{ openwisp2_redis_port }})],
+            "hosts": [f"redis://{{ openwisp2_redis_host }}:{{ openwisp2_redis_port }}/3"],
             "group_expiry": {{ openwisp2_daphne_websocket_timeout }},
         },
     },
@@ -358,11 +358,18 @@ CACHES = {
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         },
-    }
+    },
+    "sessions": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "{{ openwisp2_redis_sessions_url }}",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    },
 }
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
-SESSION_CACHE_ALIAS = "default"
+SESSION_CACHE_ALIAS = "sessions"
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
