@@ -6,11 +6,11 @@ Work in progress.
 
 ### Bugfixes
 
-- Ensured log files in the OpenWISP log directory (e.g. ``/opt/openwisp2/log/``)
-  are owned by the application user (``www-data``) instead of being created as
-  ``root``, which prevented the application processes (uWSGI, celery, daphne,
-  Django) from writing to them (`#627
-  <https://github.com/openwisp/ansible-openwisp2/issues/627>`_)
+- Ensured log files in the OpenWISP log directory (e.g. `/opt/openwisp2/log/`)
+  are owned by the application user (`www-data`) instead of being created as
+  `root`, which prevented the application processes (uWSGI, celery, daphne,
+  Django) from writing to them
+  ([#627](https://github.com/openwisp/ansible-openwisp2/issues/627))
 
 ## Version 25.10.2 [2026-01-28]
 

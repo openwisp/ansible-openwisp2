@@ -39,15 +39,21 @@
     # keep the task idempotent (touch reports "changed" otherwise)
     access_time: preserve
     modification_time: preserve
-  loop:
-    - openwisp2.log
-    - uwsgi.log
-    - celery.log
-    - celerybeat.log
-    - celery-network.log
-    - celery-monitoring.log
-    - celery-firmware-upgrader.log
-    - daphne.log
+  # Only pre-create the log files for the services that are actually enabled,
+  # matching the conditions used to install the supervisor programs in
+  # supervisor.yml, so we don't leave empty log files for disabled features.
+  loop: >-
+    {{
+      ['openwisp2.log', 'uwsgi.log', 'celery.log']
+      + (['celerybeat.log'] if openwisp2_celerybeat else [])
+      + (['celery-network.log'] if openwisp2_celery_network else [])
+      + (['celery-monitoring.log']
+         if (openwisp2_monitoring and openwisp2_celery_monitoring) else [])
+      + (['celery-firmware-upgrader.log']
+         if (openwisp2_firmware_upgrader and openwisp2_celery_firmware_upgrader)
+         else [])
+      + (['daphne.log'] if openwisp2_daphne_install else [])
+    }}
   # Services (e.g. supervisord running as root) may rotate/recreate these log
   # files between converge runs, so skip the idempotence check for this task,
   # consistent with the log directory task above.
