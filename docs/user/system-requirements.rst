@@ -43,5 +43,6 @@ Supported Operating Systems
 
 - Debian 12
 - Debian 11
+- Ubuntu 26 LTS
 - Ubuntu 24 LTS
 - Ubuntu 22 LTS
