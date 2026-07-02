@@ -8,6 +8,15 @@
     - ansible_distribution_release|string == 'trixie'
   tags: [always]
 
+- name: Include variables for Ubuntu 26.04
+  ansible.builtin.include_vars:
+    dir: "{{ role_path }}/vars"
+    files_matching: "^ubuntu-26.yml$"
+  when:
+    - ansible_distribution|string == 'Ubuntu'
+    - ansible_distribution_release|string == 'resolute'
+  tags: [always]
+
 - name: Import APT tasks
   ansible.builtin.import_tasks: apt.yml
   tags: [openwisp2, apt]

@@ -1,0 +1,6 @@
+---
+
+# Override variables for Ubuntu 26.04
+
+openwisp2_ntp_pkg: ntpsec
+openwisp2_libgdk_pixbuf_pkg: libgdk-pixbuf-2.0-0
