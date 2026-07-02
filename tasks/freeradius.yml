@@ -69,7 +69,7 @@
   ansible.builtin.copy:
     content: >
       deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc]
-      http://packages.networkradius.com/freeradius-3.2/ubuntu/resolute resolute main
+      http://packages.inkbridgenetworks.com/freeradius-3.2/ubuntu/resolute resolute main
     dest: /etc/apt/sources.list.d/networkradius.list
     mode: "0644"
 
