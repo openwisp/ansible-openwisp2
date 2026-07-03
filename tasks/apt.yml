@@ -39,55 +39,15 @@
     name: nginx
   when: openwisp2_nginx_install
 
-- name: Get nginx build configuration
-  ansible.builtin.command: nginx -V
-  register: nginx_build_config
-  when: openwisp2_nginx_install
-  changed_when: false
-
-- name: Get nginx loaded configuration
-  ansible.builtin.command: nginx -T
-  register: nginx_loaded_config
-  when: openwisp2_nginx_install
-  changed_when: false
-
-- name: Set nginx module availability facts
-  ansible.builtin.set_fact:
-    nginx_gzip_static_module_available: >-
-      {{ openwisp2_nginx_install and
-         ('http_gzip_static_module' in (nginx_build_config.stderr | default(''))) }}
-    nginx_brotli_static_module_available: >-
-      {{ openwisp2_nginx_install and
-         ('brotli_static_module' in (
-           (nginx_build_config.stderr | default('')) ~
-           (nginx_loaded_config.stdout | default('')) ~
-           (nginx_loaded_config.stderr | default(''))
-         )) }}
-
-- name: Fail when gzip_static is required but unavailable
-  ansible.builtin.fail:
-    msg: "openwisp2_nginx_gzip_static is true but nginx gzip_static module is not available."
+- name: Install nginx brotli static module
+  ansible.builtin.apt:
+    name: libnginx-mod-http-brotli-static
   when:
     - openwisp2_nginx_install
-    - (openwisp2_nginx_gzip_static | string | lower) == 'true'
-    - not nginx_gzip_static_module_available
-
-- name: Fail when brotli_static is required but unavailable
-  ansible.builtin.fail:
-    msg: "openwisp2_nginx_brotli_static is true but nginx brotli_static module is not available."
-  when:
-    - openwisp2_nginx_install
-    - (openwisp2_nginx_brotli_static | string | lower) == 'true'
-    - not nginx_brotli_static_module_available
-
-- name: Set nginx static compression availability facts
-  ansible.builtin.set_fact:
-    nginx_gzip_static_available: >-
-      {{ nginx_gzip_static_module_available and
-         ((openwisp2_nginx_gzip_static | string | lower) in ['true', 'auto']) }}
-    nginx_brotli_static_available: >-
-      {{ nginx_brotli_static_module_available and
-         ((openwisp2_nginx_brotli_static | string | lower) in ['true', 'auto']) }}
+    - (openwisp2_nginx_brotli_static | string | lower) in ['true', 'auto']
+    # brotli static package not available on old distros
+    - not (ansible_distribution == 'Debian' and ansible_distribution_major_version == '11')
+    - not (ansible_distribution == 'Ubuntu' and ansible_distribution_version == '22.04')
 
 - name: Install redis
   ansible.builtin.apt:

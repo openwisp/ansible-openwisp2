@@ -176,9 +176,9 @@ take a look at `the default values of these variables
         # - 'auto' (default): automatically enabled when nginx ngx_brotli module is detected
         # - true: require nginx ngx_brotli module and fail if it is unavailable
         # - false: explicitly disable even when module is available
-        # Note: brotli is not shipped with stock nginx. On Debian/Ubuntu,
-        # install libnginx-mod-http-brotli-filter and
-        # libnginx-mod-http-brotli-static, otherwise 'auto' does nothing.
+        # Note: brotli is not shipped with stock nginx. The role installs
+        # libnginx-mod-http-brotli-static when available. Debian 11 and
+        # Ubuntu 22.04 do not provide this package.
         openwisp2_nginx_brotli_static: auto
         # nginx error log configuration
         openwisp2_nginx_access_log: "{{ openwisp2_path }}/log/nginx.access.log"
