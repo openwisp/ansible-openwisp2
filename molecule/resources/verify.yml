@@ -68,8 +68,6 @@
 
     - name: Test nginx compression configuration
       block:
-        # Check if modules are available in nginx build/loaded configuration.
-        # nginx -V prints configure arguments to stderr.
         - name: Get nginx build configuration
           ansible.builtin.command: nginx -V
           register: nginx_build_config
@@ -91,50 +89,26 @@
                    (nginx_loaded_config.stderr | default(''))
                  ) }}
 
-        # Assert gzip_static directive is present when module is available
-        - name: Assert gzip_static directive is present (when module available)
-          shell: "grep 'gzip_static on;' /etc/nginx/sites-enabled/{{ inventory_hostname }}"
-          register: gzip_static_check
-          changed_when: false
-          when: nginx_gzip_static_module_available
+        - name: Read nginx site configuration
+          ansible.builtin.slurp:
+            src: "/etc/nginx/sites-enabled/{{ inventory_hostname }}"
+          register: nginx_site_config
 
-        # Assert gzip_static directive is absent when module is unavailable
-        - name: Assert gzip_static directive is absent (when module unavailable)
-          shell: "grep -q 'gzip_static on;' /etc/nginx/sites-enabled/{{ inventory_hostname }}"
-          register: gzip_static_absent_check
-          changed_when: false
-          failed_when: gzip_static_absent_check.rc != 1
-          when: not nginx_gzip_static_module_available
+        - name: Assert nginx static compression directives match module availability
+          ansible.builtin.assert:
+            that:
+              - >-
+                ('gzip_static on;' in (nginx_site_config.content | b64decode)) ==
+                nginx_gzip_static_module_available
+              - >-
+                ('brotli_static on;' in (nginx_site_config.content | b64decode)) ==
+                nginx_brotli_static_module_available
+            fail_msg: "Nginx static compression directives do not match available modules."
 
-        # Assert brotli_static directive is present when module is available
-        - name: Assert brotli_static directive is present (when module available)
-          shell: "grep 'brotli_static on;' /etc/nginx/sites-enabled/{{ inventory_hostname }}"
-          register: brotli_static_check
-          changed_when: false
-          when: nginx_brotli_static_module_available
-
-        # Assert brotli_static directive is absent when module is unavailable
-        - name: Assert brotli_static directive is absent (when module unavailable)
-          shell: "grep -q 'brotli_static on;' /etc/nginx/sites-enabled/{{ inventory_hostname }}"
-          register: brotli_static_absent_check
-          changed_when: false
-          failed_when: brotli_static_absent_check.rc != 1
-          when: not nginx_brotli_static_module_available
-
-        # Log when modules are not available
-        - name: Log module availability status
-          debug:
-            msg:
-              - "Gzip static module: {{ nginx_gzip_static_module_available | ternary('available', 'not_available') }}"
-              - "Brotli module: {{ nginx_brotli_static_module_available | ternary('available', 'not_available') }}"
-              - "Expected: Both features set to auto in converge.yml, directives present only when modules available"
-
-        # Test nginx configuration syntax is valid
         - name: Test nginx configuration syntax
-          shell: "nginx -t"
+          ansible.builtin.command: nginx -t
           changed_when: false
 
-        # Assert directives are absent when static compression variables are disabled
         - name: Load role defaults for nginx static compression disabled test
           ansible.builtin.include_vars:
             file: "{{ playbook_dir }}/../../defaults/main.yml"
@@ -150,14 +124,14 @@
             dest: /tmp/openwisp2-nginx-static-compression-disabled.conf
             mode: "0644"
 
-        - name: Assert gzip_static directive is absent (when variable is false)
-          shell: "grep -q 'gzip_static on;' /tmp/openwisp2-nginx-static-compression-disabled.conf"
-          register: gzip_static_disabled_check
-          changed_when: false
-          failed_when: gzip_static_disabled_check.rc != 1
+        - name: Read nginx site configuration with static compression disabled
+          ansible.builtin.slurp:
+            src: /tmp/openwisp2-nginx-static-compression-disabled.conf
+          register: nginx_disabled_site_config
 
-        - name: Assert brotli_static directive is absent (when variable is false)
-          shell: "grep -q 'brotli_static on;' /tmp/openwisp2-nginx-static-compression-disabled.conf"
-          register: brotli_static_disabled_check
-          changed_when: false
-          failed_when: brotli_static_disabled_check.rc != 1
+        - name: Assert nginx static compression directives are disabled
+          ansible.builtin.assert:
+            that:
+              - "'gzip_static on;' not in (nginx_disabled_site_config.content | b64decode)"
+              - "'brotli_static on;' not in (nginx_disabled_site_config.content | b64decode)"
+            fail_msg: "Nginx static compression directives should be disabled."
