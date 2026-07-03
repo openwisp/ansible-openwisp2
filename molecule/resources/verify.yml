@@ -65,3 +65,73 @@
       register: freeradius_eap_ports  # Register the output and return code
       failed_when: freeradius_eap_ports.rc | int != 0
       changed_when: false
+
+    - name: Test nginx compression configuration
+      block:
+        - name: Get nginx build configuration
+          ansible.builtin.command: nginx -V
+          register: nginx_build_config
+          changed_when: false
+
+        - name: Get nginx loaded configuration
+          ansible.builtin.command: nginx -T
+          register: nginx_loaded_config
+          changed_when: false
+
+        - name: Set nginx static compression module availability facts
+          ansible.builtin.set_fact:
+            nginx_gzip_static_module_available: >-
+              {{ 'http_gzip_static_module' in (nginx_build_config.stderr | default('')) }}
+            nginx_brotli_static_module_available: >-
+              {{ 'brotli_static_module' in (
+                   (nginx_build_config.stderr | default('')) ~
+                   (nginx_loaded_config.stdout | default('')) ~
+                   (nginx_loaded_config.stderr | default(''))
+                 ) }}
+
+        - name: Read nginx site configuration
+          ansible.builtin.slurp:
+            src: "/etc/nginx/sites-enabled/{{ inventory_hostname }}"
+          register: nginx_site_config
+
+        - name: Assert nginx static compression directives match module availability
+          ansible.builtin.assert:
+            that:
+              - >-
+                ('gzip_static on;' in (nginx_site_config.content | b64decode)) ==
+                nginx_gzip_static_module_available
+              - >-
+                ('brotli_static on;' in (nginx_site_config.content | b64decode)) ==
+                nginx_brotli_static_module_available
+            fail_msg: "Nginx static compression directives do not match available modules."
+
+        - name: Test nginx configuration syntax
+          ansible.builtin.command: nginx -t
+          changed_when: false
+
+        - name: Load role defaults for nginx static compression disabled test
+          ansible.builtin.include_vars:
+            file: "{{ playbook_dir }}/../../defaults/main.yml"
+
+        - name: Set nginx static compression facts with variables disabled
+          ansible.builtin.set_fact:
+            nginx_gzip_static_available: false
+            nginx_brotli_static_available: false
+
+        - name: Render nginx site configuration with static compression disabled
+          ansible.builtin.template:
+            src: "{{ playbook_dir }}/../../templates/nginx/site-conf.j2"
+            dest: /tmp/openwisp2-nginx-static-compression-disabled.conf
+            mode: "0644"
+
+        - name: Read nginx site configuration with static compression disabled
+          ansible.builtin.slurp:
+            src: /tmp/openwisp2-nginx-static-compression-disabled.conf
+          register: nginx_disabled_site_config
+
+        - name: Assert nginx static compression directives are disabled
+          ansible.builtin.assert:
+            that:
+              - "'gzip_static on;' not in (nginx_disabled_site_config.content | b64decode)"
+              - "'brotli_static on;' not in (nginx_disabled_site_config.content | b64decode)"
+            fail_msg: "Nginx static compression directives should be disabled."

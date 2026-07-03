@@ -167,6 +167,19 @@ take a look at `the default values of these variables
                 - "application/xml"
                 - "application/x-font-ttf"
                 - "font/opentype"
+        # Precompressed gzip files serving control
+        # - 'auto' (default): automatically enabled when nginx gzip_static module is detected
+        # - true: require nginx gzip_static module and fail if it is unavailable
+        # - false: explicitly disable even when module is available
+        openwisp2_nginx_gzip_static: auto
+        # Precompressed brotli files serving control
+        # - 'auto' (default): automatically enabled when nginx ngx_brotli module is detected
+        # - true: require nginx ngx_brotli module and fail if it is unavailable
+        # - false: explicitly disable even when module is available
+        # Note: brotli is not shipped with stock nginx. The role installs
+        # libnginx-mod-http-brotli-static when available. Debian 11 and
+        # Ubuntu 22.04 do not provide this package.
+        openwisp2_nginx_brotli_static: auto
         # nginx error log configuration
         openwisp2_nginx_access_log: "{{ openwisp2_path }}/log/nginx.access.log"
         openwisp2_nginx_error_log: "{{ openwisp2_path }}/log/nginx.error.log error"
