@@ -82,6 +82,7 @@ linux debian/ubuntu systems):
 
 .. code-block:: shell
 
+    docker pull geerlingguy/docker-ubuntu2604-ansible:latest
     docker pull geerlingguy/docker-ubuntu2404-ansible:latest
     docker pull geerlingguy/docker-ubuntu2204-ansible:latest
     docker pull geerlingguy/docker-debian13-ansible:latest
