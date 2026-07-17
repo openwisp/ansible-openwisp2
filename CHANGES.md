@@ -93,7 +93,7 @@ Work in progress.
 - Added `openwisp2_uwsgi_extra_conf` variable to configure extra uWSGI
   parameters
 - Added `openwisp2_email_timeout` variable to set the [default email
-  timeout](https://docs.djangoproject.com/en/4.2/ref/settings/#email-timeout)
+  timeout](https://docs.djangoproject.com/en/5.2/ref/settings/#email-timeout)
 - Added variables `openwisp2_users_user_password_expiration` and
   `openwisp2_users_staff_user_password_expiration` to configure password
   expiration settings
