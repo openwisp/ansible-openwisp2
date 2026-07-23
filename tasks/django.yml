@@ -17,9 +17,47 @@
   ansible.builtin.file:
     path: "{{ openwisp2_path }}/log"
     state: directory
+    owner: "{{ www_user }}"
     group: "{{ www_group }}"
     mode: "0770"
     recurse: true
+  tags:
+    - molecule-idempotence-notest
+
+# Supervisord and Django (RotatingFileHandler) both create their log files on
+# first run. Supervisord runs as root and would otherwise create these files as
+# root:root, and Django tasks running as root would do the same for
+# openwisp2.log. Pre-creating the files with the correct ownership ensures the
+# www-data processes (uWSGI, celery, daphne, Django) can always write to them.
+# The loop only includes the log files for services that are actually enabled,
+# matching the conditions used to install the supervisor programs in
+# supervisor.yml, so disabled features don't get empty log files.
+# access_time/modification_time are preserved to keep the task idempotent
+# (touch reports "changed" otherwise), and the idempotence check itself is
+# skipped because services such as supervisord, which runs as root, may
+# rotate or recreate these files between converge runs, consistent with the
+# log directory task above.
+- name: Ensure openwisp2 log files are owned by "{{ www_user }}"
+  ansible.builtin.file:
+    path: "{{ openwisp2_path }}/log/{{ item }}"
+    state: touch
+    owner: "{{ www_user }}"
+    group: "{{ www_group }}"
+    mode: "0640"
+    access_time: preserve
+    modification_time: preserve
+  loop: >-
+    {{
+      ['openwisp2.log', 'uwsgi.log', 'celery.log']
+      + (['celerybeat.log'] if openwisp2_celerybeat else [])
+      + (['celery-network.log'] if openwisp2_celery_network else [])
+      + (['celery-monitoring.log']
+         if (openwisp2_monitoring and openwisp2_celery_monitoring) else [])
+      + (['celery-firmware-upgrader.log']
+         if (openwisp2_firmware_upgrader and openwisp2_celery_firmware_upgrader)
+         else [])
+      + (['daphne.log'] if openwisp2_daphne_install else [])
+    }}
   tags:
     - molecule-idempotence-notest
 
@@ -224,6 +262,10 @@
     mode: "0754"
 
 - name: Load initial data
+  # Run as the application user so that any log file (e.g. openwisp2.log)
+  # touched by Django during startup is not created as root.
+  become: true
+  become_user: "{{ www_user }}"
   environment:
     PRIVATE_KEY: "{{ default_private_ssh_key.stdout | default(None) }}"
     PUBLIC_KEY: "{{ default_public_ssh_key.stdout | default(None) }}"

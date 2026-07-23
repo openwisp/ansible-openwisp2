@@ -60,6 +60,85 @@
           debug:
             var: openwisp_log
 
+    # Regression tests for
+    # https://github.com/openwisp/ansible-openwisp2/issues/627
+    # The log directory and the supervisor/Django log files must be owned by the
+    # application user (www-data) so the services running as www-data can write
+    # to them. (nginx*.log are intentionally excluded: they are created by the
+    # nginx master process running as root.)
+    - name: Get ownership of the OpenWISP log directory
+      ansible.builtin.stat:
+        path: /opt/openwisp2/log
+      register: openwisp2_log_dir
+
+    - name: Ensure the OpenWISP log directory is owned by www-data
+      ansible.builtin.assert:
+        that:
+          - openwisp2_log_dir.stat.exists
+          - openwisp2_log_dir.stat.isdir
+          - openwisp2_log_dir.stat.pw_name == 'www-data'
+          - openwisp2_log_dir.stat.gr_name == 'www-data'
+        fail_msg: >-
+          /opt/openwisp2/log is not owned by www-data:www-data
+          (owner={{ openwisp2_log_dir.stat.pw_name | default('?') }}:{{
+          openwisp2_log_dir.stat.gr_name | default('?') }})
+        quiet: true
+
+    - name: Get ownership of the OpenWISP log files
+      ansible.builtin.stat:
+        path: "/opt/openwisp2/log/{{ item }}"
+      loop:
+        - openwisp2.log
+        - uwsgi.log
+        - celery.log
+        - celerybeat.log
+        - celery-network.log
+        - celery-monitoring.log
+        - celery-firmware-upgrader.log
+        - daphne.log
+      register: openwisp2_log_files
+
+    - name: Ensure OpenWISP log files exist and are owned by www-data
+      ansible.builtin.assert:
+        that:
+          - item.stat.exists
+          - item.stat.pw_name == 'www-data'
+          - item.stat.gr_name == 'www-data'
+        fail_msg: >-
+          {{ item.item }} is missing or not owned by www-data:www-data
+          (exists={{ item.stat.exists }}, owner={{
+          item.stat.pw_name | default('?') }}:{{
+          item.stat.gr_name | default('?') }})
+        quiet: true
+      loop: "{{ openwisp2_log_files.results }}"
+      loop_control:
+        label: "{{ item.item }}"
+
+    - name: Read the www-data crontab
+      ansible.builtin.command: crontab -u www-data -l
+      register: www_data_crontab
+      changed_when: false
+
+    - name: Read the root crontab
+      ansible.builtin.command: crontab -u root -l
+      register: root_crontab
+      changed_when: false
+      failed_when: false
+
+    - name: Ensure OpenWISP cron jobs run as www-data and not as root
+      ansible.builtin.assert:
+        that:
+          - "'manage.py clearsessions' in www_data_crontab.stdout"
+          - "'manage.py update_topology' in www_data_crontab.stdout"
+          - "'manage.py save_snapshot' in www_data_crontab.stdout"
+          - "'manage.py clearsessions' not in root_crontab.stdout"
+          - "'manage.py update_topology' not in root_crontab.stdout"
+          - "'manage.py save_snapshot' not in root_crontab.stdout"
+        fail_msg: >-
+          OpenWISP cron jobs are not installed in the www-data crontab as
+          expected (www-data crontab: {{ www_data_crontab.stdout }})
+        quiet: true
+
     - name: Check if FreeRADIUS is listening on WPA Enterprise site ports
       shell: "netstat -tuln | grep -Eq '1822|1823|18230'"
       register: freeradius_eap_ports  # Register the output and return code
