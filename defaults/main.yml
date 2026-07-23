@@ -1,5 +1,4 @@
 ---
-
 openwisp2_python: python3
 ansible_python_interpreter: /usr/bin/python3
 openwisp2_network_topology: false
@@ -72,6 +71,7 @@ openwisp2_redis_install: true
 openwisp2_redis_host: localhost
 openwisp2_redis_port: 6379
 openwisp2_redis_cache_url: "redis://{{ openwisp2_redis_host }}:{{ openwisp2_redis_port }}/1"
+openwisp2_redis_sessions_url: "redis://{{ openwisp2_redis_host }}:{{ openwisp2_redis_port }}/4"
 openwisp2_influxdb_install: true
 openwisp2_timeseries_database:
   backend: "openwisp_monitoring.db.backends.influxdb"
