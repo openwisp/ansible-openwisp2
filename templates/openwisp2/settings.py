@@ -246,20 +246,7 @@ CELERY_BROKER_TRANSPORT_OPTIONS = {
     "max_retries": {{ openwisp2_celery_broker_max_tries }},
 }
 
-{% if openwisp2_controller_whois_geoip_account and openwisp2_controller_whois_geoip_key %}
-OPENWISP_CONTROLLER_WHOIS_GEOIP_ACCOUNT = "{{ openwisp2_controller_whois_geoip_account }}"
-OPENWISP_CONTROLLER_WHOIS_GEOIP_KEY = "{{ openwisp2_controller_whois_geoip_key }}"
-OPENWISP_CONTROLLER_WHOIS_ENABLED = True
-{% endif %}
-OPENWISP_CONTROLLER_ESTIMATED_LOCATION_ENABLED = {{ openwisp2_controller_estimated_location_enabled }}
-
 CELERY_BEAT_SCHEDULE = {
-{% if openwisp2_controller_whois_geoip_account and openwisp2_controller_whois_geoip_key %}
-    "cleanup_unreferenced_whois_records": {
-        "task": "openwisp_controller.config.whois.tasks.cleanup_unreferenced_whois_records",
-        "schedule": crontab(hour=2, minute=0),
-    },
-{% endif %}
 {% if openwisp2_users_user_password_expiration or openwisp2_users_staff_user_password_expiration %}
     "password_expiry_email": {
         "task": "openwisp_users.tasks.password_expiration_email",
@@ -338,6 +325,20 @@ CELERY_BEAT_SCHEDULE = {
     },
 {% endif %}
 }
+
+{% if openwisp2_controller_whois_geoip_account and openwisp2_controller_whois_geoip_key %}
+OPENWISP_CONTROLLER_WHOIS_GEOIP_ACCOUNT = "{{ openwisp2_controller_whois_geoip_account }}"
+OPENWISP_CONTROLLER_WHOIS_GEOIP_KEY = "{{ openwisp2_controller_whois_geoip_key }}"
+OPENWISP_CONTROLLER_WHOIS_ENABLED = True
+OPENWISP_CONTROLLER_ESTIMATED_LOCATION_ENABLED = {{ openwisp2_controller_estimated_location_enabled }}
+
+CELERY_BEAT_SCHEDULE.update({
+    "cleanup_unreferenced_whois_records": {
+        "task": "openwisp_controller.config.whois.tasks.cleanup_unreferenced_whois_records",
+        "schedule": crontab(hour=2, minute=0),
+    },
+})
+{% endif %}
 
 {% if openwisp2_celery_task_routes_defaults %}
 CELERY_TASK_ROUTES = {
