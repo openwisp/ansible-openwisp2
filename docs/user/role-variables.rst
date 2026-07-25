@@ -41,6 +41,11 @@ take a look at `the default values of these variables
         # for more information. https://github.com/openwisp/openwisp-controller#subnet-division-app
         # By default, it is set to false.
         openwisp2_controller_subnet_division: true
+        # MaxMind GeoIP credentials enable WHOIS lookups and the daily cleanup task.
+        openwisp2_controller_whois_geoip_account: "YOUR_MAXMIND_ACCOUNT_ID"
+        openwisp2_controller_whois_geoip_key: "YOUR_MAXMIND_LICENSE_KEY"
+        # Enable estimated device location based on nearby access points.
+        openwisp2_controller_estimated_location_enabled: true
         # when openwisp2_radius_urls is set to false, the radius module
         # is setup but it's urls are not added, which means API and social
         # views cannot be used, this is helpful if you have an external
