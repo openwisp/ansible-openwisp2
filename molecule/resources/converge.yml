@@ -9,6 +9,9 @@
     openwisp2_firmware_upgrader: true
     openwisp2_radius: true
     openwisp2_controller_subnet_division: true
+    openwisp2_controller_whois_geoip_account: "123456"
+    openwisp2_controller_whois_geoip_key: "test-geoip-key"
+    openwisp2_controller_estimated_location_enabled: true
     openwisp2_uwsgi_extra_conf: |
       single-interpreter=True
     openwisp2_usage_metric_collection: false

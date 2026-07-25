@@ -6,6 +6,21 @@
   gather_facts: false
 
   tasks:
+    - name: Read OpenWISP settings
+      ansible.builtin.slurp:
+        src: /opt/openwisp2/openwisp2/settings.py
+      register: openwisp_settings
+
+    - name: Assert Controller GeoIP and estimated location settings
+      ansible.builtin.assert:
+        that:
+          - "'OPENWISP_CONTROLLER_WHOIS_GEOIP_ACCOUNT = \"123456\"' in (openwisp_settings.content | b64decode)"
+          - "'OPENWISP_CONTROLLER_WHOIS_GEOIP_KEY = \"test-geoip-key\"' in (openwisp_settings.content | b64decode)"
+          - "'OPENWISP_CONTROLLER_WHOIS_ENABLED = True' in (openwisp_settings.content | b64decode)"
+          - "'OPENWISP_CONTROLLER_ESTIMATED_LOCATION_ENABLED = True' in (openwisp_settings.content | b64decode)"
+          - "'openwisp_controller.config.whois.tasks.cleanup_unreferenced_whois_records' in (openwisp_settings.content | b64decode)"
+          - "'crontab(hour=2, minute=0)' in (openwisp_settings.content | b64decode)"
+
     - name: Run a specific subset of tests
       command: >
         /opt/openwisp2/env/bin/python /opt/openwisp2/manage.py test --keepdb --exclude skip_prod \
