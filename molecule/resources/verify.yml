@@ -18,7 +18,8 @@
           - "'OPENWISP_CONTROLLER_WHOIS_GEOIP_KEY = \"test-geoip-key\"' in (openwisp_settings.content | b64decode)"
           - "'OPENWISP_CONTROLLER_WHOIS_ENABLED = True' in (openwisp_settings.content | b64decode)"
           - "'OPENWISP_CONTROLLER_ESTIMATED_LOCATION_ENABLED = True' in (openwisp_settings.content | b64decode)"
-          - "'cleanup_unreferenced_whois_records' in (openwisp_settings.content | b64decode)"
+          - "'openwisp_controller.config.whois.tasks.cleanup_unreferenced_whois_records' in (openwisp_settings.content | b64decode)"
+          - "'crontab(hour=2, minute=0)' in (openwisp_settings.content | b64decode)"
 
     - name: Run a specific subset of tests
       command: >
