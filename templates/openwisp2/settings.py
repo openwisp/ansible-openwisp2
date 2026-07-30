@@ -157,13 +157,15 @@ AUTHENTICATION_BACKENDS = [
     "openwisp_users.backends.UsersAuthenticationBackend",
 ]
 
-{% if openwisp2_radius %}
-OPENWISP_RADIUS_FREERADIUS_ALLOWED_HOSTS = {{ openwisp2_radius_allowed_hosts }}
 REST_AUTH = {
     "SESSION_LOGIN": False,
-    "PASSWORD_RESET_SERIALIZER": "openwisp_radius.api.serializers.PasswordResetSerializer",
-    "REGISTER_SERIALIZER": "openwisp_radius.api.serializers.RegisterSerializer",
+    "PASSWORD_RESET_SERIALIZER": "openwisp_users.api.serializers.PasswordResetSerializer",
+    "PASSWORD_CHANGE_SERIALIZER": "openwisp_users.api.serializers.PasswordChangeSerializer",
 }
+
+{% if openwisp2_radius %}
+OPENWISP_RADIUS_FREERADIUS_ALLOWED_HOSTS = {{ openwisp2_radius_allowed_hosts }}
+REST_AUTH["REGISTER_SERIALIZER"] = "openwisp_radius.api.serializers.RegisterSerializer"
 
 # SMS settings
 OPENWISP_RADIUS_SMS_TOKEN_MAX_IP_DAILY = {{ openwisp2_radius_sms_token_max_ip_daily }}
