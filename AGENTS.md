@@ -47,7 +47,6 @@ If instructions conflict, repository config and CI workflows win first, docs nex
 ## Testing and QA
 
 - Add or update Molecule or role tests for every role behavior change.
-- For bug fixes, write or update the failing test or scenario first, run it against the unfixed code, confirm it fails for the expected reason, then implement the fix.
 - Use targeted checks while iterating, then run the documented full QA/test command before considering the change complete.
 
 ## Security Notes
