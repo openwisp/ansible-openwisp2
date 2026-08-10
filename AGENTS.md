@@ -35,6 +35,7 @@ If instructions conflict, repository config and CI workflows win first, docs nex
 
 ## Development Rules
 
+- Follow the DRY principle: do not duplicate information or code across files.
 - Preserve role variables, defaults, handlers, task ordering, idempotency, supported OS behavior, and upgrade paths unless explicitly required.
 - Be careful with templates, secrets, file ownership, permissions, service restarts, migrations, and FreeRADIUS/nginx/supervisor integration.
 - Be careful when changing nginx listen directives, FreeRADIUS listen addresses, or service ports. Do not broaden a service's network exposure beyond the role's documented deployment configuration without an explicit requirement.
