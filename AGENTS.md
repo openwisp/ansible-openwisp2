@@ -33,7 +33,7 @@ If instructions conflict, repository config and CI workflows win first, docs nex
 - Add an explanatory commit body only for substantial changes, new features, or non-obvious bug fixes. The releaser automatically publishes the subject of `[feature]`, `[change]`, `[change!]`, `[deps]`, and `[fix]` commits, including scoped variants, in the changelog. Write those subjects in clear, user-friendly language suitable for release notes.
 - Send new commits in response to review feedback instead of amending existing commits.
 
-## Development Notes
+## Development Rules
 
 - Preserve role variables, defaults, handlers, task ordering, idempotency, supported OS behavior, and upgrade paths unless explicitly required.
 - Be careful with templates, secrets, file ownership, permissions, service restarts, migrations, and FreeRADIUS/nginx/supervisor integration.
@@ -51,7 +51,7 @@ If instructions conflict, repository config and CI workflows win first, docs nex
 - Use targeted checks while iterating, then run the documented full QA/test command before considering the change complete.
 - Keep helpers and classes used by only one test method inside that method. Promote them to class or module scope only when genuinely reused.
 
-## Security Notes
+## Security Rules
 
 - Watch for leaked secrets, unsafe defaults, weak permissions, unsafe shell expansion, and templates that expose credentials.
 - Preserve safe handling of Django secret keys, database credentials, TLS material, FreeRADIUS secrets, private keys, and admin credentials.
