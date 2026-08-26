@@ -283,6 +283,10 @@ CELERY_BEAT_SCHEDULE = {
         "task": "openwisp_firmware_upgrader.tasks.send_pending_upgrade_reminders",
         "schedule": timedelta(days={{ openwisp2_firmware_upgrader_reminder_scan_period_days }}),
     },
+    "execute_scheduled_upgrades": {
+        "task": "openwisp_firmware_upgrader.tasks.execute_scheduled_upgrades",
+        "schedule": timedelta(seconds={{ openwisp2_firmware_upgrader_execute_scheduled_period_seconds }}),
+    },
 {% endif %}
 {% if openwisp2_radius and openwisp2_radius_periodic_tasks %}
     "delete_old_radiusbatch_users": {
