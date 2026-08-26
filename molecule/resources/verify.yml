@@ -21,6 +21,16 @@
           - "'openwisp_controller.config.whois.tasks.cleanup_unreferenced_whois_records' in (openwisp_settings.content | b64decode)"
           - "'crontab(hour=2, minute=0)' in (openwisp_settings.content | b64decode)"
 
+    - name: Read playbook custom CSS
+      ansible.builtin.slurp:
+        src: /opt/openwisp2/static_custom/css/custom.css
+      register: playbook_theme_css
+
+    - name: Assert playbook custom CSS was copied
+      ansible.builtin.assert:
+        that:
+          - (playbook_theme_css.content | b64decode) == "openwisp2-theme-check { color: red }\n"
+
     - name: Run a specific subset of tests
       command: >
         /opt/openwisp2/env/bin/python /opt/openwisp2/manage.py test --keepdb --exclude skip_prod \
