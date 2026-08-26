@@ -29,7 +29,7 @@
     - name: Assert playbook custom CSS was copied
       ansible.builtin.assert:
         that:
-          - (playbook_theme_css.content | b64decode) == "openwisp2-theme-check { color: red }\n"
+          - "(playbook_theme_css.content | b64decode) == 'openwisp2-theme-check { color: red }\n'"
 
     - name: Run a specific subset of tests
       command: >

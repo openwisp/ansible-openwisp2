@@ -162,6 +162,9 @@
 - name: Check if ow2_static exists
   ansible.builtin.stat:
     path: "{{ playbook_dir }}/files/ow2_static"
+  # copy's src is read from the controller, so the check must run there too
+  delegate_to: localhost
+  become: false
   register: ow2_static_dir
   tags:
     - openwisp2_theme
