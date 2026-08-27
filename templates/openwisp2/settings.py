@@ -197,7 +197,16 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("{{ openwisp2_redis_host }}", {{ openwisp2_redis_port }})],
+            "hosts": [
+                {
+                    "host": "{{ openwisp2_redis_host }}",
+                    "port": {{ openwisp2_redis_port }},
+                    # Redis>=8 changed the default timeout of read
+                    # operations to 5 seconds, which breaks django-channels,
+                    # hence we need to explicitly remove the timeout. 
+                    "socket_timeout": None,
+                },
+            ],
             "group_expiry": {{ openwisp2_daphne_websocket_timeout }},
         },
     },
