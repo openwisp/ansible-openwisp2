@@ -10,24 +10,7 @@ This ansible role allows deploying the OpenWISP Server Application.
 
 **Recommended minimum ansible core version**: 2.13.
 
-Tested on **Debian (Trixie/Bookworm)**, **Ubuntu (24/22 LTS)**.
-
-The following diagram illustrates the role of the Ansible OpenWISP role
-within the OpenWISP architecture.
-
-.. figure:: images/architecture-v2-ansible-openwisp.png
-    :target: ../_images/architecture-v2-ansible-openwisp.png
-    :align: center
-    :alt: OpenWISP Architecture: Ansible OpenWISP role
-
-    **OpenWISP Architecture: highlighted Ansible OpenWISP role**
-
-.. important::
-
-    For an enhanced viewing experience, open the image above in a new
-    browser tab.
-
-    Refer to :doc:`/general/architecture` for more information.
+Tested on **Debian (Trixie/Bookworm)**, **Ubuntu (26/24/22 LTS)**.
 
 .. toctree::
     :caption: Ansible OpenWISP Usage Docs

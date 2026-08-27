@@ -326,6 +326,20 @@ CELERY_BEAT_SCHEDULE = {
 {% endif %}
 }
 
+{% if openwisp2_controller_whois_geoip_account and openwisp2_controller_whois_geoip_key %}
+OPENWISP_CONTROLLER_WHOIS_GEOIP_ACCOUNT = "{{ openwisp2_controller_whois_geoip_account }}"
+OPENWISP_CONTROLLER_WHOIS_GEOIP_KEY = "{{ openwisp2_controller_whois_geoip_key }}"
+OPENWISP_CONTROLLER_WHOIS_ENABLED = True
+OPENWISP_CONTROLLER_ESTIMATED_LOCATION_ENABLED = {{ openwisp2_controller_estimated_location_enabled }}
+
+CELERY_BEAT_SCHEDULE.update({
+    "cleanup_unreferenced_whois_records": {
+        "task": "openwisp_controller.config.whois.tasks.cleanup_unreferenced_whois_records",
+        "schedule": crontab(hour=2, minute=0),
+    },
+})
+{% endif %}
+
 {% if openwisp2_celery_task_routes_defaults %}
 CELERY_TASK_ROUTES = {
 {% if openwisp2_celery_network %}
@@ -531,9 +545,6 @@ STORAGES = {
         "BACKEND": "openwisp_utils.storage.CompressStaticFilesStorage",
     },
 }
-# GZIP compression is handled by nginx
-BROTLI_STATIC_COMPRESSION = False
-GZIP_STATIC_COMPRESSION = False
 
 {% if openwisp2_sentry.get("dsn") %}
 RAVEN_CONFIG = {{ openwisp2_sentry | to_nice_json }}

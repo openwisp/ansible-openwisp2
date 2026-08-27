@@ -31,7 +31,7 @@ take a look at `the default values of these variables
         openwisp2_monitoring_version: "openwisp-monitoring~=1.0.0"
         openwisp2_radius_version: "openwisp-radius~=1.0.0"
         openwisp2_django_version: "django~=3.2.13"
-        # Extra arguments passed to pip when reinstalling Python packages with --force-reinstall 
+        # Extra arguments passed to pip when reinstalling Python packages with --force-reinstall
         # By default, packages are upgraded on each playbook run.
         # Can be overridden, for example:
         # openwisp2_pip_extra_args: "--upgrade --force-reinstall"
@@ -41,6 +41,12 @@ take a look at `the default values of these variables
         # for more information. https://github.com/openwisp/openwisp-controller#subnet-division-app
         # By default, it is set to false.
         openwisp2_controller_subnet_division: true
+        # MaxMind GeoIP API credentials enable WHOIS lookups and the daily cleanup task.
+        openwisp2_controller_whois_geoip_account: "YOUR_MAXMIND_ACCOUNT_ID"
+        openwisp2_controller_whois_geoip_key: "YOUR_MAXMIND_LICENSE_KEY"
+        # Enable estimated device location based on nearby access points.
+        # (Requires MaxMind GeoIP API credentials to be set)
+        openwisp2_controller_estimated_location_enabled: true
         # when openwisp2_radius_urls is set to false, the radius module
         # is setup but it's urls are not added, which means API and social
         # views cannot be used, this is helpful if you have an external
@@ -56,7 +62,7 @@ take a look at `the default values of these variables
         openwisp2_email_backend: "djcelery_email.backends.CeleryEmailBackend"
         # Email timeout in seconds used by Django for blocking operations
         # like connection attempts. For more info read the Django documentation,
-        # https://docs.djangoproject.com/en/4.2/ref/settings/#email-timeout.
+        # https://docs.djangoproject.com/en/5.2/ref/settings/#email-timeout.
         # Defaults to 10 seconds.
         openwisp2_email_timeout: 5
         # edit database settings only if you are not using sqlite
@@ -167,6 +173,19 @@ take a look at `the default values of these variables
                 - "application/xml"
                 - "application/x-font-ttf"
                 - "font/opentype"
+        # Precompressed gzip files serving control
+        # - 'auto' (default): automatically enabled when nginx gzip_static module is detected
+        # - true: require nginx gzip_static module and fail if it is unavailable
+        # - false: explicitly disable even when module is available
+        openwisp2_nginx_gzip_static: auto
+        # Precompressed brotli files serving control
+        # - 'auto' (default): automatically enabled when nginx ngx_brotli module is detected
+        # - true: require nginx ngx_brotli module and fail if it is unavailable
+        # - false: explicitly disable even when module is available
+        # Note: brotli is not shipped with stock nginx. The role installs
+        # libnginx-mod-http-brotli-static when available. Debian 11 and
+        # Ubuntu 22.04 do not provide this package.
+        openwisp2_nginx_brotli_static: auto
         # nginx error log configuration
         openwisp2_nginx_access_log: "{{ openwisp2_path }}/log/nginx.access.log"
         openwisp2_nginx_error_log: "{{ openwisp2_path }}/log/nginx.error.log error"

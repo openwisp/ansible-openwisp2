@@ -6,6 +6,31 @@
   gather_facts: false
 
   tasks:
+    - name: Read OpenWISP settings
+      ansible.builtin.slurp:
+        src: /opt/openwisp2/openwisp2/settings.py
+      register: openwisp_settings
+
+    - name: Assert Controller GeoIP and estimated location settings
+      ansible.builtin.assert:
+        that:
+          - "'OPENWISP_CONTROLLER_WHOIS_GEOIP_ACCOUNT = \"123456\"' in (openwisp_settings.content | b64decode)"
+          - "'OPENWISP_CONTROLLER_WHOIS_GEOIP_KEY = \"test-geoip-key\"' in (openwisp_settings.content | b64decode)"
+          - "'OPENWISP_CONTROLLER_WHOIS_ENABLED = True' in (openwisp_settings.content | b64decode)"
+          - "'OPENWISP_CONTROLLER_ESTIMATED_LOCATION_ENABLED = True' in (openwisp_settings.content | b64decode)"
+          - "'openwisp_controller.config.whois.tasks.cleanup_unreferenced_whois_records' in (openwisp_settings.content | b64decode)"
+          - "'crontab(hour=2, minute=0)' in (openwisp_settings.content | b64decode)"
+
+    - name: Read playbook custom CSS
+      ansible.builtin.slurp:
+        src: /opt/openwisp2/static_custom/css/custom.css
+      register: playbook_theme_css
+
+    - name: Assert playbook custom CSS was copied
+      ansible.builtin.assert:
+        that:
+          - "(playbook_theme_css.content | b64decode) == 'openwisp2-theme-check { color: red }\n'"
+
     - name: Run a specific subset of tests
       command: >
         /opt/openwisp2/env/bin/python /opt/openwisp2/manage.py test --keepdb --exclude skip_prod \
@@ -144,3 +169,73 @@
       register: freeradius_eap_ports  # Register the output and return code
       failed_when: freeradius_eap_ports.rc | int != 0
       changed_when: false
+
+    - name: Test nginx compression configuration
+      block:
+        - name: Get nginx build configuration
+          ansible.builtin.command: nginx -V
+          register: nginx_build_config
+          changed_when: false
+
+        - name: Get nginx loaded configuration
+          ansible.builtin.command: nginx -T
+          register: nginx_loaded_config
+          changed_when: false
+
+        - name: Set nginx static compression module availability facts
+          ansible.builtin.set_fact:
+            nginx_gzip_static_module_available: >-
+              {{ 'http_gzip_static_module' in (nginx_build_config.stderr | default('')) }}
+            nginx_brotli_static_module_available: >-
+              {{ 'brotli_static_module' in (
+                   (nginx_build_config.stderr | default('')) ~
+                   (nginx_loaded_config.stdout | default('')) ~
+                   (nginx_loaded_config.stderr | default(''))
+                 ) }}
+
+        - name: Read nginx site configuration
+          ansible.builtin.slurp:
+            src: "/etc/nginx/sites-enabled/{{ inventory_hostname }}"
+          register: nginx_site_config
+
+        - name: Assert nginx static compression directives match module availability
+          ansible.builtin.assert:
+            that:
+              - >-
+                ('gzip_static on;' in (nginx_site_config.content | b64decode)) ==
+                nginx_gzip_static_module_available
+              - >-
+                ('brotli_static on;' in (nginx_site_config.content | b64decode)) ==
+                nginx_brotli_static_module_available
+            fail_msg: "Nginx static compression directives do not match available modules."
+
+        - name: Test nginx configuration syntax
+          ansible.builtin.command: nginx -t
+          changed_when: false
+
+        - name: Load role defaults for nginx static compression disabled test
+          ansible.builtin.include_vars:
+            file: "{{ playbook_dir }}/../../defaults/main.yml"
+
+        - name: Set nginx static compression facts with variables disabled
+          ansible.builtin.set_fact:
+            nginx_gzip_static_available: false
+            nginx_brotli_static_available: false
+
+        - name: Render nginx site configuration with static compression disabled
+          ansible.builtin.template:
+            src: "{{ playbook_dir }}/../../templates/nginx/site-conf.j2"
+            dest: /tmp/openwisp2-nginx-static-compression-disabled.conf
+            mode: "0644"
+
+        - name: Read nginx site configuration with static compression disabled
+          ansible.builtin.slurp:
+            src: /tmp/openwisp2-nginx-static-compression-disabled.conf
+          register: nginx_disabled_site_config
+
+        - name: Assert nginx static compression directives are disabled
+          ansible.builtin.assert:
+            that:
+              - "'gzip_static on;' not in (nginx_disabled_site_config.content | b64decode)"
+              - "'brotli_static on;' not in (nginx_disabled_site_config.content | b64decode)"
+            fail_msg: "Nginx static compression directives should be disabled."

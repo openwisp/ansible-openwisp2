@@ -9,9 +9,15 @@
     openwisp2_firmware_upgrader: true
     openwisp2_radius: true
     openwisp2_controller_subnet_division: true
+    openwisp2_controller_whois_geoip_account: "123456"
+    openwisp2_controller_whois_geoip_key: "test-geoip-key"
+    openwisp2_controller_estimated_location_enabled: true
     openwisp2_uwsgi_extra_conf: |
       single-interpreter=True
     openwisp2_usage_metric_collection: false
+    # Test nginx static compression modules
+    openwisp2_nginx_gzip_static: auto
+    openwisp2_nginx_brotli_static: auto
     openwisp2_extra_django_settings:
       ACCOUNT_RATE_LIMITS: false
     freeradius_eap_orgs:

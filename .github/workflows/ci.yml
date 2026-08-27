@@ -27,11 +27,12 @@ jobs:
         distro:
           - ubuntu2204
           - ubuntu2404
+          - ubuntu2604
           - debian12
           - debian13
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 

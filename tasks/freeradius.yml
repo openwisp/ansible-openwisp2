@@ -44,6 +44,7 @@
       ansible.builtin.set_fact:
         freeradius_dir: "/etc/freeradius/3.0"
       when: openwisp2_installed_freeradius_version.stdout == '3.0'
+
 - name: Add freeradius repository into Ubuntu noble sources list
   become: true
   when:
@@ -55,6 +56,20 @@
     content: >
       deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc]
       http://packages.networkradius.com/freeradius-3.2/ubuntu/noble noble main
+    dest: /etc/apt/sources.list.d/networkradius.list
+    mode: "0644"
+
+- name: Add freeradius repository into Ubuntu resolute sources list
+  become: true
+  when:
+    - ansible_distribution|string == 'Ubuntu'
+    - ansible_distribution_release|string == 'resolute'
+  tags:
+    - molecule-idempotence-notest
+  ansible.builtin.copy:
+    content: >
+      deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc]
+      http://packages.inkbridgenetworks.com/freeradius-3.2/ubuntu/resolute resolute main
     dest: /etc/apt/sources.list.d/networkradius.list
     mode: "0644"
 

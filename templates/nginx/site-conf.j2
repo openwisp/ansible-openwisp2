@@ -80,6 +80,12 @@ server {
 
     location /static/ {
         alias {{ openwisp2_path }}/static/;
+        {% if nginx_gzip_static_available | default(false) %}
+        gzip_static on;
+        {% endif %}
+        {% if nginx_brotli_static_available | default(false) %}
+        brotli_static on;
+        {% endif %}
     }
 
     location /media/ {

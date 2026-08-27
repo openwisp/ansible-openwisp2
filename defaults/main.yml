@@ -7,6 +7,9 @@ openwisp2_firmware_upgrader: false
 openwisp2_monitoring: true
 openwisp2_radius: false
 openwisp2_controller_subnet_division: false
+openwisp2_controller_whois_geoip_account: ""
+openwisp2_controller_whois_geoip_key: ""
+openwisp2_controller_estimated_location_enabled: false
 openwisp2_radius_urls: "{{ openwisp2_radius }}"
 # TODO: Update when releasing OpenWISP 26
 openwisp2_controller_version: "openwisp-controller @ https://github.com/openwisp/openwisp-controller/tarball/master"
@@ -163,6 +166,9 @@ openwisp2_nginx_ssl_config:
     - "font/opentype"
 openwisp2_nginx_access_log: "{{ openwisp2_path }}/log/nginx.access.log"
 openwisp2_nginx_error_log: "{{ openwisp2_path }}/log/nginx.error.log error"
+
+openwisp2_nginx_gzip_static: auto
+openwisp2_nginx_brotli_static: auto
 # internationalization
 openwisp2_internationalization: false
 openwisp2_users_auth_api: true

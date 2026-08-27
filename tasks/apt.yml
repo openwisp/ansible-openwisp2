@@ -39,6 +39,16 @@
     name: nginx
   when: openwisp2_nginx_install
 
+- name: Install nginx brotli static module
+  ansible.builtin.apt:
+    name: libnginx-mod-http-brotli-static
+  when:
+    - openwisp2_nginx_install
+    - (openwisp2_nginx_brotli_static | string | lower) in ['true', 'auto']
+    # brotli static package not available on old distros
+    - not (ansible_distribution == 'Debian' and ansible_distribution_major_version == '11')
+    - not (ansible_distribution == 'Ubuntu' and ansible_distribution_version == '22.04')
+
 - name: Install redis
   ansible.builtin.apt:
     name: redis-server

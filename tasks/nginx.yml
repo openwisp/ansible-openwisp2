@@ -5,6 +5,49 @@
     openwisp2_nginx_client_max_body_size: "{{ openwisp2_firmware_upgrader_max_file_size }}"
   when: openwisp2_firmware_upgrader
 
+- name: Configure nginx static compression
+  block:
+    - name: Get nginx build configuration
+      ansible.builtin.command: nginx -V
+      register: nginx_build_config
+      changed_when: false
+
+    - name: Get nginx loaded configuration
+      ansible.builtin.command: nginx -T
+      register: nginx_loaded_config
+      changed_when: false
+
+    - name: Set nginx static compression facts
+      ansible.builtin.set_fact:
+        nginx_gzip_static_module_available: >-
+          {{ 'http_gzip_static_module' in (nginx_build_config.stderr | default('')) }}
+        nginx_brotli_static_module_available: >-
+          {{ 'brotli_static_module' in (
+            (nginx_build_config.stderr | default('')) ~
+            (nginx_loaded_config.stdout | default('')) ~
+            (nginx_loaded_config.stderr | default(''))
+          ) }}
+
+    - name: Validate nginx static compression settings
+      ansible.builtin.assert:
+        that:
+          - >-
+            (openwisp2_nginx_gzip_static | string | lower) != 'true' or
+            nginx_gzip_static_module_available
+          - >-
+            (openwisp2_nginx_brotli_static | string | lower) != 'true' or
+            nginx_brotli_static_module_available
+        fail_msg: "A required nginx static compression module is not available."
+
+    - name: Set enabled nginx static compression facts
+      ansible.builtin.set_fact:
+        nginx_gzip_static_available: >-
+          {{ nginx_gzip_static_module_available and
+             (openwisp2_nginx_gzip_static | string | lower) in ['true', 'auto'] }}
+        nginx_brotli_static_available: >-
+          {{ nginx_brotli_static_module_available and
+             (openwisp2_nginx_brotli_static | string | lower) in ['true', 'auto'] }}
+
 - name: Create public_html directory
   ansible.builtin.file:
     path: "{{ openwisp2_path }}/public_html"

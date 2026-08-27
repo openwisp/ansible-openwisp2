@@ -197,9 +197,13 @@
     - molecule-idempotence-notest
     - openwisp2_theme
 
+# The copy task reads the source from the machine running the playbook,
+# so check whether the ow2_static directory exists on that machine too.
 - name: Check if ow2_static exists
   ansible.builtin.stat:
-    path: "{{ role_path }}/files/ow2_static"
+    path: "{{ playbook_dir }}/files/ow2_static"
+  delegate_to: localhost
+  become: false
   register: ow2_static_dir
   tags:
     - openwisp2_theme
@@ -207,7 +211,7 @@
 - name: Copy static files
   become: true
   ansible.builtin.copy:
-    src: ow2_static/
+    src: "{{ playbook_dir }}/files/ow2_static/"
     dest: "{{ openwisp2_path }}/static_custom"
     owner: "{{ www_user }}"
     group: "{{ www_group }}"

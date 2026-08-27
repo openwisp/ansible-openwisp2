@@ -3,6 +3,23 @@ Developer Installation Instructions
 
 .. include:: ../partials/developer-docs.rst
 
+The following diagram illustrates the role of the Ansible OpenWISP role
+within the OpenWISP architecture.
+
+.. figure:: ../images/architecture-v2-ansible-openwisp.png
+    :target: ../../_images/architecture-v2-ansible-openwisp.png
+    :align: center
+    :alt: OpenWISP Architecture: Ansible OpenWISP role
+
+    **OpenWISP Architecture: highlighted Ansible OpenWISP role**
+
+.. important::
+
+    For an enhanced viewing experience, open the image above in a new
+    browser tab.
+
+    Refer to :doc:`/general/architecture` for more information.
+
 .. contents:: **Table of Contents**:
     :depth: 2
     :local:
@@ -82,6 +99,7 @@ linux debian/ubuntu systems):
 
 .. code-block:: shell
 
+    docker pull geerlingguy/docker-ubuntu2604-ansible:latest
     docker pull geerlingguy/docker-ubuntu2404-ansible:latest
     docker pull geerlingguy/docker-ubuntu2204-ansible:latest
     docker pull geerlingguy/docker-debian13-ansible:latest
