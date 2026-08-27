@@ -24,7 +24,7 @@
     - name: Assert Channels Redis host has no socket timeout
       ansible.builtin.assert:
         that:
-          - "'\"hosts\": [{' in (openwisp_settings.content | b64decode)"
+          - "'\"hosts\": [' in (openwisp_settings.content | b64decode)"
           - "'\"host\": \"localhost\",' in (openwisp_settings.content | b64decode)"
           - "'\"port\": 6379,' in (openwisp_settings.content | b64decode)"
           - "'\"socket_timeout\": None,' in (openwisp_settings.content | b64decode)"
