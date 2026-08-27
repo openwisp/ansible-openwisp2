@@ -201,9 +201,9 @@ CHANNEL_LAYERS = {
                 {
                     "host": "{{ openwisp2_redis_host }}",
                     "port": {{ openwisp2_redis_port }},
-                    # Redis>=8 changed the default timeout of read
+                    # redis-py 8.0.0 changed the default timeout of socket
                     # operations to 5 seconds, which breaks django-channels,
-                    # hence we need to explicitly remove the timeout. 
+                    # hence we need to explicitly remove the timeout.
                     "socket_timeout": None,
                 },
             ],
