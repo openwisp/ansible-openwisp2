@@ -85,6 +85,61 @@
           debug:
             var: openwisp_log
 
+    # Regression tests for
+    # https://github.com/openwisp/ansible-openwisp2/issues/627
+    # Supervisor stdout logs are excluded on purpose: supervisord runs as root
+    # and recreates them on rotation, so their ownership is not an invariant
+    # this role can assert.
+    - name: Stat the OpenWISP log directory and Django log file
+      ansible.builtin.stat:
+        path: "{{ item }}"
+      loop:
+        - /opt/openwisp2/log
+        - /opt/openwisp2/log/openwisp2.log
+      register: openwisp2_log_paths
+
+    - name: Ensure the log directory and Django log file are owned by www-data
+      ansible.builtin.assert:
+        that:
+          - item.stat.exists
+          - item.stat.pw_name == 'www-data'
+          - item.stat.gr_name == 'www-data'
+        fail_msg: >-
+          {{ item.item }} is missing or not owned by www-data:www-data
+          (exists={{ item.stat.exists }}, owner={{
+          item.stat.pw_name | default('?') }}:{{
+          item.stat.gr_name | default('?') }})
+        quiet: true
+      loop: "{{ openwisp2_log_paths.results }}"
+      loop_control:
+        label: "{{ item.item }}"
+
+    - name: Read the www-data crontab
+      ansible.builtin.command: crontab -u www-data -l
+      register: www_data_crontab
+      changed_when: false
+
+    # Upgraded deployments have a root crontab, fresh ones do not.
+    - name: Read the root crontab
+      ansible.builtin.command: crontab -u root -l
+      register: root_crontab
+      changed_when: false
+      failed_when: false
+
+    - name: Ensure OpenWISP cron jobs run as www-data and not as root
+      ansible.builtin.assert:
+        that:
+          - "'manage.py clearsessions' in www_data_crontab.stdout"
+          - "'manage.py update_topology' in www_data_crontab.stdout"
+          - "'manage.py save_snapshot' in www_data_crontab.stdout"
+          - "'manage.py clearsessions' not in root_crontab.stdout"
+          - "'manage.py update_topology' not in root_crontab.stdout"
+          - "'manage.py save_snapshot' not in root_crontab.stdout"
+        fail_msg: >-
+          OpenWISP cron jobs are not installed in the www-data crontab as
+          expected (www-data crontab: {{ www_data_crontab.stdout }})
+        quiet: true
+
     - name: Check if FreeRADIUS is listening on WPA Enterprise site ports
       shell: "netstat -tuln | grep -Eq '1822|1823|18230'"
       register: freeradius_eap_ports  # Register the output and return code

@@ -23,6 +23,29 @@
   tags:
     - molecule-idempotence-notest
 
+# Ownership is set here and not on the recursive task above, which would also
+# chown nginx*.log and its rotated backups, recreated as root by nginx anyway.
+- name: Set ownership of the openwisp2 log directory
+  ansible.builtin.file:
+    path: "{{ openwisp2_path }}/log"
+    state: directory
+    owner: "{{ www_user }}"
+    group: "{{ www_group }}"
+    mode: "0770"
+
+# Django creates this file on first use, so create it up front to keep it
+# writable by the application processes even if a management command runs as
+# root. The mode matches the recursive task above to stay idempotent.
+- name: Create openwisp2.log owned by "{{ www_user }}"
+  ansible.builtin.file:
+    path: "{{ openwisp2_path }}/log/openwisp2.log"
+    state: touch
+    owner: "{{ www_user }}"
+    group: "{{ www_group }}"
+    mode: "0770"
+    access_time: preserve
+    modification_time: preserve
+
 - name: Create custom static directory
   ansible.builtin.file:
     path: "{{ openwisp2_path }}/static_custom"
@@ -227,7 +250,10 @@
     dest: "{{ openwisp2_path }}/load_initial_data.py"
     mode: "0754"
 
+# Run as the application user so Django creates its log with write access.
 - name: Load initial data
+  become: true
+  become_user: "{{ www_user }}"
   environment:
     PRIVATE_KEY: "{{ default_private_ssh_key.stdout | default(None) }}"
     PUBLIC_KEY: "{{ default_public_ssh_key.stdout | default(None) }}"
