@@ -1,8 +1,6 @@
 ---
-# NOTE: these cron jobs run manage.py commands which use Django's logging and
-# may create/rotate openwisp2.log. They are installed in the www-data user's
-# crontab (user: "{{ www_user }}") so they run as the application user and do
-# not create root-owned log files.
+# Run Django cron jobs as the application user so log rotation preserves write
+# access.
 - name: Install topology update cron
   when: openwisp2_network_topology
   become: true
@@ -35,9 +33,7 @@
     minute: "30"
     job: "{{ virtualenv_path }}/bin/python {{ openwisp2_path }}/manage.py clearsessions"
 
-# Older versions of this role installed these cron jobs in root's crontab.
-# Remove the stale root-owned entries so they don't keep running as root and
-# creating root-owned log files after the upgrade.
+# Remove root crontab entries created by earlier role versions.
 - name: Remove obsolete root-owned cron jobs
   become: true
   ansible.builtin.cron:

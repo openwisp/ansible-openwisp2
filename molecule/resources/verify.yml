@@ -87,43 +87,18 @@
 
     # Regression tests for
     # https://github.com/openwisp/ansible-openwisp2/issues/627
-    # The log directory and the supervisor/Django log files must be owned by the
-    # application user (www-data) so the services running as www-data can write
-    # to them. (nginx*.log are intentionally excluded: they are created by the
-    # nginx master process running as root.)
-    - name: Get ownership of the OpenWISP log directory
+    # Supervisor stdout logs are excluded on purpose: supervisord runs as root
+    # and recreates them on rotation, so their ownership is not an invariant
+    # this role can assert.
+    - name: Stat the OpenWISP log directory and Django log file
       ansible.builtin.stat:
-        path: /opt/openwisp2/log
-      register: openwisp2_log_dir
-
-    - name: Ensure the OpenWISP log directory is owned by www-data
-      ansible.builtin.assert:
-        that:
-          - openwisp2_log_dir.stat.exists
-          - openwisp2_log_dir.stat.isdir
-          - openwisp2_log_dir.stat.pw_name == 'www-data'
-          - openwisp2_log_dir.stat.gr_name == 'www-data'
-        fail_msg: >-
-          /opt/openwisp2/log is not owned by www-data:www-data
-          (owner={{ openwisp2_log_dir.stat.pw_name | default('?') }}:{{
-          openwisp2_log_dir.stat.gr_name | default('?') }})
-        quiet: true
-
-    - name: Get ownership of the OpenWISP log files
-      ansible.builtin.stat:
-        path: "/opt/openwisp2/log/{{ item }}"
+        path: "{{ item }}"
       loop:
-        - openwisp2.log
-        - uwsgi.log
-        - celery.log
-        - celerybeat.log
-        - celery-network.log
-        - celery-monitoring.log
-        - celery-firmware-upgrader.log
-        - daphne.log
-      register: openwisp2_log_files
+        - /opt/openwisp2/log
+        - /opt/openwisp2/log/openwisp2.log
+      register: openwisp2_log_paths
 
-    - name: Ensure OpenWISP log files exist and are owned by www-data
+    - name: Ensure the log directory and Django log file are owned by www-data
       ansible.builtin.assert:
         that:
           - item.stat.exists
@@ -135,7 +110,7 @@
           item.stat.pw_name | default('?') }}:{{
           item.stat.gr_name | default('?') }})
         quiet: true
-      loop: "{{ openwisp2_log_files.results }}"
+      loop: "{{ openwisp2_log_paths.results }}"
       loop_control:
         label: "{{ item.item }}"
 
@@ -144,6 +119,7 @@
       register: www_data_crontab
       changed_when: false
 
+    # Upgraded deployments have a root crontab, fresh ones do not.
     - name: Read the root crontab
       ansible.builtin.command: crontab -u root -l
       register: root_crontab
