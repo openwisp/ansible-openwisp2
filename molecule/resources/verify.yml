@@ -21,6 +21,121 @@
           - "'openwisp_controller.config.whois.tasks.cleanup_unreferenced_whois_records' in (openwisp_settings.content | b64decode)"
           - "'crontab(hour=2, minute=0)' in (openwisp_settings.content | b64decode)"
 
+    - name: Verify timeseries database settings rendering
+      block:
+        - name: Load role defaults for timeseries database rendering
+          ansible.builtin.include_vars:
+            file: "{{ playbook_dir }}/../../defaults/main.yml"
+
+        - name: Set common settings template facts
+          ansible.builtin.set_fact:
+            openwisp2_secret_key: test-secret-key
+            openwisp2_influxdb_backends:
+              - openwisp_monitoring.db.backends.influxdb
+              - openwisp_monitoring.db.backends.influxdb2
+
+        - name: Render OpenWISP settings with InfluxDB 2.x timeseries database
+          ansible.builtin.template:
+            src: "{{ playbook_dir }}/../../templates/openwisp2/settings.py"
+            dest: /tmp/openwisp2-settings-influxdb2.py
+            mode: "0644"
+          vars:
+            openwisp2_timeseries_database:
+              backend: openwisp_monitoring.db.backends.influxdb2
+              name: openwisp2
+              user: openwisp
+              password: openwisp-token
+              url: http://localhost:8086
+              options:
+                udp_writes: true
+                udp_host: localhost
+                udp_port: 8089
+
+        - name: Read rendered InfluxDB 2.x settings
+          ansible.builtin.slurp:
+            src: /tmp/openwisp2-settings-influxdb2.py
+          register: influxdb2_settings
+
+        - name: Assert InfluxDB 2.x timeseries database settings
+          ansible.builtin.assert:
+            that:
+              - "'\"BACKEND\": \"openwisp_monitoring.db.backends.influxdb2\"' in (influxdb2_settings.content | b64decode)"
+              - "'\"URL\": \"http://localhost:8086\"' in (influxdb2_settings.content | b64decode)"
+              - "'\"USER\": \"openwisp\"' in (influxdb2_settings.content | b64decode)"
+              - "'\"PASSWORD\": \"openwisp-token\"' in (influxdb2_settings.content | b64decode)"
+              - "'\"OPTIONS\": {' in (influxdb2_settings.content | b64decode)"
+              - "'udp_writes' in (influxdb2_settings.content | b64decode)"
+              - "'udp_host' in (influxdb2_settings.content | b64decode)"
+              - "'udp_port' in (influxdb2_settings.content | b64decode)"
+            fail_msg: "InfluxDB 2.x timeseries database settings were not rendered correctly."
+
+        - name: Render OpenWISP settings with Elasticsearch timeseries database
+          ansible.builtin.template:
+            src: "{{ playbook_dir }}/../../templates/openwisp2/settings.py"
+            dest: /tmp/openwisp2-settings-elasticsearch.py
+            mode: "0644"
+          vars:
+            openwisp2_timeseries_database:
+              backend: openwisp_monitoring.db.backends.elasticsearch
+              name: openwisp2
+              url: https://localhost:9200
+              cloud_id: openwisp-cloud-id
+              api_key: openwisp-api-key
+              bearer_auth: openwisp-bearer-token
+              user: elastic
+              password: elastic-password
+              ca_certs: /etc/elasticsearch/certs/http_ca.crt
+              ssl_assert_fingerprint: test-fingerprint
+              verify_certs: true
+              options:
+                refresh: wait_for
+                read_size: 10000
+                terms_size: 1000
+                http_compress: true
+                max_retries: 3
+                request_timeout: 30
+                retry_on_timeout: true
+
+        - name: Read rendered Elasticsearch settings
+          ansible.builtin.slurp:
+            src: /tmp/openwisp2-settings-elasticsearch.py
+          register: elasticsearch_settings
+
+        - name: Assert Elasticsearch timeseries database settings
+          ansible.builtin.assert:
+            that:
+              - "'\"BACKEND\": \"openwisp_monitoring.db.backends.elasticsearch\"' in (elasticsearch_settings.content | b64decode)"
+              - "'\"URL\": \"https://localhost:9200\"' in (elasticsearch_settings.content | b64decode)"
+              - "'\"CLOUD_ID\": \"openwisp-cloud-id\"' in (elasticsearch_settings.content | b64decode)"
+              - "'\"API_KEY\": \"openwisp-api-key\"' in (elasticsearch_settings.content | b64decode)"
+              - "'\"BEARER_AUTH\": \"openwisp-bearer-token\"' in (elasticsearch_settings.content | b64decode)"
+              - "'\"CA_CERTS\": \"/etc/elasticsearch/certs/http_ca.crt\"' in (elasticsearch_settings.content | b64decode)"
+              - "'\"SSL_ASSERT_FINGERPRINT\": \"test-fingerprint\"' in (elasticsearch_settings.content | b64decode)"
+              - "'\"VERIFY_CERTS\": True' in (elasticsearch_settings.content | b64decode)"
+              - "'\"OPTIONS\": {' in (elasticsearch_settings.content | b64decode)"
+              - "'refresh' in (elasticsearch_settings.content | b64decode)"
+              - "'read_size' in (elasticsearch_settings.content | b64decode)"
+              - "'terms_size' in (elasticsearch_settings.content | b64decode)"
+              - "'http_compress' in (elasticsearch_settings.content | b64decode)"
+              - "'max_retries' in (elasticsearch_settings.content | b64decode)"
+              - "'request_timeout' in (elasticsearch_settings.content | b64decode)"
+              - "'retry_on_timeout' in (elasticsearch_settings.content | b64decode)"
+            fail_msg: "Elasticsearch timeseries database settings were not rendered correctly."
+
+        - name: Assert InfluxDB role dependency backend selection
+          ansible.builtin.assert:
+            that:
+              - >
+                'openwisp_monitoring.db.backends.influxdb'
+                in openwisp2_influxdb_backends
+              - >
+                'openwisp_monitoring.db.backends.influxdb2'
+                in openwisp2_influxdb_backends
+              - >
+                'openwisp_monitoring.db.backends.elasticsearch'
+                not in openwisp2_influxdb_backends
+            fail_msg: "InfluxDB role dependency backend selection is not correct."
+
     - name: Run a specific subset of tests
       command: >
         /opt/openwisp2/env/bin/python /opt/openwisp2/manage.py test --keepdb --exclude skip_prod \

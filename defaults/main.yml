@@ -76,6 +76,9 @@ openwisp2_redis_host: localhost
 openwisp2_redis_port: 6379
 openwisp2_redis_cache_url: "redis://{{ openwisp2_redis_host }}:{{ openwisp2_redis_port }}/1"
 openwisp2_influxdb_install: true
+openwisp2_influxdb_backends:
+  - "openwisp_monitoring.db.backends.influxdb"
+  - "openwisp_monitoring.db.backends.influxdb2"
 openwisp2_timeseries_database:
   backend: "openwisp_monitoring.db.backends.influxdb"
   user: "openwisp"
@@ -83,6 +86,9 @@ openwisp2_timeseries_database:
   name: "openwisp2"
   host: "localhost"
   port: 8086
+  options:
+    udp_writes: false
+    udp_port: 8089
 openwisp2_monitoring_default_retention_policy: "26280h0m0s" # 3 years
 openwisp2_celerybeat: true
 # keep backward compatibility with old variable openwisp2_eventlet_concurrency

@@ -11,7 +11,9 @@ dependencies:
   - src: https://github.com/openwisp/ansible-ow-influxdb
     version: origin/master
     name: openwisp.influxdb
-    when: openwisp2_monitoring and openwisp2_influxdb_install
+    when: >
+      openwisp2_monitoring and openwisp2_influxdb_install and
+      openwisp2_timeseries_database.backend in openwisp2_influxdb_backends
 
 galaxy_info:
   role_name: openwisp2

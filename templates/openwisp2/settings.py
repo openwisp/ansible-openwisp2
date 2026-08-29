@@ -551,13 +551,26 @@ RAVEN_CONFIG = {{ openwisp2_sentry | to_nice_json }}
 {% endif %}
 
 {% if openwisp2_monitoring %}
+{% set timeseries_database_keys = {
+    "backend": "BACKEND",
+    "user": "USER",
+    "password": "PASSWORD",
+    "name": "NAME",
+    "host": "HOST",
+    "port": "PORT",
+    "url": "URL",
+    "cloud_id": "CLOUD_ID",
+    "api_key": "API_KEY",
+    "bearer_auth": "BEARER_AUTH",
+    "ca_certs": "CA_CERTS",
+    "ssl_assert_fingerprint": "SSL_ASSERT_FINGERPRINT",
+    "verify_certs": "VERIFY_CERTS",
+    "options": "OPTIONS",
+} %}
 TIMESERIES_DATABASE = {
-    "BACKEND": "{{ openwisp2_timeseries_database.backend }}",
-    "USER": "{{ openwisp2_timeseries_database.user }}",
-    "PASSWORD": "{{ openwisp2_timeseries_database.password }}",
-    "NAME": "{{ openwisp2_timeseries_database.name }}",
-    "HOST": "{{ openwisp2_timeseries_database.host }}",
-    "PORT": "{{ openwisp2_timeseries_database.port }}",
+{% for key, value in openwisp2_timeseries_database.items() %}
+    "{{ timeseries_database_keys.get(key, key | upper) }}": {% if value is string %}{{ value | to_json }}{% else %}{{ value }}{% endif %},
+{% endfor %}
 }
 OPENWISP_MONITORING_DEFAULT_RETENTION_POLICY = (
     "{{ openwisp2_monitoring_default_retention_policy }}"

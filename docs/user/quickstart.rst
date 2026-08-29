@@ -316,7 +316,8 @@ installing a fully-featured version of OpenWISP.
         openwisp2_monitoring: true # monitoring is enabled by default
 
 Read :doc:`role-variables` section to learn about available configuration
-variables.
+variables, including how to switch the OpenWISP Monitoring timeseries
+database backend.
 
 Follow instructions in :ref:`ansible_run_playbook` section to run above
 playbook.

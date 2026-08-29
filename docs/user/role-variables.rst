@@ -247,8 +247,14 @@ take a look at `the default values of these variables
         openwisp2_redis_host: localhost
         openwisp2_redis_port: 6379
         openwisp2_redis_cache_url: "redis://{{ openwisp2_redis_host }}:{{ openwisp2_redis_port }}/1"
-        # the following options are required to configure influxdb which is used in openwisp-monitoring
+        # timeseries database used by openwisp-monitoring
+        # See "Timeseries Database Backends" below for InfluxDB 2.x and
+        # Elasticsearch examples.
         openwisp2_influxdb_install: true
+        # timeseries backends for which the openwisp.influxdb role is used
+        openwisp2_influxdb_backends:
+          - "openwisp_monitoring.db.backends.influxdb"
+          - "openwisp_monitoring.db.backends.influxdb2"
         openwisp2_timeseries_database:
             backend: "openwisp_monitoring.db.backends.influxdb"
             user: "openwisp"
@@ -256,6 +262,9 @@ take a look at `the default values of these variables
             name: "openwisp2"
             host: "localhost"
             port: 8086
+            options:
+                udp_writes: false
+                udp_port: 8089
         # celery concurrency for the default queue, by default the number of CPUs is used
         # celery concurrency for the default queue, by default it is set to 1
         # Setting it to "null" will make concurrency equal to number of CPUs if autoscaling is not used
@@ -492,6 +501,89 @@ take a look at `the default values of these variables
           # HTTP requests. Read https://github.com/adamchainz/django-cors-headers#cors_allowed_origins-sequencestr
           # for detail. By default, it is set to an empty list.
           allowed_origins_list: ["https://log.openwisp.org"]
+
+Timeseries Database Backends
+----------------------------
+
+The ``openwisp2_timeseries_database`` variable is the single entrypoint
+for configuring the timeseries database used by
+:doc:`OpenWISP Monitoring </monitoring/index>`.
+
+By default this role configures the InfluxDB 1.x backend and delegates
+InfluxDB provisioning to the ``openwisp.influxdb`` role when
+``openwisp2_influxdb_install`` is ``true`` and the selected backend is
+listed in ``openwisp2_influxdb_backends``. The ``openwisp.influxdb`` role
+is skipped automatically when Elasticsearch is selected.
+
+InfluxDB 1.x, the default backend:
+
+.. code-block:: yaml
+
+    openwisp2_influxdb_install: true
+    openwisp2_timeseries_database:
+      backend: "openwisp_monitoring.db.backends.influxdb"
+      user: "openwisp"
+      password: "openwisp"
+      name: "openwisp2"
+      host: "localhost"
+      port: 8086
+      options:
+        udp_writes: false
+        udp_port: 8089
+
+InfluxDB 2.x:
+
+.. code-block:: yaml
+
+    openwisp2_timeseries_database:
+      backend: "openwisp_monitoring.db.backends.influxdb2"
+      name: "openwisp2"
+      user: "openwisp"  # InfluxDB organization
+      password: "openwisp-token"  # InfluxDB API token
+      url: "http://localhost:8086"
+      options:
+        udp_writes: false
+        udp_host: "localhost"
+        udp_port: 8089
+
+The ``influxdb2`` backend also supports ``host`` and ``port`` instead of
+``url``. InfluxDB 2.x does not support UDP writes natively; when
+``udp_writes`` is enabled, OpenWISP sends Influx line protocol to a
+Telegraf UDP listener, which forwards data to InfluxDB 2.x over HTTP.
+InfluxDB installation is handled by ``openwisp.influxdb``; set
+``openwisp2_influxdb_install`` to ``false`` only when using an externally
+provisioned InfluxDB service.
+
+Elasticsearch:
+
+.. code-block:: yaml
+
+    openwisp2_timeseries_database:
+      backend: "openwisp_monitoring.db.backends.elasticsearch"
+      name: "openwisp2"
+      url: "https://localhost:9200"
+      api_key: "openwisp-api-key"
+      ca_certs: "/etc/elasticsearch/certs/http_ca.crt"
+      verify_certs: true
+      options:
+        refresh: "wait_for"
+        read_size: 10000
+        terms_size: 1000
+        http_compress: true
+        max_retries: 3
+        request_timeout: 30
+        retry_on_timeout: true
+
+The ``elasticsearch`` backend uses ``url``, or ``host`` and ``port``, to
+connect to the cluster. ``cloud_id`` can be used instead for Elastic Cloud
+deployments. Supported authentication keys are ``api_key``,
+``bearer_auth``, or ``user`` and ``password`` together. Supported TLS keys
+are ``ca_certs``, ``ssl_assert_fingerprint``, and ``verify_certs``.
+Elasticsearch writes over HTTP/TCP only and does not use UDP or Telegraf.
+
+The nested ``options`` dictionary is passed to the selected backend as
+``OPTIONS``. Keep option names lowercase as shown above; they match the
+backend options documented by OpenWISP Monitoring.
 
 .. note::
 
