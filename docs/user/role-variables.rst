@@ -377,6 +377,9 @@ take a look at `the default values of these variables
         openwisp2_monitoring_periodic_tasks: true
         openwisp2_radius_periodic_tasks: true
         openwisp2_usage_metric_collection_periodic_tasks: true
+        openwisp2_firmware_upgrader_periodic_tasks: true
+        openwisp2_firmware_upgrader_check_pending_period_minutes: 10
+        openwisp2_firmware_upgrader_reminder_scan_period_days: 7
         # point {{ inventory_name }} to localhost in /etc/hosts
         openwisp2_inventory_hostname_localhost: true
         # this role provides a default configuration of freeradius
