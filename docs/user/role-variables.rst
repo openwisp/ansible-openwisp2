@@ -246,8 +246,10 @@ take a look at `the default values of these variables
         openwisp2_redis_install: true
         openwisp2_redis_host: localhost
         openwisp2_redis_port: 6379
-        openwisp2_redis_cache_url: "redis://{{ openwisp2_redis_host }}:{{ openwisp2_redis_port }}/1"
-        openwisp2_redis_sessions_url: "redis://{{ openwisp2_redis_host }}:{{ openwisp2_redis_port }}/4"
+        # Cache uses database /0. Sessions use /1, so clearing the cache does
+        # not terminate active user sessions.
+        openwisp2_redis_cache_url: "redis://{{ openwisp2_redis_host }}:{{ openwisp2_redis_port }}/0"
+        openwisp2_redis_sessions_url: "redis://{{ openwisp2_redis_host }}:{{ openwisp2_redis_port }}/1"
         # the following options are required to configure influxdb which is used in openwisp-monitoring
         openwisp2_influxdb_install: true
         openwisp2_timeseries_database:
