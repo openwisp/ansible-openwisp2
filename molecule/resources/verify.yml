@@ -79,6 +79,37 @@
       command: systemctl status redis
       changed_when: false
 
+    - name: Read Redis bucket configuration
+      ansible.builtin.command:
+        argv:
+          - /opt/openwisp2/env/bin/python
+          - /opt/openwisp2/manage.py
+          - shell
+          - -c
+          - >-
+            from django.conf import settings; print(settings.SESSION_CACHE_ALIAS,
+            settings.CACHES['default']['LOCATION'],
+            settings.CACHES['sessions']['LOCATION'],
+            settings.CHANNEL_LAYERS['default']['CONFIG']['hosts'][0]['db'],
+            settings.CELERY_BROKER_URL)
+      register: redis_buckets
+      changed_when: false
+
+    - name: Assert Redis buckets are separated
+      ansible.builtin.assert:
+        that:
+          - >-
+            redis_buckets.stdout_lines[-1].split() == [
+              'sessions',
+              'redis://localhost:6379/0',
+              'redis://localhost:6379/1',
+              '2',
+              'redis://localhost:6379/3'
+            ]
+        fail_msg: >-
+          Django cache, sessions, Channels and Celery must use distinct Redis
+          buckets. Got: {{ redis_buckets.stdout_lines }}
+
     - name: Check Openwisp
       block:
         - name: Check if OpenWISP is running
