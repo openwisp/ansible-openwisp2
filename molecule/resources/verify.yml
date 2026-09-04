@@ -99,7 +99,7 @@
       ansible.builtin.assert:
         that:
           - >-
-            redis_buckets.stdout.split() == [
+            redis_buckets.stdout_lines[-1].split() == [
               'sessions',
               'redis://localhost:6379/0',
               'redis://localhost:6379/1',
@@ -108,7 +108,7 @@
             ]
         fail_msg: >-
           Django cache, sessions, Channels and Celery must use distinct Redis
-          buckets. Got: {{ redis_buckets.stdout }}
+          buckets. Got: {{ redis_buckets.stdout_lines }}
 
     - name: Check Openwisp
       block:
