@@ -108,7 +108,7 @@
             ]
         fail_msg: >-
           Django cache, sessions, Channels and Celery must use distinct Redis
-          buckets.
+          buckets. Got: {{ redis_buckets.stdout }}
 
     - name: Check Openwisp
       block:
