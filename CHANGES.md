@@ -1,8 +1,57 @@
 # Change log
 
-## Version 26.06.0 [Unreleased]
+## Version 26.09.0 [2026-09-04]
 
-Work in progress.
+### Features
+
+- Added WHOIS and Estimated Location configuration variables.
+- Configured nginx to
+  [serve precompressed gzip and Brotli files](https://github.com/openwisp/ansible-openwisp2/issues/599),
+  improving static file delivery by serving precompressed files when
+  available instead of compressing them on the fly.
+- Added
+  [Firmware Upgrader WebSocket routes](https://github.com/openwisp/ansible-openwisp2/issues/534)
+  to support real-time firmware upgrade progress updates.
+- Added support for
+  [user expiration reminder emails](https://github.com/openwisp/ansible-openwisp2/issues/608),
+  including configuration of the reminder schedule.
+
+### Changes
+
+- Separated the Redis database used for sessions from the cache database.
+  Deployments with a custom Redis cache URL should verify that it does not
+  conflict with the updated Redis database assignments.
+
+#### Other changes
+
+- Added `--upgrade` to the default `openwisp2_pip_extra_args` value to
+  [upgrade dependencies when installing OpenWISP modules](https://github.com/openwisp/ansible-openwisp2/issues/572).
+- Added support for Ubuntu 26.04.
+- Dropped support for Debian 11.
+
+#### Dependencies
+
+- Upgraded to OpenWISP Users 1.3.x (see [change log](https://github.com/openwisp/openwisp-users/releases/tag/1.3.0)).
+- Upgraded to OpenWISP Controller 1.3.x (see [change log](https://github.com/openwisp/openwisp-controller/releases/tag/1.3.0)).
+- Upgraded to OpenWISP Monitoring 1.3.x (see [change log](https://github.com/openwisp/openwisp-monitoring/releases/tag/1.3.0)).
+- Upgraded to OpenWISP Network Topology 1.3.x (see [change log](https://github.com/openwisp/openwisp-network-topology/releases/tag/1.3.0)).
+- Upgraded to OpenWISP Firmware Upgrader 1.3.x (see [change log](https://github.com/openwisp/openwisp-firmware-upgrader/releases/tag/1.3.0)).
+- Upgraded to OpenWISP RADIUS 1.3.x (see [change
+  log](https://github.com/openwisp/openwisp-radius/releases/tag/1.3.0)).
+- Upgraded to OpenWISP Notifications 1.3.x (see [change
+  log](https://github.com/openwisp/openwisp-notifications/releases/tag/1.3.0)).
+- Upgraded to Netjsonconfig 1.3.x (see [change
+  log](https://github.com/openwisp/netjsonconfig/releases/tag/1.3.0)).
+- Bumped `ansible-core` from `>=2.15,<2.19` to
+  [`>=2.20.5,<2.22`](https://github.com/ansible/ansible/releases/tag/v2.20.5).
+- Bumped `django-redis` from `>=6.0.0,<6.1.0` to
+  [`>=7.0.0,<7.1.0`](https://github.com/jazzband/django-redis/releases/tag/7.0.0).
+- Bumped `mysqlclient` from `>=2.2,<2.3` to
+  [`>=2.2.8,<2.3`](https://github.com/PyMySQL/mysqlclient/releases/tag/v2.2.8).
+- Bumped `psycopg2` from `>=2.9,<2.10` to
+  [`>=2.9.12,<2.10`](https://www.psycopg.org/docs/news.html).
+- Bumped `uwsgi` from `>=2.0.30,<2.1.0` to [`>=2.0.31,<2.1.0`](https://uwsgi-docs.readthedocs.io/en/latest/Changelog-2.0.31.html).
+- Bumped `django-celery-email-reboot` from `>=4.1,<4.2` to [`4.2.1`](https://github.com/panevo/django-celery-email-reboot/blob/master/CHANGELOGS.md).
 
 ## Version 25.10.2 [2026-01-28]
 
