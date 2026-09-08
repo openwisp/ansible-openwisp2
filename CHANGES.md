@@ -1,5 +1,9 @@
 # Change log
 
+## Version 27.04.0a [unreleased]
+
+Work in progress.
+
 ## Version 26.09.0 [2026-09-04]
 
 ### Features
