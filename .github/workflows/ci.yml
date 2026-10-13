@@ -69,7 +69,7 @@ jobs:
   import:
     name: Update imports on Ansible Galaxy
     runs-on: ubuntu-22.04
-    container: python:3-slim
+    container: python:3.12-slim
     needs:
       - build
 
