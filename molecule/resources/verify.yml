@@ -200,3 +200,10 @@
               - "'gzip_static on;' not in (nginx_disabled_site_config.content | b64decode)"
               - "'brotli_static on;' not in (nginx_disabled_site_config.content | b64decode)"
             fail_msg: "Nginx static compression directives should be disabled."
+
+    - name: Assert nginx sends the connection address to the websocket server
+      ansible.builtin.assert:
+        that:
+          - "'proxy_set_header X-Forwarded-For $remote_addr;' in (nginx_site_config.content | b64decode)"
+          - "'$proxy_add_x_forwarded_for' not in (nginx_site_config.content | b64decode)"
+        fail_msg: "Nginx must not forward client-supplied X-Forwarded-For values to the websocket server."
