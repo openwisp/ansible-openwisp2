@@ -144,6 +144,7 @@ openwisp2_nginx_spdy: false
 openwisp2_nginx_http2: false
 openwisp2_nginx_ipv6: false
 openwisp2_nginx_client_max_body_size: 20M
+openwisp2_nginx_trusted_proxies: []
 openwisp2_nginx_csp: >
   "default-src http: https: data: blob: 'unsafe-inline';
   script-src 'unsafe-eval' https: 'unsafe-inline' 'self';

@@ -5,6 +5,32 @@
     openwisp2_nginx_client_max_body_size: "{{ openwisp2_firmware_upgrader_max_file_size }}"
   when: openwisp2_firmware_upgrader
 
+- name: Validate nginx trusted proxies
+  block:
+    - name: Check nginx trusted proxy addresses
+      ansible.builtin.command:
+        argv:
+          - "{{ openwisp2_python }}"
+          - -c
+          - import ipaddress, sys; ipaddress.ip_network(sys.argv[1], strict=False)
+          - "{{ proxy }}"
+      loop: "{{ openwisp2_nginx_trusted_proxies }}"
+      loop_control:
+        loop_var: proxy
+      register: nginx_trusted_proxy_validation
+      changed_when: false
+      failed_when: false
+
+    - name: Assert nginx trusted proxy addresses are valid
+      ansible.builtin.assert:
+        that:
+          - >-
+            nginx_trusted_proxy_validation.results | selectattr('rc', 'ne', 0)
+            | list | length == 0
+        fail_msg: >-
+          openwisp2_nginx_trusted_proxies entries must be IP addresses or
+          networks.
+
 - name: Configure nginx static compression
   block:
     - name: Get nginx build configuration
