@@ -216,9 +216,11 @@
               - 192.0.2.10
               - 2001:db8::/32
 
-        - name: Apply nginx configuration with trusted proxies
-          ansible.builtin.include_tasks:
-            file: "{{ playbook_dir }}/../../tasks/nginx.yml"
+        - name: Render nginx site configuration with trusted proxies
+          ansible.builtin.template:
+            src: "{{ playbook_dir }}/../../templates/nginx/site-conf.j2"
+            dest: "/etc/nginx/sites-available/{{ inventory_hostname }}"
+            mode: "0644"
 
         - name: Test nginx configuration syntax with trusted proxies
           ansible.builtin.command: nginx -t
