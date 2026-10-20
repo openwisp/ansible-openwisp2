@@ -150,6 +150,12 @@ take a look at `the default values of these variables
         openwisp2_nginx_ipv6: false
         # nginx client_max_body_size setting
         openwisp2_nginx_client_max_body_size: 10M
+        # addresses or networks of proxies allowed to provide client addresses
+        # only add your load balancer or ingress addresses here
+        # hostnames are not supported
+        openwisp2_nginx_trusted_proxies:
+          - "192.0.2.10"
+          - "2001:db8::/32"
         # list of upstream servers for OpenWISP
         openwisp2_nginx_openwisp_server:
           - "localhost:8000"
