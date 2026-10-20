@@ -200,3 +200,69 @@
               - "'gzip_static on;' not in (nginx_disabled_site_config.content | b64decode)"
               - "'brotli_static on;' not in (nginx_disabled_site_config.content | b64decode)"
             fail_msg: "Nginx static compression directives should be disabled."
+
+    # Test openwisp2_nginx_trusted_proxies configuration.
+    - name: Test nginx trusted proxies configuration
+      block:
+        - name: Assert nginx does not trust forwarded client addresses by default
+          ansible.builtin.assert:
+            that:
+              - "'real_ip_header X-Forwarded-For;' not in (nginx_site_config.content | b64decode)"
+            fail_msg: "Nginx must not trust forwarded client addresses by default."
+
+        - name: Configure trusted proxies
+          ansible.builtin.set_fact:
+            openwisp2_nginx_trusted_proxies:
+              - 192.0.2.10
+              - 2001:db8::/32
+
+        - name: Render nginx site configuration with trusted proxies
+          ansible.builtin.template:
+            src: "{{ playbook_dir }}/../../templates/nginx/site-conf.j2"
+            dest: "/etc/nginx/sites-available/{{ inventory_hostname }}"
+            mode: "0644"
+
+        - name: Test nginx configuration syntax with trusted proxies
+          ansible.builtin.command: nginx -t
+          changed_when: false
+
+        - name: Read nginx site configuration with trusted proxies
+          ansible.builtin.slurp:
+            src: "/etc/nginx/sites-enabled/{{ inventory_hostname }}"
+          register: nginx_trusted_proxies_site_config
+
+        - name: Assert nginx accepts client addresses from trusted proxies
+          ansible.builtin.assert:
+            that:
+              - "'set_real_ip_from 192.0.2.10;' in (nginx_trusted_proxies_site_config.content | b64decode)"
+              - "'set_real_ip_from 2001:db8::/32;' in (nginx_trusted_proxies_site_config.content | b64decode)"
+              - "'real_ip_header X-Forwarded-For;' in (nginx_trusted_proxies_site_config.content | b64decode)"
+              - "'real_ip_recursive on;' in (nginx_trusted_proxies_site_config.content | b64decode)"
+            fail_msg: "Nginx must accept forwarded client addresses only from trusted proxies."
+
+    - name: Test nginx rejects invalid trusted proxies
+      block:
+        - name: Include nginx tasks with a hostname-like trusted proxy
+          ansible.builtin.include_tasks:
+            file: "{{ playbook_dir }}/../../tasks/nginx.yml"
+          vars:
+            openwisp2_nginx_trusted_proxies:
+              - proxy.example.com
+
+        - name: Fail if nginx accepts a hostname-like trusted proxy
+          ansible.builtin.fail:
+            msg: "Nginx accepted a hostname-like trusted proxy."
+      rescue:
+        - name: Assert nginx rejects hostname-like trusted proxies
+          ansible.builtin.assert:
+            that:
+              - >-
+                'openwisp2_nginx_trusted_proxies entries must be IP addresses
+                or networks.' in ansible_failed_result.msg
+
+    - name: Assert nginx sends the connection address to the websocket server
+      ansible.builtin.assert:
+        that:
+          - "'proxy_set_header X-Forwarded-For $remote_addr;' in (nginx_site_config.content | b64decode)"
+          - "'$proxy_add_x_forwarded_for' not in (nginx_site_config.content | b64decode)"
+        fail_msg: "Nginx must not forward client-supplied X-Forwarded-For values to the websocket server."
