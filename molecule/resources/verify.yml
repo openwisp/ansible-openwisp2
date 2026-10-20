@@ -216,15 +216,17 @@
               - 192.0.2.10
               - 2001:db8::/32
 
-        - name: Render nginx site configuration with trusted proxies
-          ansible.builtin.template:
-            src: "{{ playbook_dir }}/../../templates/nginx/site-conf.j2"
-            dest: /tmp/openwisp2-nginx-trusted-proxies.conf
-            mode: "0644"
+        - name: Apply nginx configuration with trusted proxies
+          ansible.builtin.include_tasks:
+            file: "{{ playbook_dir }}/../../tasks/nginx.yml"
+
+        - name: Test nginx configuration syntax with trusted proxies
+          ansible.builtin.command: nginx -t
+          changed_when: false
 
         - name: Read nginx site configuration with trusted proxies
           ansible.builtin.slurp:
-            src: /tmp/openwisp2-nginx-trusted-proxies.conf
+            src: "/etc/nginx/sites-enabled/{{ inventory_hostname }}"
           register: nginx_trusted_proxies_site_config
 
         - name: Assert nginx accepts client addresses from trusted proxies
@@ -239,9 +241,8 @@
     - name: Test nginx rejects invalid trusted proxies
       block:
         - name: Include nginx tasks with a hostname-like trusted proxy
-          ansible.builtin.include_role:
-            name: openwisp.openwisp2
-            tasks_from: nginx
+          ansible.builtin.include_tasks:
+            file: "{{ playbook_dir }}/../../tasks/nginx.yml"
           vars:
             openwisp2_nginx_trusted_proxies:
               - proxy.example.com
