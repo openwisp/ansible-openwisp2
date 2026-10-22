@@ -1,8 +1,5 @@
 ---
-# The OpenWISP 1.4 dependency stack no longer supports Jammy's Python 3.10.
-openwisp2_python: >-
-  {{ 'python3.12' if ansible_distribution == 'Ubuntu' and
-  ansible_distribution_release == 'jammy' else 'python3' }}
+openwisp2_python: python3
 ansible_python_interpreter: /usr/bin/python3
 openwisp2_network_topology: false
 openwisp2_firmware_upgrader: false

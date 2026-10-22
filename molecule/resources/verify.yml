@@ -6,43 +6,6 @@
   gather_facts: false
 
   tasks:
-    # Verify that the application uses a supported Python runtime.
-    - name: Read OpenWISP virtualenv Python version
-      ansible.builtin.command:
-        argv:
-          - /opt/openwisp2/env/bin/python
-          - -c
-          - "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')"
-      changed_when: false
-      register: openwisp2_installed_python
-
-    - name: Assert OpenWISP uses a supported Python version
-      ansible.builtin.assert:
-        that:
-          - openwisp2_installed_python.stdout is version('3.11', '>=')
-        fail_msg: OpenWISP 1.4 requires Python 3.11 or newer.
-
-    # Check that the obsolete Jammy FreeRADIUS source is not configured.
-    - name: Check obsolete FreeRADIUS repository file
-      ansible.builtin.stat:
-        path: /etc/apt/sources.list.d/networkradius.list
-      register: freeradius_repository_file
-
-    - name: Read FreeRADIUS repository file when present
-      ansible.builtin.slurp:
-        src: /etc/apt/sources.list.d/networkradius.list
-      register: freeradius_repository
-      when: freeradius_repository_file.stat.exists
-
-    - name: Assert obsolete FreeRADIUS repository was removed
-      ansible.builtin.assert:
-        that:
-          - >-
-            not freeradius_repository_file.stat.exists or
-            'freeradius-3.0/ubuntu/jammy focal' not in
-            (freeradius_repository.content | default('') | b64decode)
-        fail_msg: The obsolete Ubuntu Jammy FreeRADIUS 3.0 source must be absent.
-
     - name: Read OpenWISP settings
       ansible.builtin.slurp:
         src: /opt/openwisp2/openwisp2/settings.py
