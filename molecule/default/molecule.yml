@@ -33,6 +33,8 @@ provisioner:
       result_format: yaml
   inventory:
     host_vars:
+      openwisp2-ubuntu2204:
+        openwisp2_python: python3.12
       openwisp2-debian11:
         openwisp2_django_version: "django~=4.2.0"
 

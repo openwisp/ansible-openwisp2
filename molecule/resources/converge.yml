@@ -35,6 +35,50 @@
         cache_valid_time: 600
       when: ansible_os_family == 'Debian'
 
+    # Jammy ships Python 3.10, which cannot install the current netdiff.
+    - name: Install Python 3.12 PPA prerequisites for Ubuntu 22.04 CI
+      ansible.builtin.apt:
+        name:
+          - ca-certificates
+          - dirmngr
+          - gnupg
+          - python3-apt
+          - python3-launchpadlib
+          - software-properties-common
+        state: present
+      when:
+        - ansible_distribution == 'Ubuntu'
+        - ansible_distribution_release == 'jammy'
+
+    - name: Add Python 3.12 PPA for Ubuntu 22.04 CI
+      ansible.builtin.apt_repository:
+        repo: ppa:deadsnakes/ppa
+        state: present
+        update_cache: true
+      when:
+        - ansible_distribution == 'Ubuntu'
+        - ansible_distribution_release == 'jammy'
+
+    - name: Install Python 3.12 for Ubuntu 22.04 CI
+      ansible.builtin.apt:
+        name:
+          - python3.12
+          - python3.12-dev
+          - python3.12-venv
+        state: present
+      when:
+        - ansible_distribution == 'Ubuntu'
+        - ansible_distribution_release == 'jammy'
+
+    - name: Confirm Python 3.12 interpreter selection on Ubuntu 22.04 CI
+      ansible.builtin.assert:
+        that:
+          - openwisp2_python == 'python3.12'
+        fail_msg: Ubuntu 22.04 Molecule must select Python 3.12.
+      when:
+        - ansible_distribution == 'Ubuntu'
+        - ansible_distribution_release == 'jammy'
+
     - name: Install net-tools
       apt:
         name:
