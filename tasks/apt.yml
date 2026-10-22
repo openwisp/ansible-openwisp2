@@ -144,6 +144,39 @@
     name: supervisor
     state: started
 
+- name: Install Python repository prerequisites on Ubuntu 22.04
+  ansible.builtin.apt:
+    name:
+      - software-properties-common
+      - python3-launchpadlib
+    state: present
+  when:
+    - ansible_distribution == 'Ubuntu'
+    - ansible_distribution_release == 'jammy'
+    - openwisp2_python == 'python3.12'
+
+- name: Add Python 3.12 repository on Ubuntu 22.04
+  ansible.builtin.apt_repository:
+    repo: ppa:deadsnakes/ppa
+    state: present
+    update_cache: true
+  when:
+    - ansible_distribution == 'Ubuntu'
+    - ansible_distribution_release == 'jammy'
+    - openwisp2_python == 'python3.12'
+
+- name: Install Python 3.12 on Ubuntu 22.04
+  ansible.builtin.apt:
+    name:
+      - python3.12
+      - python3.12-dev
+      - python3.12-venv
+    state: present
+  when:
+    - ansible_distribution == 'Ubuntu'
+    - ansible_distribution_release == 'jammy'
+    - openwisp2_python == 'python3.12'
+
 - name: Install python3 packages
   ansible.builtin.apt:
     name:

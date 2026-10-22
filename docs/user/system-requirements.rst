@@ -46,3 +46,17 @@ Supported Operating Systems
 - Ubuntu 26 LTS
 - Ubuntu 24 LTS
 - Ubuntu 22 LTS
+
+.. important::
+
+    Current development versions of OpenWISP require Python 3.11 or newer.
+    On Ubuntu 22.04, this role installs Python 3.12 from the third-party
+    `Deadsnakes PPA <https://launchpad.net/~deadsnakes/+archive/ubuntu/ppa>`_
+    for the OpenWISP virtual environment, leaving the system Python unchanged.
+    Third-party repositories have separate security maintenance policies;
+    review them before production deployment. Set ``openwisp2_python`` to
+    another preinstalled compatible interpreter to avoid this PPA.
+
+    When upgrading an existing Python 3.10 virtual environment, back up
+    the installation and migrate/recreate the environment before rerunning
+    the role.

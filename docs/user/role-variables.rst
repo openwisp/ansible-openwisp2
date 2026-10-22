@@ -15,6 +15,10 @@ take a look at `the default values of these variables
       # you can add other roles here
         - openwisp.openwisp2
       vars:
+        # Python for the application virtualenv. Ubuntu 22.04 defaults to
+        # Python 3.12 from the Deadsnakes PPA for OpenWISP 1.4.
+        # Other supported OS versions use the system python3 by default.
+        # openwisp2_python: python3.12
         # Enable the modules you want to use
         openwisp2_network_topology: false
         openwisp2_firmware_upgrader: false

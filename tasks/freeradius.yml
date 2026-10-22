@@ -24,14 +24,13 @@
       failed_when: false
       changed_when: false
       register: openwisp2_installed_freeradius_version
-    - name: Add FreeRADIUS 3.0.x repository to sources list
-      ansible.builtin.copy:
-        content: >
-          deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.networkradius.com.asc]
-          http://packages.networkradius.com/freeradius-3.0/ubuntu/jammy focal main
-        dest: /etc/apt/sources.list.d/networkradius.list
-        mode: "0644"
-      when: openwisp2_installed_freeradius_version.stdout == '3.0'
+    - name: Remove obsolete or unsupported FreeRADIUS repository
+      ansible.builtin.file:
+        path: /etc/apt/sources.list.d/networkradius.list
+        state: absent
+      when: >-
+        openwisp2_installed_freeradius_version.stdout == '3.0' or
+        ansible_architecture not in ['x86_64', 'amd64']
     - name: Add FreeRADIUS 3.2.x repository to sources list
       ansible.builtin.copy:
         content: >
@@ -39,7 +38,9 @@
           http://packages.networkradius.com/freeradius-3.2/ubuntu/jammy jammy main
         dest: /etc/apt/sources.list.d/networkradius.list
         mode: "0644"
-      when: openwisp2_installed_freeradius_version.stdout != '3.0'
+      when:
+        - openwisp2_installed_freeradius_version.stdout != '3.0'
+        - ansible_architecture in ['x86_64', 'amd64']
     - name: Update freeradius_dir variable
       ansible.builtin.set_fact:
         freeradius_dir: "/etc/freeradius/3.0"
@@ -137,6 +138,54 @@
     name: freeradius-mysql
     state: latest
   notify: Restart freeradius
+
+# Ubuntu 22.04's native FreeRADIUS 3.0 may have a newer, incompatible
+# architecture-independent freeradius-common package from a vendor repository.
+- name: Read FreeRADIUS package version on Ubuntu 22.04
+  ansible.builtin.command:
+    argv:
+      - dpkg-query
+      - -W
+      - '-f=${Version}'
+      - freeradius
+  register: openwisp2_freeradius_package
+  changed_when: false
+  when:
+    - ansible_distribution == 'Ubuntu'
+    - ansible_distribution_release == 'jammy'
+
+- name: Read freeradius-common package version on Ubuntu 22.04
+  ansible.builtin.command:
+    argv:
+      - dpkg-query
+      - -W
+      - '-f=${Version}'
+      - freeradius-common
+  register: openwisp2_freeradius_common_package
+  changed_when: false
+  when:
+    - ansible_distribution == 'Ubuntu'
+    - ansible_distribution_release == 'jammy'
+
+- name: Align native FreeRADIUS common package with the server on Ubuntu 22.04
+  ansible.builtin.apt:
+    name: "freeradius-common={{ openwisp2_freeradius_package.stdout }}"
+    state: present
+    allow_downgrade: true
+  when:
+    - ansible_distribution == 'Ubuntu'
+    - ansible_distribution_release == 'jammy'
+    - openwisp2_freeradius_package.stdout.startswith('3.0')
+    - openwisp2_freeradius_package.stdout != openwisp2_freeradius_common_package.stdout
+  notify: Restart freeradius
+
+- name: Select FreeRADIUS 3.0 configuration path on Ubuntu 22.04
+  ansible.builtin.set_fact:
+    freeradius_dir: /etc/freeradius/3.0
+  when:
+    - ansible_distribution == 'Ubuntu'
+    - ansible_distribution_release == 'jammy'
+    - openwisp2_freeradius_package.stdout.startswith('3.0')
 
 - name: SQL configuration
   ansible.builtin.template:
