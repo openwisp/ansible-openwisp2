@@ -7,32 +7,9 @@
     - ../../vars/main.yml
     - ../../vars/ubuntu-22.yml
   tasks:
-    - name: Install isolated runtime test prerequisites
-      ansible.builtin.apt:
-        name:
-          - python3.10-venv
-          - python3-virtualenv
-        update_cache: true
-        cache_valid_time: 3600
-
-    # Model an existing deployment without touching any application data.
-    - name: Create a legacy Python 3.10 virtualenv
-      ansible.builtin.command:
-        argv:
-          - /usr/bin/python3
-          - -m
-          - venv
-          - /opt/openwisp2-upgrade-test/env
-        creates: /opt/openwisp2-upgrade-test/env/bin/python
-
-    - name: Write a legacy environment preservation marker
-      ansible.builtin.copy:
-        content: Preserve the previous environment for recovery.
-        dest: /opt/openwisp2-upgrade-test/env/legacy-marker
-        mode: "0644"
-
-    - name: Exercise fresh installation and migration
-      ansible.builtin.include_tasks: tasks/runtime.yml
+    # Molecule runs this playbook with --check before and after convergence.
+    - name: Check fresh and migrated application environments without provisioning
+      ansible.builtin.include_tasks: ../../tasks/ubuntu-22.yml
       loop:
         - /opt/openwisp2-fresh-test
         - /opt/openwisp2-upgrade-test
@@ -40,76 +17,114 @@
         loop_var: runtime_test_path
       vars:
         openwisp2_path: "{{ runtime_test_path }}"
+      when: ansible_check_mode
 
-    # Explicit interpreter and virtualenv overrides must not be silently replaced.
-    - name: Validate a provisioned custom interpreter
-      ansible.builtin.include_tasks: ../../tasks/ubuntu-22.yml
-      vars:
-        openwisp2_python: /usr/bin/python3.11
-        openwisp2_virtualenv_path: /opt/openwisp2-custom-test/env
-
-    - name: Reject the unsupported system interpreter
+    - name: Exercise runtime installation and migration
+      when: not ansible_check_mode
       block:
-        - name: Try an explicit Python 3.10 override
-          ansible.builtin.include_tasks: ../../tasks/ubuntu-22.yml
+        - name: Install isolated runtime test prerequisites
+          ansible.builtin.apt:
+            name:
+              - python3.10-venv
+              - python3-virtualenv
+            update_cache: true
+            cache_valid_time: 3600
+
+        # Model an existing deployment without touching any application data.
+        - name: Create a legacy Python 3.10 virtualenv
+          ansible.builtin.command:
+            argv:
+              - /usr/bin/python3
+              - -m
+              - venv
+              - /opt/openwisp2-upgrade-test/env
+            creates: /opt/openwisp2-upgrade-test/env/bin/python
+
+        - name: Write a legacy environment preservation marker
+          ansible.builtin.copy:
+            content: Preserve the previous environment for recovery.
+            dest: /opt/openwisp2-upgrade-test/env/legacy-marker
+            mode: "0644"
+
+        - name: Exercise fresh installation and migration
+          ansible.builtin.include_tasks: tasks/runtime.yml
+          loop:
+            - /opt/openwisp2-fresh-test
+            - /opt/openwisp2-upgrade-test
+          loop_control:
+            loop_var: runtime_test_path
           vars:
-            openwisp2_python: /usr/bin/python3
-            openwisp2_virtualenv_path: /opt/openwisp2-upgrade-test/env
-        - name: Fail if the unsupported interpreter was accepted
-          ansible.builtin.fail:
-            msg: A Python 3.10 override must fail before package installation.
-      rescue:
-        - name: Verify the runtime validation rejected Python 3.10
-          ansible.builtin.assert:
-            that:
-              - ansible_failed_task.name == 'Require a stable supported application interpreter'
-            fail_msg: The unsupported interpreter must be rejected by the explicit version check.
+            openwisp2_path: "{{ runtime_test_path }}"
 
-    - name: Reject reusing an incompatible virtualenv
-      block:
-        - name: Try the new interpreter with the legacy virtualenv path
-          ansible.builtin.include_tasks: ../../tasks/ubuntu-22.yml
-          vars:
-            openwisp2_python: /usr/bin/python3.11
-            openwisp2_virtualenv_path: /opt/openwisp2-upgrade-test/env
-        - name: Fail if the incompatible virtualenv was accepted
-          ansible.builtin.fail:
-            msg: An existing Python 3.10 virtualenv must not be silently reused.
-      rescue:
-        - name: Verify the virtualenv compatibility check failed
-          ansible.builtin.assert:
-            that:
-              - ansible_failed_task.name == 'Reject an incompatible existing virtualenv without modifying it'
-            fail_msg: The incompatible virtualenv must fail with explicit migration instructions.
-
-    # A metadata fixture tests release-candidate rejection without installing one.
-    - name: Create the prerelease virtualenv metadata fixture directory
-      ansible.builtin.file:
-        path: /opt/openwisp2-prerelease-test/env/bin
-        state: directory
-        mode: "0755"
-
-    - name: Create the prerelease Python metadata fixture
-      ansible.builtin.copy:
-        dest: /opt/openwisp2-prerelease-test/env/bin/python
-        mode: "0755"
-        content: |
-          #!/bin/sh
-          printf '%s\n' '{"version": [3, 11], "releaselevel": "candidate"}'
-
-    - name: Reject an existing prerelease virtualenv
-      block:
-        - name: Try a stable interpreter with a prerelease virtualenv
+        # Explicit interpreter and virtualenv overrides must not be silently replaced.
+        - name: Validate a provisioned custom interpreter
           ansible.builtin.include_tasks: ../../tasks/ubuntu-22.yml
           vars:
             openwisp2_python: /usr/bin/python3.11
-            openwisp2_virtualenv_path: /opt/openwisp2-prerelease-test/env
-        - name: Fail if a prerelease virtualenv was accepted
-          ansible.builtin.fail:
-            msg: A stable selected interpreter must not hide a prerelease virtualenv.
-      rescue:
-        - name: Verify the prerelease virtualenv was rejected
-          ansible.builtin.assert:
-            that:
-              - ansible_failed_task.name == 'Reject an incompatible existing virtualenv without modifying it'
-            fail_msg: An existing release-candidate virtualenv must be rejected.
+            openwisp2_virtualenv_path: /opt/openwisp2-custom-test/env
+
+        - name: Reject the unsupported system interpreter
+          block:
+            - name: Try an explicit Python 3.10 override
+              ansible.builtin.include_tasks: ../../tasks/ubuntu-22.yml
+              vars:
+                openwisp2_python: /usr/bin/python3
+                openwisp2_virtualenv_path: /opt/openwisp2-upgrade-test/env
+            - name: Fail if the unsupported interpreter was accepted
+              ansible.builtin.fail:
+                msg: A Python 3.10 override must fail before package installation.
+          rescue:
+            - name: Verify the runtime validation rejected Python 3.10
+              ansible.builtin.assert:
+                that:
+                  - ansible_failed_task.name == 'Require a stable supported application interpreter'
+                fail_msg: The unsupported interpreter must be rejected by the explicit version check.
+
+        - name: Reject reusing an incompatible virtualenv
+          block:
+            - name: Try the new interpreter with the legacy virtualenv path
+              ansible.builtin.include_tasks: ../../tasks/ubuntu-22.yml
+              vars:
+                openwisp2_python: /usr/bin/python3.11
+                openwisp2_virtualenv_path: /opt/openwisp2-upgrade-test/env
+            - name: Fail if the incompatible virtualenv was accepted
+              ansible.builtin.fail:
+                msg: An existing Python 3.10 virtualenv must not be silently reused.
+          rescue:
+            - name: Verify the virtualenv compatibility check failed
+              ansible.builtin.assert:
+                that:
+                  - ansible_failed_task.name == 'Reject an incompatible existing virtualenv without modifying it'
+                fail_msg: The incompatible virtualenv must fail with explicit migration instructions.
+
+        # A metadata fixture tests release-candidate rejection without installing one.
+        - name: Create the prerelease virtualenv metadata fixture directory
+          ansible.builtin.file:
+            path: /opt/openwisp2-prerelease-test/env/bin
+            state: directory
+            mode: "0755"
+
+        - name: Create the prerelease Python metadata fixture
+          ansible.builtin.copy:
+            dest: /opt/openwisp2-prerelease-test/env/bin/python
+            mode: "0755"
+            content: |
+              #!/bin/sh
+              printf '%s\n' '{"version": [3, 11], "releaselevel": "candidate"}'
+
+        - name: Reject an existing prerelease virtualenv
+          block:
+            - name: Try a stable interpreter with a prerelease virtualenv
+              ansible.builtin.include_tasks: ../../tasks/ubuntu-22.yml
+              vars:
+                openwisp2_python: /usr/bin/python3.11
+                openwisp2_virtualenv_path: /opt/openwisp2-prerelease-test/env
+            - name: Fail if a prerelease virtualenv was accepted
+              ansible.builtin.fail:
+                msg: A stable selected interpreter must not hide a prerelease virtualenv.
+          rescue:
+            - name: Verify the prerelease virtualenv was rejected
+              ansible.builtin.assert:
+                that:
+                  - ansible_failed_task.name == 'Reject an incompatible existing virtualenv without modifying it'
+                fail_msg: An existing release-candidate virtualenv must be rejected.

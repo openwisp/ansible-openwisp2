@@ -1,10 +1,4 @@
 ---
-- name: Check the Jammy runtime before provisioning
-  ansible.builtin.include_tasks:
-    file: ../../../tasks/ubuntu-22.yml
-    apply:
-      check_mode: true
-
 - name: Provision the Jammy runtime
   ansible.builtin.include_tasks: ../../../tasks/ubuntu-22.yml
 
@@ -24,9 +18,3 @@
         assert sys.version_info[:2] == (3, 11), sys.version;
         assert sys.version_info.releaselevel == 'final', sys.version
   changed_when: false
-
-- name: Check the installed Jammy runtime and virtualenv
-  ansible.builtin.include_tasks:
-    file: ../../../tasks/ubuntu-22.yml
-    apply:
-      check_mode: true
