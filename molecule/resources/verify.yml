@@ -6,6 +6,15 @@
   gather_facts: false
 
   tasks:
+    - name: Read the installed application supervisor configuration
+      ansible.builtin.slurp:
+        src: /etc/supervisor/conf.d/openwisp2.conf
+      register: supervisor_config
+
+    - name: Find the application virtualenv from its supervisor command
+      ansible.builtin.set_fact:
+        virtualenv_path: "{{ (supervisor_config.content | b64decode | regex_findall('(?m)^command=(.*)/bin/uwsgi ')) | first }}"
+
     - name: Read OpenWISP settings
       ansible.builtin.slurp:
         src: /opt/openwisp2/openwisp2/settings.py
@@ -42,7 +51,7 @@
 
     - name: Run a specific subset of tests
       command: >
-        /opt/openwisp2/env/bin/python /opt/openwisp2/manage.py test --keepdb --exclude skip_prod \
+        {{ virtualenv_path }}/bin/python /opt/openwisp2/manage.py test --keepdb --exclude skip_prod \
             openwisp_controller.pki.tests.test_admin \
             openwisp_controller.pki.tests.test_models \
             openwisp_controller.config.tests.test_tag \
@@ -82,7 +91,7 @@
     - name: Read Redis bucket configuration
       ansible.builtin.command:
         argv:
-          - /opt/openwisp2/env/bin/python
+          - "{{ virtualenv_path }}/bin/python"
           - /opt/openwisp2/manage.py
           - shell
           - -c

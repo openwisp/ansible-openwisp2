@@ -509,3 +509,54 @@ take a look at `the default values of these variables
     encouraged to adjust these settings to match the scale of their
     project. The same applies to the concurrency and auto-scaling settings
     for Celery workers.
+
+***********************************
+ Application Python and Virtualenv
+***********************************
+
+``openwisp2_python`` selects the application interpreter. It does not replace
+``/usr/bin/python3``, which remains the interpreter used by Ubuntu and Ansible. The
+default is ``python3``, except on Ubuntu 22.04 where the role installs stable
+``python3.11`` from the `deadsnakes PPA
+<https://launchpad.net/~deadsnakes/+archive/ubuntu/ppa>`_. The repository key is scoped
+to that APT source with ``signed-by``.
+
+On Ubuntu 22.04, the managed interpreter includes the development headers, ``venv``,
+``distutils`` and ``gdbm`` modules. An explicit interpreter override is preserved; when
+it is not ``python3.11``, provision that interpreter and its required extension modules
+before running the role. A stable Python 3.11 or newer is required. The release
+candidate in Ubuntu's original archive is not suitable.
+
+``openwisp2_virtualenv_path`` defaults to ``{{ openwisp2_path }}/env``. On Ubuntu 22.04
+with the managed ``python3.11`` interpreter, it instead defaults to ``{{ openwisp2_path
+}}/env-python3.11``. This separate directory prevents an existing Python 3.10
+environment from being silently reused. Changing ``openwisp2_python`` alone cannot
+convert an existing virtualenv; for other interpreter changes, set
+``openwisp2_virtualenv_path`` to a new directory.
+
+Upgrading an existing Ubuntu 22.04 deployment
+=============================================
+
+Back up the database, uploaded files, settings and service configuration before
+upgrading, and schedule a maintenance window. Run the full role, not only the ``pip``
+tag: dependency installation populates the new virtualenv, then Django tasks and
+supervisor configuration use its path. Supervisor updates restart the affected
+application processes. The old ``env`` directory is retained and is not automatically
+deleted.
+
+Retaining the previous environment is not a complete rollback: database migrations,
+generated settings and other role changes may require restoring the corresponding
+backups. Review custom service commands and scripts for hard-coded ``env/bin`` paths and
+update them to the selected virtualenv.
+
+The deadsnakes PPA is a third-party source and does not guarantee timely
+security fixes. This role does not enable or change automatic-update
+policies. Plan regular maintenance to install application-runtime updates
+and restart affected OpenWISP processes onto the patched interpreter.
+Keep Ubuntu's system Python maintained separately as well.
+
+In Ansible check mode, Jammy's managed repository and package provisioning
+are deferred because their metadata may not exist yet. Existing interpreters
+and virtualenvs are validated read-only; validation of a missing managed
+interpreter is deferred until a normal run. Check mode is not a substitute
+for a fresh-install or upgrade integration test.

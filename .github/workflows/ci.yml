@@ -52,6 +52,10 @@ jobs:
         run: |
           ./run-qa-checks
 
+      - name: Test Ubuntu 22.04 runtime installation and migration
+        if: matrix.distro == 'ubuntu2204'
+        run: molecule test -s ubuntu22-runtime
+
       - name: Tests
         run: |
           mkdir -p ~/.ansible/roles

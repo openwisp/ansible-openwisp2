@@ -1,5 +1,6 @@
 ---
-openwisp2_python: python3
+openwisp2_python: "{{ _openwisp2_python | default('python3') }}"
+openwisp2_virtualenv_path: "{{ openwisp2_path }}/{{ _openwisp2_virtualenv_name | default('env') }}"
 ansible_python_interpreter: /usr/bin/python3
 openwisp2_network_topology: false
 openwisp2_firmware_upgrader: false

@@ -51,6 +51,10 @@ with the following commands:
     cd /opt/openwisp2
     source env/bin/activate
 
+On Ubuntu 22.04 with the managed Python 3.11 runtime, use
+``source env-python3.11/bin/activate`` instead. If you customized
+``openwisp2_virtualenv_path``, activate the environment at that path.
+
 SSL Certificate Gotchas
 -----------------------
 
