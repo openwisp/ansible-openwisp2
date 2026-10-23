@@ -519,13 +519,16 @@ take a look at `the default values of these variables
 default is ``python3``, except on Ubuntu 22.04 where the role installs stable
 ``python3.11`` from the `deadsnakes PPA
 <https://launchpad.net/~deadsnakes/+archive/ubuntu/ppa>`_. The repository key is scoped
-to that APT source with ``signed-by``.
+to that APT source with ``signed-by``. The role bundles the public signing key
+with fingerprint ``F23C5A6CF475977595C89F51BA6932366A755776`` to avoid
+re-fetching keyserver responses during every run.
 
 On Ubuntu 22.04, the managed interpreter includes the development headers, ``venv``,
 ``distutils`` and ``gdbm`` modules. An explicit interpreter override is preserved; when
 it is not ``python3.11``, provision that interpreter and its required extension modules
-before running the role. A stable Python 3.11 or newer is required. The release
-candidate in Ubuntu's original archive is not suitable.
+before running the role. A stable Python 3.11 or newer with working ``ssl`` support
+for HTTPS dependency downloads is required. The release candidate in Ubuntu's
+original archive is not suitable.
 
 ``openwisp2_virtualenv_path`` defaults to ``{{ openwisp2_path }}/env``. On Ubuntu 22.04
 with the managed ``python3.11`` interpreter, it instead defaults to ``{{ openwisp2_path

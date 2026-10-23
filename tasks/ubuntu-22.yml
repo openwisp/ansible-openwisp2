@@ -12,8 +12,8 @@
         cache_valid_time: 3600
 
     - name: Install the scoped deadsnakes signing key
-      ansible.builtin.get_url:
-        url: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xF23C5A6CF475977595C89F51BA6932366A755776
+      ansible.builtin.copy:
+        src: "{{ role_path | default(_openwisp2_role_path) }}/files/ubuntu-22-deadsnakes.asc"
         dest: /usr/share/keyrings/openwisp-deadsnakes.asc
         mode: "0644"
 
@@ -104,3 +104,27 @@
           Changing openwisp2_python does not upgrade an existing virtualenv.
           Set openwisp2_virtualenv_path to a new directory and rerun the full
           role. The existing directory is retained for recovery.
+
+- name: Probe SSL support in application interpreters
+  when: openwisp2_runtime.rc == 0
+  ansible.builtin.command:
+    argv:
+      - "{{ item }}"
+      - -c
+      - import ssl
+  loop: "{{ [openwisp2_python] + ([virtualenv_path ~ '/bin/python'] if openwisp2_existing_python.stat.exists else []) }}"
+  register: openwisp2_ssl
+  failed_when: false
+  changed_when: false
+  check_mode: false
+
+- name: Require SSL support for dependency downloads
+  when: openwisp2_runtime.rc == 0
+  ansible.builtin.assert:
+    that:
+      - openwisp2_ssl.results | map(attribute='rc') | unique | list == [0]
+    fail_msg: >-
+      An application interpreter cannot import ssl, which pip needs
+      for HTTPS downloads. Provision a Python build with SSL support or use
+      the default managed python3.11. If an existing virtualenv lacks SSL,
+      set openwisp2_virtualenv_path to a new directory.

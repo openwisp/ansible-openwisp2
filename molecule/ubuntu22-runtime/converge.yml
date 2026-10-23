@@ -2,6 +2,8 @@
 - name: Test fresh and legacy Jammy application environments
   hosts: all
   become: true
+  vars:
+    _openwisp2_role_path: "{{ playbook_dir }}/../.."
   vars_files:
     - ../../defaults/main.yml
     - ../../vars/main.yml
@@ -57,8 +59,8 @@
             openwisp2_path: "{{ runtime_test_path }}"
 
         # Explicit interpreter and virtualenv overrides must not be silently replaced.
-        - name: Validate a provisioned custom interpreter
-          ansible.builtin.include_tasks: ../../tasks/ubuntu-22.yml
+        - name: Install dependencies with a custom interpreter and virtualenv path
+          ansible.builtin.include_tasks: tasks/runtime.yml
           vars:
             openwisp2_python: /usr/bin/python3.11
             openwisp2_virtualenv_path: /opt/openwisp2-custom-test/env
@@ -128,3 +130,61 @@
                 that:
                   - ansible_failed_task.name == 'Reject an incompatible existing virtualenv without modifying it'
                 fail_msg: An existing release-candidate virtualenv must be rejected.
+
+        # Simulate a custom Python build missing SSL without installing one.
+        - name: Create the interpreter fixture without SSL support
+          ansible.builtin.copy:
+            dest: /opt/openwisp2-no-ssl-python
+            mode: "0755"
+            content: |
+              #!/bin/sh
+              if [ "$2" = "import ssl" ]; then
+                  exit 1
+              fi
+              exec /usr/bin/python3.11 "$@"
+
+        - name: Reject an interpreter without SSL support
+          block:
+            - name: Try the interpreter fixture without SSL support
+              ansible.builtin.include_tasks: ../../tasks/ubuntu-22.yml
+              vars:
+                openwisp2_python: /opt/openwisp2-no-ssl-python
+                openwisp2_virtualenv_path: /opt/openwisp2-no-ssl-test/env
+            - name: Fail if the interpreter without SSL was accepted
+              ansible.builtin.fail:
+                msg: Missing SSL support must fail before dependency installation.
+          rescue:
+            - name: Verify the SSL prerequisite check rejected the interpreter
+              ansible.builtin.assert:
+                that:
+                  - ansible_failed_task.name == 'Require SSL support for dependency downloads'
+                fail_msg: Missing SSL must be rejected with explicit prerequisite guidance.
+
+        - name: Create the existing virtualenv fixture without SSL support
+          ansible.builtin.file:
+            path: /opt/openwisp2-no-ssl-test/env/bin
+            state: directory
+            mode: "0755"
+
+        - name: Link the virtualenv interpreter fixture without SSL support
+          ansible.builtin.file:
+            src: /opt/openwisp2-no-ssl-python
+            dest: /opt/openwisp2-no-ssl-test/env/bin/python
+            state: link
+
+        - name: Reject reusing a virtualenv without SSL support
+          block:
+            - name: Try the virtualenv fixture without SSL support
+              ansible.builtin.include_tasks: ../../tasks/ubuntu-22.yml
+              vars:
+                openwisp2_python: /usr/bin/python3.11
+                openwisp2_virtualenv_path: /opt/openwisp2-no-ssl-test/env
+            - name: Fail if the virtualenv without SSL was accepted
+              ansible.builtin.fail:
+                msg: An existing virtualenv missing SSL must fail before dependency installation.
+          rescue:
+            - name: Verify the SSL prerequisite check rejected the virtualenv
+              ansible.builtin.assert:
+                that:
+                  - ansible_failed_task.name == 'Require SSL support for dependency downloads'
+                fail_msg: Missing virtualenv SSL must be rejected with explicit migration guidance.

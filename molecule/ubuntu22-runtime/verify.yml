@@ -26,10 +26,10 @@
           - (legacy_marker.content | b64decode) == 'Preserve the previous environment for recovery.'
         fail_msg: The previous virtualenv must remain available for recovery.
 
-    - name: Verify both application environments use stable Python 3.11
+    - name: Verify all application environments use stable Python 3.11
       ansible.builtin.command:
         argv:
-          - "{{ item }}/env-python3.11/bin/python"
+          - "{{ item }}/bin/python"
           - -c
           - >-
             import dbm.gnu, netdiff, sqlite3, ssl, sys;
@@ -37,5 +37,6 @@
             assert sys.version_info.releaselevel == 'final', sys.version
       changed_when: false
       loop:
-        - /opt/openwisp2-fresh-test
-        - /opt/openwisp2-upgrade-test
+        - /opt/openwisp2-fresh-test/env-python3.11
+        - /opt/openwisp2-upgrade-test/env-python3.11
+        - /opt/openwisp2-custom-test/env
