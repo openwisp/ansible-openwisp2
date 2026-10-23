@@ -4,6 +4,24 @@
 
 Work in progress.
 
+## Version 26.9.1 [2026-10-23]
+
+# Changes
+
+## Other changes
+
+- Updated default Python on Ubuntu 22.04 to 3.11 [#656](https://github.com/openwisp/ansible-openwisp2/issues/656)
+
+  Python 3.11 is EOL.
+
+# Bugfixes
+
+- Stopped trusting `X-Forwarded-For` for the client IP address
+
+  Added `openwisp2\_nginx\_trusted\_proxies` to validate proxy IP addresses and networks before nginx trusts `X-Forwarded-For`.
+
+  Advisory: [**GHSA-hvmx-g7m2-vqx8**](https://github.com/openwisp/openwisp-radius/security/advisories/GHSA-hvmx-g7m2-vqx8).
+
 ## Version 26.09.0 [2026-09-04]
 
 ### Features
