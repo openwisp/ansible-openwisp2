@@ -1,4 +1,3 @@
 ---
-_openwisp2_ubuntu22: true
 _openwisp2_python: python3.11
-_openwisp2_virtualenv_name: "{{ 'env-python3.11' if openwisp2_python == 'python3.11' else 'env' }}"
+virtualenv_path: "{{ openwisp2_path }}/env-python3.11"

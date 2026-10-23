@@ -3,17 +3,37 @@
 - name: Verify
   hosts: all
   become: true
-  gather_facts: false
+  gather_facts: true
+  vars:
+    openwisp2_path: /opt/openwisp2
 
   tasks:
-    - name: Read the installed application supervisor configuration
-      ansible.builtin.slurp:
-        src: /etc/supervisor/conf.d/openwisp2.conf
-      register: supervisor_config
-
-    - name: Find the application virtualenv from its supervisor command
+    - name: Set the application virtualenv path
       ansible.builtin.set_fact:
-        virtualenv_path: "{{ (supervisor_config.content | b64decode | regex_findall('(?m)^command=(.*)/bin/uwsgi ')) | first }}"
+        virtualenv_path: >-
+          {{ openwisp2_path }}/{{ 'env-python3.11' if ansible_distribution == 'Ubuntu'
+          and ansible_distribution_version == '22.04' else 'env' }}
+
+    # Test the Ubuntu 22.04 Python runtime.
+    - name: Verify Ubuntu 22.04 uses Python 3.11
+      when:
+        - ansible_distribution == 'Ubuntu'
+        - ansible_distribution_version == '22.04'
+      block:
+        - name: Read the application Python version
+          ansible.builtin.command:
+            argv:
+              - "{{ virtualenv_path }}/bin/python"
+              - -c
+              - import sys; print('.'.join(map(str, sys.version_info[:2])))
+          register: openwisp2_python_version
+          changed_when: false
+
+        - name: Assert the application uses Python 3.11
+          ansible.builtin.assert:
+            that:
+              - openwisp2_python_version.stdout == '3.11'
+            fail_msg: Ubuntu 22.04 must use Python 3.11 for the application virtualenv.
 
     - name: Read OpenWISP settings
       ansible.builtin.slurp:

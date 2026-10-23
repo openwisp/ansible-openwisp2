@@ -17,20 +17,14 @@
     - ansible_distribution_release|string == 'resolute'
   tags: [always]
 
-- name: Include Ubuntu 22.04 compatibility variables
-  ansible.builtin.include_vars: ubuntu-22.yml
+- name: Include variables for Ubuntu 22.04
+  ansible.builtin.include_vars:
+    dir: "{{ role_path }}/vars"
+    files_matching: "^ubuntu-22.yml$"
   when:
     - ansible_distribution == 'Ubuntu'
     - ansible_distribution_version == '22.04'
   tags: [always]
-
-- name: Include Ubuntu 22.04 compatibility tasks
-  ansible.builtin.include_tasks:
-    file: ubuntu-22.yml
-    apply:
-      tags: [openwisp2, apt, pip]
-  when: _openwisp2_ubuntu22 | default(false)
-  tags: [openwisp2, apt, pip]
 
 - name: Import APT tasks
   ansible.builtin.import_tasks: apt.yml
