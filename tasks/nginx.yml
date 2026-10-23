@@ -224,8 +224,9 @@
       ansible.builtin.fail:
         msg: >-
           Nginx site update rejected; previous site restored.
-          Rollback syntax check rc={{ nginx_after_rollback.rc }}.
+          Rollback syntax check rc={{ nginx_after_rollback.rc | default('unavailable') }}.
           Original error: {{ ansible_failed_result.msg | default('unknown') }}
+          Nginx diagnostics: {{ ansible_failed_result.stderr | default('') }}
 
 - name: Configure nginx log rotation
   ansible.builtin.template:

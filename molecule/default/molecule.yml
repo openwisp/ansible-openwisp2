@@ -10,7 +10,7 @@ lint: |
   set -e
   ../../run-qa-checks
 platforms:
-  - name: "${ROLE_NAME:-openwisp2}-${MOLECULE_DISTRO}"
+  - name: "${ROLE_NAME:-instance}-${MOLECULE_DISTRO}"
     image: "geerlingguy/docker-${MOLECULE_DISTRO}-ansible:${tag:-latest}"
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
@@ -33,8 +33,6 @@ provisioner:
       result_format: yaml
   inventory:
     host_vars:
-      openwisp2-ubuntu2204:
-        openwisp2_python: python3.12
       openwisp2-debian11:
         openwisp2_django_version: "django~=4.2.0"
 

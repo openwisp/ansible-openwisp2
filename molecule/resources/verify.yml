@@ -361,6 +361,12 @@
             src: "/etc/nginx/sites-available/{{ inventory_hostname }}"
           register: nginx_before_bad_extras
 
+        - name: Snapshot enabled Nginx site symlink before malformed directives
+          ansible.builtin.stat:
+            path: "/etc/nginx/sites-enabled/{{ inventory_hostname }}"
+            follow: false
+          register: nginx_enabled_before_bad_extras
+
         - name: Attempt to deploy malformed Nginx directives
           ansible.builtin.include_role:
             name: openwisp.openwisp2
@@ -380,6 +386,7 @@
           ansible.builtin.assert:
             that:
               - "'Nginx site update rejected; previous site restored.' in ansible_failed_result.msg"
+              - "'invalid_nginx_directive_xyz' in ansible_failed_result.msg"
             fail_msg: Unexpected error while testing invalid Nginx directives.
 
         - name: Read Nginx site after validation failure
@@ -387,10 +394,26 @@
             src: "/etc/nginx/sites-available/{{ inventory_hostname }}"
           register: nginx_after_bad_extras
 
+        - name: Inspect enabled Nginx site symlink after rollback
+          ansible.builtin.stat:
+            path: "/etc/nginx/sites-enabled/{{ inventory_hostname }}"
+            follow: false
+          register: nginx_enabled_after_bad_extras
+
         - name: Verify the prior site was restored byte for byte
           ansible.builtin.assert:
             that:
               - nginx_after_bad_extras.content == nginx_before_bad_extras.content
+
+        - name: Verify enabled Nginx site symlink was preserved
+          ansible.builtin.assert:
+            that:
+              - nginx_enabled_before_bad_extras.stat.islnk | default(false)
+              - nginx_enabled_after_bad_extras.stat.islnk | default(false)
+              - >-
+                (nginx_enabled_after_bad_extras.stat.lnk_source | default('')) ==
+                (nginx_enabled_before_bad_extras.stat.lnk_source | default(''))
+            fail_msg: Enabled Nginx site symlink changed during rollback.
 
         - name: Validate restored full Nginx configuration
           ansible.builtin.command: nginx -t
