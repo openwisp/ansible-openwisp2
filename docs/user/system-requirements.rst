@@ -46,5 +46,5 @@ Supported Operating Systems
 - Ubuntu 26 LTS
 - Ubuntu 24 LTS
 - Ubuntu 22 LTS (uses Python 3.11 from the `deadsnakes PPA
-  <https://launchpad.net/~deadsnakes/+archive/ubuntu/ppa>`_ because its
-  default Python 3.10 is end of life and insecure)
+  <https://launchpad.net/~deadsnakes/+archive/ubuntu/ppa>`_ because Network
+  Topology requires Python 3.11)
