@@ -31,14 +31,15 @@ OpenWISP is installed in ``/opt/openwisp2`` (unless you changed the
 ``openwisp2_path`` variable in the Ansible playbook configuration). These
 are some useful directories to check when experiencing issues.
 
-========================= ==============================
-Location                  Description
-========================= ==============================
-/opt/openwisp2            The OpenWISP 2 root directory.
-/opt/openwisp2/log        Log files
-/opt/openwisp2/env        Python virtual environment
-/opt/openwisp2/db.sqlite3 OpenWISP 2 SQLite database
-========================= ==============================
+================================ ==============================================
+Location                         Description
+================================ ==============================================
+/opt/openwisp2                   The OpenWISP 2 root directory.
+/opt/openwisp2/log               Log files
+/opt/openwisp2/env               Python virtual environment, except Ubuntu 22.04
+/opt/openwisp2/env-python3.11    Python virtual environment on Ubuntu 22.04
+/opt/openwisp2/db.sqlite3        OpenWISP 2 SQLite database
+================================ ==============================================
 
 All processes are running as the ``www-data`` user.
 
