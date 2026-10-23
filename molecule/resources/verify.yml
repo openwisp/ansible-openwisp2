@@ -3,9 +3,38 @@
 - name: Verify
   hosts: all
   become: true
-  gather_facts: false
+  gather_facts: true
+  vars:
+    openwisp2_path: /opt/openwisp2
 
   tasks:
+    - name: Set the application virtualenv path
+      ansible.builtin.set_fact:
+        virtualenv_path: >-
+          {{ openwisp2_path }}/{{ 'env-python3.11' if ansible_distribution == 'Ubuntu'
+          and ansible_distribution_version == '22.04' else 'env' }}
+
+    # Test the Ubuntu 22.04 Python runtime.
+    - name: Verify Ubuntu 22.04 uses Python 3.11
+      when:
+        - ansible_distribution == 'Ubuntu'
+        - ansible_distribution_version == '22.04'
+      block:
+        - name: Read the application Python version
+          ansible.builtin.command:
+            argv:
+              - "{{ virtualenv_path }}/bin/python"
+              - -c
+              - import sys; print('.'.join(map(str, sys.version_info[:2])))
+          register: openwisp2_python_version
+          changed_when: false
+
+        - name: Assert the application uses Python 3.11
+          ansible.builtin.assert:
+            that:
+              - openwisp2_python_version.stdout == '3.11'
+            fail_msg: Ubuntu 22.04 must use Python 3.11 for the application virtualenv.
+
     - name: Read OpenWISP settings
       ansible.builtin.slurp:
         src: /opt/openwisp2/openwisp2/settings.py
@@ -42,7 +71,7 @@
 
     - name: Run a specific subset of tests
       command: >
-        /opt/openwisp2/env/bin/python /opt/openwisp2/manage.py test --keepdb --exclude skip_prod \
+        {{ virtualenv_path }}/bin/python /opt/openwisp2/manage.py test --keepdb --exclude skip_prod \
             openwisp_controller.pki.tests.test_admin \
             openwisp_controller.pki.tests.test_models \
             openwisp_controller.config.tests.test_tag \
@@ -82,7 +111,7 @@
     - name: Read Redis bucket configuration
       ansible.builtin.command:
         argv:
-          - /opt/openwisp2/env/bin/python
+          - "{{ virtualenv_path }}/bin/python"
           - /opt/openwisp2/manage.py
           - shell
           - -c
