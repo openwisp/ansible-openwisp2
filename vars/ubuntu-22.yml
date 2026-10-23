@@ -1,0 +1,3 @@
+---
+_openwisp2_python: python3.11
+virtualenv_path: "{{ openwisp2_path }}/env-python3.11"
