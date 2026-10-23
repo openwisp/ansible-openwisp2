@@ -323,3 +323,50 @@
         - name: Validate restored nginx configuration
           ansible.builtin.command: nginx -t
           changed_when: false
+
+    # Invalid custom directives must not replace a working Nginx site.
+    - name: Test invalid Nginx extras are rejected and rolled back
+      block:
+        - name: Snapshot Nginx site before malformed directives
+          ansible.builtin.slurp:
+            src: "/etc/nginx/sites-available/{{ inventory_hostname }}"
+          register: nginx_before_bad_extras
+
+        - name: Attempt to deploy malformed Nginx directives
+          ansible.builtin.include_role:
+            name: openwisp.openwisp2
+            tasks_from: nginx.yml
+          vars:
+            openwisp2_postfix_install: false
+            openwisp2_influxdb_install: false
+            openwisp2_nginx_extras: |
+              invalid_nginx_directive_xyz on;
+
+        - name: Fail when malformed directives are accepted
+          ansible.builtin.fail:
+            msg: Nginx unexpectedly accepted invalid custom directives.
+
+      rescue:
+        - name: Assert Nginx validation rejected the invalid configuration
+          ansible.builtin.assert:
+            that:
+              - "'Nginx site update rejected; previous site restored.' in ansible_failed_result.msg"
+            fail_msg: Unexpected error while testing invalid Nginx directives.
+
+        - name: Read Nginx site after validation failure
+          ansible.builtin.slurp:
+            src: "/etc/nginx/sites-available/{{ inventory_hostname }}"
+          register: nginx_after_bad_extras
+
+        - name: Verify the prior site was restored byte for byte
+          ansible.builtin.assert:
+            that:
+              - nginx_after_bad_extras.content == nginx_before_bad_extras.content
+
+        - name: Validate restored full Nginx configuration
+          ansible.builtin.command: nginx -t
+          changed_when: false
+
+        - name: Confirm Nginx service stayed active
+          ansible.builtin.command: systemctl is-active nginx
+          changed_when: false

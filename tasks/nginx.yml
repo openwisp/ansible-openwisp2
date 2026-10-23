@@ -136,19 +136,96 @@
   notify: Restart nginx
   tags: [nginx_security]
 
-- name: Nginx site available
-  ansible.builtin.template:
-    src: nginx/site-conf.j2
-    dest: "/etc/nginx/sites-available/{{ inventory_hostname }}"
-    mode: "0644"
-  notify: Restart nginx
+# Keep the previous site available if custom directives fail validation.
+- name: Inspect previous Nginx site configuration
+  ansible.builtin.stat:
+    path: "/etc/nginx/sites-available/{{ inventory_hostname }}"
+    follow: false
+  register: nginx_site_before
 
-- name: Nginx site enabled
-  ansible.builtin.file:
+- name: Save previous Nginx site configuration
+  ansible.builtin.slurp:
     src: "/etc/nginx/sites-available/{{ inventory_hostname }}"
-    dest: "/etc/nginx/sites-enabled/{{ inventory_hostname }}"
-    state: link
-  notify: Restart nginx
+  register: nginx_site_saved
+  when: nginx_site_before.stat.exists
+
+- name: Inspect previously enabled Nginx site
+  ansible.builtin.stat:
+    path: "/etc/nginx/sites-enabled/{{ inventory_hostname }}"
+    follow: false
+  register: nginx_enabled_before
+
+- name: Verify that Nginx site paths can be managed safely
+  ansible.builtin.assert:
+    that:
+      - not nginx_site_before.stat.exists or (nginx_site_before.stat.isreg | default(false))
+      - not nginx_enabled_before.stat.exists or (nginx_enabled_before.stat.islnk | default(false))
+    fail_msg: Existing Nginx site paths have unsupported file types; no changes made.
+
+- name: Deploy Nginx site with complete configuration validation
+  block:
+    - name: Nginx site available
+      ansible.builtin.template:
+        src: nginx/site-conf.j2
+        dest: "/etc/nginx/sites-available/{{ inventory_hostname }}"
+        mode: "0644"
+      register: nginx_site_render
+
+    - name: Nginx site enabled
+      ansible.builtin.file:
+        src: "/etc/nginx/sites-available/{{ inventory_hostname }}"
+        dest: "/etc/nginx/sites-enabled/{{ inventory_hostname }}"
+        state: link
+      register: nginx_site_link
+
+    - name: Validate complete Nginx configuration before scheduling restart
+      ansible.builtin.command: nginx -t
+      changed_when: nginx_site_render.changed or nginx_site_link.changed
+      notify: Restart nginx
+      when: not ansible_check_mode
+
+  rescue:
+    - name: Restore previously enabled Nginx site link
+      ansible.builtin.file:
+        src: "{{ nginx_enabled_before.stat.lnk_source }}"
+        dest: "/etc/nginx/sites-enabled/{{ inventory_hostname }}"
+        state: link
+        force: true
+      when: nginx_enabled_before.stat.islnk | default(false)
+
+    - name: Remove newly enabled Nginx site link
+      ansible.builtin.file:
+        path: "/etc/nginx/sites-enabled/{{ inventory_hostname }}"
+        state: absent
+      when: not (nginx_enabled_before.stat.islnk | default(false))
+
+    - name: Restore previous Nginx site contents
+      ansible.builtin.copy:
+        content: "{{ nginx_site_saved.content | b64decode }}"
+        dest: "/etc/nginx/sites-available/{{ inventory_hostname }}"
+        owner: "{{ nginx_site_before.stat.pw_name | default('root') }}"
+        group: "{{ nginx_site_before.stat.gr_name | default('root') }}"
+        mode: "{{ nginx_site_before.stat.mode | default('0644') }}"
+      when: nginx_site_before.stat.exists
+
+    - name: Remove new Nginx site if no previous site existed
+      ansible.builtin.file:
+        path: "/etc/nginx/sites-available/{{ inventory_hostname }}"
+        state: absent
+      when: not nginx_site_before.stat.exists
+
+    - name: Check Nginx configuration following rollback
+      ansible.builtin.command: nginx -t
+      register: nginx_after_rollback
+      failed_when: false
+      changed_when: false
+
+    - name: Stop deployment after rejected Nginx configuration
+      ansible.builtin.fail:
+        msg: >-
+          Nginx site update rejected; previous site restored.
+          Rollback syntax check rc={{ nginx_after_rollback.rc }}.
+          Original error: {{ ansible_failed_result.msg | default('unknown') }}
 
 - name: Configure nginx log rotation
   ansible.builtin.template:

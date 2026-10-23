@@ -10,7 +10,7 @@ lint: |
   set -e
   ../../run-qa-checks
 platforms:
-  - name: "${ROLE_NAME:-instance}-${MOLECULE_DISTRO}"
+  - name: "${ROLE_NAME:-openwisp2}-${MOLECULE_DISTRO}"
     image: "geerlingguy/docker-${MOLECULE_DISTRO}-ansible:${tag:-latest}"
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
