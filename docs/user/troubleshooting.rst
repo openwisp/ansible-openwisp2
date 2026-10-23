@@ -51,6 +51,8 @@ with the following commands:
     cd /opt/openwisp2
     source env/bin/activate
 
+On Ubuntu 22.04, use ``source env-python3.11/bin/activate`` instead.
+
 SSL Certificate Gotchas
 -----------------------
 
