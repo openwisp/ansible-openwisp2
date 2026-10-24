@@ -295,3 +295,130 @@
           - "'proxy_set_header X-Forwarded-For $remote_addr;' in (nginx_site_config.content | b64decode)"
           - "'$proxy_add_x_forwarded_for' not in (nginx_site_config.content | b64decode)"
         fail_msg: "Nginx must not forward client-supplied X-Forwarded-For values to the websocket server."
+
+    # Test the openwisp2_nginx_extras setting in both default and custom configurations.
+    - name: Test custom nginx HTTPS directives
+      block:
+        - name: Assert no custom status endpoint exists by default
+          ansible.builtin.assert:
+            that:
+              - "'location = /nginx_status {' not in (nginx_site_config.content | b64decode)"
+
+        - name: Set custom nginx HTTPS directives
+          ansible.builtin.set_fact:
+            openwisp2_nginx_extras: |
+              location = /nginx_status {
+                  stub_status;
+                  allow 127.0.0.1;
+                  deny all;
+              }
+
+        - name: Render nginx configuration with custom HTTPS directives
+          ansible.builtin.template:
+            src: "{{ playbook_dir | dirname | dirname }}/templates/nginx/site-conf.j2"
+            dest: "/etc/nginx/sites-available/{{ inventory_hostname }}"
+            mode: "0644"
+
+        - name: Validate nginx syntax with custom HTTPS directives
+          ansible.builtin.command: nginx -t
+          changed_when: false
+
+        - name: Read nginx configuration with custom HTTPS directives
+          ansible.builtin.slurp:
+            src: "/etc/nginx/sites-enabled/{{ inventory_hostname }}"
+          register: nginx_custom_site_config
+
+        - name: Assert custom status endpoint remains loopback-only
+          ansible.builtin.assert:
+            that:
+              - "(nginx_custom_site_config.content | b64decode).count('location = /nginx_status {') == 1"
+              - "(nginx_custom_site_config.content | b64decode).split('listen 80;')[0].count('location = /nginx_status {') == 1"
+              - "'stub_status;' in (nginx_custom_site_config.content | b64decode)"
+              - "'allow 127.0.0.1;' in (nginx_custom_site_config.content | b64decode)"
+              - "'deny all;' in (nginx_custom_site_config.content | b64decode)"
+            fail_msg: "Custom nginx status location was not rendered with safe access rules."
+
+      always:
+        - name: Restore default nginx extras variable
+          ansible.builtin.set_fact:
+            openwisp2_nginx_extras: ""
+
+        - name: Restore original nginx site configuration
+          ansible.builtin.copy:
+            content: "{{ nginx_site_config.content | b64decode }}"
+            dest: "/etc/nginx/sites-available/{{ inventory_hostname }}"
+            mode: "0644"
+
+        - name: Validate restored nginx configuration
+          ansible.builtin.command: nginx -t
+          changed_when: false
+
+    # Invalid custom directives must not replace a working Nginx site.
+    - name: Test invalid Nginx extras are rejected and rolled back
+      block:
+        - name: Snapshot Nginx site before malformed directives
+          ansible.builtin.slurp:
+            src: "/etc/nginx/sites-available/{{ inventory_hostname }}"
+          register: nginx_before_bad_extras
+
+        - name: Snapshot enabled Nginx site symlink before malformed directives
+          ansible.builtin.stat:
+            path: "/etc/nginx/sites-enabled/{{ inventory_hostname }}"
+            follow: false
+          register: nginx_enabled_before_bad_extras
+
+        - name: Attempt to deploy malformed Nginx directives
+          ansible.builtin.include_role:
+            name: openwisp.openwisp2
+            tasks_from: nginx.yml
+          vars:
+            openwisp2_postfix_install: false
+            openwisp2_influxdb_install: false
+            openwisp2_nginx_extras: |
+              invalid_nginx_directive_xyz on;
+
+        - name: Fail when malformed directives are accepted
+          ansible.builtin.fail:
+            msg: Nginx unexpectedly accepted invalid custom directives.
+
+      rescue:
+        - name: Assert Nginx validation rejected the invalid configuration
+          ansible.builtin.assert:
+            that:
+              - "'Nginx site update rejected; previous site restored.' in ansible_failed_result.msg"
+              - "'invalid_nginx_directive_xyz' in ansible_failed_result.msg"
+            fail_msg: Unexpected error while testing invalid Nginx directives.
+
+        - name: Read Nginx site after validation failure
+          ansible.builtin.slurp:
+            src: "/etc/nginx/sites-available/{{ inventory_hostname }}"
+          register: nginx_after_bad_extras
+
+        - name: Inspect enabled Nginx site symlink after rollback
+          ansible.builtin.stat:
+            path: "/etc/nginx/sites-enabled/{{ inventory_hostname }}"
+            follow: false
+          register: nginx_enabled_after_bad_extras
+
+        - name: Verify the prior site was restored byte for byte
+          ansible.builtin.assert:
+            that:
+              - nginx_after_bad_extras.content == nginx_before_bad_extras.content
+
+        - name: Verify enabled Nginx site symlink was preserved
+          ansible.builtin.assert:
+            that:
+              - nginx_enabled_before_bad_extras.stat.islnk | default(false)
+              - nginx_enabled_after_bad_extras.stat.islnk | default(false)
+              - >-
+                (nginx_enabled_after_bad_extras.stat.lnk_source | default('')) ==
+                (nginx_enabled_before_bad_extras.stat.lnk_source | default(''))
+            fail_msg: Enabled Nginx site symlink changed during rollback.
+
+        - name: Validate restored full Nginx configuration
+          ansible.builtin.command: nginx -t
+          changed_when: false
+
+        - name: Confirm Nginx service stayed active
+          ansible.builtin.command: systemctl is-active nginx
+          changed_when: false
