@@ -150,6 +150,12 @@ take a look at `the default values of these variables
         openwisp2_nginx_ipv6: false
         # nginx client_max_body_size setting
         openwisp2_nginx_client_max_body_size: 10M
+        # addresses or networks of proxies allowed to provide client addresses
+        # only add your load balancer or ingress addresses here
+        # hostnames are not supported
+        openwisp2_nginx_trusted_proxies:
+          - "192.0.2.10"
+          - "2001:db8::/32"
         # list of upstream servers for OpenWISP
         openwisp2_nginx_openwisp_server:
           - "localhost:8000"
@@ -246,7 +252,10 @@ take a look at `the default values of these variables
         openwisp2_redis_install: true
         openwisp2_redis_host: localhost
         openwisp2_redis_port: 6379
-        openwisp2_redis_cache_url: "redis://{{ openwisp2_redis_host }}:{{ openwisp2_redis_port }}/1"
+        # Cache uses database /0. Sessions use /1, so clearing the cache does
+        # not terminate active user sessions.
+        openwisp2_redis_cache_url: "redis://{{ openwisp2_redis_host }}:{{ openwisp2_redis_port }}/0"
+        openwisp2_redis_sessions_url: "redis://{{ openwisp2_redis_host }}:{{ openwisp2_redis_port }}/1"
         # the following options are required to configure influxdb which is used in openwisp-monitoring
         openwisp2_influxdb_install: true
         openwisp2_timeseries_database:

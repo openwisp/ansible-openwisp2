@@ -1,6 +1,5 @@
 ---
-
-openwisp2_python: python3
+openwisp2_python: "{{ _openwisp2_python | default('python3') }}"
 ansible_python_interpreter: /usr/bin/python3
 openwisp2_network_topology: false
 openwisp2_firmware_upgrader: false
@@ -11,12 +10,11 @@ openwisp2_controller_whois_geoip_account: ""
 openwisp2_controller_whois_geoip_key: ""
 openwisp2_controller_estimated_location_enabled: false
 openwisp2_radius_urls: "{{ openwisp2_radius }}"
-# TODO: Update when releasing OpenWISP 26
-openwisp2_controller_version: "openwisp-controller @ https://github.com/openwisp/openwisp-controller/tarball/master"
-openwisp2_network_topology_version: "openwisp-network-topology @ https://github.com/openwisp/openwisp-network-topology/tarball/master"
-openwisp2_firmware_upgrader_version: "openwisp-firmware-upgrader @ https://github.com/openwisp/openwisp-firmware-upgrader/tarball/master"
-openwisp2_monitoring_version: "openwisp-monitoring @ https://github.com/openwisp/openwisp-monitoring/tarball/master"
-openwisp2_radius_version: "openwisp-radius @ https://github.com/openwisp/openwisp-radius/tarball/master"
+openwisp2_controller_version: "openwisp-controller @ https://github.com/openwisp/openwisp-controller/archive/refs/heads/1.4.tar.gz"
+openwisp2_network_topology_version: "openwisp-network-topology @ https://github.com/openwisp/openwisp-network-topology/archive/refs/heads/1.4.tar.gz"
+openwisp2_firmware_upgrader_version: "openwisp-firmware-upgrader @ https://github.com/openwisp/openwisp-firmware-upgrader/archive/refs/heads/1.4.tar.gz"
+openwisp2_monitoring_version: "openwisp-monitoring @ https://github.com/openwisp/openwisp-monitoring/archive/refs/heads/1.4.tar.gz"
+openwisp2_radius_version: "openwisp-radius @ https://github.com/openwisp/openwisp-radius/archive/refs/heads/1.4.tar.gz"
 openwisp2_django_version: "django~=5.2.0"
 openwisp2_extra_python_packages:
   - bpython
@@ -74,7 +72,9 @@ openwisp2_django_sesame_max_age: 1800 # 30 minutes
 openwisp2_redis_install: true
 openwisp2_redis_host: localhost
 openwisp2_redis_port: 6379
-openwisp2_redis_cache_url: "redis://{{ openwisp2_redis_host }}:{{ openwisp2_redis_port }}/1"
+openwisp2_redis_cache_url: "redis://{{ openwisp2_redis_host }}:{{ openwisp2_redis_port }}/0"
+# Sessions use a separate database but retain custom cache endpoint settings.
+openwisp2_redis_sessions_url: "{{ openwisp2_redis_cache_url | regex_replace('/[0-9]+$', '/1') }}"
 openwisp2_influxdb_install: true
 openwisp2_timeseries_database:
   backend: "openwisp_monitoring.db.backends.influxdb"
@@ -144,6 +144,7 @@ openwisp2_nginx_spdy: false
 openwisp2_nginx_http2: false
 openwisp2_nginx_ipv6: false
 openwisp2_nginx_client_max_body_size: 20M
+openwisp2_nginx_trusted_proxies: []
 openwisp2_nginx_csp: >
   "default-src http: https: data: blob: 'unsafe-inline';
   script-src 'unsafe-eval' https: 'unsafe-inline' 'self';

@@ -197,7 +197,17 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("{{ openwisp2_redis_host }}", {{ openwisp2_redis_port }})],
+            "hosts": [
+                {
+                    "host": "{{ openwisp2_redis_host }}",
+                    "port": {{ openwisp2_redis_port }},
+                    "db": 2,
+                    # redis-py 8.0.0 changed the default timeout of socket
+                    # operations to 5 seconds, which breaks django-channels,
+                    # hence we need to explicitly remove the timeout.
+                    "socket_timeout": None,
+                },
+            ],
             "group_expiry": {{ openwisp2_daphne_websocket_timeout }},
         },
     },
@@ -372,11 +382,18 @@ CACHES = {
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         },
-    }
+    },
+    "sessions": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "{{ openwisp2_redis_sessions_url }}",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    },
 }
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
-SESSION_CACHE_ALIAS = "default"
+SESSION_CACHE_ALIAS = "sessions"
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 

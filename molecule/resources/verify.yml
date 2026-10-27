@@ -3,9 +3,38 @@
 - name: Verify
   hosts: all
   become: true
-  gather_facts: false
+  gather_facts: true
+  vars:
+    openwisp2_path: /opt/openwisp2
 
   tasks:
+    - name: Set the application virtualenv path
+      ansible.builtin.set_fact:
+        virtualenv_path: >-
+          {{ openwisp2_path }}/{{ 'env-python3.11' if ansible_distribution == 'Ubuntu'
+          and ansible_distribution_version == '22.04' else 'env' }}
+
+    # Test the Ubuntu 22.04 Python runtime.
+    - name: Verify Ubuntu 22.04 uses Python 3.11
+      when:
+        - ansible_distribution == 'Ubuntu'
+        - ansible_distribution_version == '22.04'
+      block:
+        - name: Read the application Python version
+          ansible.builtin.command:
+            argv:
+              - "{{ virtualenv_path }}/bin/python"
+              - -c
+              - import sys; print('.'.join(map(str, sys.version_info[:2])))
+          register: openwisp2_python_version
+          changed_when: false
+
+        - name: Assert the application uses Python 3.11
+          ansible.builtin.assert:
+            that:
+              - openwisp2_python_version.stdout == '3.11'
+            fail_msg: Ubuntu 22.04 must use Python 3.11 for the application virtualenv.
+
     - name: Read OpenWISP settings
       ansible.builtin.slurp:
         src: /opt/openwisp2/openwisp2/settings.py
@@ -21,6 +50,15 @@
           - "'openwisp_controller.config.whois.tasks.cleanup_unreferenced_whois_records' in (openwisp_settings.content | b64decode)"
           - "'crontab(hour=2, minute=0)' in (openwisp_settings.content | b64decode)"
 
+    - name: Assert Channels Redis host has no socket timeout
+      ansible.builtin.assert:
+        that:
+          - "'\"hosts\": [' in (openwisp_settings.content | b64decode)"
+          - "'\"host\": \"localhost\",' in (openwisp_settings.content | b64decode)"
+          - "'\"port\": 6379,' in (openwisp_settings.content | b64decode)"
+          - "'\"socket_timeout\": None,' in (openwisp_settings.content | b64decode)"
+        fail_msg: "Channels Redis host must have an unlimited socket timeout."
+
     - name: Read playbook custom CSS
       ansible.builtin.slurp:
         src: /opt/openwisp2/static_custom/css/custom.css
@@ -33,7 +71,7 @@
 
     - name: Run a specific subset of tests
       command: >
-        /opt/openwisp2/env/bin/python /opt/openwisp2/manage.py test --keepdb --exclude skip_prod \
+        {{ virtualenv_path }}/bin/python /opt/openwisp2/manage.py test --keepdb --exclude skip_prod \
             openwisp_controller.pki.tests.test_admin \
             openwisp_controller.pki.tests.test_models \
             openwisp_controller.config.tests.test_tag \
@@ -69,6 +107,37 @@
     - name: Chcke if redis is running
       command: systemctl status redis
       changed_when: false
+
+    - name: Read Redis bucket configuration
+      ansible.builtin.command:
+        argv:
+          - "{{ virtualenv_path }}/bin/python"
+          - /opt/openwisp2/manage.py
+          - shell
+          - -c
+          - >-
+            from django.conf import settings; print(settings.SESSION_CACHE_ALIAS,
+            settings.CACHES['default']['LOCATION'],
+            settings.CACHES['sessions']['LOCATION'],
+            settings.CHANNEL_LAYERS['default']['CONFIG']['hosts'][0]['db'],
+            settings.CELERY_BROKER_URL)
+      register: redis_buckets
+      changed_when: false
+
+    - name: Assert Redis buckets are separated
+      ansible.builtin.assert:
+        that:
+          - >-
+            redis_buckets.stdout_lines[-1].split() == [
+              'sessions',
+              'redis://localhost:6379/0',
+              'redis://localhost:6379/1',
+              '2',
+              'redis://localhost:6379/3'
+            ]
+        fail_msg: >-
+          Django cache, sessions, Channels and Celery must use distinct Redis
+          buckets. Got: {{ redis_buckets.stdout_lines }}
 
     - name: Check Openwisp
       block:
@@ -215,3 +284,69 @@
               - "'gzip_static on;' not in (nginx_disabled_site_config.content | b64decode)"
               - "'brotli_static on;' not in (nginx_disabled_site_config.content | b64decode)"
             fail_msg: "Nginx static compression directives should be disabled."
+
+    # Test openwisp2_nginx_trusted_proxies configuration.
+    - name: Test nginx trusted proxies configuration
+      block:
+        - name: Assert nginx does not trust forwarded client addresses by default
+          ansible.builtin.assert:
+            that:
+              - "'real_ip_header X-Forwarded-For;' not in (nginx_site_config.content | b64decode)"
+            fail_msg: "Nginx must not trust forwarded client addresses by default."
+
+        - name: Configure trusted proxies
+          ansible.builtin.set_fact:
+            openwisp2_nginx_trusted_proxies:
+              - 192.0.2.10
+              - 2001:db8::/32
+
+        - name: Render nginx site configuration with trusted proxies
+          ansible.builtin.template:
+            src: "{{ playbook_dir }}/../../templates/nginx/site-conf.j2"
+            dest: "/etc/nginx/sites-available/{{ inventory_hostname }}"
+            mode: "0644"
+
+        - name: Test nginx configuration syntax with trusted proxies
+          ansible.builtin.command: nginx -t
+          changed_when: false
+
+        - name: Read nginx site configuration with trusted proxies
+          ansible.builtin.slurp:
+            src: "/etc/nginx/sites-enabled/{{ inventory_hostname }}"
+          register: nginx_trusted_proxies_site_config
+
+        - name: Assert nginx accepts client addresses from trusted proxies
+          ansible.builtin.assert:
+            that:
+              - "'set_real_ip_from 192.0.2.10;' in (nginx_trusted_proxies_site_config.content | b64decode)"
+              - "'set_real_ip_from 2001:db8::/32;' in (nginx_trusted_proxies_site_config.content | b64decode)"
+              - "'real_ip_header X-Forwarded-For;' in (nginx_trusted_proxies_site_config.content | b64decode)"
+              - "'real_ip_recursive on;' in (nginx_trusted_proxies_site_config.content | b64decode)"
+            fail_msg: "Nginx must accept forwarded client addresses only from trusted proxies."
+
+    - name: Test nginx rejects invalid trusted proxies
+      block:
+        - name: Include nginx tasks with a hostname-like trusted proxy
+          ansible.builtin.include_tasks:
+            file: "{{ playbook_dir }}/../../tasks/nginx.yml"
+          vars:
+            openwisp2_nginx_trusted_proxies:
+              - proxy.example.com
+
+        - name: Fail if nginx accepts a hostname-like trusted proxy
+          ansible.builtin.fail:
+            msg: "Nginx accepted a hostname-like trusted proxy."
+      rescue:
+        - name: Assert nginx rejects hostname-like trusted proxies
+          ansible.builtin.assert:
+            that:
+              - >-
+                'openwisp2_nginx_trusted_proxies entries must be IP addresses
+                or networks.' in ansible_failed_result.msg
+
+    - name: Assert nginx sends the connection address to the websocket server
+      ansible.builtin.assert:
+        that:
+          - "'proxy_set_header X-Forwarded-For $remote_addr;' in (nginx_site_config.content | b64decode)"
+          - "'$proxy_add_x_forwarded_for' not in (nginx_site_config.content | b64decode)"
+        fail_msg: "Nginx must not forward client-supplied X-Forwarded-For values to the websocket server."

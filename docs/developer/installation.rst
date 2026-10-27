@@ -72,11 +72,13 @@ To do that, proceed with the following steps:
 
 **Step 1**: Clone ``ansible-openwisp2``
 
-Clone repository by:
+Fork the `ansible-openwisp2 repository
+<https://github.com/openwisp/ansible-openwisp2>`_ on GitHub, then clone
+your fork. Replace ``YOUR_GITHUB_USERNAME`` with your GitHub username:
 
 .. code-block:: shell
 
-    git clone https://github.com/<your_fork>/ansible-openwisp2.git openwisp.openwisp2
+    git clone git@github.com:YOUR_GITHUB_USERNAME/ansible-openwisp2.git openwisp.openwisp2
     cd openwisp.openwisp2
 
 **Step 2**: Install docker

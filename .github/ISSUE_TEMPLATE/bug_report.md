@@ -28,4 +28,3 @@ If applicable, add screenshots to help explain your problem.
  - OS: [e.g. Ubuntu 24.04 LTS]
  - Python Version: [e.g. Python 3.11.2]
  - Django Version: [e.g. Django 4.2.5]
- - Browser and Browser Version (if applicable): [e.g. Chromium v126.0.6478.126]

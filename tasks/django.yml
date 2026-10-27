@@ -257,7 +257,10 @@
   environment:
     PRIVATE_KEY: "{{ default_private_ssh_key.stdout | default(None) }}"
     PUBLIC_KEY: "{{ default_public_ssh_key.stdout | default(None) }}"
-  ansible.builtin.command: "env/bin/python load_initial_data.py"
+  ansible.builtin.command:
+    argv:
+      - "{{ virtualenv_path }}/bin/python"
+      - load_initial_data.py
   register: load_initial_data_result
   changed_when: >
     "created" in load_initial_data_result.stdout
