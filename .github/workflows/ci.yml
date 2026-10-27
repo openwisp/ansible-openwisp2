@@ -14,6 +14,13 @@ on:             # yamllint disable-line rule:truthy
       - dev
       - "[0-9]+.[0-9]+"
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.repository }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     name: Build ${{ matrix.distro }}
@@ -30,21 +37,24 @@ jobs:
           - debian13
 
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v7
+      - name: Set up Python 3.12
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7
         with:
           python-version: "3.12"
 
       - name: Install python dependencies
+        id: deps
         run: |
           pip install -U pip wheel setuptools
           pip install -r requirements-test.txt
 
       - name: Install Ansible Galaxy dependencies
+        id: galaxy
         run: ansible-galaxy collection install "community.general:>=3.6.0"
 
       - name: QA checks
@@ -53,9 +63,10 @@ jobs:
           ./run-qa-checks
 
       - name: Tests
+        if: ${{ !cancelled() && steps.deps.conclusion == 'success' && steps.galaxy.conclusion == 'success' }}
         run: |
           mkdir -p ~/.ansible/roles
-          ln -s $GITHUB_WORKSPACE ~/.ansible/roles/openwisp.openwisp2
+          ln -s "$GITHUB_WORKSPACE" ~/.ansible/roles/openwisp.openwisp2
           molecule test
         env:
           ROLE_NAME: openwisp2
@@ -67,15 +78,21 @@ jobs:
   import:
     name: Update imports on Ansible Galaxy
     runs-on: ubuntu-22.04
-    container: python:3.12-slim
     needs:
       - build
 
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
     steps:
+      - name: Set up Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7
+        with:
+          python-version: "3.12"
+
       - name: Install ansible
         run: pip install ansible
 
       - name: Update imports on Ansible Galaxy
         run: |
-          ansible-galaxy role import --api-key ${{ secrets.GALAXY_API_KEY }} openwisp ansible-openwisp2
+          ansible-galaxy role import --api-key "$GALAXY_API_KEY" openwisp ansible-openwisp2
+        env:
+          GALAXY_API_KEY: ${{ secrets.GALAXY_API_KEY }}
