@@ -78,6 +78,9 @@ jobs:
   import:
     name: Update imports on Ansible Galaxy
     runs-on: ubuntu-22.04
+    environment:
+      name: ansible-galaxy
+      deployment: false
     needs:
       - build
 
