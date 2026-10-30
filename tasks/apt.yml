@@ -16,11 +16,18 @@
     - ansible_distribution_version == '22.04'
     - openwisp2_python == 'python3.11'
   block:
+    # Preserve idempotence when the PPA signing key is already installed.
+    - name: Check whether the deadsnakes signing key exists
+      ansible.builtin.stat:
+        path: /usr/share/keyrings/openwisp-deadsnakes.asc
+      register: openwisp_deadsnakes_signing_key
+
     - name: Download the deadsnakes signing key
       ansible.builtin.get_url:
         url: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xF23C5A6CF475977595C89F51BA6932366A755776
         dest: /usr/share/keyrings/openwisp-deadsnakes.asc
         mode: "0644"
+      when: not openwisp_deadsnakes_signing_key.stat.exists
 
     - name: Add the deadsnakes repository
       ansible.builtin.apt_repository:
