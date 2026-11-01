@@ -422,3 +422,62 @@
         - name: Confirm Nginx service stayed active
           ansible.builtin.command: systemctl is-active nginx
           changed_when: false
+
+    # Failure in an included file must restore all Nginx includes, not just the site.
+    - name: Test invalid Nginx included security directives
+      block:
+        - name: Snapshot Nginx included configurations before invalid CSP
+          ansible.builtin.slurp:
+            src: "{{ openwisp2_path }}/nginx-conf/openwisp2/{{ item }}"
+          loop:
+            - ssl.conf
+            - security.conf
+          register: nginx_includes_before_bad_security
+
+        - name: Attempt to deploy invalid included security directives
+          ansible.builtin.include_role:
+            name: openwisp.openwisp2
+            tasks_from: nginx.yml
+          vars:
+            openwisp2_nginx_csp: |-
+              "default-src 'self'" always;
+              invalid_nginx_security_directive_xyz on;
+
+        - name: Fail if malformed included Nginx directives were accepted
+          ansible.builtin.fail:
+            msg: Nginx unexpectedly accepted the malformed security include.
+
+      rescue:
+        - name: Verify included Nginx directives were rejected
+          ansible.builtin.assert:
+            that:
+              - "'Nginx site update rejected; previous site restored.' in ansible_failed_result.msg"
+              - "'invalid_nginx_security_directive_xyz' in ansible_failed_result.msg"
+            fail_msg: Unexpected failure while testing included Nginx directives.
+
+        - name: Read Nginx included configurations after rejected update
+          ansible.builtin.slurp:
+            src: "{{ openwisp2_path }}/nginx-conf/openwisp2/{{ item }}"
+          loop:
+            - ssl.conf
+            - security.conf
+          register: nginx_includes_after_bad_security
+
+        - name: Verify Nginx includes were restored byte for byte
+          ansible.builtin.assert:
+            that:
+              - item.0.content == item.1.content
+            fail_msg: "Nginx include {{ item.0.item }} changed after rollback."
+          loop: >-
+            {{ nginx_includes_before_bad_security.results |
+               zip(nginx_includes_after_bad_security.results) | list }}
+          loop_control:
+            label: "{{ item.0.item }}"
+
+        - name: Validate full Nginx configuration after include rollback
+          ansible.builtin.command: nginx -t
+          changed_when: false
+
+        - name: Verify Nginx remained active after include rollback
+          ansible.builtin.command: systemctl is-active nginx
+          changed_when: false
