@@ -121,39 +121,59 @@
     path: "/etc/nginx/sites-enabled/default"
     state: absent
 
-- name: Nginx SSL configuration
-  ansible.builtin.template:
-    src: nginx/ssl-conf.j2
-    dest: "{{ openwisp2_path }}/nginx-conf/openwisp2/ssl.conf"
-    mode: "0644"
-  notify: Restart nginx
-
-- name: Nginx security configuration
-  ansible.builtin.template:
-    src: nginx/security-conf.j2
-    dest: "{{ openwisp2_path }}/nginx-conf/openwisp2/security.conf"
-    mode: "0644"
-  notify: Restart nginx
+# Treat the SSL/security includes and the server site as one Nginx update.
+# Otherwise, reverting only the site after nginx -t fails leaves broken includes.
+- name: Inspect existing Nginx include files
+  ansible.builtin.stat:
+    path: "{{ openwisp2_path }}/nginx-conf/openwisp2/{{ item }}"
+    follow: false
+  loop:
+    - ssl.conf
+    - security.conf
+  register: nginx_includes_before
   tags: [nginx_security]
 
-# Keep the previous site available if custom directives fail validation.
+- name: Reject unsupported Nginx include file types
+  ansible.builtin.assert:
+    that:
+      - not item.stat.exists or (item.stat.isreg | default(false))
+    fail_msg: "Nginx include {{ item.item }} is not a regular file."
+  loop: "{{ nginx_includes_before.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+  tags: [nginx_security]
+
+- name: Save existing Nginx include files
+  ansible.builtin.slurp:
+    src: "{{ openwisp2_path }}/nginx-conf/openwisp2/{{ item.item }}"
+  loop: "{{ nginx_includes_before.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+  when: item.stat.exists
+  register: nginx_includes_saved
+  tags: [nginx_security]
+
+# Preserve the previous site, its enabled symlink and both include files.
 - name: Inspect previous Nginx site configuration
   ansible.builtin.stat:
     path: "/etc/nginx/sites-available/{{ inventory_hostname }}"
     follow: false
   register: nginx_site_before
+  tags: [nginx_security]
 
 - name: Save previous Nginx site configuration
   ansible.builtin.slurp:
     src: "/etc/nginx/sites-available/{{ inventory_hostname }}"
   register: nginx_site_saved
   when: nginx_site_before.stat.exists
+  tags: [nginx_security]
 
 - name: Inspect previously enabled Nginx site
   ansible.builtin.stat:
     path: "/etc/nginx/sites-enabled/{{ inventory_hostname }}"
     follow: false
   register: nginx_enabled_before
+  tags: [nginx_security]
 
 - name: Verify that Nginx site paths can be managed safely
   ansible.builtin.assert:
@@ -161,9 +181,25 @@
       - not nginx_site_before.stat.exists or (nginx_site_before.stat.isreg | default(false))
       - not nginx_enabled_before.stat.exists or (nginx_enabled_before.stat.islnk | default(false))
     fail_msg: Existing Nginx site paths have unsupported file types; no changes made.
+  tags: [nginx_security]
 
-- name: Deploy Nginx site with complete configuration validation
+- name: Deploy Nginx files with complete configuration validation
+  tags: [nginx_security]
   block:
+    - name: Nginx SSL configuration
+      ansible.builtin.template:
+        src: nginx/ssl-conf.j2
+        dest: "{{ openwisp2_path }}/nginx-conf/openwisp2/ssl.conf"
+        mode: "0644"
+      register: nginx_ssl_render
+
+    - name: Nginx security configuration
+      ansible.builtin.template:
+        src: nginx/security-conf.j2
+        dest: "{{ openwisp2_path }}/nginx-conf/openwisp2/security.conf"
+        mode: "0644"
+      register: nginx_security_render
+
     - name: Nginx site available
       ansible.builtin.template:
         src: nginx/site-conf.j2
@@ -180,7 +216,9 @@
 
     - name: Validate complete Nginx configuration before scheduling restart
       ansible.builtin.command: nginx -t
-      changed_when: nginx_site_render.changed or nginx_site_link.changed
+      changed_when: >-
+        nginx_site_render.changed or nginx_site_link.changed or
+        nginx_ssl_render.changed or nginx_security_render.changed
       notify: Restart nginx
       when: not ansible_check_mode
 
@@ -213,6 +251,27 @@
         path: "/etc/nginx/sites-available/{{ inventory_hostname }}"
         state: absent
       when: not nginx_site_before.stat.exists
+
+    - name: Restore existing Nginx include files after failed validation
+      ansible.builtin.copy:
+        content: "{{ item.content | b64decode }}"
+        dest: "{{ openwisp2_path }}/nginx-conf/openwisp2/{{ item.item.item }}"
+        owner: "{{ item.item.stat.pw_name | default('root') }}"
+        group: "{{ item.item.stat.gr_name | default('root') }}"
+        mode: "{{ item.item.stat.mode | default('0644') }}"
+      loop: "{{ nginx_includes_saved.results }}"
+      loop_control:
+        label: "{{ item.item.item }}"
+      when: item.item.stat.exists
+
+    - name: Remove new Nginx include files after failed validation
+      ansible.builtin.file:
+        path: "{{ openwisp2_path }}/nginx-conf/openwisp2/{{ item.item }}"
+        state: absent
+      loop: "{{ nginx_includes_before.results }}"
+      loop_control:
+        label: "{{ item.item }}"
+      when: not item.stat.exists
 
     - name: Check Nginx configuration following rollback
       ansible.builtin.command: nginx -t
