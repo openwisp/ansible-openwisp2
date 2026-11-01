@@ -4,6 +4,7 @@
   ansible.builtin.set_fact:
     openwisp2_nginx_client_max_body_size: "{{ openwisp2_firmware_upgrader_max_file_size }}"
   when: openwisp2_firmware_upgrader
+  tags: [nginx_security]
 
 - name: Validate nginx trusted proxies
   block:
@@ -32,6 +33,7 @@
           networks.
 
 - name: Configure nginx static compression
+  tags: [nginx_security]
   block:
     - name: Get nginx build configuration
       ansible.builtin.command: nginx -V

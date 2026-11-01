@@ -434,11 +434,20 @@
             - security.conf
           register: nginx_includes_before_bad_security
 
+        - name: Snapshot Nginx site before invalid security directives
+          ansible.builtin.slurp:
+            src: "/etc/nginx/sites-available/{{ inventory_hostname }}"
+          register: nginx_site_before_bad_security
+
         - name: Attempt to deploy invalid included security directives
           ansible.builtin.include_role:
             name: openwisp.openwisp2
             tasks_from: nginx.yml
           vars:
+            # Match the working Nginx-only negative test. Running dependent
+            # services here can fail on unrelated apt repository availability.
+            openwisp2_postfix_install: false
+            openwisp2_influxdb_install: false
             openwisp2_nginx_csp: |-
               "default-src 'self'" always;
               invalid_nginx_security_directive_xyz on;
@@ -462,6 +471,18 @@
             - ssl.conf
             - security.conf
           register: nginx_includes_after_bad_security
+
+        - name: Read Nginx site after rejected security configuration
+          ansible.builtin.slurp:
+            src: "/etc/nginx/sites-available/{{ inventory_hostname }}"
+          register: nginx_site_after_bad_security
+
+        - name: Verify Nginx site was restored byte for byte
+          ansible.builtin.assert:
+            that:
+              - >-
+                nginx_site_after_bad_security.content ==
+                nginx_site_before_bad_security.content
 
         - name: Verify Nginx includes were restored byte for byte
           ansible.builtin.assert:
