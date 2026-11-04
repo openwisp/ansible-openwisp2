@@ -23,8 +23,8 @@
   tags:
     - molecule-idempotence-notest
 
-# Ownership is set here and not on the recursive task above, which would also
-# chown nginx*.log and its rotated backups, recreated as root by nginx anyway.
+# Set ownership on the directory only. The recursive task above would also
+# chown the nginx logs, which logrotate manages.
 - name: Set ownership of the openwisp2 log directory
   ansible.builtin.file:
     path: "{{ openwisp2_path }}/log"
