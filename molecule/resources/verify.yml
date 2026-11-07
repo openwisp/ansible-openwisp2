@@ -191,7 +191,9 @@
           ansible.builtin.command: crontab -u root -l
           register: root_crontab
           changed_when: false
-          failed_when: false
+          failed_when: >-
+            root_crontab.rc != 0
+            and 'no crontab for root' not in root_crontab.stderr
 
         - name: Ensure OpenWISP cron jobs run as www-data and not as root
           ansible.builtin.assert:
