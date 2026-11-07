@@ -35,7 +35,8 @@
 
 # Django creates this file on first use, so create it up front to keep it
 # writable by the application processes even if a management command runs as
-# root. The mode matches the recursive task above to stay idempotent.
+# root. Django recreates it when it rotates, so like the log directory task
+# above it is skipped by the idempotence test.
 - name: Create openwisp2.log owned by "{{ www_user }}"
   ansible.builtin.file:
     path: "{{ openwisp2_path }}/log/openwisp2.log"
@@ -45,6 +46,8 @@
     mode: "0770"
     access_time: preserve
     modification_time: preserve
+  tags:
+    - molecule-idempotence-notest
 
 - name: Create custom static directory
   ansible.builtin.file:
