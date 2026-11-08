@@ -33,10 +33,8 @@
     group: "{{ www_group }}"
     mode: "0770"
 
-# Django creates this file on first use, so create it up front to keep it
-# writable by the application processes even if a management command runs as
-# root. Django recreates it when it rotates, so like the log directory task
-# above it is skipped by the idempotence test.
+# Pre-create the Django log so it is owned by the application user.
+# Django recreates it on rotation, so the idempotence test skips it.
 - name: Create openwisp2.log owned by "{{ www_user }}"
   ansible.builtin.file:
     path: "{{ openwisp2_path }}/log/openwisp2.log"
