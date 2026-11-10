@@ -28,6 +28,11 @@
         mode: "0644"
       when: not _openwisp_deadsnakes_key.stat.exists
 
+    - name: Set deadsnakes signing key permissions
+      ansible.builtin.file:
+        path: /usr/share/keyrings/openwisp-deadsnakes.asc
+        mode: "0644"
+
     - name: Add the deadsnakes repository
       ansible.builtin.apt_repository:
         repo: >-
