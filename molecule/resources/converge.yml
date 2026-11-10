@@ -29,6 +29,19 @@
         inner_tunnel_auth_port: 18230
 
   pre_tasks:
+    - name: Configure deadsnakes signing key test fixture
+      when:
+        - ansible_distribution == 'Ubuntu'
+        - ansible_distribution_version == '22.04'
+      block:
+        - name: Download deadsnakes signing key with restricted permissions
+          ansible.builtin.get_url:
+            url: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xF23C5A6CF475977595C89F51BA6932366A755776
+            dest: /usr/share/keyrings/openwisp-deadsnakes.asc
+            mode: "0600"
+          tags:
+            - molecule-idempotence-notest
+
     - name: Update apt cache
       apt:
         update_cache: true
