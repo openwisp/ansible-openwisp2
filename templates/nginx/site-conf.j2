@@ -99,6 +99,10 @@ server {
     location /media/ {
         alias {{ openwisp2_path }}/media/;
     }
+
+    {% if openwisp2_nginx_extras %}
+    {{ openwisp2_nginx_extras | indent(4) }}
+    {% endif %}
 }
 
 server {

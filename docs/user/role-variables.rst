@@ -156,6 +156,14 @@ take a look at `the default values of these variables
         openwisp2_nginx_trusted_proxies:
           - "192.0.2.10"
           - "2001:db8::/32"
+        # optional directives inside the HTTPS nginx server block;
+        # restrict access to any added monitoring endpoints
+        openwisp2_nginx_extras: |
+          location = /nginx_status {
+              stub_status;
+              allow 127.0.0.1;
+              deny all;
+          }
         # list of upstream servers for OpenWISP
         openwisp2_nginx_openwisp_server:
           - "localhost:8000"
