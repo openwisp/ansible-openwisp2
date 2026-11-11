@@ -35,20 +35,26 @@
               - openwisp2_python_version.stdout == '3.11'
             fail_msg: Ubuntu 22.04 must use Python 3.11 for the application virtualenv.
 
-    - name: Verify deadsnakes signing key permissions on Ubuntu 22.04
+    - name: Verify deadsnakes signing key on Ubuntu 22.04
       when:
         - ansible_distribution == 'Ubuntu'
         - ansible_distribution_version == '22.04'
       block:
-        - name: Read deadsnakes signing key metadata
+        - name: Read deadsnakes signing key
           ansible.builtin.stat:
             path: /usr/share/keyrings/openwisp-deadsnakes.asc
+            checksum_algorithm: sha256
           register: deadsnakes_key
 
-        - name: Assert deadsnakes signing key permissions
+        - name: Assert deadsnakes signing key contents and permissions
           ansible.builtin.assert:
             that:
+              - >-
+                deadsnakes_key.stat.checksum ==
+                (lookup('file', playbook_dir | dirname | dirname ~
+                '/files/deadsnakes-ppa.asc', rstrip=False) | hash('sha256'))
               - deadsnakes_key.stat.mode == '0644'
+            fail_msg: Deadsnakes signing key must match the bundled key and be readable by APT.
 
     - name: Read OpenWISP settings
       ansible.builtin.slurp:
