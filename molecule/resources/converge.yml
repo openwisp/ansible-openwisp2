@@ -47,3 +47,26 @@
 
   roles:
     - role: openwisp.openwisp2
+
+  post_tasks:
+    # Test deadsnakes signing key permissions.
+    - name: Test deadsnakes signing key permissions
+      when:
+        - ansible_distribution == 'Ubuntu'
+        - ansible_distribution_version == '22.04'
+      tags:
+        - molecule-idempotence-notest
+      block:
+        - name: Remove the deadsnakes repository
+          ansible.builtin.file:
+            path: /etc/apt/sources.list.d/openwisp-deadsnakes.list
+            state: absent
+
+        - name: Restrict deadsnakes signing key permissions
+          ansible.builtin.file:
+            path: /usr/share/keyrings/openwisp-deadsnakes.asc
+            mode: "0600"
+
+        - name: Reapply the role
+          ansible.builtin.include_role:
+            name: openwisp.openwisp2
