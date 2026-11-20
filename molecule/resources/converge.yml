@@ -49,8 +49,8 @@
     - role: openwisp.openwisp2
 
   post_tasks:
-    # Test deadsnakes signing key permissions.
-    - name: Test deadsnakes signing key permissions
+    # Test deadsnakes signing key recovery from invalid contents and permissions.
+    - name: Test deadsnakes signing key recovery
       when:
         - ansible_distribution == 'Ubuntu'
         - ansible_distribution_version == '22.04'
@@ -62,9 +62,10 @@
             path: /etc/apt/sources.list.d/openwisp-deadsnakes.list
             state: absent
 
-        - name: Restrict deadsnakes signing key permissions
-          ansible.builtin.file:
-            path: /usr/share/keyrings/openwisp-deadsnakes.asc
+        - name: Replace the deadsnakes signing key with invalid contents
+          ansible.builtin.copy:
+            content: invalid signing key
+            dest: /usr/share/keyrings/openwisp-deadsnakes.asc
             mode: "0600"
 
         - name: Reapply the role

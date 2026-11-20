@@ -52,6 +52,13 @@
     virtualenv: "{{ virtualenv_path }}"
   when: openwisp2_monitoring
 
+# A handler may also be notified by SSL, security or nginx.conf changes.
+- name: Validate nginx before restart
+  ansible.builtin.command: nginx -t
+  changed_when: false
+  when: openwisp2_nginx_install
+  listen: Restart nginx
+
 - name: Restart nginx
   ansible.builtin.service:
     name: nginx

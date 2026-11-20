@@ -35,20 +35,26 @@
               - openwisp2_python_version.stdout == '3.11'
             fail_msg: Ubuntu 22.04 must use Python 3.11 for the application virtualenv.
 
-    - name: Verify deadsnakes signing key permissions on Ubuntu 22.04
+    - name: Verify deadsnakes signing key on Ubuntu 22.04
       when:
         - ansible_distribution == 'Ubuntu'
         - ansible_distribution_version == '22.04'
       block:
-        - name: Read deadsnakes signing key metadata
+        - name: Read deadsnakes signing key
           ansible.builtin.stat:
             path: /usr/share/keyrings/openwisp-deadsnakes.asc
+            checksum_algorithm: sha256
           register: deadsnakes_key
 
-        - name: Assert deadsnakes signing key permissions
+        - name: Assert deadsnakes signing key contents and permissions
           ansible.builtin.assert:
             that:
+              - >-
+                deadsnakes_key.stat.checksum ==
+                (lookup('file', playbook_dir | dirname | dirname ~
+                '/files/deadsnakes-ppa.asc', rstrip=False) | hash('sha256'))
               - deadsnakes_key.stat.mode == '0644'
+            fail_msg: Deadsnakes signing key must match the bundled key and be readable by APT.
 
     - name: Read OpenWISP settings
       ansible.builtin.slurp:
@@ -310,3 +316,210 @@
           - "'proxy_set_header X-Forwarded-For $remote_addr;' in (nginx_site_config.content | b64decode)"
           - "'$proxy_add_x_forwarded_for' not in (nginx_site_config.content | b64decode)"
         fail_msg: "Nginx must not forward client-supplied X-Forwarded-For values to the websocket server."
+
+    # Test the openwisp2_nginx_extras setting in both default and custom configurations.
+    - name: Test custom nginx HTTPS directives
+      block:
+        - name: Assert no custom status endpoint exists by default
+          ansible.builtin.assert:
+            that:
+              - "'location = /nginx_status {' not in (nginx_site_config.content | b64decode)"
+
+        - name: Set custom nginx HTTPS directives
+          ansible.builtin.set_fact:
+            openwisp2_nginx_extras: |
+              location = /nginx_status {
+                  stub_status;
+                  allow 127.0.0.1;
+                  deny all;
+              }
+
+        - name: Render nginx configuration with custom HTTPS directives
+          ansible.builtin.template:
+            src: "{{ playbook_dir | dirname | dirname }}/templates/nginx/site-conf.j2"
+            dest: "/etc/nginx/sites-available/{{ inventory_hostname }}"
+            mode: "0644"
+
+        - name: Validate nginx syntax with custom HTTPS directives
+          ansible.builtin.command: nginx -t
+          changed_when: false
+
+        - name: Read nginx configuration with custom HTTPS directives
+          ansible.builtin.slurp:
+            src: "/etc/nginx/sites-enabled/{{ inventory_hostname }}"
+          register: nginx_custom_site_config
+
+        - name: Assert custom status endpoint remains loopback-only
+          ansible.builtin.assert:
+            that:
+              - "(nginx_custom_site_config.content | b64decode).count('location = /nginx_status {') == 1"
+              - "(nginx_custom_site_config.content | b64decode).split('listen 80;')[0].count('location = /nginx_status {') == 1"
+              - "'stub_status;' in (nginx_custom_site_config.content | b64decode)"
+              - "'allow 127.0.0.1;' in (nginx_custom_site_config.content | b64decode)"
+              - "'deny all;' in (nginx_custom_site_config.content | b64decode)"
+            fail_msg: "Custom nginx status location was not rendered with safe access rules."
+
+      always:
+        - name: Restore default nginx extras variable
+          ansible.builtin.set_fact:
+            openwisp2_nginx_extras: ""
+
+        - name: Restore original nginx site configuration
+          ansible.builtin.copy:
+            content: "{{ nginx_site_config.content | b64decode }}"
+            dest: "/etc/nginx/sites-available/{{ inventory_hostname }}"
+            mode: "0644"
+
+        - name: Validate restored nginx configuration
+          ansible.builtin.command: nginx -t
+          changed_when: false
+
+    # Invalid custom directives must not replace a working Nginx site.
+    - name: Test invalid Nginx extras are rejected and rolled back
+      block:
+        - name: Snapshot Nginx site before malformed directives
+          ansible.builtin.slurp:
+            src: "/etc/nginx/sites-available/{{ inventory_hostname }}"
+          register: nginx_before_bad_extras
+
+        - name: Snapshot enabled Nginx site symlink before malformed directives
+          ansible.builtin.stat:
+            path: "/etc/nginx/sites-enabled/{{ inventory_hostname }}"
+            follow: false
+          register: nginx_enabled_before_bad_extras
+
+        - name: Attempt to deploy malformed Nginx directives
+          ansible.builtin.include_role:
+            name: openwisp.openwisp2
+            tasks_from: nginx.yml
+          vars:
+            openwisp2_postfix_install: false
+            openwisp2_influxdb_install: false
+            openwisp2_nginx_extras: |
+              invalid_nginx_directive_xyz on;
+
+        - name: Fail when malformed directives are accepted
+          ansible.builtin.fail:
+            msg: Nginx unexpectedly accepted invalid custom directives.
+
+      rescue:
+        - name: Assert Nginx validation rejected the invalid configuration
+          ansible.builtin.assert:
+            that:
+              - "'Nginx site update rejected; previous site restored.' in ansible_failed_result.msg"
+              - "'invalid_nginx_directive_xyz' in ansible_failed_result.msg"
+            fail_msg: Unexpected error while testing invalid Nginx directives.
+
+        - name: Read Nginx site after validation failure
+          ansible.builtin.slurp:
+            src: "/etc/nginx/sites-available/{{ inventory_hostname }}"
+          register: nginx_after_bad_extras
+
+        - name: Inspect enabled Nginx site symlink after rollback
+          ansible.builtin.stat:
+            path: "/etc/nginx/sites-enabled/{{ inventory_hostname }}"
+            follow: false
+          register: nginx_enabled_after_bad_extras
+
+        - name: Verify the prior site was restored byte for byte
+          ansible.builtin.assert:
+            that:
+              - nginx_after_bad_extras.content == nginx_before_bad_extras.content
+
+        - name: Verify enabled Nginx site symlink was preserved
+          ansible.builtin.assert:
+            that:
+              - nginx_enabled_before_bad_extras.stat.islnk | default(false)
+              - nginx_enabled_after_bad_extras.stat.islnk | default(false)
+              - >-
+                (nginx_enabled_after_bad_extras.stat.lnk_source | default('')) ==
+                (nginx_enabled_before_bad_extras.stat.lnk_source | default(''))
+            fail_msg: Enabled Nginx site symlink changed during rollback.
+
+        - name: Validate restored full Nginx configuration
+          ansible.builtin.command: nginx -t
+          changed_when: false
+
+        - name: Confirm Nginx service stayed active
+          ansible.builtin.command: systemctl is-active nginx
+          changed_when: false
+
+    # Failure in an included file must restore all Nginx includes, not just the site.
+    - name: Test invalid Nginx included security directives
+      block:
+        - name: Snapshot Nginx included configurations before invalid CSP
+          ansible.builtin.slurp:
+            src: "{{ openwisp2_path }}/nginx-conf/openwisp2/{{ item }}"
+          loop:
+            - ssl.conf
+            - security.conf
+          register: nginx_includes_before_bad_security
+
+        - name: Snapshot Nginx site before invalid security directives
+          ansible.builtin.slurp:
+            src: "/etc/nginx/sites-available/{{ inventory_hostname }}"
+          register: nginx_site_before_bad_security
+
+        - name: Attempt to deploy invalid included security directives
+          ansible.builtin.include_role:
+            name: openwisp.openwisp2
+            tasks_from: nginx.yml
+          vars:
+            # Match the working Nginx-only negative test. Running dependent
+            # services here can fail on unrelated apt repository availability.
+            openwisp2_postfix_install: false
+            openwisp2_influxdb_install: false
+            openwisp2_nginx_csp: |-
+              "default-src 'self'" always;
+              invalid_nginx_security_directive_xyz on;
+
+        - name: Fail if malformed included Nginx directives were accepted
+          ansible.builtin.fail:
+            msg: Nginx unexpectedly accepted the malformed security include.
+
+      rescue:
+        - name: Verify included Nginx directives were rejected
+          ansible.builtin.assert:
+            that:
+              - "'Nginx site update rejected; previous site restored.' in ansible_failed_result.msg"
+              - "'invalid_nginx_security_directive_xyz' in ansible_failed_result.msg"
+            fail_msg: Unexpected failure while testing included Nginx directives.
+
+        - name: Read Nginx included configurations after rejected update
+          ansible.builtin.slurp:
+            src: "{{ openwisp2_path }}/nginx-conf/openwisp2/{{ item }}"
+          loop:
+            - ssl.conf
+            - security.conf
+          register: nginx_includes_after_bad_security
+
+        - name: Read Nginx site after rejected security configuration
+          ansible.builtin.slurp:
+            src: "/etc/nginx/sites-available/{{ inventory_hostname }}"
+          register: nginx_site_after_bad_security
+
+        - name: Verify Nginx site was restored byte for byte
+          ansible.builtin.assert:
+            that:
+              - >-
+                nginx_site_after_bad_security.content ==
+                nginx_site_before_bad_security.content
+
+        - name: Verify Nginx includes were restored byte for byte
+          ansible.builtin.assert:
+            that:
+              - item.0.content == item.1.content
+            fail_msg: "Nginx include {{ item.0.item }} changed after rollback."
+          loop: >-
+            {{ nginx_includes_before_bad_security.results |
+               zip(nginx_includes_after_bad_security.results) | list }}
+          loop_control:
+            label: "{{ item.0.item }}"
+
+        - name: Validate full Nginx configuration after include rollback
+          ansible.builtin.command: nginx -t
+          changed_when: false
+
+        - name: Verify Nginx remained active after include rollback
+          ansible.builtin.command: systemctl is-active nginx
+          changed_when: false

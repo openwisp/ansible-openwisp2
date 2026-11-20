@@ -116,6 +116,8 @@
 - name: Update apt packages
   ansible.builtin.apt:
     update_cache: true
+  # Refreshing package indexes does not change the managed system configuration.
+  changed_when: false
 
 - name: Freeradius system packages
   ansible.builtin.apt:
