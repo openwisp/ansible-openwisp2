@@ -46,6 +46,7 @@ class TestCiInstaller(unittest.TestCase):
                 log.read_text(),
             )
             self.assertIn(
-                "ansible-galaxy role install --force -r molecule/resources/requirements.yml",
+                "ansible-galaxy role install --force -r "
+                f"molecule/resources/requirements.yml -p {path / 'cache' / 'ansible-roles'}",
                 log.read_text(),
             )

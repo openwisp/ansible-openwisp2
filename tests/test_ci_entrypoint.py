@@ -51,3 +51,31 @@ class TestCiEntrypoint(unittest.TestCase):
     def test_returns_molecule_status(self):
         result = self.run_entrypoint(status=17)
         self.assertEqual(result.returncode, 17)
+
+    def test_dangling_user_role_link_is_preserved(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            roles = root / ".ansible" / "roles"
+            roles.mkdir(parents=True)
+            link = roles / "openwisp.openwisp2"
+            link.symlink_to(root / "deleted-checkout")
+            fake = root / "molecule"
+            fake.write_text(
+                "#!/bin/sh\nrole=${ANSIBLE_ROLES_PATH%%:*}\n"
+                '[ -L "$role/openwisp.openwisp2" ] || exit 19\n'
+            )
+            fake.chmod(0o755)
+            result = subprocess.run(
+                [str(ROOT / "runtests")],
+                cwd=ROOT,
+                env={
+                    **os.environ,
+                    "HOME": str(root),
+                    "TMPDIR": str(root),
+                    "PATH": f"{root}:{os.environ['PATH']}",
+                },
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(os.readlink(link), str(root / "deleted-checkout"))
