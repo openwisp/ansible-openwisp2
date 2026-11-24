@@ -26,7 +26,7 @@ jobs:
     name: Build ${{ matrix.distro }}
     runs-on: ubuntu-24.04
     env:
-      AI_REVIEW_CACHE_GLOB: "**/requirements*"
+      AI_REVIEW_CACHE_GLOB: molecule/resources/requirements.yml
 
     strategy:
       fail-fast: false
