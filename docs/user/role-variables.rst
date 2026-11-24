@@ -415,6 +415,8 @@ take a look at `the default values of these variables
         # this role provides a default configuration of freeradius
         # if you manage freeradius on a different machine or you need different configurations
         # you can disable this default behavior
+        # The default and EAP sites combine accounting octets and gigawords.
+        # Custom site templates must enable acct_counters64 for the same behavior.
         openwisp2_freeradius_install: true
         # Set an account to expire T seconds after first login.
         # This variable sets the value of T.
