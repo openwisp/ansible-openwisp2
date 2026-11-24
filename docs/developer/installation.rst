@@ -96,6 +96,7 @@ linux debian/ubuntu systems):
 
     # from the root of the repository
     pip install -r requirements-test.txt
+    ansible-galaxy collection install "community.general:>=3.6.0" community.docker
 
 **Step 4**: Download docker images
 

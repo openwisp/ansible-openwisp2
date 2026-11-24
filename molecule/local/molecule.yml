@@ -52,6 +52,10 @@ platforms:
     pre_build_image: true
 provisioner:
   name: ansible
+  # The Docker API connection avoids spawning the Docker CLI for every task
+  # and supports pipelining, which reduces the runtime of the test suite.
+  connection_options:
+    ansible_connection: community.docker.docker_api
   env:
     MOLECULE_NO_LOG: false
   playbooks:
@@ -59,9 +63,9 @@ provisioner:
     verify: ../resources/verify.yml
   config_options:
     defaults:
+      pipelining: true
       stdout_callback: default
       bin_ansible_callbacks: true
-    default:
-      result_format: yaml
+      callback_result_format: yaml
 verifier:
   name: ansible

@@ -55,7 +55,7 @@ jobs:
 
       - name: Install Ansible Galaxy dependencies
         id: galaxy
-        run: ansible-galaxy collection install "community.general:>=3.6.0"
+        run: ansible-galaxy collection install "community.general:>=3.6.0" community.docker
 
       - name: QA checks
         continue-on-error: true
