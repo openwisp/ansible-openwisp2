@@ -310,3 +310,43 @@
           - "'proxy_set_header X-Forwarded-For $remote_addr;' in (nginx_site_config.content | b64decode)"
           - "'$proxy_add_x_forwarded_for' not in (nginx_site_config.content | b64decode)"
         fail_msg: "Nginx must not forward client-supplied X-Forwarded-For values to the websocket server."
+
+    # Test accounting counters in both FreeRADIUS sites and the shared REST module.
+    - name: Verify FreeRADIUS accounting counter configuration
+      block:
+        - name: Read the default accounting site
+          ansible.builtin.slurp:
+            src: "{{ freeradius_dir }}/sites-enabled/openwisp_site"
+          register: radius_default_site
+
+        - name: Read the EAP accounting site
+          ansible.builtin.slurp:
+            src: "{{ freeradius_dir }}/sites-enabled/openwisp_eap_openwisp_site"
+          register: radius_eap_site
+
+        - name: Read the accounting REST module
+          ansible.builtin.slurp:
+            src: "{{ freeradius_dir }}/mods-enabled/rest"
+          register: radius_rest
+
+        - name: Assert both sites calculate 64-bit counters without replacing missing values
+          ansible.builtin.assert:
+            that:
+              - "'acct_counters64' in (radius_default_site.content | b64decode)"
+              - "'acct_counters64' in (radius_eap_site.content | b64decode)"
+              - "'if (!&Acct-Input-Octets && !&Acct-Input-Gigawords)' in (radius_default_site.content | b64decode)"
+              - "'if (!&Acct-Input-Octets && !&Acct-Input-Gigawords)' in (radius_eap_site.content | b64decode)"
+              - "'if (!&Acct-Output-Octets && !&Acct-Output-Gigawords)' in (radius_default_site.content | b64decode)"
+              - "'if (!&Acct-Output-Octets && !&Acct-Output-Gigawords)' in (radius_eap_site.content | b64decode)"
+              - "'&Acct-Input-Octets64 !* ANY' in (radius_default_site.content | b64decode)"
+              - "'&Acct-Input-Octets64 !* ANY' in (radius_eap_site.content | b64decode)"
+              - "'&Acct-Output-Octets64 !* ANY' in (radius_default_site.content | b64decode)"
+              - "'&Acct-Output-Octets64 !* ANY' in (radius_eap_site.content | b64decode)"
+            fail_msg: "Both FreeRADIUS sites must preserve absent accounting counters."
+
+        - name: Assert REST uses 64-bit counters with 32-bit fallback
+          ansible.builtin.assert:
+            that:
+              - "'Acct-Input-Octets64}:-%{Acct-Input-Octets' in (radius_rest.content | b64decode)"
+              - "'Acct-Output-Octets64}:-%{Acct-Output-Octets' in (radius_rest.content | b64decode)"
+            fail_msg: "FreeRADIUS REST must send 64-bit counters when available."
