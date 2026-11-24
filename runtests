@@ -1,0 +1,17 @@
+#!/bin/bash
+# Run the reviewed Molecule scenarios without accepting arbitrary runner options.
+set -e
+for argument in "$@"; do
+  case "$argument" in
+    --scenario-name=default|--scenario-name=local) ;;
+    *) echo "Unsupported test argument: $argument" >&2; exit 2 ;;
+  esac
+done
+roles="$HOME/.ansible/roles"
+mkdir -p "$roles"
+if [ ! -e "$roles/openwisp.openwisp2" ]; then
+  ln -s "$PWD" "$roles/openwisp.openwisp2"
+fi
+cache=${CI_DEPS_CACHE:-"$HOME/.cache/ci-deps"}/ansible-roles
+export ANSIBLE_ROLES_PATH="$cache:$roles${ANSIBLE_ROLES_PATH:+:$ANSIBLE_ROLES_PATH}"
+exec molecule test "$@"

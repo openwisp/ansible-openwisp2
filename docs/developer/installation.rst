@@ -111,7 +111,10 @@ linux debian/ubuntu systems):
 
 .. code-block:: shell
 
-    molecule test -s local
+    ./runtests --scenario-name=local
+
+The entry point also accepts ``--scenario-name=default`` and rejects other
+arguments. This validation does not sandbox test code or configuration.
 
 If you don't get any error message it means that the tests ran
 successfully without errors.

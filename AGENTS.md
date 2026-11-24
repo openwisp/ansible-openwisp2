@@ -47,6 +47,7 @@ If instructions conflict, repository config and CI workflows win first, docs nex
 - Prefer short, precise names that rely on their nearest meaningful scope. Do not repeat a feature, domain object, or namespace already named by the containing module, class, or function. For example, prefer `EstimatedLocation.refresh()` over `EstimatedLocation.refresh_estimated_location()`. Repeat that context only when the name is used outside that scope or is needed to distinguish genuinely different concepts. When a concise name cannot express a necessary distinction, use a concise docstring to describe it rather than encoding it in an excessively long name.
 - Before adding a comment or docstring, ask whether it conveys information a reader cannot reasonably infer from clear code, names, and surrounding scope. Add a concise comment when it explains a non-obvious reason, constraint, compatibility or security requirement, side effect, or unavoidable complexity. In opaque syntax or domain-specific code, especially shell scripts, a comment may also explain what the code does. Do not add comments that merely restate adjacent code one-to-one.
 - Update docs when variables, defaults, setup steps, supported OS versions, or deployment behavior change, including when a documented feature's behavior changes or a new user-facing feature is added.
+- Add CI dependencies to `./install-ci-deps.sh` and cache them. Keep cache inputs in sync with the installer and dependency files. Follow the shared structure and internal naming in `.github/workflows/ci.yml` so OpenWISP automation works across repositories.
 - Review documentation examples and references when behavior changes.
 - Preserve public documentation anchors, URLs, include directives, and versioned links unless explicitly required.
 
@@ -55,6 +56,7 @@ If instructions conflict, repository config and CI workflows win first, docs nex
 - Add or update Molecule or role tests for every role behavior change.
 - Group related test tasks in a clearly named block and precede it with a concise comment identifying the variable or behavior under test.
 - Use targeted checks while iterating, then run the documented full QA/test command before considering the change complete.
+- Use `./runtests` for Molecule tests. Enforce an explicit allowlist of reviewed, safe flags and reject unsupported arguments: runner options can execute code outside the selected scenario.
 - Keep helpers and classes used by only one test method inside that method. Promote them to class or module scope only when genuinely reused.
 
 ## Security Rules
