@@ -1,19 +1,42 @@
-#!/bin/bash
-# Run the reviewed Molecule scenarios without accepting arbitrary runner options.
-set -e
-for argument in "$@"; do
-	case "$argument" in
-	--scenario-name=default | --scenario-name=local) ;;
-	*)
-		echo "Unsupported test argument: $argument" >&2
-		exit 2
-		;;
-	esac
-done
-# Isolate the role link so an existing user checkout is never overwritten.
-roles=$(mktemp -d "${TMPDIR:-/tmp}/openwisp-role.XXXXXXXX")
-trap 'rm -rf "$roles"' EXIT
-ln -s "$PWD" "$roles/openwisp.openwisp2"
-cache=${CI_DEPS_CACHE:-"$HOME/.cache/ci-deps"}/ansible-roles
-export ANSIBLE_ROLES_PATH="$roles:$cache:$HOME/.ansible/roles${ANSIBLE_ROLES_PATH:+:$ANSIBLE_ROLES_PATH}"
-molecule test "$@"
+#!/usr/bin/env python3
+"""Run the reviewed Molecule scenarios without arbitrary runner options."""
+
+import os
+import subprocess
+import sys
+import tempfile
+from pathlib import Path
+
+from openwisp_utils.test.runner import InvalidTestArgument, parse_test_arguments
+
+
+def main():
+    arguments = sys.argv[1:]
+    try:
+        labels, _ = parse_test_arguments(
+            arguments,
+            allowed_flags=("--scenario-name=default", "--scenario-name=local"),
+        )
+        if labels:
+            raise InvalidTestArgument(
+                f"Unsupported test argument: {labels[0].group(0)}"
+            )
+    except InvalidTestArgument as error:
+        print(error, file=sys.stderr)
+        return 2
+    with tempfile.TemporaryDirectory(prefix="openwisp-role.") as roles:
+        Path(roles, "openwisp.openwisp2").symlink_to(
+            Path.cwd(), target_is_directory=True
+        )
+        env = os.environ.copy()
+        home = Path(env.get("HOME", ""))
+        cache = Path(env.get("CI_DEPS_CACHE") or home / ".cache" / "ci-deps")
+        paths = [roles, str(cache / "ansible-roles"), str(home / ".ansible" / "roles")]
+        if env.get("ANSIBLE_ROLES_PATH"):
+            paths.append(env["ANSIBLE_ROLES_PATH"])
+        env["ANSIBLE_ROLES_PATH"] = os.pathsep.join(paths)
+        return subprocess.call(["molecule", "test", *arguments], env=env)
+
+
+if __name__ == "__main__":
+    sys.exit(main())
