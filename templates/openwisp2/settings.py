@@ -1,9 +1,14 @@
+import json
 import os
 import sys
 from datetime import timedelta
 
 from celery.schedules import crontab
-
+{% if openwisp2_sentry.get("dsn") %}
+import sentry_sdk
+from sentry_sdk.integrations.celery import CeleryIntegration
+from sentry_sdk.integrations.django import DjangoIntegration
+{% endif %}
 TESTING = "test" in sys.argv
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -98,9 +103,6 @@ INSTALLED_APPS = [
 {% for app in openwisp2_extra_django_apps %}
     "{{ app }}",
 {% endfor %}
-{% if openwisp2_sentry.get("dsn") %}
-    "raven.contrib.django.raven_compat",
-{% endif %}
 {% if openwisp2_email_backend == "djcelery_email.backends.CeleryEmailBackend"%}
     "djcelery_email",
 {% endif %}
@@ -527,13 +529,6 @@ LOGGING = {
             "level": "DEBUG",
             "class": "logging.NullHandler",
         },
-{% if openwisp2_sentry.get("dsn") %}
-        "sentry": {
-            "level": "ERROR",
-            "class": "raven.contrib.django.raven_compat.handlers.SentryHandler",
-            "filters": ["require_debug_false"],
-        },
-{% endif %}
     },
     "root": {
         "level": "INFO",
@@ -541,9 +536,6 @@ LOGGING = {
             "main_log",
             "console",
             "mail_admins",
-{% if openwisp2_sentry.get("dsn") %}
-            "sentry",
-{% endif %}
         ],
     },
     "loggers": {
@@ -564,7 +556,10 @@ STORAGES = {
 }
 
 {% if openwisp2_sentry.get("dsn") %}
-RAVEN_CONFIG = {{ openwisp2_sentry | to_nice_json }}
+sentry_sdk.init(
+    integrations=[DjangoIntegration(), CeleryIntegration()],
+    **json.loads({{ openwisp2_sentry | to_json | to_json }}),
+)
 {% endif %}
 
 {% if openwisp2_monitoring %}

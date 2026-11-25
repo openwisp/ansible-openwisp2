@@ -245,7 +245,9 @@ take a look at `the default values of these variables
         openwisp2_usage_metric_collection: false
         # enable sentry example
         openwisp2_sentry:
-            dsn: "https://7d2e3cd61acc32eca1fb2a390f7b55e1:bf82aab5ddn4422688e34a486c7426e3@getsentry.com:443/12345"
+            dsn: "https://PUBLIC_KEY@SENTRY_HOST/PROJECT_ID"
+            environment: "production"
+            send_default_pii: false
         openwisp2_default_cert_validity: 1825
         openwisp2_default_ca_validity: 3650
         # the following options for redis allow to configure an external redis instance if needed
@@ -509,3 +511,26 @@ take a look at `the default values of these variables
     encouraged to adjust these settings to match the scale of their
     project. The same applies to the concurrency and auto-scaling settings
     for Celery workers.
+
+Sentry Error Reporting
+----------------------
+
+Set ``openwisp2_sentry.dsn`` to enable error reporting for Django and
+Celery. Reporting is disabled by default and when ``dsn`` is missing,
+empty, or false. The role installs ``sentry-sdk`` 2.x and initializes the
+Django and Celery integrations in Django settings. uWSGI threading and
+fork hooks are enabled for this integration.
+
+Other ``openwisp2_sentry`` entries are passed to ``sentry_sdk.init``; use
+`SDK options
+<https://docs.sentry.io/platforms/python/configuration/options/>`_ such as
+``environment``, ``release``, and ``sample_rate``. The integrations are
+configured by the role. Tracing and personal-data collection are not
+enabled by the role; enable them explicitly only if needed.
+
+When upgrading from Raven, review any extra options: Raven-specific keys
+such as ``processors`` cannot be passed to the new SDK. See the `Raven
+migration guide
+<https://docs.sentry.io/platforms/python/migration/raven-to-sentry-sdk/>`_.
+The role no longer uses ``RAVEN_CONFIG`` or Raven's logging and Celery
+hooks.

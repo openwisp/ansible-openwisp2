@@ -310,3 +310,8 @@
           - "'proxy_set_header X-Forwarded-For $remote_addr;' in (nginx_site_config.content | b64decode)"
           - "'$proxy_add_x_forwarded_for' not in (nginx_site_config.content | b64decode)"
         fail_msg: "Nginx must not forward client-supplied X-Forwarded-For values to the websocket server."
+
+    - name: Verify Sentry integration
+      ansible.builtin.include_tasks: tasks/sentry.yml
+      vars:
+        sentry_role_path: "{{ (playbook_dir ~ '/../..') | realpath }}"

@@ -15,6 +15,12 @@
     openwisp2_uwsgi_extra_conf: |
       single-interpreter=True
     openwisp2_usage_metric_collection: false
+    # Install and initialize the SDK without sending test events to Sentry.
+    openwisp2_sentry:
+      dsn: "https://public@example.invalid/1"
+      sample_rate: 0.0
+      auto_session_tracking: false
+      send_client_reports: false
     # Test nginx static compression modules
     openwisp2_nginx_gzip_static: auto
     openwisp2_nginx_brotli_static: auto

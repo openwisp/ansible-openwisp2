@@ -1,0 +1,36 @@
+---
+
+- name: Set Sentry test options
+  ansible.builtin.set_fact:
+    openwisp2_sentry: "{{ sentry_case.options }}"
+    openwisp2_django_celery_logging: "{{ sentry_case.logging }}"
+    openwisp2_secret_key: sentry-test-secret
+
+- name: Render Sentry test configuration
+  ansible.builtin.template:
+    src: "{{ sentry_role_path }}/templates/{{ item.src }}"
+    dest: "{{ sentry_test_dir.path }}/{{ item.dest }}"
+    mode: "0600"
+  loop:
+    - {src: openwisp2/settings.py, dest: settings.py}
+    - {src: openwisp2/celery.py, dest: celery_config.py}
+    - {src: uwsgi.ini.j2, dest: uwsgi.ini}
+
+- name: Check Sentry configuration and error capture
+  ansible.builtin.command:
+    argv:
+      - "{{ virtualenv_path }}/bin/python"
+      - "{{ sentry_test_dir.path }}/test_sentry.py"
+      - "{{ sentry_test_dir.path }}"
+      - "{{ 'enabled' if sentry_case.options.get('dsn') else 'disabled' }}"
+      - "{{ sentry_case.logging | ternary('true', 'false') }}"
+  environment:
+    PYTHONPATH: "{{ sentry_test_dir.path }}:{{ openwisp2_path }}"
+    PYTHONDONTWRITEBYTECODE: "1"
+  changed_when: false
+  register: sentry_result
+
+- name: Assert Sentry checks completed
+  ansible.builtin.assert:
+    that:
+      - "'Sentry configuration and error capture checks passed' in sentry_result.stdout"
