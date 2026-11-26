@@ -5,6 +5,7 @@ import os
 import runpy
 import sys
 from pathlib import Path
+from unittest import mock
 
 import django
 import sentry_sdk
@@ -20,6 +21,7 @@ def broken_view(request):
 
 
 def healthy_view(request):
+    request.get_host()
     return HttpResponse("ok")
 
 
@@ -78,6 +80,15 @@ if enabled:
         browser = Client(raise_request_exception=False)
         assert browser.get("/healthy/").status_code == 200
         assert browser.get("/broken/").status_code == 500
+        security_logger = logging.getLogger("django.security.DisallowedHost")
+        assert security_logger.propagate is False
+        assert [handler.name for handler in security_logger.handlers] == ["main_log"]
+        with mock.patch.object(security_logger.handlers[0], "emit") as local_log:
+            assert (
+                browser.get("/healthy/", HTTP_HOST="invalid.example").status_code == 400
+            )
+            local_log.assert_called_once()
+            assert local_log.call_args.args[0].name == "django.security.DisallowedHost"
 
     @app.task
     def broken_task():
@@ -87,6 +98,10 @@ if enabled:
     assert result.failed(), "The test task should fail"
     logging.getLogger("sentry-test").error("sentry-logging-test")
     sentry_sdk.flush()
+    assert not any(
+        event.get("logger") == "django.security.DisallowedHost"
+        for event in transport.events
+    ), "Invalid-host requests should stay in local logs"
     exceptions = [
         value["value"]
         for event in transport.events

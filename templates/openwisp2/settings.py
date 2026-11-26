@@ -8,6 +8,7 @@ from celery.schedules import crontab
 import sentry_sdk
 from sentry_sdk.integrations.celery import CeleryIntegration
 from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk.integrations.logging import ignore_logger
 {% endif %}
 TESTING = "test" in sys.argv
 
@@ -556,6 +557,7 @@ STORAGES = {
 }
 
 {% if openwisp2_sentry.get("dsn") %}
+ignore_logger("django.security.DisallowedHost")
 sentry_options = json.loads({{ openwisp2_sentry | to_json | to_json }})
 sentry_options["integrations"] = [DjangoIntegration(), CeleryIntegration()]
 sentry_sdk.init(**sentry_options)

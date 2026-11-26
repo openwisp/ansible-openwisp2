@@ -521,6 +521,9 @@ empty, or false. The role installs ``sentry-sdk`` 2.x and initializes the
 Django and Celery integrations in Django settings. uWSGI threading and
 fork hooks are enabled for this integration.
 
+Invalid-host errors (``django.security.DisallowedHost``) stay in local
+logs and are excluded from Sentry events.
+
 Other ``openwisp2_sentry`` entries are passed to ``sentry_sdk.init``; use
 `SDK options
 <https://docs.sentry.io/platforms/python/configuration/options/>`_ such as
