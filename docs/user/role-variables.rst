@@ -525,8 +525,11 @@ Other ``openwisp2_sentry`` entries are passed to ``sentry_sdk.init``; use
 `SDK options
 <https://docs.sentry.io/platforms/python/configuration/options/>`_ such as
 ``environment``, ``release``, and ``sample_rate``. The integrations are
-configured by the role. Tracing and personal-data collection are not
-enabled by the role; enable them explicitly only if needed.
+configured by the role. Tracing is not enabled by the role; enable it
+explicitly only if needed. The SDK captures local variables in stack
+traces by default, even when ``send_default_pii`` is false. These
+variables can contain personal data. To disable this capture, set
+``include_local_variables: false`` under ``openwisp2_sentry``.
 
 When upgrading from Raven, review any extra options: Raven-specific keys
 such as ``processors`` cannot be passed to the new SDK. See the `Raven
