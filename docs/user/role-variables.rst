@@ -525,15 +525,16 @@ Other ``openwisp2_sentry`` entries are passed to ``sentry_sdk.init``; use
 `SDK options
 <https://docs.sentry.io/platforms/python/configuration/options/>`_ such as
 ``environment``, ``release``, and ``sample_rate``. The integrations are
-configured by the role. Tracing is not enabled by the role; enable it
-explicitly only if needed. The SDK captures local variables in stack
-traces by default, even when ``send_default_pii`` is false. These
-variables can contain personal data. Without ``data_collection``, set
-``include_local_variables: false`` under ``openwisp2_sentry`` to disable
-this capture. If you configure ``data_collection`` with an SDK version
-that supports it, set its ``stack_frame_variables`` option to false
-instead. Its default can override ``include_local_variables: false``. See
-the `SDK 2.x data collection documentation
+configured by the role; any ``integrations`` value in ``openwisp2_sentry``
+is ignored. Tracing is not enabled by the role; enable it explicitly only
+if needed. The SDK captures local variables in stack traces by default,
+even when ``send_default_pii`` is false. These variables can contain
+personal data. Without ``data_collection``, set ``include_local_variables:
+false`` under ``openwisp2_sentry`` to disable this capture. If you
+configure ``data_collection`` with an SDK version that supports it, set
+its ``stack_frame_variables`` option to false instead. Its default can
+override ``include_local_variables: false``. See the `SDK 2.x data
+collection documentation
 <https://docs.sentry.io/platforms/python/data-management/data-collected__v2.x>`_
 before enabling ``data_collection``, as its other defaults also differ.
 

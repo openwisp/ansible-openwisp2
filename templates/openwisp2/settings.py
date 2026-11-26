@@ -556,10 +556,9 @@ STORAGES = {
 }
 
 {% if openwisp2_sentry.get("dsn") %}
-sentry_sdk.init(
-    integrations=[DjangoIntegration(), CeleryIntegration()],
-    **json.loads({{ openwisp2_sentry | to_json | to_json }}),
-)
+sentry_options = json.loads({{ openwisp2_sentry | to_json | to_json }})
+sentry_options["integrations"] = [DjangoIntegration(), CeleryIntegration()]
+sentry_sdk.init(**sentry_options)
 {% endif %}
 
 {% if openwisp2_monitoring %}
