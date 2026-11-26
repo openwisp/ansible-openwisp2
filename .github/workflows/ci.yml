@@ -69,7 +69,7 @@ jobs:
                 'install-ci-deps.sh', 'install-dev.sh')) }}
 
       - name: Cache Ansible collections
-        uses: openwisp/openwisp-actions/.github/actions/ci-cache@5f88ad7f2668ba4536bfddc184056a3d357ea04a # PR 41
+        uses: openwisp/openwisp-actions/.github/actions/ci-cache@7dd9179d47cc950e9e42e36dd881248554684218 # merged PR 41
         with:
           mode: write
           dependency-glob: ${{ env.AI_REVIEW_CACHE_GLOB }}
