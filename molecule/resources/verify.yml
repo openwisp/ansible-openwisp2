@@ -196,6 +196,33 @@
           loop_control:
             label: "{{ item.item }}"
 
+        - name: Ensure the Django log is a regular file
+          ansible.builtin.assert:
+            that:
+              - openwisp2_log_paths.results[1].stat.isreg
+            fail_msg: /opt/openwisp2/log/openwisp2.log is not a regular file
+            quiet: true
+
+        # Converge put a link to this probe at the log path and reran the log tasks.
+        - name: Stat the log link probe
+          ansible.builtin.stat:
+            path: /root/openwisp2-log-probe
+          register: openwisp2_log_probe
+
+        - name: Ensure the log tasks left the link target alone
+          ansible.builtin.assert:
+            that:
+              - openwisp2_log_probe.stat.exists
+              - openwisp2_log_probe.stat.pw_name == 'root'
+              - openwisp2_log_probe.stat.gr_name == 'root'
+              - openwisp2_log_probe.stat.mode == '0600'
+            fail_msg: >-
+              The log tasks changed the link target (owner={{
+              openwisp2_log_probe.stat.pw_name | default('?') }}:{{
+              openwisp2_log_probe.stat.gr_name | default('?') }}, mode={{
+              openwisp2_log_probe.stat.mode | default('?') }})
+            quiet: true
+
         - name: Read the www-data crontab
           ansible.builtin.command: crontab -u www-data -l
           register: www_data_crontab

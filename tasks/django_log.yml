@@ -1,0 +1,35 @@
+---
+# The application user owns the log directory and can leave a link here, so
+# root never follows the path and the file itself is made by that user.
+- name: Check openwisp2.log
+  ansible.builtin.stat:
+    path: "{{ openwisp2_path }}/log/openwisp2.log"
+    follow: false
+  register: openwisp2_log
+
+- name: Remove a link at openwisp2.log
+  ansible.builtin.file:
+    path: "{{ openwisp2_path }}/log/openwisp2.log"
+    state: absent
+  when: openwisp2_log.stat.islnk | default(false)
+
+- name: Give an existing openwisp2.log to "{{ www_user }}"
+  ansible.builtin.file:
+    path: "{{ openwisp2_path }}/log/openwisp2.log"
+    follow: false
+    owner: "{{ www_user }}"
+    group: "{{ www_group }}"
+  when: openwisp2_log.stat.isreg | default(false)
+
+# Django recreates the log on rotation, so the idempotence test skips it.
+- name: Create openwisp2.log as "{{ www_user }}"
+  become: true
+  become_user: "{{ www_user }}"
+  ansible.builtin.file:
+    path: "{{ openwisp2_path }}/log/openwisp2.log"
+    state: touch
+    mode: "0770"
+    access_time: preserve
+    modification_time: preserve
+  tags:
+    - molecule-idempotence-notest

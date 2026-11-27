@@ -42,7 +42,7 @@
   ansible.builtin.import_tasks: pip.yml
   tags: [openwisp2, pip]
 
-# comprises django_secret_key.yml
+# comprises django_secret_key.yml and django_log.yml
 - name: Import Django tasks
   ansible.builtin.import_tasks: django.yml
   tags: [openwisp2, django]

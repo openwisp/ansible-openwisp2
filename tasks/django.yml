@@ -34,18 +34,8 @@
     mode: "0770"
 
 # Pre-create the Django log so it is owned by the application user.
-# Django recreates it on rotation, so the idempotence test skips it.
-- name: Create openwisp2.log owned by "{{ www_user }}"
-  ansible.builtin.file:
-    path: "{{ openwisp2_path }}/log/openwisp2.log"
-    state: touch
-    owner: "{{ www_user }}"
-    group: "{{ www_group }}"
-    mode: "0770"
-    access_time: preserve
-    modification_time: preserve
-  tags:
-    - molecule-idempotence-notest
+- name: Import Django log tasks
+  ansible.builtin.import_tasks: django_log.yml
 
 - name: Create custom static directory
   ansible.builtin.file:
