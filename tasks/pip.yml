@@ -190,10 +190,10 @@
   until: result is success
   notify: Reload application
 
-- name: Install raven (sentry client)
-  when: openwisp2_sentry.get('dsn')
+- name: Install Sentry SDK
+  when: openwisp2_sentry.get('dsn') is truthy
   ansible.builtin.pip:
-    name: raven
+    name: "sentry-sdk>=2.0,<3.0"
     state: latest
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_python: "{{ openwisp2_python }}"

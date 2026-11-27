@@ -1,0 +1,55 @@
+---
+
+# Test openwisp2_sentry with both Celery logging modes and disabled configurations.
+- name: Test Sentry configuration
+  block:
+    - name: Load role defaults for Sentry template tests
+      ansible.builtin.include_vars:
+        file: "{{ sentry_role_path }}/defaults/main.yml"
+
+    - name: Create Sentry test directory
+      ansible.builtin.tempfile:
+        state: directory
+        path: "{{ openwisp2_path }}"
+        prefix: sentry-test-
+      register: sentry_test_dir
+
+    - name: Copy Sentry verification script
+      ansible.builtin.copy:
+        src: "{{ sentry_role_path }}/molecule/resources/files/test_sentry.py"
+        dest: "{{ sentry_test_dir.path }}/test_sentry.py"
+        mode: "0600"
+
+    - name: Verify enabled and disabled Sentry configurations
+      ansible.builtin.include_tasks: sentry-case.yml
+      loop:
+        - options: &sentry_options
+            dsn: "https://public@example.invalid/1"
+            environment: 'test "quoted" environment'
+            sample_rate: 0.0
+            auto_session_tracking: false
+            send_client_reports: false
+            send_default_pii: false
+            traces_sample_rate: null
+          logging: true
+        - options: *sentry_options
+          logging: false
+        - options:
+            <<: *sentry_options
+            integrations: []
+            auto_enabling_integrations: false
+          logging: false
+        - options: {dsn: false}
+          logging: true
+        - options: {dsn: ""}
+          logging: false
+        - options: {}
+          logging: false
+      loop_control:
+        loop_var: sentry_case
+  always:
+    - name: Remove Sentry test directory
+      ansible.builtin.file:
+        path: "{{ sentry_test_dir.path }}"
+        state: absent
+      when: sentry_test_dir is defined and sentry_test_dir.path is defined

@@ -20,11 +20,4 @@ def config_loggers(*args, **kwargs):
     dictConfig(settings.LOGGING)
 
 
-{% else %}
-if hasattr(settings, "RAVEN_CONFIG"):
-    from raven.contrib.celery import register_logger_signal, register_signal
-    from raven.contrib.django.raven_compat.models import client
-
-    register_logger_signal(client)
-    register_signal(client, ignore_expected=True)
 {% endif %}
