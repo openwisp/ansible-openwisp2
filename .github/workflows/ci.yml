@@ -22,9 +22,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  test:
     name: Build ${{ matrix.distro }}
     runs-on: ubuntu-24.04
+    env:
+      AI_REVIEW_CACHE_GLOB: molecule/resources/requirements.yml
 
     strategy:
       fail-fast: false
@@ -35,6 +37,9 @@ jobs:
           - ubuntu2604
           - debian12
           - debian13
+        include:
+          - distro: ubuntu2404
+            review_default: true # Used by on-demand AI reviews
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -43,19 +48,37 @@ jobs:
           persist-credentials: false
 
       - name: Set up Python 3.12
+        id: python
         uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7
         with:
           python-version: "3.12"
 
+      - name: Identify runner image
+        id: platform
+        run: echo "image_os=$ImageOS" >> "$GITHUB_OUTPUT"
+
+      - name: Cache pip downloads
+        id: cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/pip
+          key: >-
+            ${{ format('{0}-{1}-{2}-pip-{3}-{4}', runner.os, runner.arch,
+                steps.platform.outputs.image_os, steps.python.outputs.python-version,
+                hashFiles('requirements-test.txt', 'requirements.txt', 'setup.py',
+                'install-ci-deps.sh', 'install-dev.sh')) }}
+
+      - name: Cache Ansible collections
+        uses: openwisp/openwisp-actions/.github/actions/ci-cache@7dd9179d47cc950e9e42e36dd881248554684218 # merged PR 41
+        with:
+          mode: write
+          dependency-glob: ${{ env.AI_REVIEW_CACHE_GLOB }}
+          image-os: ${{ steps.platform.outputs.image_os }}
+          python-version: ${{ steps.python.outputs.python-version }}
+
       - name: Install python dependencies
         id: deps
-        run: |
-          pip install -U pip wheel setuptools
-          pip install -r requirements-test.txt
-
-      - name: Install Ansible Galaxy dependencies
-        id: galaxy
-        run: ansible-galaxy collection install "community.general:>=3.6.0"
+        run: ./install-ci-deps.sh
 
       - name: QA checks
         continue-on-error: true
@@ -63,11 +86,8 @@ jobs:
           ./run-qa-checks
 
       - name: Tests
-        if: ${{ !cancelled() && steps.deps.conclusion == 'success' && steps.galaxy.conclusion == 'success' }}
-        run: |
-          mkdir -p ~/.ansible/roles
-          ln -s "$GITHUB_WORKSPACE" ~/.ansible/roles/openwisp.openwisp2
-          molecule test
+        if: ${{ !cancelled() && steps.deps.conclusion == 'success' }}
+        run: ./runtests
         env:
           ROLE_NAME: openwisp2
           PY_COLORS: '1'
@@ -75,12 +95,15 @@ jobs:
           MOLECULE_DISTRO: ${{ matrix.distro }}
           ANSIBLE_ROLES_PATH: /home/runner/.cache/molecule/ansible-openwisp2/default/roles:/home/runner/.ansible/roles:/usr/share/ansible/roles:/etc/ansible/roles
 
+      - name: CI entry point tests
+        run: python -m unittest discover -s tests -p 'test_ci_*.py'
+
   import:
     name: Update imports on Ansible Galaxy
     runs-on: ubuntu-22.04
     environment: ansible-galaxy
     needs:
-      - build
+      - test
 
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
     steps:

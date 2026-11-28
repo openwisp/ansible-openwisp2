@@ -111,12 +111,7 @@ linux debian/ubuntu systems):
 
 .. code-block:: shell
 
-    molecule test -s local
+    ./runtests --scenario-name=local
 
 If you don't get any error message it means that the tests ran
 successfully without errors.
-
-.. tip::
-
-    Use ``molecule test --destroy=never`` to speed up subsequent test
-    runs.
