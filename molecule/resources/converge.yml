@@ -70,3 +70,28 @@
         - name: Reapply the role
           ansible.builtin.include_role:
             name: openwisp.openwisp2
+
+    # Test that a link at the Django log path can't redirect the log tasks (#627).
+    - name: Test a link at the Django log path
+      tags:
+        - molecule-idempotence-notest
+      block:
+        - name: Create a probe file only root can read
+          ansible.builtin.copy:
+            dest: /root/openwisp2-log-probe
+            content: probe
+            owner: root
+            group: root
+            mode: "0600"
+
+        - name: Put a link to the probe at the Django log path
+          ansible.builtin.file:
+            src: /root/openwisp2-log-probe
+            dest: /opt/openwisp2/log/openwisp2.log
+            state: link
+            force: true
+
+        - name: Rerun the Django log tasks
+          ansible.builtin.include_role:
+            name: openwisp.openwisp2
+            tasks_from: django_log
