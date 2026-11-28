@@ -47,6 +47,18 @@ server default {
         acct_unique
         suffix
         files
+        acct_counters64
+        # An absent counter must stay blank so OpenWISP keeps the last reported total.
+        if (!&Acct-Input-Octets && !&Acct-Input-Gigawords) {
+            update request {
+                &Acct-Input-Octets64 !* ANY
+            }
+        }
+        if (!&Acct-Output-Octets && !&Acct-Output-Gigawords) {
+            update request {
+                &Acct-Output-Octets64 !* ANY
+            }
+        }
     }
 
     accounting {
